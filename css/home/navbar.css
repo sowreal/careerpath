@@ -1,0 +1,65 @@
+/* NAVBAR styles */
+.navbar {
+    padding-top: 1rem;
+    padding-bottom: 1rem;
+    padding-left: 4rem;
+    padding-right: 4rem;
+    width: 100%; /* Ensure the navbar stretches the full width */
+    z-index: 1030; /* Ensures the navbar stays above other elements */
+}
+
+.logo {
+    height: 60px; /* Adjusted for better alignment */
+    width: auto;
+}
+
+.nav-link {
+    color: var(--bs-dark);
+    font-size: 18px; /* Slightly reduced for better fit */
+    transition: color 0.3s, font-weight 0.3s;
+}
+
+.nav-link:hover {
+    color: var(--bs-primary);
+    font-weight: bold;
+}
+
+.btn {
+    padding: 8px 20px; /* Adjusted for better fit */
+}
+
+.btn:hover {
+    background: var(--bs-dark);
+    color: var(--bs-white);
+}
+
+/* Responsive Adjustments */
+
+/* Align with Bootstrap's lg breakpoint (992px) */
+/* @media (max-width: 992px) {
+    .navbar-nav {
+        text-align: center;
+        width: 100%;
+    }
+    .navbar-nav .btn {
+        width: 100%;
+        margin-top: 10px;
+    }
+} */
+
+/* Hide the university name at 660px */
+/* @media (max-width: 660px) {
+    .navbar {
+        padding-left: 1rem;
+        padding-right: 1rem;
+    }
+    
+    .navbar-brand span {
+        display: none;
+    } */
+    
+    /* Ensure menu button stays to the right */
+    /* .navbar-toggler {
+        margin-left: auto;
+    }
+} */

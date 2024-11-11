@@ -1,0 +1,71 @@
+/* Progress bar container */
+#progressbar {
+    position: relative;
+    margin: 0;
+    padding: 0;
+    counter-reset: step;
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+}
+
+/* Each step */
+#progressbar .step {
+    width: 33%;
+    position: relative;
+    text-align: center;
+}
+
+/* Circle style */
+#progressbar .step .step-number {
+    display: inline-block;
+    width: 40px;
+    height: 40px;
+    line-height: 40px;
+    border-radius: 50%;
+    background-color: #E0E0E0; /* Update inactive color */
+    color: white;
+    font-size: 18px;
+    font-weight: bold;
+    position: relative;
+    z-index: 1;
+    transition: background-color 0.3s ease-in-out;
+}
+
+/* Step title style */
+#progressbar .step .step-title {
+    display: block;
+    margin-top: 10px;
+    font-size: 14px;
+    color: #555555; /* Lighter font for step title */
+}
+
+/* Active step circle */
+#progressbar .step.active .step-number {
+    background-color: #51DA86;
+}
+
+/* Line between circles */
+#progressbar .step::before {
+    content: '';
+    position: absolute;
+    top: 28%;
+    left: 0;
+    width: 100%;
+    height: 2px;
+    background-color: #DDDDDD; /* Lighter connecting line */
+    z-index: 0;
+    transform: translateX(-50%);
+}
+
+/* No line before the first step */
+#progressbar .step:first-child::before {
+    content: none;
+}
+
+/* Active line between steps */
+#progressbar .step.active::before {
+    background-color: #51DA86;
+}
+
+/* Removed hover effect to keep it non-clickable */

@@ -1,0 +1,14 @@
+/* Input Field Styles */
+.input-group {
+    margin-bottom: 1rem;
+}
+
+input[type="email"],
+input[type="password"] {
+    background-color: #f8f9fa;
+}
+
+/* Style for focused inputs (placeholders to remain light when input is focused) */
+input:focus::placeholder {
+    color: #aaa; /* Lighter color when focused */
+}

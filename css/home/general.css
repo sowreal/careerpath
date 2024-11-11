@@ -1,0 +1,10 @@
+/***********
+Divider
+***********/
+.divider {
+    width: 1200px; /* Set the width of the line */
+    height: 4px; /* Set the height/thickness of the line */
+    background-color: #28a745; /* Green color for the line */
+    margin: 40px auto; /* Center the line and add margin for spacing */
+    border-radius: 10px; /* Rounded edges */
+  }

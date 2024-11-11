@@ -1,0 +1,16 @@
+{
+  "name": "tunay-na",
+  "version": "1.0.0",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "description": "",
+  "dependencies": {
+    "bootstrap": "^5.3.3",
+    "normalize.css": "^8.0.1",
+    "wowjs": "^1.1.3"
+  }
+}

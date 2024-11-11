@@ -1,0 +1,84 @@
+/* General styles */
+body {
+  font-family: 'Poppins', sans-serif;
+}
+
+.container {
+  max-width: 1000px;
+}
+
+.left-box {
+  background: #00BF7B;
+  color: white;
+  border-radius: 20px 0 0 20px;
+  padding: 20px;
+  text-align: center;
+}
+
+
+.right-box {
+  padding: 20px;
+}
+
+.header-text h2 {
+  font-weight: 600;
+  margin-bottom: 0.5rem;
+}
+
+.header-text p {
+  margin-bottom: 1.5rem;
+}
+
+.input-group {
+  margin-bottom: 1rem;
+}
+
+input[type="email"],
+input[type="password"] {
+  background-color: #f8f9fa;
+}
+
+.btn-primary {
+  background-color: #00BF7B;
+  border-color: #00BF7B;
+}
+
+.btn-light {
+  background-color: #ffffff;
+  border: 1px solid #ddd;
+}
+
+.Forgot a {
+  color: #00BF7B;
+}
+
+.Forgot a:hover {
+  text-decoration: underline;
+}
+
+.text-center {
+  margin-top: 1rem;
+}
+
+/* Home Button */
+.btn-secondary {
+  background-color: #6c757d;
+  border-color: #6c757d;
+}
+
+.btn-secondary:hover {
+  background-color: #5a6268;
+  border-color: #545b62;
+}
+
+
+
+/* Responsive styles */
+@media (max-width: 768px) {
+  .left-box, .right-box {
+      flex: 1 0 100%;
+  }
+  .left-box {
+    border-radius: 20px;
+  }
+}

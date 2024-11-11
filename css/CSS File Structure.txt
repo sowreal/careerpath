@@ -1,0 +1,7 @@
+css/
+│
+├── global.css                  # General/global styles applied across the whole site
+├── overrides.css               # Global overrides or customizations
+│
+├── specific page folders/      # Folders for specific page styles
+│   ├── page.css                # For general style for specific pages

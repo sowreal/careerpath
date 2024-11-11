@@ -1,0 +1,63 @@
+/* BUTTONS */
+.btn-primary {
+    background-color: #00BF7B;
+    border-color: #00BF7B;
+}
+
+.btn-light {
+    background-color: #ffffff;
+    border: 1px solid #ddd;
+}
+
+.Forgot a {
+    color: #00BF7B;
+}
+
+.Forgot a:hover {
+    text-decoration: underline;
+}
+
+/* Secondary Button */
+.btn-secondary {
+    background-color: #6c757d;
+    border-color: #6c757d;
+}
+
+.btn-secondary:hover {
+    background-color: #5a6268;
+    border-color: #545b62;
+}
+
+/* Adjust font size for Confirm and Submit button */
+#submit-btn-step4 {
+    font-size: 14px; /* Reduce font size slightly if needed */
+    padding: 10px;   /* Adjust padding to make more space */
+    white-space: nowrap; /* Prevent text from wrapping onto two lines */
+}
+
+/* Button container alignment and spacing */
+#button-container, #button-container-step4 {
+    display: flex;
+    justify-content: space-between; /* Ensure buttons are spaced evenly */
+    padding: 10px; /* Padding for alignment with form content */
+    margin-bottom: 20px; /* Consistent spacing below the buttons */
+    width: 100%;
+    gap: 10px; /* Add space between buttons */
+}
+
+#button-container button.d-none,
+#button-container-step4 button.d-none {
+    display: none !important; /* Ensure hidden buttons don't take up space */
+}
+
+/* Width for buttons in Step 4 */
+.w-45 {
+    width: 50%;
+}
+
+/* Make all buttons inherit full-width when needed */
+button {
+    width: 100%;
+    max-width: 100%; /* Ensure buttons do not exceed the container */
+    margin: 0 auto; /* Center the button in its container */
+}
