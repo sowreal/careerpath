@@ -1,0 +1,62 @@
+/* Sidebar BG Color */
+.sidebar-bg {
+    background-color: #0a4b2d;
+}
+.sidebar-bg-top {
+    background-color: #063520;
+}
+
+
+/* HEADER SETTINGS */
+/* Adjust the logo size */
+.brand-image {
+    width: 120px; /* Increase the width as needed */
+    height: auto;
+    display: block;
+    margin-left: 0; /* Align to the left */
+}
+
+/* Adjust the text size */
+.brand-text {
+    font-size: 26px; /* Increase the font size as needed */
+    font-weight: bold; /* Make the text bold if desired */
+    text-align: left; /* Align text to the left */
+}
+
+.sidebar-brand {
+    padding: 1.6rem;
+}
+/* HEADER SETTINGS END */
+
+
+/* Sidebar Width */
+.app-sidebar {
+    min-width: 200px;
+    max-width: 300px;
+    width: auto;
+}
+
+/* Collapsed Sidebar */
+.sidebar-collapse .app-sidebar {
+    width: 60px;
+}
+
+/* Text Wrapping */
+.app-sidebar .nav-item .nav-link p {
+    white-space: normal;
+    word-break: break-word; 
+    overflow-wrap: break-word; 
+}
+
+/* Hover effect for settings and logout */
+.sidebar-footer .nav-link:hover {
+    background-color: hwb(0 100% 0% / 0.13); /* Subtle hover effect */
+    color: #ffffff; /* Ensure the text stays white */
+    transition: background-color 0.3s ease;
+}
+
+.sidebar-footer {
+    padding-top: 2.5rem;
+}
+
+

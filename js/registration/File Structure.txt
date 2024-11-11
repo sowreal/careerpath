@@ -1,0 +1,8 @@
+/js/registration/
+    - registration_buttons.js      (Button navigation logic like next, back, submit)
+    - registration_validation.js   (All validation-related logic)
+    - registration_progress.js     (Progress bar and step control)
+    - registration_placeholders.js (Placeholder color handling)
+    - registration_password.js     (Password visibility toggle and related handling)
+    - registration_review.js       (Populating the review step with entered data)
+    - registration_tooltips.js     (Tooltip initialization)

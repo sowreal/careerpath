@@ -1,0 +1,26 @@
+/* Ensure the sidebar uses flexbox to push the footer to the bottom */
+.app-sidebar {
+    display: flex;
+    flex-direction: column;
+    height: 100vh; /* Full height of the viewport */
+}
+
+/* Sidebar content should grow/shrink */
+.sidebar-content {
+    flex-grow: 1; /* Allows the main content to take up all the remaining space */
+    overflow-y: auto; /* Ensures that if content overflows, it scrolls */
+}
+
+/* Footer items stay at the bottom */
+.sidebar-footer {
+    margin-top: auto; /* Pushes the footer to the bottom */
+}
+
+/* Additional styling for the settings and logout links */
+.sidebar-footer .nav-item {
+    padding: 10px 15px; /* Adjust padding as needed */
+}
+
+.sidebar-footer .nav-link {
+    color: #ffffff; /* Adjust colors as per your design */
+}

@@ -1,0 +1,14 @@
+/* Apply a lighter color to the default option in the dropdown */
+select {
+    color: #888; /* Default gray color for the placeholder */
+}
+
+/* When a valid option is selected, change the color */
+select option {
+    color: #000; /* Black for actual options */
+}
+
+/* Ensure the dropdown text is black when an option is selected */
+select:not(:focus):not([value=""]) {
+    color: #000; /* Black when a non-placeholder option is selected */
+}

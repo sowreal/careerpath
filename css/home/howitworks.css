@@ -1,0 +1,137 @@
+.how-it-works .step {
+  border-radius: 10px;
+  overflow: hidden;
+  transition: 0.5s;
+  background-color: var(--bs-white);
+  position: relative;
+  padding: 30px;
+  text-align: center;
+  box-shadow: 0 0 45px rgba(0, 0, 0, 0.08);
+  display: flex; /* Use Flexbox for alignment */
+  flex-direction: column; /* Align items in a column */
+  justify-content: space-between; /* Ensure space is distributed */
+  height: 100%; /* Allow cards to stretch to full height */
+}
+
+.how-it-works .how-it-works-icon {
+  position: relative;
+  width: 80px;
+  height: 80px;
+  margin: 0 auto 20px;
+  border-radius: 50%;
+  background-color: var(--bs-dark);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--bs-primary);
+  transition: 0.5s;
+}
+
+.how-it-works .how-it-works-icon i {
+  font-size: 3rem;
+  transition: 0.5s;
+}
+
+.how-it-works .step:hover .how-it-works-icon {
+  background-color: var(--bs-primary);
+}
+
+.how-it-works .step:hover .how-it-works-icon i {
+  transform: rotateX(360deg);
+}
+
+.how-it-works .step h3 {
+  font-size: 1.5rem;
+  color: var(--bs-dark);
+  margin-bottom: 15px;
+  transition: 0.5s;
+}
+
+.how-it-works .step p {
+  font-size: 1rem;
+  color: var(--bs-secondary);
+  transition: 0.5s;
+}
+
+.how-it-works .step:hover h3,
+.how-it-works .step:hover p {
+  color: var(--bs-white);
+}
+
+/* Card Hover Effects */
+.how-it-works .step:hover {
+  background-color: var(--bs-dark);
+  box-shadow: 0px 4px 15px rgba(0, 0, 0, 0.15);
+  transform: scale(1.05);
+}
+
+.how-it-works .step:hover .how-it-works-icon i {
+  color: var(--bs-white);
+}
+
+/* Spacing between cards */
+/* How It Works Section Styling */
+.how-it-works .step {
+  border-radius: 10px;
+  overflow: hidden;
+  transition: 0.5s;
+  background-color: var(--bs-white);
+  position: relative;
+  padding: 30px;
+  text-align: center;
+  box-shadow: 0 0 45px rgba(0, 0, 0, 0.08);
+  display: flex; /* Use Flexbox for alignment */
+  flex-direction: column; /* Align items in a column */
+  justify-content: space-between; /* Ensure space is distributed */
+  height: 100%; /* Allow cards to stretch to full height */
+}
+
+/* Responsive Design */
+@media (max-width: 576px) {
+  .how-it-works .step {
+    flex: 1; /* Allow cards to grow equally in height */
+  }
+}
+
+/*** Footer Start ***/
+.footer {
+  padding: 20px 0; /* Adjust as needed */
+}
+
+.footer .container {
+  padding: 0 15px; /* Ensure padding is uniform */
+}
+
+.footer {
+  background: var(--bs-dark);
+}
+
+@media (max-width: 991px) {
+  .header-carousel .header-carousel-item .carousel-caption {
+    padding-top: 45px;
+  }
+
+  .header-carousel .header-carousel-item {
+    height: 1300px;
+  }
+}
+
+@media (max-width: 767px) {
+  .header-carousel .header-carousel-item {
+    height: 950px;
+  }
+
+  .header-carousel .owl-nav .owl-prev {
+    bottom: -30px;
+    left: 50%;
+    transform: translateX(-50%);
+    margin-left: -45px;
+  }
+
+  .header-carousel .owl-nav .owl-next {
+    bottom: -30px;
+    left: 50%;
+    transform: translateX(-50%);
+    margin-left: 45px;
+  }
+}

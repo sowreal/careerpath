@@ -1,0 +1,37 @@
+/* General styles */
+body {
+    font-family: 'Poppins', sans-serif;
+}
+
+.container {
+    max-width: 1000px;
+    padding: 40px; 
+    margin-top: 0.7rem;
+}
+
+/* Ensure form sections have sufficient space */
+.step-form {
+    padding: 10px;
+    margin-bottom: 20px;
+}
+
+.left-box {
+    background: #00BF7B;
+    color: white;
+    border-radius: 20px 0 0 20px;
+    padding: 20px;
+    text-align: center;
+}
+
+.right-box {
+    padding: 20px;
+}
+
+.header-text h2 {
+    font-weight: 600;
+    margin-bottom: 0.5rem;
+}
+
+.header-text p {
+    margin-bottom: 1.5rem;
+}

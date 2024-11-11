@@ -1,0 +1,88 @@
+/* footer.css */
+
+/* General Footer Styles */
+.footer {
+  background-color: #000; /* Dark background */
+  color: #fff; /* White text */
+}
+
+.footer a {
+  color: #fff;
+  text-decoration: none;
+  transition: color 0.3s;
+}
+
+.footer a:hover {
+  color: var(--bs-primary); /* Bootstrap primary color */
+  text-decoration: underline;
+}
+
+/* Font Awesome Icons Styling */
+.footer .fab {
+  font-size: 1.5rem;
+  margin-right: 15px;
+  transition: color 0.3s;
+}
+
+.footer .fab:hover {
+  color: var(--bs-primary);
+}
+
+/* Responsive Layout Adjustments */
+@media (max-width: 768px) {
+  .footer .row > div {
+      margin-bottom: 20px;
+  }
+
+  .footer .text-md-left {
+      text-align: center !important;
+  }
+
+  .footer .text-md-right {
+      text-align: center !important;
+  }
+}
+
+/* Additional Styling for Better Aesthetics */
+.footer h5 {
+  font-weight: bold;
+  margin-bottom: 20px;
+}
+
+.footer p {
+  line-height: 1.6;
+}
+
+
+/* Enhanced Modal Styles */
+.modal-content.bg-dark {
+  background: linear-gradient(135deg, #1c1c1c, #343a40); /* Gradient background */
+}
+
+.modal-header h5 {
+  font-family: 'Poppins', sans-serif;
+  font-weight: 600;
+}
+
+.modal-footer p {
+  font-size: 0.9rem;
+  opacity: 0.8;
+}
+
+.btn-close-white {
+  filter: invert(1); /* Ensure the close button is visible on dark backgrounds */
+}
+
+/* Optional: Add some animation to the modal */
+.modal.fade .modal-dialog {
+  transition: transform 0.3s ease-out;
+}
+
+.modal.show .modal-dialog {
+  transform: translate(0, 0);
+}
+
+/* Optional: Change cursor on hover over the close button */
+.btn-close-white:hover {
+  cursor: pointer;
+}
