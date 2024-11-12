@@ -69,4 +69,4 @@ $formatted_logs = array_map(function($log) {
 
 // Return JSON response
 echo json_encode(['status' => 'success', 'data' => $formatted_logs, 'total_pages' => $total_pages]);
-?>
+

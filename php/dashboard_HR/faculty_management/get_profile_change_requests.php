@@ -159,4 +159,4 @@ echo json_encode(array(
     'table_data' => $table_data,
     'pagination' => $pagination
 ));
-?>
+
