@@ -20,7 +20,7 @@ CareerPath is a web-based career mapping and tracking system designed to support
 - **Frontend**: Contains the structure and styling for the faculty and HR dashboards, login, signup, and account management pages.
 - **Backend**: Handles user authentication, data management, and profile updates, with a MySQL database for storing faculty information and career tracking data.
 
-## Contributions
+## Current Contributions
 
 - This project was developed with key technical contributions in code and system architecture attributed to Francesca Sophia P. De Guzman.
 - Additional documentation, data sourcing, and strategic planning contributions were also managed by Francesca Sophia P. De Guzman.
