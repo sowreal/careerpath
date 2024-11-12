@@ -34,18 +34,32 @@
                 <li class="nav-item"> <a href="career_progress_tracking.php" class="nav-link <?php echo ($activePage == 'CPT') ? 'active' : ''; ?>"> <i class="nav-icon bi bi-box-seam"></i>
                         <p><strong>Career Progress Tracking</strong></p>
                     </a>
-                    <!-- <ul class="nav nav-treeview">
-                        <li class="nav-item"> francesca <a href="#" class="nav-link"> <i class="nav-icon bi bi-circle"></i>
-                                <p>Career Goals</p>
-                            </a> </li>
-                        <li class="nav-item"> <a href="#" class="nav-link"> <i class="nav-icon bi bi-circle"></i>
-                                <p>Milestone Achievements</p>
-                            </a> </li>
-                        <li class="nav-item"> <a href="#" class="nav-link"> <i class="nav-icon bi bi-circle"></i>
-                                <p>Performance Overview</p>
-                            </a> 
-                        </li>
-                    </ul> -->
+                    <ul class="nav nav-treeview">
+                            <li class="nav-item">
+                                <a href="/career-tracking/teaching" class="nav-link">
+                                    <i class="nav-icon fas fa-chalkboard-teacher"></i>
+                                    <p>Teaching</p>
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a href="/career-tracking/research" class="nav-link">
+                                    <i class="nav-icon fas fa-book"></i>
+                                    <p>Research</p>
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a href="/career-tracking/extension-services" class="nav-link">
+                                    <i class="nav-icon fas fa-hands-helping"></i>
+                                    <p>Extension Services</p>
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a href="/career-tracking/professional-development" class="nav-link">
+                                    <i class="nav-icon fas fa-user-graduate"></i>
+                                    <p>Professional Development</p>
+                                </a>
+                            </li>
+                        </ul>
                 </li>
                 
                 <li class="nav-item"> <a href="document_management.php" class="nav-link <?php echo ($activePage == 'Documents') ? 'active' : ''; ?>"> <i class="nav-icon bi bi-folder"></i>
