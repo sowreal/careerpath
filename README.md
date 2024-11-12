@@ -23,7 +23,7 @@ CareerPath is a web-based career mapping and tracking system designed to support
 ## Current Contributions
 
 - This project was developed with key technical contributions in code and system architecture attributed to Francesca Sophia P. De Guzman.
-- Additional documentation, data sourcing, and strategic planning contributions were also managed by Francesca Sophia P. De Guzman.
+- Data sourcing, and strategic planning contributions were also managed by Francesca Sophia P. De Guzman.
 
 ## Acknowledgments
 This project is developed as a capstone project for SLSU, intended to support faculty career development and performance monitoring in a streamlined, secure, and user-friendly manner.
