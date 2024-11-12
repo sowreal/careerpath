@@ -39,25 +39,25 @@
                     </a>
                     <ul class="nav nav-treeview">
                         <li class="nav-item">
-                            <a href="career_progress_teaching.php" class="nav-link <?php echo ($activePage == 'CPT_Teaching') ? 'active' : ''; ?>">
+                            <a href="career_progress_tracking/career_progress_teaching.php" class="nav-link <?php echo ($activePage == 'CPT_Teaching') ? 'active' : ''; ?>">
                                 <i class="nav-icon bi bi-journal-text"></i> 
                                 <p>Teaching</p>
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a href="career_progress_research.php" class="nav-link <?php echo ($activePage == 'CPT_Research') ? 'active' : ''; ?>">
+                            <a href="career_progress_tracking/career_progress_research.php" class="nav-link <?php echo ($activePage == 'CPT_Research') ? 'active' : ''; ?>">
                                 <i class="nav-icon bi bi-journal-medical"></i> 
                                 <p>Research, Innovation, and Creative Works</p>
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a href="career_progress_extension.php" class="nav-link <?php echo ($activePage == 'CPT_Extension') ? 'active' : ''; ?>">
+                            <a href="career_progress_tracking/career_progress_extension.php" class="nav-link <?php echo ($activePage == 'CPT_Extension') ? 'active' : ''; ?>">
                                 <i class="nav-icon bi bi-people"></i>
                                 <p>Extension Services</p>
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a href="career_progress_professional.php" class="nav-link <?php echo ($activePage == 'CPT_Professional') ? 'active' : ''; ?>">
+                            <a href="career_progress_tracking/career_progress_professional.php" class="nav-link <?php echo ($activePage == 'CPT_Professional') ? 'active' : ''; ?>">
                                 <i class="nav-icon bi bi-award"></i> 
                                 <p>Professional Development</p>
                             </a>
