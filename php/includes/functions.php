@@ -28,4 +28,4 @@ function logChange($conn, $userId, $changedBy, $changedFields, $action = 'Update
     $stmt->bindParam(':changed_fields', $changed_fields_json, PDO::PARAM_STR);
     $stmt->execute();
 }
-?>
+

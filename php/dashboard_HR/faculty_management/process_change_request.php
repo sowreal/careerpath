@@ -96,4 +96,4 @@ try {
     $conn->rollBack();
     echo json_encode(array('success' => false, 'message' => 'An error occurred.'));
 }
-?>
+

@@ -53,4 +53,3 @@ if ($stmt->execute()) {
 } else {
     echo json_encode(['status' => 'error', 'message' => 'Failed to submit change request. Please try again.']);
 }
-?>
