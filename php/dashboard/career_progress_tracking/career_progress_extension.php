@@ -46,7 +46,7 @@ if ($_SESSION['role'] != 'Regular Instructor' && $_SESSION['role'] != 'Contract 
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <?php require_once('../../includes/header.php') ?>
+    <?php require_once '../../includes/header.php' ?>
 </head>
 
 
@@ -63,7 +63,7 @@ if ($_SESSION['role'] != 'Regular Instructor' && $_SESSION['role'] != 'Contract 
 
         <!--begin::App Main-->
         <main class="app-main">
-            <h1>PLACE CONTENT HERE</h1>
+            <h1>CAREER PROGRESS EXTENSION SERVICES PAGE</h1>
         </main>
         <!--end::App Main-->
         

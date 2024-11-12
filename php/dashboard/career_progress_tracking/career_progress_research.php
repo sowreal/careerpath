@@ -63,7 +63,7 @@ if ($_SESSION['role'] != 'Regular Instructor' && $_SESSION['role'] != 'Contract 
 
         <!--begin::App Main-->
         <main class="app-main">
-            <h1>PLACE CONTENT HERE</h1>
+            <h1>CAREER PROGRESS RESEARCH, INNOVATION, AND CREATIVE WORKS PAGE</h1>
         </main>
         <!--end::App Main-->
         
