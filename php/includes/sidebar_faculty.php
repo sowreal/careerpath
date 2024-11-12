@@ -64,9 +64,6 @@
                         </li>
                     </ul>
                 </li>
-
-
-
                 
                 <li class="nav-item"> <a href="document_management.php" class="nav-link <?php echo ($activePage == 'Documents') ? 'active' : ''; ?>"> <i class="nav-icon bi bi-folder"></i>
                         <p><strong>Document Management</strong></p>
