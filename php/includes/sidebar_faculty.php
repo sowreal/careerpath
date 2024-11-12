@@ -47,7 +47,7 @@
                         <li class="nav-item">
                             <a href="career_progress_research.php" class="nav-link <?php echo ($activePage == 'CPT_Research') ? 'active' : ''; ?>">
                                 <i class="nav-icon bi bi-journal-medical"></i> 
-                                <p>Research</p>
+                                <p>Research, Innovation, and Creative Works</p>
                             </a>
                         </li>
                         <li class="nav-item">
