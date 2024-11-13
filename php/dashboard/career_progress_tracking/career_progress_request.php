@@ -47,6 +47,7 @@ if ($_SESSION['role'] != 'Regular Instructor' && $_SESSION['role'] != 'Contract 
 <html lang="en">
 <head>
     <?php require_once '../../includes/header.php' ?>
+
 </head>
 
 
@@ -85,13 +86,12 @@ if ($_SESSION['role'] != 'Regular Instructor' && $_SESSION['role'] != 'Contract 
                     <!-- Centered Form Card Container -->
                     <div class="row justify-content-center">
                         <div class="col-lg-8 col-md-10">
-                            <div class="card shadow-sm mt-4">
+                            <div class="card shadow-sm">
                                 <div class="card-header bg-success text-white">
-                                    <h1 class="card-title">Request Form</h1>
+                                    <h4>Request Form</h4>
                                 </div>
                                 <div class="card-body">
                                     <form>
-
                                         <div class="row">
                                             <!-- Personal Information Column -->
                                             <div class="col-md-6">
@@ -176,7 +176,7 @@ if ($_SESSION['role'] != 'Regular Instructor' && $_SESSION['role'] != 'Contract 
                                                     </div>
                                                     <div class="form-group mt-3 mb-3">
                                                         <label for="date_of_appointment">Date of Appointment</label>
-                                                        <input type="date" class="form-control mt-2" id="date_of_appointment" placeholder="Select date of appointment">
+                                                        <input type="date" class="form-control mt-2" id="date_of_appointment" placeholder="Select date of appointment" required>
                                                     </div>
                                                 </div>
 
@@ -184,15 +184,15 @@ if ($_SESSION['role'] != 'Regular Instructor' && $_SESSION['role'] != 'Contract 
                                                 <div class="col-md-6">
                                                     <div class="form-group">
                                                         <label for="suc_name">Name of SUC</label>
-                                                        <input type="text" class="form-control mt-2" id="suc_name" placeholder="Enter name of SUC">
+                                                        <input type="text" class="form-control mt-2" id="suc_name" placeholder="Enter name of SUC" required>
                                                     </div>
                                                     <div class="form-group mt-3">
                                                         <label for="campus">Campus</label>
-                                                        <input type="text" class="form-control mt-2" id="campus" placeholder="Enter campus name">
+                                                        <input type="text" class="form-control mt-2" id="campus" placeholder="Enter campus name" required>
                                                     </div>
                                                     <div class="form-group mt-3 mb-3">
                                                         <label for="address">Address</label>
-                                                        <input type="text" class="form-control mt-2" id="address" placeholder="Enter address">
+                                                        <input type="text" class="form-control mt-2" id="address" placeholder="Enter address" required>
                                                     </div>
                                                 </div>
                                             </div>
@@ -213,12 +213,14 @@ if ($_SESSION['role'] != 'Regular Instructor' && $_SESSION['role'] != 'Contract 
                 <div class="modal fade" id="confirmationModal" tabindex="-1" aria-labelledby="confirmationModalLabel" aria-hidden="true">
                     <div class="modal-dialog modal-dialog-centered">
                         <div class="modal-content">
+                            <!-- Modal Header -->
                             <div class="modal-header">
                                 <h5 class="modal-title" id="confirmationModalLabel">Confirm Submission</h5>
-                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                    <span aria-hidden="true">&times;</span>
-                                </button>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                    <!-- <span aria-hidden="true">&times;</span> -->
                             </div>
+
+                            <!-- Modal Body -->
                             <div class="modal-body">
                                 <p>
                                     Attached to this request form are my self-accomplished Individual Summary Sheet (ISS) and its attached forms; 
@@ -232,13 +234,20 @@ if ($_SESSION['role'] != 'Regular Instructor' && $_SESSION['role'] != 'Contract 
                                     for this evaluation cycle.
                                 </p>
                             </div>
+
+                            <!-- Modal Footer with Cancel and Agree Buttons -->
                             <div class="modal-footer">
-                                <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                                <!-- Cancel Button -->
+                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+
+                                <!-- Agree and Submit Button -->
                                 <button type="button" class="btn btn-primary" id="confirmSubmitButton">Agree and Submit</button>
                             </div>
                         </div>
                     </div>
                 </div>
+
+
             </section>
         </main>
 
