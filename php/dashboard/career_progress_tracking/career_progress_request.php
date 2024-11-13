@@ -4,7 +4,7 @@ include('../../connection.php'); // Include the database connection
 
 // Define variables for Page Titles and Sidebar Active effects
 $pageTitle = 'Career Path | Career Tracking';
-$activePage = 'CPT_Extension';
+$activePage = 'CPT_Request';
 
 // Check if the user is a Faculty Member
 if ($_SESSION['role'] != 'Regular Instructor' && $_SESSION['role'] != 'Contract of Service Instructor') {
@@ -63,7 +63,7 @@ if ($_SESSION['role'] != 'Regular Instructor' && $_SESSION['role'] != 'Contract 
 
         <!--begin::App Main-->
         <main class="app-main">
-            <h1>CAREER PROGRESS EXTENSION SERVICES PAGE</h1>
+            <h1>CAREER PROGRESS REQUEST PAGE</h1>
         </main>
         <!--end::App Main-->
         
