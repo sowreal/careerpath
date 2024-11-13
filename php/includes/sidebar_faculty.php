@@ -42,6 +42,12 @@ $isCPTActive = in_array($activePage, ['CPT', 'CPT_Teaching', 'CPT_Research', 'CP
                     </a>
                     <ul class="nav nav-treeview">
                         <li class="nav-item ms-3">
+                            <a href="/careerpath/php/dashboard/career_progress_tracking/career_progress_request.php" class="nav-link <?php echo ($activePage == 'CPT_Request') ? 'active' : ''; ?>">
+                                <i class="nav-icon bi bi-journal-text"></i> 
+                                <p>Request Form</p>
+                            </a>
+                        </li>
+                        <li class="nav-item ms-3">
                             <a href="/careerpath/php/dashboard/career_progress_tracking/career_progress_teaching.php" class="nav-link <?php echo ($activePage == 'CPT_Teaching') ? 'active' : ''; ?>">
                                 <i class="nav-icon bi bi-journal-text"></i> 
                                 <p>Teaching</p>
