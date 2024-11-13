@@ -1,6 +1,6 @@
 <?php
 // Determine if any of the Career Progress Tracking pages are active
-$isCPTActive = in_array($activePage, ['CPT', 'CPT_Teaching', 'CPT_Research', 'CPT_Extension', 'CPT_Professional']);
+$isCPTActive = in_array($activePage, ['CPT', 'CPT_Request', 'CPT_Teaching', 'CPT_Research', 'CPT_Extension', 'CPT_Professional']);
 ?>
 
 <aside class="app-sidebar sidebar-bg" data-bs-theme="dark"> 
@@ -41,6 +41,12 @@ $isCPTActive = in_array($activePage, ['CPT', 'CPT_Teaching', 'CPT_Research', 'CP
                         <i class="nav-arrow bi bi-chevron-right"></i> 
                     </a>
                     <ul class="nav nav-treeview">
+                        <li class="nav-item ms-3">
+                            <a href="/careerpath/php/dashboard/career_progress_tracking/career_progress_request.php" class="nav-link <?php echo ($activePage == 'CPT_Request') ? 'active' : ''; ?>">
+                                <i class="nav-icon bi bi-file-earmark-text"></i> 
+                                <p>Request Form</p>
+                            </a>
+                        </li>
                         <li class="nav-item ms-3">
                             <a href="/careerpath/php/dashboard/career_progress_tracking/career_progress_teaching.php" class="nav-link <?php echo ($activePage == 'CPT_Teaching') ? 'active' : ''; ?>">
                                 <i class="nav-icon bi bi-journal-text"></i> 
