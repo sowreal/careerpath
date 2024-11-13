@@ -100,19 +100,19 @@ if ($_SESSION['role'] != 'Regular Instructor' && $_SESSION['role'] != 'Contract 
                                                     <label for="last_name">Last Name</label>
                                                     <input type="text" class="form-control mt-2" id="last_name" 
                                                         placeholder="Enter last name" 
-                                                        value="<?php echo $_SESSION['last_name']; ?>">
+                                                        value="<?php echo $_SESSION['last_name']; ?>" required>
                                                 </div>
                                                 <div class="form-group mt-3">
                                                     <label for="first_name">First Name</label>
                                                     <input type="text" class="form-control mt-2" id="first_name" 
                                                         placeholder="Enter first name" 
-                                                        value="<?php echo $_SESSION['first_name']; ?>">
+                                                        value="<?php echo $_SESSION['first_name']; ?>" required>
                                                 </div>
                                                 <div class="form-group mt-3 mb-3">
                                                     <label for="email">Email</label>
                                                     <input type="email" class="form-control mt-2" id="email"
                                                         placeholder="Enter email" 
-                                                        value="<?php echo $_SESSION['email']; ?>">
+                                                        value="<?php echo $_SESSION['email']; ?>" required>
                                                 </div>
                                             </div>
 
@@ -121,18 +121,18 @@ if ($_SESSION['role'] != 'Regular Instructor' && $_SESSION['role'] != 'Contract 
                                                 <h5 class="font-weight-bold">Highest Educational Attainment</h5>
                                                 <div class="form-group mt-3">
                                                     <label for="degree">Name of Degree</label>
-                                                    <input type="text" class="form-control mt-2" id="degree" placeholder="Enter highest degree">
+                                                    <input type="text" class="form-control mt-2" id="degree" placeholder="Enter highest degree" required>
                                                 </div>
                                                 <div class="form-group mt-3">
                                                     <label for="name_hei">Name of HEI</label>
-                                                    <input type="text" class="form-control mt-2" id="name_hei" placeholder="Enter name of Higher Education Institution">
+                                                    <input type="text" class="form-control mt-2" id="name_hei" placeholder="Enter name of Higher Education Institution" required>
                                                 </div>
                                                 <div class="form-group mt-3">
                                                     <label for="year_graduated">Year Graduated</label>
-                                                    <input type="text" class="form-control mt-2" id="year_graduated" placeholder="Enter year of graduation">
+                                                    <input type="text" class="form-control mt-2" id="year_graduated" placeholder="Enter year of graduation" required>
                                                 </div>
                                             </div>
-
+                                        </div>
                                             <!-- Current Employment Status Section -->
                                             <div class="row mt-4">
                                                 <div class="col-12">
@@ -142,7 +142,7 @@ if ($_SESSION['role'] != 'Regular Instructor' && $_SESSION['role'] != 'Contract 
                                                 <div class="col-md-6">
                                                     <div class="form-group">
                                                         <label for="faculty_rank">Current Faculty Rank</label>
-                                                        <select class="form-control" id="faculty_rank" name="faculty_rank" required>
+                                                        <select class="form-control mt-2" id="faculty_rank" name="faculty_rank" required>
                                                             <option value="Instructor I" <?php if($_SESSION['faculty_rank'] == 'Instructor I') echo 'selected'; ?>>Instructor I</option>
                                                             <option value="Instructor II" <?php if($_SESSION['faculty_rank'] == 'Instructor II') echo 'selected'; ?>>Instructor II</option>
                                                             <option value="Instructor III" <?php if($_SESSION['faculty_rank'] == 'Instructor III') echo 'selected'; ?>>Instructor III</option>
@@ -167,7 +167,8 @@ if ($_SESSION['role'] != 'Regular Instructor' && $_SESSION['role'] != 'Contract 
                                                     </div>
                                                     <div class="form-group mt-3">
                                                         <label for="mode_of_appointment">Mode of Appointment</label>
-                                                        <select class="form-control" id="mode_of_appointment" name="mode_of_appointment">
+                                                        <select class="form-control mt-2" id="mode_of_appointment" name="mode_of_appointment" required>
+                                                            <option value="">Select Mode of Appointment</option>
                                                             <option value="new_appointment">New Appointment</option>
                                                             <option value="institutional_promotion">Institutional Promotion</option>
                                                             <option value="nbc461">NBC 461</option>
@@ -175,7 +176,7 @@ if ($_SESSION['role'] != 'Regular Instructor' && $_SESSION['role'] != 'Contract 
                                                     </div>
                                                     <div class="form-group mt-3 mb-3">
                                                         <label for="date_of_appointment">Date of Appointment</label>
-                                                        <input type="date" class="form-control" id="date_of_appointment" placeholder="Select date of appointment">
+                                                        <input type="date" class="form-control mt-2" id="date_of_appointment" placeholder="Select date of appointment">
                                                     </div>
                                                 </div>
 
@@ -183,28 +184,24 @@ if ($_SESSION['role'] != 'Regular Instructor' && $_SESSION['role'] != 'Contract 
                                                 <div class="col-md-6">
                                                     <div class="form-group">
                                                         <label for="suc_name">Name of SUC</label>
-                                                        <input type="text" class="form-control" id="suc_name" placeholder="Enter name of SUC">
+                                                        <input type="text" class="form-control mt-2" id="suc_name" placeholder="Enter name of SUC">
                                                     </div>
                                                     <div class="form-group mt-3">
                                                         <label for="campus">Campus</label>
-                                                        <input type="text" class="form-control" id="campus" placeholder="Enter campus name">
+                                                        <input type="text" class="form-control mt-2" id="campus" placeholder="Enter campus name">
                                                     </div>
                                                     <div class="form-group mt-3 mb-3">
                                                         <label for="address">Address</label>
-                                                        <input type="text" class="form-control" id="address" placeholder="Enter address">
+                                                        <input type="text" class="form-control mt-2" id="address" placeholder="Enter address">
                                                     </div>
                                                 </div>
                                             </div>
-
-                                        </div>
-
                                         <!-- Submit Button with Modal Trigger -->
                                         <div class="mt-4 text-right">
-                                            <button type="button" class="btn btn-success" data-toggle="modal" data-target="#confirmationModal">
+                                            <button type="button" class="btn btn-success" id="submitRequestButton">
                                                 Submit Request
                                             </button>
                                         </div>
-                                        
                                     </form>
                                 </div>
                             </div>
@@ -226,18 +223,18 @@ if ($_SESSION['role'] != 'Regular Instructor' && $_SESSION['role'] != 'Contract 
                                 <p>
                                     Attached to this request form are my self-accomplished Individual Summary Sheet (ISS) and its attached forms; 
                                     checklist of evidence submitted; and photocopy of the sets of evidence based on my ISS. 
-                                    The electronic copies of the ISS and the evidence are available in my Google Drive that I will willingly share 
-                                    with the Evaluation Committees for the validation of the information submitted.
+                                    The electronic copies of the ISS and the evidence are available in my Google Drive that I will willingly 
+                                    share with the Evaluation Committees for the validation of the information submitted.
                                 </p>
                                 <p>
                                     I attest that all information provided in this request for position reclassification are true, accurate, and complete. 
-                                    I understand that any falsification of these documents may lead to my disqualification 
-                                    from position reclassification for this evaluation cycle.
+                                    I understand that any falsification of these documents may lead to my disqualification from position reclassification 
+                                    for this evaluation cycle.
                                 </p>
                             </div>
                             <div class="modal-footer">
                                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
-                                <button type="submit" class="btn btn-primary">Agree and Submit</button>
+                                <button type="button" class="btn btn-primary" id="confirmSubmitButton">Agree and Submit</button>
                             </div>
                         </div>
                     </div>
@@ -261,6 +258,33 @@ if ($_SESSION['role'] != 'Regular Instructor' && $_SESSION['role'] != 'Contract 
         
     <!--begin::Script--> 
     <?php require_once('../../includes/dashboard_default_scripts.php'); ?> 
+
+
+
+
+    <!-- Validation and Modal Trigger Logic -->
+    <script>
+        document.querySelector('#submitRequestButton').addEventListener('click', function(event) {
+            // Reference the form element
+            const form = document.querySelector('form');
+            
+            // Check if the form is valid using the HTML5 checkValidity method
+            if (form.checkValidity()) {
+                // If valid, prevent the default action and show the confirmation modal
+                event.preventDefault();
+                $('#confirmationModal').modal('show');
+            } else {
+                // If not valid, let the browser display the validation messages
+                form.reportValidity();
+            }
+        });
+
+        // Event listener for the Agree and Submit button inside the modal
+        document.querySelector('#confirmSubmitButton').addEventListener('click', function() {
+            // Submit the form when the user clicks "Agree and Submit" in the modal
+            document.querySelector('form').submit();
+        });
+    </script>
 
 
 </body>
