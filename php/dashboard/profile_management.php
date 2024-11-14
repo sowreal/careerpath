@@ -554,12 +554,13 @@ if (isset($_GET['request'])) {
                     return;
                 }
 
-                // Validate file size (2MB)
-                if (file.size > 2097152) {
-                    alert('Sorry, your file is too large. Maximum size is 2MB.');
+                // Validate file size (10MB)
+                if (file.size > 10485760) {  // 10 * 1024 * 1024 = 10485760 bytes
+                    alert('Sorry, your file is too large. Maximum size is 10MB.');
                     profilePictureInput.value = '';
                     return;
                 }
+
 
                 const reader = new FileReader();
                 reader.onload = function (e) {
