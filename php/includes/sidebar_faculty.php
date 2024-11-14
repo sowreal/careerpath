@@ -7,9 +7,9 @@ $isCPTActive = in_array($activePage, ['CPT', 'CPT_Request', 'CPT_Teaching', 'CPT
     <!--begin::Sidebar Brand-->
     <div class="sidebar-brand sidebar-bg-top"> 
         <!--begin::Brand Link--> 
-        <a href="dashboard_faculty.php" class="brand-link"> 
+        <a href="php/dashboard/dashboard_faculty.php" class="brand-link"> 
             <!--begin::Brand Image--> 
-            <img src="/careerpath/img/cropped-SLSU_Logo-1.png" alt="AdminLTE Logo" class="brand-image opacity-75 shadow"> <!--end::Brand Image--> 
+            <img src="img/cropped-SLSU_Logo-1.png" alt="AdminLTE Logo" class="brand-image opacity-75 shadow"> <!--end::Brand Image--> 
 
             <!--begin::Brand Text--> 
             <span class="brand-text fw-light">SLSU Career Path</span>
@@ -22,14 +22,14 @@ $isCPTActive = in_array($activePage, ['CPT', 'CPT_Request', 'CPT_Teaching', 'CPT
         <nav class="mt-2"> 
             <!--begin::Sidebar Menu-->
             <ul class="nav sidebar-menu flex-column" data-lte-toggle="treeview" role="menu" data-accordion="false">
-                <li class="nav-item"> <a href="/careerpath/php/dashboard/dashboard_faculty.php" class="nav-link <?php echo ($activePage == 'Dashboard') ? 'active' : ''; ?>"> <i class="nav-icon bi bi-speedometer2"></i>
+                <li class="nav-item"> <a href="php/dashboard/dashboard_faculty.php" class="nav-link <?php echo ($activePage == 'Dashboard') ? 'active' : ''; ?>"> <i class="nav-icon bi bi-speedometer2"></i>
                         <p><strong>Dashboard</strong>
                         <!-- <i class="nav-arrow bi bi-chevron-right"></i> -->
                         </p>
                     </a>
                 </li>
 
-                <li class="nav-item"> <a href="/careerpath/php/dashboard/profile_management.php" class="nav-link <?php echo ($activePage == 'Profile') ? 'active' : ''; ?>"> <i class="nav-icon bi bi-person-circle active"></i>
+                <li class="nav-item"> <a href="/php/dashboard/profile_management.php" class="nav-link <?php echo ($activePage == 'Profile') ? 'active' : ''; ?>"> <i class="nav-icon bi bi-person-circle active"></i>
                         <p><strong>Profile Management</strong></p>
                     </a> 
                 </li>
