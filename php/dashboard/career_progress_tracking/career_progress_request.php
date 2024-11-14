@@ -47,7 +47,6 @@ if ($_SESSION['role'] != 'Regular Instructor' && $_SESSION['role'] != 'Contract 
 <html lang="en">
 <head>
     <?php require_once '../../includes/header.php' ?>
-
 </head>
 
 

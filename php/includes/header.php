@@ -16,7 +16,11 @@
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.min.css" integrity="sha256-Qsx5lrStHZyR9REqhUF8iQt73X06c8LGIUPzpOhwRrI=" crossorigin="anonymous">
 
 <!-- Required Plugin (AdminLTE) -->
+<<<<<<< HEAD
 <link rel="stylesheet" href="../../AdminLTE/dist/css/adminlte.min.css">
+=======
+<link rel="stylesheet" href="<?php echo BASE_URL; ?>AdminLTE/dist/css/adminlte.min.css">
+>>>>>>> a5711ab3cc3774a2da976211607461712342840f
 
 <!-- apexcharts -->
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/apexcharts@3.37.1/dist/apexcharts.css" integrity="sha256-4MX+61mt9NVvvuPjUWdUdyfZfxSB1/Rf9WtqRHgG5S0=" crossorigin="anonymous">
@@ -26,7 +30,14 @@
 
 
 <!-- Your Custom Global Styles -->
+<<<<<<< HEAD
 <link rel="stylesheet" href="../../css/global.css">
 <!-- Sidebar BG Override -->
 <link rel="stylesheet" href="../../css/dashboard/faculty_overrides.css">
 <link rel="stylesheet" href="../../css/dashboard/faculty_sidebar_footer.css">
+=======
+<link rel="stylesheet" href="<?php echo BASE_URL; ?>css/global.css">
+<!-- Sidebar BG Override -->
+<link rel="stylesheet" href="<?php echo BASE_URL; ?>css/dashboard/faculty_overrides.css">
+<link rel="stylesheet" href="<?php echo BASE_URL; ?>css/dashboard/faculty_sidebar_footer.css">
+>>>>>>> a5711ab3cc3774a2da976211607461712342840f
