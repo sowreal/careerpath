@@ -80,8 +80,6 @@ if (isset($_GET['request'])) {
 
     <!-- Cropper.js CSS -->
     <link href="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.13/cropper.min.css" rel="stylesheet">
-
-
 </head>
 
 
@@ -513,7 +511,7 @@ if (isset($_GET['request'])) {
 
 
         <!--begin::Footer-->
-        <?php require_once('../includes/footer.php')?> 
+        <?php //require_once('../includes/footer.php')?>
         <!--end::Footer-->
     </div> <!--end::App Wrapper--> 
     
@@ -523,6 +521,8 @@ if (isset($_GET['request'])) {
     <?php require_once('../includes/dashboard_default_scripts.php');?>
     <!-- Cropper.js JS -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.13/cropper.min.js"></script>
+    <!-- Bootstrap JS Bundle (includes Popper) -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 
 
     <!-- JavaScript for Cropping and Uploading -->
@@ -554,12 +554,13 @@ if (isset($_GET['request'])) {
                     return;
                 }
 
-                // Validate file size (2MB)
-                if (file.size > 2097152) {
-                    alert('Sorry, your file is too large. Maximum size is 2MB.');
+                // Validate file size (10MB)
+                if (file.size > 10485760) {  // 10 * 1024 * 1024 = 10485760 bytes
+                    alert('Sorry, your file is too large. Maximum size is 10MB.');
                     profilePictureInput.value = '';
                     return;
                 }
+
 
                 const reader = new FileReader();
                 reader.onload = function (e) {
