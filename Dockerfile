@@ -14,8 +14,14 @@ RUN apt-get update && apt-get install -y \
 # Enable Apache mod_rewrite for pretty URLs
 RUN a2enmod rewrite
 
+# Set DocumentRoot to /var/www/html/careerpath
+RUN sed -i 's|/var/www/html|/var/www/html/careerpath|g' /etc/apache2/sites-available/000-default.conf
+
 # Copy your project files to the Docker image
-COPY . /var/www/html
+COPY . /var/www/html/careerpath
 
 # Set permissions for the project files
-RUN chown -R www-data:www-data /var/www/html && chmod -R 755 /var/www/html
+RUN chown -R www-data:www-data /var/www/html/careerpath && chmod -R 755 /var/www/html/careerpath
+
+# Expose port 80
+EXPOSE 80

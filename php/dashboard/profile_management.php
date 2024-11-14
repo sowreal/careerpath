@@ -1,6 +1,7 @@
 <?php
 include('../session.php'); // Ensure the user is logged in
 include('../connection.php'); // Include the database connection
+require_once '../config.php';
 
 // Define variables for Page Titles and Sidebar Active effects
 $pageTitle = 'Career Path | Profile';
@@ -31,7 +32,7 @@ if ($_SESSION['role'] != 'Regular Instructor' && $_SESSION['role'] != 'Contract 
         // Notify the user and redirect to the login page
         echo "<script>
                 alert('Your account is not authorized. Redirecting to login page.');
-                window.location.href = '../login.php';
+                window.location.href = '" . BASE_URL . "/php/login.php';
             </script>";
         exit();
     }

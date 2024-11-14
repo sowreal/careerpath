@@ -1,6 +1,7 @@
 <?php
 include('../../session.php'); // Ensure the user is logged in
 include('../../connection.php'); // Include the database connection
+require_once '../../config.php';
 
 // Define variables for Page Titles and Sidebar Active effects
 $pageTitle = 'Career Path | Career Tracking';
@@ -47,7 +48,6 @@ if ($_SESSION['role'] != 'Regular Instructor' && $_SESSION['role'] != 'Contract 
 <html lang="en">
 <head>
     <?php require_once '../../includes/header.php' ?>
-
 </head>
 
 
@@ -211,10 +211,10 @@ if ($_SESSION['role'] != 'Regular Instructor' && $_SESSION['role'] != 'Contract 
 
                 <!-- Confirmation Modal -->
                 <div class="modal fade" id="confirmationModal" tabindex="-1" aria-labelledby="confirmationModalLabel" aria-hidden="true">
-                    <div class="modal-dialog modal-dialog-centered">
+                    <div class="modal-dialog modal-dialog-centered modal-lg">
                         <div class="modal-content">
                             <!-- Modal Header -->
-                            <div class="modal-header">
+                            <div class="modal-header bg-success text-white">
                                 <h5 class="modal-title" id="confirmationModalLabel">Confirm Submission</h5>
                                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                                     <!-- <span aria-hidden="true">&times;</span> -->
@@ -222,13 +222,13 @@ if ($_SESSION['role'] != 'Regular Instructor' && $_SESSION['role'] != 'Contract 
 
                             <!-- Modal Body -->
                             <div class="modal-body">
-                                <p>
+                                <p class="fs-5">
                                     Attached to this request form are my self-accomplished Individual Summary Sheet (ISS) and its attached forms; 
                                     checklist of evidence submitted; and photocopy of the sets of evidence based on my ISS. 
                                     The electronic copies of the ISS and the evidence are available in my Google Drive that I will willingly 
                                     share with the Evaluation Committees for the validation of the information submitted.
                                 </p>
-                                <p>
+                                <p class="fs-5">
                                     I attest that all information provided in this request for position reclassification are true, accurate, and complete. 
                                     I understand that any falsification of these documents may lead to my disqualification from position reclassification 
                                     for this evaluation cycle.
@@ -241,7 +241,7 @@ if ($_SESSION['role'] != 'Regular Instructor' && $_SESSION['role'] != 'Contract 
                                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
 
                                 <!-- Agree and Submit Button -->
-                                <button type="button" class="btn btn-primary" id="confirmSubmitButton">Agree and Submit</button>
+                                <button type="button" class="btn btn-success" id="confirmSubmitButton">Agree and Submit</button>
                             </div>
                         </div>
                     </div>

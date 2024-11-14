@@ -1,23 +1,14 @@
-<!-- For Database connection -->
- 
 <?php
-// config.php
-$host = '127.0.0.1';
-$db = 'careerpath'; // Your database name
-$user = 'root'; // Your MySQL username
-$pass = ''; // Your MySQL password
-$charset = 'utf8mb4';
 
-$dsn = "mysql:host=$host;dbname=$db;charset=$charset";
-$options = [
-    PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,
-    PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC,
-    PDO::ATTR_EMULATE_PREPARES => false,
-];
+// Define the base URL for assets and links
+$protocol = (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off' || $_SERVER['SERVER_PORT'] == 443) ? "https://" : "http://";
+// Get host (e.g., localhost or example.com)
+$host = $_SERVER['HTTP_HOST'];
 
-try {
-    $pdo = new PDO($dsn, $user, $pass, $options);
-} catch (PDOException $e) {
-    throw new PDOException($e->getMessage(), (int)$e->getCode());
-}
-?>
+// Set project directory path (adjust as needed for your environment)
+$projectDir = ''; // Leave empty ('') if your project is at the root level on production
+                  // put /careerpath if not
+
+// Define BASE_URL dynamically
+define('BASE_URL', $protocol . $host . $projectDir);
+
