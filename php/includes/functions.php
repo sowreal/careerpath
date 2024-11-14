@@ -1,6 +1,4 @@
 <?php
-// functions.php
-
 /**
  * Logs changes to the profile_change_logs table.
  *

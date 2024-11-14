@@ -89,15 +89,26 @@ if (isset($_GET['token'])) {
                 <div class="container">
                     <h2 class="mb-4">Create New Password</h2>
                     <form id="resetPasswordForm">
-                        <div class="mb-3">
-                            <label for="newPassword" class="form-label">New Password:</label>
+                        <!-- New Password -->
+                        <label for="newPassword" class="form-label">New Password:</label>
+                        <div class="input-group mb-3">
                             <input type="password" class="form-control" id="newPassword" name="password" required>
+                            <span class="input-group-text" onclick="togglePassword('newPassword')">
+                                <i class="far fa-eye"></i>
+                            </span>
                         </div>
-                        <div class="mb-3">
-                            <label for="confirmNewPassword" class="form-label">Confirm New Password:</label>
+                        
+                        <!-- Confirm Password -->
+                        <label for="confirmNewPassword" class="form-label">Confirm New Password:</label>
+                        <div class="input-group mb-3">
                             <input type="password" class="form-control" id="confirmNewPassword" name="confirm_password" required>
+                            <span class="input-group-text" onclick="togglePassword('confirmNewPassword')">
+                                <i class="far fa-eye"></i>
+                            </span>
                         </div>
+                        
                         <div id="resetPasswordMessage" class="mb-3"></div>
+                        
                         <div class="row mb-3">
                             <div class="col">
                                 <a href="../index.html" class="btn btn-secondary w-100">Home</a>
@@ -122,6 +133,26 @@ if (isset($_GET['token'])) {
 
 <!-- Custom JS -->
 <script src="../js/login.js"></script>
+
+<!-- Toggle Show/Hide password -->
+<script>
+function togglePassword(fieldId) {
+    const passwordField = document.getElementById(fieldId);
+    const icon = passwordField.nextElementSibling.querySelector('i');
+
+    if (passwordField.type === "password") {
+        passwordField.type = "text";
+        icon.classList.remove('fa-eye');
+        icon.classList.add('fa-eye-slash');
+    } else {
+        passwordField.type = "password";
+        icon.classList.remove('fa-eye-slash');
+        icon.classList.add('fa-eye');
+    }
+}
+</script>
+
+
 
 <script>
     document.getElementById('resetPasswordForm').addEventListener('submit', function(event) {
