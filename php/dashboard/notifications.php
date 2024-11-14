@@ -1,19 +1,46 @@
 <?php
 include('../session.php'); // Ensure the user is logged in
 include('../connection.php'); // Include the database connection
-include '../config.php';
+require_once '../config.php';
 
 // Define variables for Page Titles and Sidebar Active effects
 $pageTitle = 'Career Path | Notifications';
 $activePage = 'Notifs';
 
-// Check if the user is a faculty member
-if ($_SESSION['role'] != 'Regular Instructor' && $_SESSION['role'] != 'Contract of Service Instructor') {
-    // If the user is not a faculty member, redirect to their appropriate dashboard
-    header('Location: ../dashboard_HR/dashboard_HR.php'); // Redirect to HR dashboard if not a faculty member
-    exit();
+// Check if the user is a Faculty Member
+if ($_SESSION['role'] != 'Regular Instructor' && $_SESSION['role'] != 'Contract of Service Instructor') { 
+    // Check if the user is Human Resources
+    if ($_SESSION['role'] == 'Human Resources') { 
+        // Redirect to HR dashboard
+        header('Location: ' . BASE_URL . '/php/dashboard_HR/dashboard_HR.php'); 
+        exit(); 
+    } else { 
+            // **Start of Session Destruction** 
+            // Unset all session variables 
+            $_SESSION = array(); 
+
+            // Kill the session, also delete the session cookie. 
+            if (ini_get("session.use_cookies")) { 
+                $params = session_get_cookie_params(); 
+                setcookie(session_name(), '', time() - 42000, 
+                $params["path"], $params["domain"], 
+                $params["secure"], $params["httponly"] 
+            ); 
+        } 
+        
+        // Finally, destroy the session. 
+        session_destroy(); 
+        // Notify the user and redirect to the login page 
+        echo "<script> 
+        alert('Your account is not authorized. Redirecting to login page.'); 
+        window.location.href = '" . BASE_URL . "/php/login.php';
+        </script>"; 
+        exit(); 
+    } 
+} else { 
+    // Faculty member's sidebar is set, proceed with their dashboard logic 
+    $sidebarFile = BASE_URL . 'php/includes/sidebar_faculty.php'; 
 }
-// Your dashboard content goes here
 ?>
 
 

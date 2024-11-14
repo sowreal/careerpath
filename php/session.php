@@ -1,14 +1,16 @@
 <?php
 session_start();
+include 'config.php';
 
 // Check if the user is logged in
 if (!isset($_SESSION['user_id'])) {
-    header('Location: login.php');
+    header('Location: '. BASE_URL . '/php/login.php');
     exit();
 }
 
 // Include the database connection
-include('connection.php');
+include 'connection.php';
+
 
 // Initialize variables to avoid undefined variable warnings
 $formattedCreatedAt = 'Unknown';  // Default value if not set
@@ -45,7 +47,7 @@ if (!isset($_SESSION['first_name']) || !isset($_SESSION['last_name'])) {
         $_SESSION['last_updated'] = $user['last_updated'];
     } else {
         // If user data not found, force logout
-        header('Location: logout.php');
+        header('Location: ' .BASE_URL . '/php/logout.php');
         exit();
     }
 }

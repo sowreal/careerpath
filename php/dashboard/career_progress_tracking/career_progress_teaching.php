@@ -1,7 +1,7 @@
 <?php
 include('../../session.php'); // Ensure the user is logged in
 include('../../connection.php'); // Include the database connection
-include '../../config.php';
+require_once '../../config.php';
 
 // Define variables for Page Titles and Sidebar Active effects
 $pageTitle = 'Career Path | Career Tracking';
