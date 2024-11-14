@@ -3,6 +3,7 @@
 session_start();
 require 'connection.php';  // Include your database connection
 require 'send_email.php';  // Include your email sending function
+require_once 'config.php';
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $email = $_POST['email'];
@@ -58,18 +59,19 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $stmt = $conn->prepare("INSERT INTO password_resets (email, token, expires, request_time) VALUES (?, ?, ?, ?)");
         $stmt->execute([$email, $token, $expires, $currentTime]);
 
-        // Send reset email
-        $resetLink = "http://localhost/careerpath/php/reset_password.php?token=$token";
+        // Generate the reset link using the dynamic BASE_URL
+        $resetLink = BASE_URL . "/php/reset_password.php?token=$token";
+        // Send the reset email
         $subject = "Password Reset Request";
         $message = "Hello,
 
-                    We received a request to reset your password. Click the link below to reset your password:
+        We received a request to reset your password. Click the link below to reset your password:
 
-                    $resetLink
+        $resetLink
 
-                    If you did not request a password reset, please ignore this email.
+        If you did not request a password reset, please ignore this email.
 
-                    Thank you.";
+        Thank you.";
 
         // Use your sendEmail function
         sendEmail($email, $subject, $message);
