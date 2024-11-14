@@ -12,13 +12,13 @@
             <!--begin::Notifications Dropdown Menu-->
             <li class="nav-item dropdown"> <a class="nav-link" data-bs-toggle="dropdown" href="#"> <i class="bi bi-bell-fill"></i> <span class="navbar-badge badge text-bg-warning">15</span> </a>
                 <div class="dropdown-menu dropdown-menu-lg dropdown-menu-end"> <span class="dropdown-item dropdown-header">15 Notifications</span>
-                    <div class="dropdown-divider"></div> <a href="../dashboard/notifications.php#" class="dropdown-item"> <i class="bi bi-envelope me-2"></i> 4 new messages
+                    <div class="dropdown-divider"></div> <a href="<?php echo BASE_URL; ?><?php echo BASE_URL; ?>php/dashboard/notifications.php#" class="dropdown-item"> <i class="bi bi-envelope me-2"></i> 4 new messages
                         <span class="float-end text-secondary fs-7">3 mins</span> </a>
-                    <div class="dropdown-divider"></div> <a href="../dashboard/notifications.php" class="dropdown-item"> <i class="bi bi-people-fill me-2"></i> 8 friend requests
+                    <div class="dropdown-divider"></div> <a href="<?php echo BASE_URL; ?><?php echo BASE_URL; ?>php/dashboard/notifications.php" class="dropdown-item"> <i class="bi bi-people-fill me-2"></i> 8 friend requests
                         <span class="float-end text-secondary fs-7">12 hours</span> </a>
-                    <div class="dropdown-divider"></div> <a href="../dashboard/notifications.php" class="dropdown-item"> <i class="bi bi-file-earmark-fill me-2"></i> 3 new reports
+                    <div class="dropdown-divider"></div> <a href="<?php echo BASE_URL; ?><?php echo BASE_URL; ?>php/dashboard/notifications.php" class="dropdown-item"> <i class="bi bi-file-earmark-fill me-2"></i> 3 new reports
                         <span class="float-end text-secondary fs-7">2 days</span> </a>
-                    <div class="dropdown-divider"></div> <a href="../dashboard/notifications.php" class="dropdown-item dropdown-footer">
+                    <div class="dropdown-divider"></div> <a href="<?php echo BASE_URL; ?><?php echo BASE_URL; ?>php/dashboard/notifications.php" class="dropdown-item dropdown-footer">
                         See All Notifications
                     </a>
                 </div>
@@ -26,12 +26,12 @@
             <li class="nav-item"> <a class="nav-link" href="#" data-lte-toggle="fullscreen"> <i data-lte-icon="maximize" class="bi bi-arrows-fullscreen"></i> <i data-lte-icon="minimize" class="bi bi-fullscreen-exit" style="display: none;"></i> </a> </li> <!--end::Fullscreen Toggle--> <!--begin::User Menu Dropdown-->
             <li class="nav-item dropdown user-menu"> 
                 <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown"> 
-                    <img src="<?php echo (!empty($_SESSION['profile_picture'])) ? '../../uploads/' . $_SESSION['profile_picture'] : '../../img/cropped-SLSU_Logo-1.png'; ?>" class="user-image rounded-circle shadow" alt="User Image"> 
+                    <img src="<?php echo (!empty($_SESSION['profile_picture'])) ? BASE_URL . 'uploads/' . $_SESSION['profile_picture'] : BASE_URL . 'img/cropped-SLSU_Logo-1.png'; ?>" class="user-image rounded-circle shadow" alt="User Image"> 
                     <span class="d-none d-md-inline"><?php echo $_SESSION['first_name'] . ' ' . $_SESSION['last_name'];?></span>
                 </a>
                 <ul class="dropdown-menu dropdown-menu-lg dropdown-menu-end"> 
                     <!--begin::User Image-->
-                    <li class="user-header text-bg-success"> <img src="<?php echo (!empty($_SESSION['profile_picture'])) ? '../../uploads/' . $_SESSION['profile_picture'] : '../../img/cropped-SLSU_Logo-1.png'; ?>" class="rounded-circle shadow" alt="User Image">
+                    <li class="user-header text-bg-success"> <img src="<?php echo (!empty($_SESSION['profile_picture'])) ? BASE_URL . 'uploads/' . $_SESSION['profile_picture'] : BASE_URL . 'img/cropped-SLSU_Logo-1.png'; ?>" class="rounded-circle shadow" alt="User Image">
                         <p>
                         <h4><?php echo $_SESSION['first_name'] . ' ' . $_SESSION['last_name'];?></h4> 
                             <?php echo $_SESSION['faculty_rank'] . '<br>' . $_SESSION['department'];?>
@@ -51,8 +51,8 @@
                     <!--end::Menu Body--> 
                     
                     <!--begin::Menu Footer-->
-                    <li class="user-footer"> <a href="../dashboard/profile_management.php" class="btn btn-default btn-flat">Profile</a> 
-                    <a href="../logout.php" class="btn btn-default btn-flat float-end">Sign out</a> </li> <!--end::Menu Footer-->
+                    <li class="user-footer"> <a href="<?php echo BASE_URL; ?>php/dashboard/profile_management.php" class="btn btn-default btn-flat">Profile</a> 
+                    <a href="<?php echo BASE_URL; ?>php/logout.php" class="btn btn-default btn-flat float-end">Sign out</a> </li> <!--end::Menu Footer-->
                 </ul>
             </li> 
             <!--end::User Menu Dropdown-->

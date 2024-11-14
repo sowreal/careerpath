@@ -1,3 +1,5 @@
+version: '3.8'
+
 services:
   app:
     build:
@@ -7,7 +9,7 @@ services:
     ports:
       - "8080:80"
     volumes:
-      - .:/var/www/html
+      - .:/var/www/html/careerpath
     depends_on:
       - db
 
@@ -16,7 +18,7 @@ services:
     container_name: careerpath_db
     environment:
       MYSQL_ROOT_PASSWORD: rootpassword
-      MYSQL_DATABASE: careerpath     # Changed this line
+      MYSQL_DATABASE: careerpath
       MYSQL_USER: user
       MYSQL_PASSWORD: password
     ports:
@@ -34,7 +36,6 @@ services:
       - "8081:80"
     depends_on:
       - db
-
 
 volumes:
   db_data:

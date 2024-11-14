@@ -1,15 +1,12 @@
 <?php
-// Define the base directory for PHP includes
-define('BASE_PATH', __DIR__ . '/');
+// Enable error reporting for debugging (remove in production)
+ini_set('display_errors', 1);
+ini_set('display_startup_errors', 1);
+error_reporting(E_ALL);
 
-// Define the base URL for assets and links
-$protocol = (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off' || $_SERVER['SERVER_PORT'] == 443) ? "https://" : "http://";
-// Get host (e.g., localhost or example.com)
-$host = $_SERVER['HTTP_HOST'];
+// Define BASE_URL as root
+define('BASE_URL', '/');
 
-// Set project directory path (adjust as needed for your environment)
-$projectDir = ''; // Leave empty ('') if your project is at the root level on production
-
-// Define BASE_URL dynamically
-define('BASE_URL', $protocol . $host . $projectDir);
-
+// Define INCLUDE_PATH for server-side includes
+define('INCLUDE_PATH', __DIR__ . '/includes/');
+?>
