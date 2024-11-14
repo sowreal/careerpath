@@ -1,6 +1,7 @@
 <?php
 include('../session.php'); // Ensure the user is logged in
 include('../connection.php'); // Include the database connection
+include '../config.php';
 
 // Check if the user is a Faculty Member
 if ($_SESSION['role'] != 'Regular Instructor' && $_SESSION['role'] != 'Contract of Service Instructor') {
