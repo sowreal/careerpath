@@ -1,5 +1,5 @@
 <div class="tab-pane fade show active" id="criterion-a" role="tabpanel" aria-labelledby="tab-criterion-a">
-    <h5>Teaching Effectiveness (Max = 60 Points)</h5>
+    <h4>CRITERION A: Teaching Effectiveness (Max = 60 Points)</h4>
     <p>FACULTY PERFORMANCE. Enter average rating received by the faculty/semester.<br>  
         For newly appointed faculty from private HEI, LUCs, TESDA/DepEd schools 
         who still decided to proceed with the evaluation, put "0" in semesters with no student and supervisor's evaluation.</p>

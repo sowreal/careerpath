@@ -75,7 +75,7 @@ document.getElementById('save-criterion-c').addEventListener('click', function()
 });
 
 
-// JavaScript to dynamically add and remove bg-success and text-white on 2nd container
+// JavaScript to dynamically add and remove bg-success and text-white on tabs on 2nd container
 document.addEventListener('DOMContentLoaded', function() {
     const tabs = document.querySelectorAll('#kra-tabs .nav-link');
 
