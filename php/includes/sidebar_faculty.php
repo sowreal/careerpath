@@ -50,7 +50,7 @@ $isCPTActive = in_array($activePage, ['CPT', 'CPT_Request', 'CPT_Teaching', 'CPT
                         <li class="nav-item ms-3">
                             <a href="<?php echo BASE_URL ?>/php/dashboard/career_progress_tracking/career_progress_teaching.php" class="nav-link <?php echo ($activePage == 'CPT_Teaching') ? 'active' : ''; ?>">
                                 <i class="nav-icon bi bi-journal-text"></i> 
-                                <p>Teaching</p>
+                                <p>Teaching Performance</p>
                             </a>
                         </li>
                         <li class="nav-item ms-3">

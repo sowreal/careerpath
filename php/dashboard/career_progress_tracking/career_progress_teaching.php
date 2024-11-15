@@ -64,9 +64,136 @@ if ($_SESSION['role'] != 'Regular Instructor' && $_SESSION['role'] != 'Contract 
 
         <!--begin::App Main-->
         <main class="app-main">
-            <h1>CAREER PROGRESS TEACHING PAGE</h1>
+            <div class="container-fluid mt-4">
+
+                <!-- Standalone Header -->
+                <div class="app-content-header">
+                    <div class="container-fluid">
+                        <div class="row">
+                            <div class="col-sm-6">
+                                <h3 class="mb-0">Teaching Performance (KRA I)</h3>
+                            </div>
+                            <div class="col-sm-6">
+                                <ol class="breadcrumb float-sm-end">
+                                    <li class="breadcrumb-item"><a href="#">Home</a></li>
+                                    <li class="breadcrumb-item active" aria-current="page">Teaching Performance Metrics</li>
+                                </ol>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Form Section -->
+                <div class="row">
+                    <div class="col-lg-12">
+                        <div class="card shadow-sm">
+                            <div class="card-header bg-success text-white">
+                                <h5 class="card-title mb-0">Teaching Metrics Input</h5>
+                            </div>
+                            <div class="card-body bg-white">
+                                <form>
+                                    <!-- Faculty Information -->
+                                    <div class="row mb-3">
+                                        <div class="col-md-4">
+                                            <label for="lastName" class="form-label">Last Name</label>
+                                            <input type="text" class="form-control" id="lastName" placeholder="Enter last name">
+                                        </div>
+                                        <div class="col-md-4">
+                                            <label for="firstName" class="form-label">First Name</label>
+                                            <input type="text" class="form-control" id="firstName" placeholder="Enter first name">
+                                        </div>
+                                        <div class="col-md-4">
+                                            <label for="middleName" class="form-label">Middle Name</label>
+                                            <input type="text" class="form-control" id="middleName" placeholder="Enter middle name">
+                                        </div>
+                                    </div>
+
+                                    <!-- Teaching Activity Input -->
+                                    <div class="row mb-3">
+                                        <div class="col-md-6">
+                                            <label for="teachingMaterial" class="form-label">Teaching Material</label>
+                                            <select class="form-select" id="teachingMaterial">
+                                                <option selected>Choose...</option>
+                                                <option value="Textbook">Textbook</option>
+                                                <option value="Textbook Chapter">Textbook Chapter</option>
+                                                <option value="Manual/Module">Manual/Module</option>
+                                                <option value="Multimedia Material">Multimedia Teaching Material</option>
+                                                <option value="Testing Material">Testing Material</option>
+                                            </select>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <label for="pointsEarned" class="form-label">Points Earned</label>
+                                            <input type="number" class="form-control" id="pointsEarned" placeholder="Enter points">
+                                        </div>
+                                    </div>
+
+                                    <!-- Submission Status -->
+                                    <div class="row mb-3">
+                                        <div class="col-md-12">
+                                            <label for="status" class="form-label">Status</label>
+                                            <select class="form-select" id="status">
+                                                <option selected>Choose...</option>
+                                                <option value="Not Applicable">Not Applicable</option>
+                                                <option value="Study Leave">On Approved Study Leave</option>
+                                                <option value="Sabbatical Leave">On Approved Sabbatical Leave</option>
+                                                <option value="Maternity Leave">On Approved Maternity Leave</option>
+                                            </select>
+                                        </div>
+                                    </div>
+
+                                    <!-- Submit Button -->
+                                    <div class="row">
+                                        <div class="col-md-12 text-end">
+                                            <button type="submit" class="btn btn-success">Submit</button>
+                                        </div>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Summary Section -->
+                <div class="row mt-5">
+                    <div class="col-lg-12">
+                        <div class="card shadow-sm">
+                            <div class="card-header bg-success text-white">
+                                <h5 class="card-title mb-0">Teaching Summary</h5>
+                            </div>
+                            <div class="card-body bg-white">
+                                <table class="table table-striped table-hover">
+                                    <thead>
+                                        <tr>
+                                            <th>#</th>
+                                            <th>Material Type</th>
+                                            <th>Points</th>
+                                            <th>Status</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <!-- Example row, to be dynamically generated -->
+                                        <tr>
+                                            <td>1</td>
+                                            <td>Textbook</td>
+                                            <td>5</td>
+                                            <td>Approved</td>
+                                        </tr>
+                                        <tr>
+                                            <td>2</td>
+                                            <td>Manual/Module</td>
+                                            <td>10</td>
+                                            <td>Pending</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </main>
-        <!--end::App Main-->
+
+<!--end::App Main-->
         
         
         

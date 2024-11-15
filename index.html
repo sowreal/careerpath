@@ -1,70 +1,421 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>CareerPath - Maintenance</title>
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/css/bootstrap.min.css">
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <meta charset="utf-8">
+    <title>CareerPath - Start Your Career Journey With Us</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
 
+    <!-- Google Web Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap" rel="stylesheet">
+
+    <!-- Icon Font Stylesheet -->
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.15.4/css/all.css"/>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.4.1/font/bootstrap-icons.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Libraries Stylesheet -->
+    <link href="lib/lightbox/css/lightbox.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="lib/animate/animate.min.css"/>
+    <link href="lib/owlcarousel/assets/owl.carousel.min.css" rel="stylesheet">
+
+    <!-- Bootstrap Stylesheet -->
+    <link href="css/main.min.css" rel="stylesheet">
+
+    <!--Custom CSS-->
+    <link href="css/global.css" rel="stylesheet">
+    <link href="css/home/spinner.css" rel="stylesheet">
+    <link href="css/home/carousel.css" rel="stylesheet">
+    <link href="css/home/features.css" rel="stylesheet">
+    <link href="css/home/general.css" rel="stylesheet">
+    <link href="css/home/chooseacc.css" rel="stylesheet">
+    <link href="css/home/howitworks.css" rel="stylesheet">
+    <link href="css/home/navbar.css" rel="stylesheet">
+    <link href="css/home/footer.css" rel="stylesheet">
+
+    <!-- Smooth Scroll CSS (Optional for smooth scrolling) -->
     <style>
-        body {
-        background: linear-gradient(135deg, #f3f4f6, #e0e7ff);
+        html {
+            scroll-behavior: smooth;
         }
-
-        img {
-        border-radius: 8px;
-        box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.1);
-        }
-
-        footer {
-        background-color: #343a40;
-        color: #ffffff;
-        padding: 1rem 0;
-        border-top: 2px solid #e5e5e5;
+    </style>
+    <style>
+        .footer .fab {
+            display: inline-block;
+            visibility: visible;
         }
 
     </style>
-
 </head>
-<body class="d-flex flex-column min-vh-100 bg-light">
 
-  <!-- Navbar with SLSU Logo -->
-  <nav class="navbar navbar-light bg-white shadow-sm py-3">
-    <div class="container">
-        <a class="navbar-brand d-flex align-items-center" href="#">
-          <img src="img/cropped-SLSU_Logo-1.png" alt="SLSU Logo" height="50" class="rounded-circle"> <!-- Logo in a circle -->
-          <span class="ms-2 fs-4 text-success">Southern Luzon State University</span>
-        </a>
-      </div>
-  </nav>
 
-<!-- Main Content -->
-<main class="container-lg text-center my-auto py-5">
-    <h1 class="display-4 display-md-5 text-success mb-3">Coming Soon!</h1>
-    <p class="lead fw-bold text-secondary fs-4">CareerPath is currently under development.</p>
-    
-    <div class="d-flex justify-content-center my-4">
-      <img src="img/computer-technician2345347.jpg" alt="Development Illustration" class="img-fluid" style="max-width: 450px;">
-      <!-- Replace with a relevant illustration path or use an icon for a simpler look -->
+
+<body>
+
+    <!-- NAV -->
+    <div class="container-fluid px-0">
+        <nav class="navbar navbar-expand-lg navbar-light bg-light shadow fixed-top">
+            <div class="container-fluid">
+                <!-- Left-aligned content: Logo and University Name -->
+                <a class="navbar-brand d-flex align-items-center" href="#home">
+                    <img src="img/cropped-SLSU_Logo-1.png" alt="Logo" class="logo">
+                    <span class="ms-2 d-none d-sm-block">Southern Luzon State University</span>
+                </a>
+
+                <!-- Mobile Navbar Toggle Button (shown only on small screens) -->
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" 
+                        aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+
+                <!-- Mobile and Desktop Navigation Links -->
+                <div class="collapse navbar-collapse" id="navbarNav">
+                    <ul class="navbar-nav mx-auto">
+                        <li class="nav-item">
+                            <a class="nav-link active" aria-current="page" href="#home">Home</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="#about-us">About Us</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="#how-it-works">How It Works</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="#features">Features</a>
+                        </li>
+                    </ul>
+
+                    <!-- Right-aligned buttons: Login and Get Started (always visible) -->
+                    <div class="d-flex ms-auto">
+                        <a href="php/login.php" class="btn btn-outline-dark rounded-pill me-2">Login</a>
+                        <button class="btn btn-success rounded-pill" onclick="window.location.href='registration.html';">Get Started</button>
+                    </div>
+
+                </div>
+            </div>
+        </nav>
     </div>
-  
-    <p class="text-muted fs-5">Our team is working hard to bring this site to you soon. Stay tuned for updates!</p>
-  
-    <!-- Contact Information -->
-    <p class="text-muted mt-4 fs-5">For inquiries, contact us at <a href="mailto:support@slsucareerpath.com" class="text-decoration-none text-success">support@slsucareerpath.com</a></p>
-</main>
+    <!-- NAV END -->
 
 
+    <!-- Carousel Start -->
+    <section id="home">
+        <div class="header-carousel owl-carousel">
+            <div class="header-carousel-item bg-success" style="background-image: url('img/try2.png');">
+                <div class="carousel-caption">
+                    <div class="container">
+                        <div class="row g-4 align-items-center">
+                            <div class="col-lg-7 animated fadeInLeft">
+                                <div class="text-sm-center text-md-start">
+                                    <h1 class="display-1 text-white mb-3">CareerPath</h1>
+                                    <h4 class="display-5 text-white mb-3">Elevate Your Career to New Heights with CareerPath</h4>
+                                    <p class="mb-5 fs-5">
+                                        Unlock new opportunities and enhance your skills with our tailored professional development programs at CareerPath. 
+                                        Our comprehensive offerings are designed to meet the diverse needs of professionals at all stages of their careers. 
+                                        Whether you’re looking to gain new qualifications, develop leadership capabilities, or expand your industry knowledge, 
+                                        we provide the resources and support you need to succeed. Join us to take your career to the next level, connect with like-minded professionals, 
+                                        and access exclusive networking events that can open doors to exciting possibilities!
+                                    </p>
+                                    <div class="d-flex justify-content-center justify-content-md-start flex-shrink-0 mb-4">
+                                        <a class="btn btn-light rounded-pill py-3 px-4 px-md-5 me-2" href="#" data-bs-toggle="modal" data-bs-target="#storyModal">Watch Our Story</a>
+                                        <a class="btn btn-success rounded-pill py-3 px-4 px-md-5 ms-2" href="#">Learn More</a>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-lg-5 animated fadeInRight">
+                                <!-- Optional: Add an image or illustration here -->
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="header-carousel-item bg-success" style="background-image: url('img/try2.png');">
+                <div class="carousel-caption">
+                    <div class="container">
+                        <div class="row g-4 align-items-center">
+                            <div class="col-lg-7 animated fadeInLeft">
+                                <div class="text-sm-center text-md-start">
+                                    <h1 class="display-1 text-white mb-4">CareerPath</h1>
+                                    <h4 class="display-5 text-white mb-4">Empowering Instructors on Their Career Journey</h4>
+                                    <p class="mb-5 fs-5">At Career Path, we equip you with the essential tools and resources to navigate your professional journey with confidence and success. Whether you're an instructor passionate about fostering student growth or a member of the HR team dedicated to building a strong workforce, we are committed to supporting your development. Our programs are designed to enhance your skills, expand your knowledge, and empower you to achieve your career goals. Join us to unlock your potential and thrive in your professional environment!</p>
+                                    <div class="d-flex justify-content-center justify-content-md-start flex-shrink-0 mb-4">
+                                        <a class="btn btn-light rounded-pill py-3 px-4 px-md-5 me-2" href="#" data-bs-toggle="modal" data-bs-target="#storyModal">Watch Our Story</a>
+                                        <a class="btn btn-success rounded-pill py-3 px-4 px-md-5 ms-2" href="#">Learn More</a>
+                                    </div>
+                                </div>
+                            </div>
+                        
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <!-- Carousel End -->
+
+    <!-- Feature Start -->
+    <section id="features" class="container-fluid feature bg-light py-5">
+        <div class="container py-5">
+            <div class="text-center mx-auto pb-5 wow fadeInUp" data-wow-delay="0.2s" style="max-width: 800px;">
+                <h4 class="text-success">Why Choose Us?</h4>
+                <h1 class="display-4 mb-4">Centralized Career Progression Monitoring</h1>
+                <p class="mb-0">Educators can track their career development, set goals, and access essential professional development resources through a unified platform.</p>
+            </div>
+            <div class="row g-4">
+                <div class="col-md-6 col-lg-6 col-xl-3 wow fadeInUp" data-wow-delay="0.2s">
+                    <div class="feature-item p-4 d-flex flex-column justify-content-between h-100">
+                        <div class="text-center mb-4">
+                            <div class="feature-icon mb-4">
+                                <i class="fa fa-desktop fa-3x text-success"></i>
+                            </div>
+                            <h4 class="mb-4">Streamlined Information Access</h4>
+                            <p class="mb-4">The tool integrates with the Faculty and Staff Development Program, empowering educators to make informed decisions about their professional growth and available opportunities.</p>
+                        </div>
+                        <div class="text-center">
+                            <a class="btn btn-success rounded py-2 px-4" href="#">Learn More</a>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6 col-lg-6 col-xl-3 wow fadeInUp" data-wow-delay="0.4s">
+                    <div class="feature-item p-4 d-flex flex-column justify-content-between h-100">
+                        <div class="text-center mb-4">
+                            <div class="feature-icon mb-4">
+                                <i class="fa fa-info fa-3x text-success"></i>
+                            </div>
+                            <h4 class="mb-4">Enhanced Communication and Management</h4>
+                            <p class="mb-4">Facilitates effective communication between educators and university staff, allowing the HR Management Office to efficiently manage career data and performance tracking.</p>
+                        </div>
+                        <div class="text-center">
+                            <a class="btn btn-success rounded py-2 px-4" href="#">Learn More</a>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6 col-lg-6 col-xl-3 wow fadeInUp" data-wow-delay="0.6s">
+                    <div class="feature-item p-4 d-flex flex-column justify-content-between h-100">
+                        <div class="text-center mb-4">
+                            <div class="feature-icon mb-4">
+                                <i class="fa fa-mobile fa-3x text-success"></i>
+                            </div>
+                            <h4 class="mb-4">Comprehensive Development Opportunities</h4>
+                            <p class="mb-4">Educators will have access to seminars, training, and other professional career requirements sourced from relevant university-related entities.</p>
+                        </div>
+                        <div class="text-center">
+                            <a class="btn btn-success rounded py-2 px-4" href="#">Learn More</a>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6 col-lg-6 col-xl-3 wow fadeInUp" data-wow-delay="0.8s">
+                    <div class="feature-item p-4 d-flex flex-column justify-content-between h-100">
+                        <div class="text-center mb-4">
+                            <div class="feature-icon mb-4">
+                                <i class="fa fa-user fa-3x text-success"></i>
+                            </div>
+                            <h4 class="mb-4">Future-Ready Research Foundation</h4>
+                            <p class="mb-4">The tool provides a foundation for future research on career development tools, enhancing understanding of necessary factors for educators in higher education.</p>
+                        </div>
+                        <div class="text-center">
+                            <a class="btn btn-success rounded py-2 px-4" href="#">Learn More</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <!-- Feature End -->
 
 
-  <!-- Footer -->
-  <footer class="mt-auto bg-dark text-white text-center py-3">
-    <div class="container">
-      <small>&copy; Southern Luzon State University - All Rights Reserved</small>
+    <!-- Divider Line -->
+    <div class="divider"></div>
+
+    <!-- How It Works Section -->
+    <section id="how-it-works" class="container-fluid how-it-works bg-light py-5">
+        <div class="container py-5">
+            <div class="text-center mx-auto pb-5 wow fadeInUp" data-wow-delay="0.2s" style="max-width: 800px;">
+                <h4 class="text-success">How It Works?</h4>
+                <h1 class="display-4 mb-4">Centralized Career Progression Monitoring</h1>
+                <p class="mb-0">Educators can track their career development, set goals, and access essential professional development resources through a unified platform.</p>
+            </div>
+            <div class="row g-4">
+                <div class="col-lg-4 col-md-6 col-12">
+                    <div class="step card wow fadeInLeft" data-wow-delay="0.2s">
+                        <div class="how-it-works-icon p-4 mb-4">
+                            <i class="fa fa-user-plus fa-3x text-success"></i> 
+                        </div>
+                        <h3>Step 1: Sign Up</h3>
+                        <p>Register for a free account on our platform to get started.</p>
+                    </div>
+                </div>
+                <div class="col-lg-4 col-md-6 col-12">
+                    <div class="step card wow fadeInUp" data-wow-delay="0.3s">
+                        <div class="how-it-works-icon p-4 mb-4">
+                            <i class="fa fa-cogs fa-3x text-success"></i> 
+                        </div>
+                        <h3>Step 2: Choose Your Role</h3>
+                        <p>Choose the services that best suit your needs from our available options.</p>
+                    </div>
+                </div>
+                <div class="col-lg-4 col-md-6 col-12">
+                    <div class="step card wow fadeInRight" data-wow-delay="0.4s">
+                        <div class="how-it-works-icon p-4 mb-4">
+                            <i class="fa fa-play-circle fa-3x text-success"></i> 
+                        </div>
+                        <h3>Step 3: Get Started</h3>
+                        <p>Once you’ve customized your plan, you can start enjoying CareerPath immediately.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <!-- How It Works End -->
+
+
+    <!-- Divider Line -->
+    <div class="divider"></div>
+
+    <!-- About Us Start -->
+    <section id="about-us" class="container-fluid about-us bg-light py-5">
+        <div class="container py-5">
+            <div class="text-center mx-auto pb-5 wow fadeInUp" data-wow-delay="0.2s" style="max-width: 800px;">
+                <h4 class="text-success">About Us</h4>
+                <h1 class="display-4 mb-4">Your Pathway to Career Success</h1>
+                <p class="mb-0">At CareerPath, we are dedicated to empowering educators with the tools and resources needed for career advancement. Our mission is to support your professional journey by providing a centralized platform for career progression monitoring, goal-setting, and access to essential development resources.</p>
+            </div>
+        </div>
+    </section>
+    <!-- About Us End -->
+
+
+    <!-- Footer Start -->
+    <footer class="bg-dark text-white pt-5 pb-4">
+        <div class="container text-md-left">
+            <div class="row text-md-left">
+                <!-- About Section -->
+                <div class="col-md-3 col-lg-3 col-xl-3 mx-auto mt-3">
+                    <h5 class="text-uppercase mb-4 font-weight-bold text-success">CareerPath</h5>
+                    <p>
+                        CareerPath is dedicated to empowering educators with the tools and resources needed for career advancement. Our platform offers centralized career progression monitoring, goal-setting, and access to essential development resources.
+                    </p>
+                </div>
+                
+                <!-- Quick Links Section -->
+                <div class="col-md-2 col-lg-2 col-xl-2 mx-auto mt-3">
+                    <h5 class="text-uppercase mb-4 font-weight-bold text-success">Quick Links</h5>
+                    <p>
+                        <a href="#home" class="text-white" style="text-decoration: none;">Home</a>
+                    </p>
+                    <p>
+                        <a href="#about-us" class="text-white" style="text-decoration: none;">About Us</a>
+                    </p>
+                    <p>
+                        <a href="#how-it-works" class="text-white" style="text-decoration: none;">How It Works</a>
+                    </p>
+                    <p>
+                        <a href="#features" class="text-white" style="text-decoration: none;">Features</a>
+                    </p>
+                </div>
+                
+                <!-- Contact Section -->
+                <div class="col-md-4 col-lg-3 col-xl-3 mx-auto mt-3">
+                    <h5 class="text-uppercase mb-4 font-weight-bold text-success">Contact Us</h5>
+                    <p><i class="fas fa-home mr-3"></i> Brgy. Kulapi, Lucban, Quezon</p>
+                    <p><i class="fas fa-envelope mr-3"></i> <a href="mailto:support@slsucareerpath.com" class="text-white" style="text-decoration: none;">support@slsucareerpath.com</a></p>
+                    <p><i class="fas fa-phone mr-3"></i> +63 912 345 6789</p>
+                </div>
+                
+                <!-- Social Media Section -->
+                <div class="col-md-3 col-lg-4 col-xl-3 mx-auto mt-3">
+                    <h5 class="text-uppercase mb-4 font-weight-bold text-success">Follow Us</h5>
+                    <a href="https://www.facebook.com/profile.php?id=100091361251499" class="text-white me-4" aria-label="Facebook">
+                        <i class="fab fa-facebook-f"></i>
+                    </a>
+                    <a href="#" class="text-white me-4" aria-label="Twitter">
+                        <i class="fab fa-twitter"></i>
+                    </a>
+                    <a href="#" class="text-white me-4" aria-label="Instagram">
+                        <i class="fab fa-instagram"></i>
+                    </a>
+                    <a href="#" class="text-white me-4" aria-label="LinkedIn">
+                        <i class="fab fa-linkedin-in"></i>
+                    </a>
+                </div>
+            </div>
+            
+            <hr class="mb-4">
+            
+            <div class="row align-items-center">
+                <!-- Copyright -->
+                <div class="col-md-7 col-lg-8">
+                    <p class="text-center text-md-left">
+                        © 2024 CareerPath. All Rights Reserved.
+                    </p>
+                </div>
+                
+                <!-- Terms and Privacy -->
+                <div class="col-md-5 col-lg-4">
+                    <div class="text-center text-md-right">
+                        <a href="terms-of-agreement.html" class="text-white me-3" style="text-decoration: none;">Terms of Agreement</a>
+                        <a href="privacy-policy.html" class="text-white" style="text-decoration: none;">Privacy Policy</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </footer>
+    <!-- Footer End -->
+
+    <!-- Video Modal Start -->
+    <div class="modal fade" id="storyModal" tabindex="-1" aria-labelledby="storyModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg modal-dialog-centered">
+            <div class="modal-content bg-dark text-white rounded-4 shadow-lg">
+                <div class="modal-header border-0">
+                    <h5 class="modal-title" id="storyModalLabel">Watch Our Story</h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body p-0">
+                    <div class="ratio ratio-16x9">
+                        <iframe id="storyVideo" src="https://www.youtube.com/embed/P2I2iVJrgaM?enablejsapi=1" title="YouTube video" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+                    </div>
+                </div>
+                <div class="modal-footer border-0">
+                    <p class="me-auto">Powered by <strong>CareerPath</strong></p>
+                    <button type="button" class="btn btn-outline-light rounded-pill" data-bs-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
     </div>
-  </footer>
+    <!-- Video Modal End -->
 
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
+  
+
+
+
+    <!-- JavaScript Libraries -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="lib/wow/wow.min.js"></script>
+    <script src="lib/lightbox/js/lightbox.min.js"></script>
+    <script src="lib/owlcarousel/owl.carousel.min.js"></script>
+
+    <!-- Custom Javascript -->
+    <script src="js/main.js"></script>
+
+    <!-- Font Awesome Kit -->
+    <script src="https://kit.fontawesome.com/YOUR_KIT_ID.js" crossorigin="anonymous"></script>
+
+    <script>
+        // Function to stop video playback when modal is closed
+        var storyModal = document.getElementById('storyModal')
+        storyModal.addEventListener('hidden.bs.modal', function () {
+          var iframe = document.getElementById('storyVideo')
+          iframe.src = iframe.src
+        })
+    </script>
+      
+
 </body>
+
 </html>
