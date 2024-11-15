@@ -67,8 +67,8 @@ if ($_SESSION['role'] != 'Regular Instructor' && $_SESSION['role'] != 'Contract 
             <section class="content">
                 <div class="container-fluid">
                     <!-- Standalone Header -->
-                    <div class="app-content-header">
-                        <div class="container-fluid">
+                    <div class="app-content-header ">
+                        <div class="container-fluid ">
                             <div class="row">
                                 <div class="col-sm-6">
                                     <h3 class="mb-0">SUC Faculty Position Reclassification Request Form</h3>
@@ -216,7 +216,7 @@ if ($_SESSION['role'] != 'Regular Instructor' && $_SESSION['role'] != 'Contract 
                             <!-- Modal Header -->
                             <div class="modal-header bg-success text-white">
                                 <h5 class="modal-title" id="confirmationModalLabel">Confirm Submission</h5>
-                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
                                     <!-- <span aria-hidden="true">&times;</span> -->
                             </div>
 

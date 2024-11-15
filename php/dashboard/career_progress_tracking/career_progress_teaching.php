@@ -64,136 +64,313 @@ if ($_SESSION['role'] != 'Regular Instructor' && $_SESSION['role'] != 'Contract 
 
         <!--begin::App Main-->
         <main class="app-main">
-            <div class="container-fluid mt-4">
+            <div class="container-fluid">
 
                 <!-- Standalone Header -->
                 <div class="app-content-header">
                     <div class="container-fluid">
+                        <div class="row align-items-top">
+                            <div class="col-sm-6 mb-6">
+                                <!-- Change Evaluation Number dynamically-->
+                                <h3 class="mb-0">Teaching Performance (KRA I) - <span id="evaluation-number">Evaluation #: 2024-047</span></h3> 
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-sm-6 pe-4 mt-4">
+                        <div class="d-flex">
+                            <!-- MODAL: Button Trigger -->
+                            <button id="select-evaluation-btn" class="btn btn-success" data-toggle="modal" data-target="#evaluationModal">
+                                Select Evaluation
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- KRA I Content -->
+                <div class="card mt-4">
+                    <div class="card-header d-flex bg-success justify-content-between align-items-center text-white">
+                        <h5 class="mb-0">Summary of KRA I</h5>
+                    </div>
+                    <div class="card-body">
                         <div class="row">
-                            <div class="col-sm-6">
-                                <h3 class="mb-0">Teaching Performance (KRA I)</h3>
+                            <!-- Summary Table for KRA I -->
+                            <div class="col-md-6">
+                                <div class="table-responsive">
+                                    <table class="table table-bordered table-striped">
+                                        <thead>
+                                            <tr>
+                                                <th>Criterion</th>
+                                                <th>Average Score</th>
+                                                <th>Total Points</th>
+                                                <th>Overall Remarks</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody id="kra-summary-body">
+                                            <!-- Dynamic Rows Will Be Injected Here -->
+                                            <tr>
+                                                <td>Teaching Effectiveness</td>
+                                                <td>85%</td>
+                                                <td>60 / 60</td>
+                                                <td>Excellent performance in Teaching Effectiveness.</td>
+                                            </tr>
+                                            <tr>
+                                                <td>Curriculum & Material Development</td>
+                                                <td>70%</td>
+                                                <td>21 / 30</td>
+                                                <td>Good development and contribution to instructional materials.</td>
+                                            </tr>
+                                            <tr>
+                                                <td>Thesis & Mentorship Services</td>
+                                                <td>90%</td>
+                                                <td>9 / 10</td>
+                                                <td>Outstanding performance in mentorship and advisory roles.</td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
                             </div>
-                            <div class="col-sm-6">
-                                <ol class="breadcrumb float-sm-end">
-                                    <li class="breadcrumb-item"><a href="#">Home</a></li>
-                                    <li class="breadcrumb-item active" aria-current="page">Teaching Performance Metrics</li>
-                                </ol>
+                            <!-- Placeholder for Graphs -->
+                            <div class="col-md-6 d-flex flex-column align-items-center justify-content-center">
+                                <h5 class="text-center mb-4">Performance Visualization</h5>
+                                <div class="d-flex justify-content-center" style="width: 100%; max-width: 400px;">
+                                    <!-- Doughnut Chart for Overall Performance -->
+                                    <canvas id="kraDoughnutChart"></canvas>
+                                </div>
                             </div>
                         </div>
                     </div>
                 </div>
 
-                <!-- Form Section -->
-                <div class="row">
-                    <div class="col-lg-12">
-                        <div class="card shadow-sm">
-                            <div class="card-header bg-success text-white">
-                                <h5 class="card-title mb-0">Teaching Metrics Input</h5>
-                            </div>
-                            <div class="card-body bg-white">
-                                <form>
-                                    <!-- Faculty Information -->
-                                    <div class="row mb-3">
-                                        <div class="col-md-4">
-                                            <label for="lastName" class="form-label">Last Name</label>
-                                            <input type="text" class="form-control" id="lastName" placeholder="Enter last name">
-                                        </div>
-                                        <div class="col-md-4">
-                                            <label for="firstName" class="form-label">First Name</label>
-                                            <input type="text" class="form-control" id="firstName" placeholder="Enter first name">
-                                        </div>
-                                        <div class="col-md-4">
-                                            <label for="middleName" class="form-label">Middle Name</label>
-                                            <input type="text" class="form-control" id="middleName" placeholder="Enter middle name">
-                                        </div>
-                                    </div>
-
-                                    <!-- Teaching Activity Input -->
-                                    <div class="row mb-3">
-                                        <div class="col-md-6">
-                                            <label for="teachingMaterial" class="form-label">Teaching Material</label>
-                                            <select class="form-select" id="teachingMaterial">
-                                                <option selected>Choose...</option>
-                                                <option value="Textbook">Textbook</option>
-                                                <option value="Textbook Chapter">Textbook Chapter</option>
-                                                <option value="Manual/Module">Manual/Module</option>
-                                                <option value="Multimedia Material">Multimedia Teaching Material</option>
-                                                <option value="Testing Material">Testing Material</option>
+                <!-- Tabs for Criteria -->
+                <div class="card mt-4">
+                    <div class="card-header">
+                        <ul class="nav nav-tabs card-header-tabs" id="kra-tabs" role="tablist">
+                            <li class="nav-item">
+                                <button class="nav-link active" id="tab-criterion-a" data-bs-toggle="tab" data-bs-target="#criterion-a" type="button" role="tab">
+                                    Criterion A: Teaching Effectiveness
+                                </button>
+                            </li>
+                            <li class="nav-item">
+                                <button class="nav-link" id="tab-criterion-b" data-bs-toggle="tab" data-bs-target="#criterion-b" type="button" role="tab">
+                                    Criterion B: Curriculum & Material Development
+                                </button>
+                            </li>
+                            <li class="nav-item">
+                                <button class="nav-link" id="tab-criterion-c" data-bs-toggle="tab" data-bs-target="#criterion-c" type="button" role="tab">
+                                    Criterion C: Thesis & Mentorship Services
+                                </button>
+                            </li>
+                        </ul>
+                    </div>
+                    <div class="card-body">
+                        <div class="tab-content" id="kra-tab-content">
+                            <!-- Tab 1: Criterion A: Teaching Effectiveness -->
+                            <div class="tab-pane fade show active" id="criterion-a" role="tabpanel" aria-labelledby="tab-criterion-a">
+                                <h5>Teaching Effectiveness (Max = 60 Points)</h5>
+                                <p>FACULTY PERFORMANCE. Enter average rating received by the faculty/semester.<br>  
+                                    For newly appointed faculty from private HEI, LUCs, TESDA/DepEd schools 
+                                    who still decided to proceed with the evaluation, put "0" in semesters with no student and supervisor's evaluation.</p>
+                                <div class="row">
+                                    <!-- Student Evaluation Section -->
+                                    <div class="col-md-12 mt-4">
+                                        <h5>1.1 Student Evaluation (60%)</h5>
+                                        <div class="mb-3 d-flex align-items-center">
+                                            <label for="student-divisor" class="form-label me-2 mb-0 align-self-center">Number of Semesters to Deduct from Divisor (if applicable):</label>
+                                            <select class="form-select col-auto w-auto" id="student-divisor">
+                                                <option value="0">0</option>
+                                                <option value="1">1</option>
+                                                <option value="2">2</option>
+                                                <option value="3">3</option>
+                                                <option value="4">4</option>
+                                                <option value="5">5</option>
+                                                <option value="6">6</option>
+                                                <option value="7">7</option>
+                                                <option value="8">8</option>
                                             </select>
                                         </div>
-                                        <div class="col-md-6">
-                                            <label for="pointsEarned" class="form-label">Points Earned</label>
-                                            <input type="number" class="form-control" id="pointsEarned" placeholder="Enter points">
-                                        </div>
-                                    </div>
-
-                                    <!-- Submission Status -->
-                                    <div class="row mb-3">
-                                        <div class="col-md-12">
-                                            <label for="status" class="form-label">Status</label>
-                                            <select class="form-select" id="status">
-                                                <option selected>Choose...</option>
-                                                <option value="Not Applicable">Not Applicable</option>
-                                                <option value="Study Leave">On Approved Study Leave</option>
-                                                <option value="Sabbatical Leave">On Approved Sabbatical Leave</option>
-                                                <option value="Maternity Leave">On Approved Maternity Leave</option>
+                                        <div class="mb-3 d-flex align-items-center">
+                                            <label for="student-reason" class="form-label me-2 mb-0 align-self-center">Reason for Reducing the Divisor:</label>
+                                            <select class="form-select col-auto w-auto" id="student-reason">
+                                                <option value="">Select Option</option>
+                                                <option value="not_applicable">Not Applicable</option>
+                                                <option value="on_approved_study_leave">On Approved Study Leave</option>
+                                                <option value="on_approved_sabbatical_leave">On Approved Sabbatical Leave</option>
+                                                <option value="on_approved_maternity_leave">On Approved Maternity Leave</option>
                                             </select>
                                         </div>
-                                    </div>
+                                        <table class="table table-bordered">
+                                            <thead>
+                                                <tr>
+                                                    <th>Evaluation Period</th>
+                                                    <th>1st Semester Rating</th>
+                                                    <th>2nd Semester Rating</th>
+                                                    <th>Link to Evidence</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <tr>
+                                                    <td>AY 2019-2020</td>
+                                                    <td><input type="number" class="form-control" value="0.00"></td>
+                                                    <td><input type="number" class="form-control" value="0.00"></td>
+                                                    <td><a href="#" target="_blank">Link to Evidence</a></td>
+                                                </tr>
+                                                <tr>
+                                                    <td>AY 2020-2021</td>
+                                                    <td><input type="number" class="form-control" value="0.00"></td>
+                                                    <td><input type="number" class="form-control" value="0.00"></td>
+                                                    <td><a href="#" target="_blank">Link to Evidence</a></td>
+                                                </tr>
+                                                <tr>
+                                                    <td>AY 2021-2022</td>
+                                                    <td><input type="number" class="form-control" value="0.00"></td>
+                                                    <td><input type="number" class="form-control" value="0.00"></td>
+                                                    <td><a href="#" target="_blank">Link to Evidence</a></td>
+                                                </tr>
+                                                <tr>
+                                                    <td>AY 2022-2023</td>
+                                                    <td><input type="number" class="form-control" value="0.00"></td>
+                                                    <td><input type="number" class="form-control" value="0.00"></td>
+                                                    <td><a href="#" target="_blank">Link to Evidence</a></td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                        <div class="container-fluid">
+                                            <div class="d-flex flex-column align-items-end">
+                                                <div class="mb-3 d-flex align-items-center">
+                                                    <label for="student-overall-score" class="form-label me-2 mb-0 align-self-center">Overall Average Rating:</label>
+                                                    <input type="number" class="form-control w-auto" id="student-overall-score" value="0.00">
+                                                </div>
+                                                <div class="mb-3 d-flex align-items-center">
+                                                    <label for="faculty-overall-score" class="form-label me-2 mb-0 align-self-center">Faculty Score:</label>
+                                                    <input type="number" class="form-control w-auto" id="faculty-overall-score" value="0.00">
+                                                </div>
+                                            </div>
+                                        </div>
 
-                                    <!-- Submit Button -->
-                                    <div class="row">
-                                        <div class="col-md-12 text-end">
-                                            <button type="submit" class="btn btn-success">Submit</button>
+
+
+                                    </div>
+                                    <!-- Supervisor's Evaluation Section -->
+                                    <div class="col-md-12 mt-4">
+                                        <h5>1.2 Supervisor's Evaluation (40%)</h5>
+                                        <div class="mb-3 d-flex align-items-center">
+                                            <label for="supervisor-divisor" class="form-label me-2 mb-0 align-self-center">Number of Semesters to Deduct from Divisor (if applicable):</label>
+                                            <select class="form-select col-auto w-auto" id="supervisor-divisor">
+                                                <option value="0">0</option>
+                                                <option value="1">1</option>
+                                                <option value="2">2</option>
+                                                <option value="3">3</option>
+                                                <option value="4">4</option>
+                                                <option value="5">5</option>
+                                                <option value="6">6</option>
+                                                <option value="7">7</option>
+                                                <option value="8">8</option>
+                                            </select>
+                                        </div>
+                                        <div class="mb-3 d-flex align-items-center">
+                                            <label for="supervisor-reason" class="form-label me-2 mb-0 align-self-center">Reason for Reducing the Divisor:</label>
+                                            <select class="form-control col-auto w-auto" id="supervisor-reason">
+                                                <option value="">Select Option</option>
+                                                <option value="not_applicable">Not Applicable</option>
+                                                <option value="on_approved_study_leave">On Approved Study Leave</option>
+                                                <option value="on_approved_sabbatical_leave">On Approved Sabbatical Leave</option>
+                                                <option value="on_approved_maternity_leave">On Approved Maternity Leave</option>
+                                            </select>
+                                        </div>
+                                        <table class="table table-bordered">
+                                            <thead>
+                                                <tr>
+                                                    <th>Evaluation Period</th>
+                                                    <th>1st Semester Rating</th>
+                                                    <th>2nd Semester Rating</th>
+                                                    <th>Link to Evidence</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <tr>
+                                                    <td>AY 2019-2020</td>
+                                                    <td><input type="number" class="form-control" value="0.00"></td>
+                                                    <td><input type="number" class="form-control" value="0.00"></td>
+                                                    <td><a href="#" target="_blank">Link to Evidence</a></td>
+                                                </tr>
+                                                <tr>
+                                                    <td>AY 2020-2021</td>
+                                                    <td><input type="number" class="form-control" value="0.00"></td>
+                                                    <td><input type="number" class="form-control" value="0.00"></td>
+                                                    <td><a href="#" target="_blank">Link to Evidence</a></td>
+                                                </tr>
+                                                <tr>
+                                                    <td>AY 2021-2022</td>
+                                                    <td><input type="number" class="form-control" value="0.00"></td>
+                                                    <td><input type="number" class="form-control" value="0.00"></td>
+                                                    <td><a href="#" target="_blank">Link to Evidence</a></td>
+                                                </tr>
+                                                <tr>
+                                                    <td>AY 2022-2023</td>
+                                                    <td><input type="number" class="form-control" value="0.00"></td>
+                                                    <td><input type="number" class="form-control" value="0.00"></td>
+                                                    <td><a href="#" target="_blank">Link to Evidence</a></td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                        <div class="container-fluid">
+                                            <div class="d-flex flex-column align-items-end">
+                                                <div class="mb-3 d-flex align-items-center">
+                                                    <label for="supervisor-overall-score" class="form-label me-2 mb-0 align-self-center">Overall Average Rating:</label>
+                                                    <input type="number" class="form-control w-auto" id="supervisor-overall-score" value="0.00">
+                                                </div>
+                                                <div class="mb-3 d-flex align-items-center">
+                                                    <label for="faculty-overall-score" class="form-label me-2 mb-0 align-self-center">Faculty Score:</label>
+                                                    <input type="number" class="form-control w-auto" id="supervisor-faculty-overall-score" value="0.00">
+                                                </div>
+                                            </div>
                                         </div>
                                     </div>
-                                </form>
+                                </div>
+                            </div>
+                            <!-- Tab 2: Criterion B: Curriculum & Material Development -->
+                            <div class="tab-pane fade" id="criterion-b" role="tabpanel" aria-labelledby="tab-criterion-b">
+                                <p>Details related to Curriculum & Instructional Material Development will appear here, including metrics like instructional materials developed, co-authorship, and program implementation. This section should be view-only for faculty members, while HR can make edits.</p>
+                            </div>
+                            <!-- Tab 3: Criterion C: Thesis & Mentorship Services -->
+                            <div class="tab-pane fade" id="criterion-c" role="tabpanel" aria-labelledby="tab-criterion-c">
+                                <p>Details related to Thesis, Dissertation, and Mentorship Services will appear here, including metrics for services rendered as adviser, panel member, and mentor. This section should be view-only for faculty members, while HR can make edits.</p>
                             </div>
                         </div>
                     </div>
                 </div>
 
-                <!-- Summary Section -->
-                <div class="row mt-5">
-                    <div class="col-lg-12">
-                        <div class="card shadow-sm">
-                            <div class="card-header bg-success text-white">
-                                <h5 class="card-title mb-0">Teaching Summary</h5>
-                            </div>
-                            <div class="card-body bg-white">
-                                <table class="table table-striped table-hover">
-                                    <thead>
-                                        <tr>
-                                            <th>#</th>
-                                            <th>Material Type</th>
-                                            <th>Points</th>
-                                            <th>Status</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        <!-- Example row, to be dynamically generated -->
-                                        <tr>
-                                            <td>1</td>
-                                            <td>Textbook</td>
-                                            <td>5</td>
-                                            <td>Approved</td>
-                                        </tr>
-                                        <tr>
-                                            <td>2</td>
-                                            <td>Manual/Module</td>
-                                            <td>10</td>
-                                            <td>Pending</td>
-                                        </tr>
-                                    </tbody>
-                                </table>
-                            </div>
+
+
+
+
+                <!-- MODAL SECTION -->
+
+                <!-- Modal: Evaluation selection -->
+                <div class="modal fade" id="evaluationModal" tabindex="-1" role="dialog" aria-labelledby="evaluationModalLabel" aria-hidden="true">
+                    <div class="modal-dialog" role="document">
+                        <div class="modal-content">
+                        <div class="modal-header bg-success text-white">
+                            <h5 class="modal-title" id="evaluationModalLabel">Select Evaluation Cycle</h5>
+                            <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" data-dismiss="modal" aria-label="Close"></button>
+                        </div>
+
+                        <div class="modal-body">
+                            <ul id="evaluation-list" class="list-group">
+                            <!-- Dynamically populated list of evaluations -->
+                            </ul>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                        </div>
                         </div>
                     </div>
                 </div>
+                
             </div>
         </main>
+        <!--end::App Main-->
 
-<!--end::App Main-->
         
         
         
@@ -206,6 +383,57 @@ if ($_SESSION['role'] != 'Regular Instructor' && $_SESSION['role'] != 'Contract 
         
     <!--begin::Script--> 
     <?php require_once('../../includes/dashboard_default_scripts.php'); ?> 
+
+    <!-- Script Links for Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+
+    <!-- For populating MODAL: Evaluation selection -->
+
+    <!--  -->
+
+
+    <!-- Enable/Disable KRA Sections Based on Selection -->
+    <!-- Initially disable KRA sections until an evaluation is selected -->
+
+    <!--  -->
+
+
+    <!-- Visualization scripts -->
+    <script>
+        // Doughnut Chart for Overall Performance
+        var ctxDoughnut = document.getElementById('kraDoughnutChart').getContext('2d');
+        var kraDoughnutChart = new Chart(ctxDoughnut, {
+            type: 'doughnut',
+            data: {
+                labels: ['Teaching Effectiveness', 'Curriculum & Material Development', 'Thesis & Mentorship Services'],
+                datasets: [{
+                    label: 'Performance',
+                    data: [85, 70, 90],
+                    backgroundColor: [
+                        'rgba(54, 162, 235, 0.7)',
+                        'rgba(255, 206, 86, 0.7)',
+                        'rgba(75, 192, 192, 0.7)'
+                    ],
+                    borderColor: [
+                        'rgba(54, 162, 235, 1)',
+                        'rgba(255, 206, 86, 1)',
+                        'rgba(75, 192, 192, 1)'
+                    ],
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: {
+                        position: 'top'
+                    }
+                }
+            }
+        });
+    </script>
 
 
 </body>
