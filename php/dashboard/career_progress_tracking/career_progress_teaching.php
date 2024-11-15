@@ -131,7 +131,7 @@ if ($_SESSION['role'] != 'Regular Instructor' && $_SESSION['role'] != 'Contract 
                             </div>
                             <!-- Placeholder for Graphs -->
                             <div class="col-md-6 d-flex flex-column align-items-center justify-content-center">
-                                <h5 class="text-center mb-4">Performance Visualization</h5>
+                                <!-- <h5 class="text-center mb-4">Performance Visualization</h5> -->
                                 <div class="d-flex justify-content-center" style="width: 100%; max-width: 400px;">
                                     <!-- Doughnut Chart for Overall Performance -->
                                     <canvas id="kraDoughnutChart"></canvas>
@@ -205,6 +205,7 @@ if ($_SESSION['role'] != 'Regular Instructor' && $_SESSION['role'] != 'Contract 
                                                     <th>1st Semester Rating</th>
                                                     <th>2nd Semester Rating</th>
                                                     <th>Link to Evidence</th>
+                                                    <th>Remarks</th>
                                                 </tr>
                                             </thead>
                                             <tbody>
@@ -213,27 +214,79 @@ if ($_SESSION['role'] != 'Regular Instructor' && $_SESSION['role'] != 'Contract 
                                                     <td><input type="number" class="form-control" value="0.00"></td>
                                                     <td><input type="number" class="form-control" value="0.00"></td>
                                                     <td><a href="#" target="_blank">Link to Evidence</a></td>
+                                                    <td>
+                                                        <button class="btn btn-link" data-bs-toggle="modal" data-bs-target="#remarksModal" 
+                                                                data-remarks1="Excellent performance in 1st semester of AY 2019-2020."
+                                                                data-remarks2="Good progress in 2nd semester of AY 2019-2020.">
+                                                            View Remarks
+                                                        </button>
+                                                    </td>
                                                 </tr>
                                                 <tr>
                                                     <td>AY 2020-2021</td>
                                                     <td><input type="number" class="form-control" value="0.00"></td>
                                                     <td><input type="number" class="form-control" value="0.00"></td>
                                                     <td><a href="#" target="_blank">Link to Evidence</a></td>
+                                                    <td>
+                                                        <button class="btn btn-link" data-bs-toggle="modal" data-bs-target="#remarksModal" 
+                                                                data-remarks1="Solid foundation in 1st semester of AY 2020-2021."
+                                                                data-remarks2="Significant improvement in 2nd semester of AY 2020-2021.">
+                                                            View Remarks
+                                                        </button>
+                                                    </td>
                                                 </tr>
                                                 <tr>
                                                     <td>AY 2021-2022</td>
                                                     <td><input type="number" class="form-control" value="0.00"></td>
                                                     <td><input type="number" class="form-control" value="0.00"></td>
                                                     <td><a href="#" target="_blank">Link to Evidence</a></td>
+                                                    <td>
+                                                        <button class="btn btn-link" data-bs-toggle="modal" data-bs-target="#remarksModal" 
+                                                                data-remarks1="Strong performance in 1st semester of AY 2021-2022."
+                                                                data-remarks2="Exceptional progress in 2nd semester of AY 2021-2022.">
+                                                            View Remarks
+                                                        </button>
+                                                    </td>
                                                 </tr>
                                                 <tr>
                                                     <td>AY 2022-2023</td>
                                                     <td><input type="number" class="form-control" value="0.00"></td>
                                                     <td><input type="number" class="form-control" value="0.00"></td>
                                                     <td><a href="#" target="_blank">Link to Evidence</a></td>
+                                                    <td>
+                                                        <button class="btn btn-link" data-bs-toggle="modal" data-bs-target="#remarksModal" 
+                                                                data-remarks1="Good start in 1st semester of AY 2022-2023."
+                                                                data-remarks2="Continued success in 2nd semester of AY 2022-2023.">
+                                                            View Remarks
+                                                        </button>
+                                                    </td>
                                                 </tr>
                                             </tbody>
                                         </table>
+
+                                        <!-- Modal for Viewing Remarks -->
+                                        <div class="modal fade" id="remarksModal" tabindex="-1" aria-labelledby="remarksModalLabel" aria-hidden="true">
+                                            <div class="modal-dialog">
+                                                <div class="modal-content">
+                                                    <div class="modal-header">
+                                                        <h5 class="modal-title" id="remarksModalLabel">Semester Remarks</h5>
+                                                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                                    </div>
+                                                    <div class="modal-body">
+                                                        <h6>1st Semester Remarks:</h6>
+                                                        <p id="remarks1Content"></p>
+                                                        <hr>
+                                                        <h6>2nd Semester Remarks:</h6>
+                                                        <p id="remarks2Content"></p>
+                                                    </div>
+                                                    <div class="modal-footer">
+                                                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+
+
                                         <div class="container-fluid">
                                             <div class="d-flex flex-column align-items-end">
                                                 <div class="mb-3 d-flex align-items-center">
@@ -432,6 +485,24 @@ if ($_SESSION['role'] != 'Regular Instructor' && $_SESSION['role'] != 'Contract 
                     }
                 }
             }
+        });
+    </script>
+
+
+    <!-- Event listener to load remarks into modal when triggered -->
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const remarksModal = document.getElementById('remarksModal');
+            const remarks1Content = document.getElementById('remarks1Content');
+            const remarks2Content = document.getElementById('remarks2Content');
+
+            remarksModal.addEventListener('show.bs.modal', function(event) {
+                const button = event.relatedTarget; // Button that triggered the modal
+                const remarks1 = button.getAttribute('data-remarks1'); // 1st semester remarks
+                const remarks2 = button.getAttribute('data-remarks2'); // 2nd semester remarks
+                remarks1Content.textContent = remarks1; // Set 1st semester content
+                remarks2Content.textContent = remarks2; // Set 2nd semester content
+            });
         });
     </script>
 
