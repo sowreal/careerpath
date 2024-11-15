@@ -164,6 +164,8 @@ if ($_SESSION['role'] != 'Regular Instructor' && $_SESSION['role'] != 'Contract 
                     </div>
                     <div class="card-body">
                         <div class="tab-content" id="kra-tab-content">
+
+
                             <!-- Tab 1: Criterion A: Teaching Effectiveness -->
                             <div class="tab-pane fade show active" id="criterion-a" role="tabpanel" aria-labelledby="tab-criterion-a">
                                 <h5>Teaching Effectiveness (Max = 60 Points)</h5>
@@ -380,15 +382,36 @@ if ($_SESSION['role'] != 'Regular Instructor' && $_SESSION['role'] != 'Contract 
                                         </div>
                                     </div>
                                 </div>
+
+                                <!-- Save Button -->
+                                <div class="d-flex justify-content-end mt-3">
+                                    <button type="button" class="btn btn-success" id="save-criterion-a">Save Criterion A</button>
+                                </div>
                             </div>
+
+
                             <!-- Tab 2: Criterion B: Curriculum & Material Development -->
                             <div class="tab-pane fade" id="criterion-b" role="tabpanel" aria-labelledby="tab-criterion-b">
                                 <p>Details related to Curriculum & Instructional Material Development will appear here, including metrics like instructional materials developed, co-authorship, and program implementation. This section should be view-only for faculty members, while HR can make edits.</p>
+                            
+                                <!-- Save Button for Tab 2 -->
+                                <div class="d-flex justify-content-end mt-3">
+                                    <button type="button" class="btn btn-success" id="save-criterion-b">Save Criterion B</button>
+                                </div>
                             </div>
+
+
                             <!-- Tab 3: Criterion C: Thesis & Mentorship Services -->
                             <div class="tab-pane fade" id="criterion-c" role="tabpanel" aria-labelledby="tab-criterion-c">
                                 <p>Details related to Thesis, Dissertation, and Mentorship Services will appear here, including metrics for services rendered as adviser, panel member, and mentor. This section should be view-only for faculty members, while HR can make edits.</p>
+                                
+                                <!-- Save Button for Tab 3 -->
+                                <div class="d-flex justify-content-end mt-3">
+                                    <button type="button" class="btn btn-success" id="save-criterion-c">Save Criterion C</button>
+                                </div>
                             </div>
+
+
                         </div>
                     </div>
                 </div>
@@ -504,6 +527,24 @@ if ($_SESSION['role'] != 'Regular Instructor' && $_SESSION['role'] != 'Contract 
                 remarks2Content.textContent = remarks2; // Set 2nd semester content
             });
         });
+    </script>
+
+    <!-- Save Button Functionality for each Criterion -->
+    <script>
+    document.getElementById('save-criterion-a').addEventListener('click', function() {
+        // Save logic for Criterion A
+        alert('Criterion A saved!');
+    });
+
+    document.getElementById('save-criterion-b').addEventListener('click', function() {
+        // Save logic for Criterion B
+        alert('Criterion B saved!');
+    });
+
+    document.getElementById('save-criterion-c').addEventListener('click', function() {
+        // Save logic for Criterion C
+        alert('Criterion C saved!');
+    });
     </script>
 
 
