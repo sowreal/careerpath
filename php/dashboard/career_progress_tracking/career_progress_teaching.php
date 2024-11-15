@@ -146,7 +146,7 @@ if ($_SESSION['role'] != 'Regular Instructor' && $_SESSION['role'] != 'Contract 
                     <div class="card-header">
                         <ul class="nav nav-tabs card-header-tabs" id="kra-tabs" role="tablist">
                             <li class="nav-item">
-                                <button class="nav-link active" id="tab-criterion-a" data-bs-toggle="tab" data-bs-target="#criterion-a" type="button" role="tab">
+                                <button class="nav-link active bg-success text-white" id="tab-criterion-a" data-bs-toggle="tab" data-bs-target="#criterion-a" type="button" role="tab">
                                     Criterion A: Teaching Effectiveness
                                 </button>
                             </li>
@@ -545,6 +545,24 @@ if ($_SESSION['role'] != 'Regular Instructor' && $_SESSION['role'] != 'Contract 
         // Save logic for Criterion C
         alert('Criterion C saved!');
     });
+    </script>
+
+
+    <!-- JavaScript to dynamically add and remove bg-success and text-white on 2nd container-->
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const tabs = document.querySelectorAll('#kra-tabs .nav-link');
+
+            tabs.forEach(tab => {
+                tab.addEventListener('show.bs.tab', function(event) {
+                    // Remove bg-success and text-white from all tabs
+                    tabs.forEach(t => t.classList.remove('bg-success', 'text-white'));
+
+                    // Add bg-success and text-white to the active tab
+                    event.target.classList.add('bg-success', 'text-white');
+                });
+            });
+        });
     </script>
 
 
