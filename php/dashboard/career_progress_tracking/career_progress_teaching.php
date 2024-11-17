@@ -91,7 +91,7 @@ if ($_SESSION['role'] != 'Regular Instructor' && $_SESSION['role'] != 'Contract 
                 <?php require_once BASE_PATH . '/php/includes/career_progress_tracking/teaching/kra1.php';?>
 
                 
-                <!-- Tabs for Criteria -->
+                <!-- Container for Criteria -->
                 <div class="card mt-4">
                     <div class="card-header">
                         <ul class="nav nav-tabs card-header-tabs" id="kra-tabs" role="tablist">
@@ -113,7 +113,6 @@ if ($_SESSION['role'] != 'Regular Instructor' && $_SESSION['role'] != 'Contract 
                         </ul>
                     </div>
 
-
                     <!-- Criterions section -->
                     <div class="card-body">
                         <div class="tab-content" id="kra-tab-content">
@@ -125,16 +124,18 @@ if ($_SESSION['role'] != 'Regular Instructor' && $_SESSION['role'] != 'Contract 
                             <?php require_once BASE_PATH . '/php/includes/career_progress_tracking/teaching/criterion_c.php'; ?> 
                         </div>
                     </div>
-
-
                 </div>
 
-
-
-
-
                 <!-- MODAL SECTION -->
+                <?php require_once BASE_PATH . '/php/includes/career_progress_tracking/teaching/modals.php'; ?>
 
+            </div>
+
+
+
+
+
+                
 
                 
             </div>
@@ -162,7 +163,9 @@ if ($_SESSION['role'] != 'Regular Instructor' && $_SESSION['role'] != 'Contract 
 
 
     <!-- Visualization scripts -->
-    <script><?php require_once BASE_PATH . '/php/includes/career_progress_tracking/teaching/js/teaching.js'; ?></script>
+    <script>
+        <?php require_once BASE_PATH . '/php/includes/career_progress_tracking/teaching/js/teaching.js'; ?>
+    </script>
 
 
 
