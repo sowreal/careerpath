@@ -100,19 +100,19 @@ if ($_SESSION['role'] != 'Regular Instructor' && $_SESSION['role'] != 'Contract 
                                                     <label for="last_name">Last Name</label>
                                                     <input type="text" class="form-control mt-2" id="last_name" 
                                                         placeholder="Enter last name" 
-                                                        value="<?php echo $_SESSION['last_name']; ?>" required>
+                                                        value="<?php echo $_SESSION['last_name']; ?>" disabled>
                                                 </div>
                                                 <div class="form-group mt-3">
                                                     <label for="first_name">First Name</label>
                                                     <input type="text" class="form-control mt-2" id="first_name" 
                                                         placeholder="Enter first name" 
-                                                        value="<?php echo $_SESSION['first_name']; ?>" required>
+                                                        value="<?php echo $_SESSION['first_name']; ?>" disabled>
                                                 </div>
                                                 <div class="form-group mt-3 mb-3">
                                                     <label for="email">Email</label>
                                                     <input type="email" class="form-control mt-2" id="email"
                                                         placeholder="Enter email" 
-                                                        value="<?php echo $_SESSION['email']; ?>" required>
+                                                        value="<?php echo $_SESSION['email']; ?>" disabled>
                                                 </div>
                                             </div>
 
@@ -142,7 +142,7 @@ if ($_SESSION['role'] != 'Regular Instructor' && $_SESSION['role'] != 'Contract 
                                                 <div class="col-md-6">
                                                     <div class="form-group">
                                                         <label for="faculty_rank">Current Faculty Rank</label>
-                                                        <select class="form-control mt-2" id="faculty_rank" name="faculty_rank" required>
+                                                        <select class="form-control mt-2" id="faculty_rank" name="faculty_rank" disabled>
                                                             <option value="Instructor I" <?php if($_SESSION['faculty_rank'] == 'Instructor I') echo 'selected'; ?>>Instructor I</option>
                                                             <option value="Instructor II" <?php if($_SESSION['faculty_rank'] == 'Instructor II') echo 'selected'; ?>>Instructor II</option>
                                                             <option value="Instructor III" <?php if($_SESSION['faculty_rank'] == 'Instructor III') echo 'selected'; ?>>Instructor III</option>

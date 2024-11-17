@@ -36,4 +36,4 @@
 </script>
 
 <!-- TOTTGLE DARK MODE -->
-<script src="<?php echo BASE_URL ?>/js/dashboards/color_mode.js"></script>
+<script src="<?php echo BASE_PATH?>/js/dashboards/color_mode.js"></script>

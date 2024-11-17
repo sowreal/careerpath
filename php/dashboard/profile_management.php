@@ -774,8 +774,6 @@ if (isset($_GET['request'])) {
 
     <!-- Handle Submit Changes button (trigger second modal for confirmation) -->
     <script>    
-    
-
     // Confirm Submission in the modal
     document.getElementById('confirmSubmitButton').addEventListener('click', function () {
         // Submit the HR-protected fields form
