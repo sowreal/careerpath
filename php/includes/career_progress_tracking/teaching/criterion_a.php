@@ -55,10 +55,10 @@
                             <tr class="align-middle">
                                 <td><?php echo $period; ?></td>
                                 <td>
-                                    <input type="number" class="form-control" value="0.00" step="0.01" min="0">
+                                    <input type="number" class="form-control" placeholder="0.00" value="" step="0.01" min="0">
                                 </td>
                                 <td>
-                                    <input type="number" class="form-control" value="0.00" step="0.01" min="0">
+                                    <input type="number" class="form-control" placeholder="0.00" value="" step="0.01" min="0">
                                 </td>
                                 <td>
                                     <a href="#" target="_blank">Link to Evidence</a>
@@ -83,11 +83,11 @@
                 <div class="row g-3 justify-content-end">
                     <div class="col-md-4">
                         <label for="student-overall-score" class="form-label">Overall Average Rating:</label>
-                        <input type="number" class="form-control" id="student-overall-score" value="0.00" step="0.01" min="0">
+                        <input type="number" class="form-control" id="student-overall-score" value="" disabled>
                     </div>
                     <div class="col-md-4">
                         <label for="faculty-overall-score" class="form-label">Faculty Score:</label>
-                        <input type="number" class="form-control" id="faculty-overall-score" value="0.00" step="0.01" min="0">
+                        <input type="number" class="form-control" id="faculty-overall-score" value="" disabled>
                     </div>
                 </div>
             </div>
@@ -135,10 +135,10 @@
                             <tr class="align-middle">
                                 <td><?php echo $period; ?></td>
                                 <td>
-                                    <input type="number" class="form-control" value="0.00" step="0.01" min="0">
+                                    <input type="number" class="form-control" placeholder="0.00" value="" step="0.01" min="0">
                                 </td>
                                 <td>
-                                    <input type="number" class="form-control" value="0.00" step="0.01" min="0">
+                                    <input type="number" class="form-control" placeholder="0.00" value="" step="0.01" min="0">
                                 </td>
                                 <td>
                                     <a href="#" target="_blank">Link to Evidence</a>
@@ -154,11 +154,11 @@
                 <div class="row g-3 justify-content-end">
                     <div class="col-md-4">
                         <label for="supervisor-overall-score" class="form-label">Overall Average Rating:</label>
-                        <input type="number" class="form-control" id="supervisor-overall-score" value="0.00" step="0.01" min="0">
+                        <input type="number" class="form-control" id="supervisor-overall-score" value="0.00" min="0" disabled>
                     </div>
                     <div class="col-md-4">
                         <label for="supervisor-faculty-overall-score" class="form-label">Faculty Score:</label>
-                        <input type="number" class="form-control" id="supervisor-faculty-overall-score" value="0.00" step="0.01" min="0">
+                        <input type="number" class="form-control" id="supervisor-faculty-overall-score" value="0.00" min="0" disabled>
                     </div>
                 </div>
             </div>
