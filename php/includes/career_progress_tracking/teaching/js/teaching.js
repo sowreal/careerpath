@@ -47,6 +47,7 @@ document.addEventListener('DOMContentLoaded', function () {
     }  
     
 
+
     // Save Button Functionality for each Criterion
     const saveCriterionA = document.getElementById('save-criterion-a');
     if (saveCriterionA) {
