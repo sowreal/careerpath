@@ -80,8 +80,6 @@ if (isset($_GET['request'])) {
 
     <!-- Cropper.js CSS -->
     <link href="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.13/cropper.min.css" rel="stylesheet">
-
-
 </head>
 
 
@@ -513,7 +511,7 @@ if (isset($_GET['request'])) {
 
 
         <!--begin::Footer-->
-        <?php require_once('../includes/footer.php')?> 
+        <?php //require_once('../includes/footer.php')?>
         <!--end::Footer-->
     </div> <!--end::App Wrapper--> 
     
@@ -523,6 +521,8 @@ if (isset($_GET['request'])) {
     <?php require_once('../includes/dashboard_default_scripts.php');?>
     <!-- Cropper.js JS -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.13/cropper.min.js"></script>
+    <!-- Bootstrap JS Bundle (includes Popper) -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 
 
     <!-- JavaScript for Cropping and Uploading -->
@@ -774,8 +774,6 @@ if (isset($_GET['request'])) {
 
     <!-- Handle Submit Changes button (trigger second modal for confirmation) -->
     <script>    
-    
-
     // Confirm Submission in the modal
     document.getElementById('confirmSubmitButton').addEventListener('click', function () {
         // Submit the HR-protected fields form
