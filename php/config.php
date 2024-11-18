@@ -12,3 +12,5 @@ $projectDir = ''; // Leave empty ('') if your project is at the root level on pr
 // Define BASE_URL dynamically
 define('BASE_URL', $protocol . $host . $projectDir);
 
+// Difine BASE_PATH dynamically
+define('BASE_PATH', $_SERVER['DOCUMENT_ROOT'] . $projectDir);

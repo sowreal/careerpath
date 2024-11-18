@@ -17,7 +17,9 @@ $pass = 'password';  // Matches MYSQL_PASSWORD in docker-compose
 // $pass = 'Careerpath@2024';
 
 try {
+    // Create PDO connection
     $conn = new PDO("mysql:host=$host;dbname=$db", $user, $pass);
+    // Set PDO error mode to exception for better error handling
     $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
     // echo "Database connection included.";
 } catch (PDOException $e) {
