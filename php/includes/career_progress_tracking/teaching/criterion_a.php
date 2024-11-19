@@ -339,7 +339,7 @@
             });
             const studentAverage = studentCount ? (studentTotal / studentCount).toFixed(2) : 0;
             document.getElementById('student-overall-score').value = studentAverage;
-            document.getElementById('faculty-overall-score').value = (studentAverage * 0.6).toFixed(2);
+            document.getElementById('faculty-overall-score').value = (studentAverage * 0.36).toFixed(2);
 
             // Supervisor Evaluation Calculations
             let supervisorTotal = 0;

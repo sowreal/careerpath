@@ -2,7 +2,7 @@
 <div class="tab-pane fade" id="criterion-b" role="tabpanel" aria-labelledby="tab-criterion-b">
     <h4 class="mb-4 pb-2 border-bottom border-3 border-success"><strong>CRITERION B: Curriculum and Instructional Materials Development (Max = 30 Points)</strong></h4>
 
-    <h5>1. FOR EVERY INSTRUCTIONAL MATERIAL DEVELOPED AND APPROVED FOR USE</h5>
+    <h5>1. FOR EVERY INSTRUCTIONAL MATERIAL DEVELOPED AND APPROVED FOR USE</h5><br><br>
 
 
     <!-- Sole Authorship -->

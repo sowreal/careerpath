@@ -1,114 +1,126 @@
-<div class="tab-pane fade" id="criterion-b" role="tabpanel" aria-labelledby="tab-criterion-b">
-    <h4 class="mb-3 pb-2 border-bottom border-3 border-success">
-        CRITERION B: Curriculum & Instructional Materials Development (Max = 30 Points)
-    </h4>
-    <p>Instructions: Provide details of instructional materials developed and approved for use. Include evidence links where applicable.</p>
+<!-- NOT TEMPLATE. Used as a basis for page design -->
+<div class="tab-pane fade" id="criterion-c" role="tabpanel" aria-labelledby="tab-criterion-c">
+    <h4 class="mb-4 pb-2 border-bottom border-3 border-success"><strong>CRITERION C: Thesis, Dissertation, and Mentorship Services (Max = 10 Points)</strong></h4>
 
-    <div class="row">
-        <!-- Sole Authorship Section -->
-        <div class="col-12 mt-4">
-            <h5 class="mb-3 pb-1 border-bottom border-2 border-success">
-                1. Sole Authorship
-            </h5>
-            <table class="table table-bordered align-middle" id="sole-authorship-table">
-                <thead>
+    <!-- Section 1: Services Rendered to Students as Adviser -->
+    <h5>1. FOR SERVICES RENDERED TO STUDENTS AS:</h5>
+
+    <!-- 1.1 Adviser -->
+    <div class="mt-4">
+        <h5 class="mb-3 pb-2 border-bottom border-2 border-success">1.1 Adviser</h5>
+        <div class="table-responsive">
+            <table class="table table-bordered align-middle" id="adviser-table">
+                <thead class="table-light">
                     <tr>
-                        <th>No</th>
-                        <th>Title of Instructional Material</th>
-                        <th>Type of Instructional Material</th>
-                        <th>Reviewer / Repository</th>
-                        <th>Date Published</th>
-                        <th>Date Approved</th>
-                        <th>Faculty Score</th>
-                        <th>Link to Evidence</th>
-                        <th>Actions</th>
+                        <th scope="col">No.</th>
+                        <th scope="col">Requirement</th>
+                        <th scope="col">AY 2019-2020</th>
+                        <th scope="col">AY 2020-2021</th>
+                        <th scope="col">AY 2021-2022</th>
+                        <th scope="col">AY 2022-2023</th>
+                        <th scope="col">Faculty Score</th>
+                        <th scope="col">Link to Evidence</th>
+                        <th scope="col">Actions</th>
                     </tr>
                 </thead>
                 <tbody>
-                    <!-- Dynamic rows -->
+                    <?php 
+                    $adviser_requirements = ["Special/Capstone Project", "Undergraduate Thesis", "Master's Thesis", "Dissertation"];
+                    foreach ($adviser_requirements as $index => $requirement): ?>
+                        <tr>
+                            <td><?php echo $index + 1; ?></td>
+                            <td><?php echo $requirement; ?></td>
+                            <?php for ($year = 1; $year <= 4; $year++): ?>
+                                <td><input type="number" class="form-control" name="adviser_ay_<?php echo $year; ?>[]" step="1" min="0" required></td>
+                            <?php endfor; ?>
+                            <td><input type="number" class="form-control" name="adviser_score[]" step="0.01" min="0" required></td>
+                            <td><input type="url" class="form-control" name="adviser_evidence_link[]" placeholder="http://example.com/evidence" required></td>
+                            <td><button type="button" class="btn btn-danger btn-sm delete-row">Delete</button></td>
+                        </tr>
+                    <?php endforeach; ?>
                 </tbody>
             </table>
-            <button class="btn btn-success mt-3 add-row" data-table-id="sole-authorship-table">Add Row</button>
         </div>
+        <button type="button" class="btn btn-success mt-3 add-row" data-table-id="adviser-table">Add Row</button>
+    </div>
 
-        <!-- Co-Authorship Section -->
-        <div class="col-12 mt-5">
-            <h5 class="mb-3 pb-2 border-bottom border-2 border-success">
-                2. Co-Authorship
-            </h5>
-            <p class="mb-2">
-                Note: Each material with multiple authors should be accompanied by a certification using Form B1a.
-            </p>
-            <table class="table table-bordered align-middle" id="co-authorship-table">
-                <thead>
+    <!-- 1.2 Panel -->
+    <div class="mt-5">
+        <h5 class="mb-3 pb-2 border-bottom border-2 border-success">1.2 Panel</h5>
+        <div class="table-responsive">
+            <table class="table table-bordered align-middle" id="panel-table">
+                <thead class="table-light">
                     <tr>
-                        <th>No</th>
-                        <th>Title of Instructional Material</th>
-                        <th>Type of Instructional Material</th>
-                        <th>Reviewer / Repository</th>
-                        <th>Date Published</th>
-                        <th>Date Approved</th>
-                        <th>% Contribution</th>
-                        <th>Faculty Score</th>
-                        <th>Link to Evidence</th>
-                        <th>Actions</th>
+                        <th scope="col">No.</th>
+                        <th scope="col">Requirement</th>
+                        <th scope="col">AY 2019-2020</th>
+                        <th scope="col">AY 2020-2021</th>
+                        <th scope="col">AY 2021-2022</th>
+                        <th scope="col">AY 2022-2023</th>
+                        <th scope="col">Faculty Score</th>
+                        <th scope="col">Link to Evidence</th>
+                        <th scope="col">Actions</th>
                     </tr>
                 </thead>
                 <tbody>
-                    <!-- Dynamic rows -->
+                    <?php 
+                    $panel_requirements = ["Special/Capstone Project", "Undergraduate Thesis", "Master's Thesis", "Dissertation"];
+                    foreach ($panel_requirements as $index => $requirement): ?>
+                        <tr>
+                            <td><?php echo $index + 1; ?></td>
+                            <td><?php echo $requirement; ?></td>
+                            <?php for ($year = 1; $year <= 4; $year++): ?>
+                                <td><input type="number" class="form-control" name="panel_ay_<?php echo $year; ?>[]" step="1" min="0" required></td>
+                            <?php endfor; ?>
+                            <td><input type="number" class="form-control" name="panel_score[]" step="0.01" min="0" required></td>
+                            <td><input type="url" class="form-control" name="panel_evidence_link[]" placeholder="http://example.com/evidence" required></td>
+                            <td><button type="button" class="btn btn-danger btn-sm delete-row">Delete</button></td>
+                        </tr>
+                    <?php endforeach; ?>
                 </tbody>
             </table>
-            <button class="btn btn-success mt-3 add-row" data-table-id="co-authorship-table">Add Row</button>
         </div>
+        <button type="button" class="btn btn-success mt-3 add-row" data-table-id="panel-table">Add Row</button>
+    </div>
 
-        <!-- Academic Programs Section -->
-        <div class="col-12 mt-5">
-            <h5 class="mb-3 pb-2 border-bottom border-2 border-success">
-                3. Academic Programs Developed / Revised & Implemented
-            </h5>
-            <table class="table table-bordered align-middle" id="academic-programs-table">
-                <thead>
+    <!-- Section 2: Services Rendered as Mentor -->
+    <div class="mt-5">
+        <h5 class="mb-3 pb-2 border-bottom border-2 border-success">2. FOR SERVICES RENDERED AS MENTOR</h5>
+        <div class="table-responsive">
+            <table class="table table-bordered align-middle" id="mentor-table">
+                <thead class="table-light">
                     <tr>
-                        <th>No</th>
-                        <th>Name of Program</th>
-                        <th>Type of Program</th>
-                        <th>Board Approval</th>
-                        <th>Academic Year</th>
-                        <th>Role</th>
-                        <th>Faculty Score</th>
-                        <th>Link to Evidence</th>
-                        <th>Actions</th>
+                        <th scope="col">No.</th>
+                        <th scope="col">Name of Academic Competition</th>
+                        <th scope="col">Name of Sponsor Organization</th>
+                        <th scope="col">Award Received</th>
+                        <th scope="col">Date Awarded</th>
+                        <th scope="col">Faculty Score</th>
+                        <th scope="col">Link to Evidence</th>
+                        <th scope="col">Actions</th>
                     </tr>
                 </thead>
                 <tbody>
-                    <!-- Dynamic rows -->
+                    <?php for ($i = 1; $i <= 5; $i++): ?>
+                        <tr>
+                            <td><?php echo $i; ?></td>
+                            <td><input type="text" class="form-control" name="mentor_competition[]" required></td>
+                            <td><input type="text" class="form-control" name="mentor_organization[]" required></td>
+                            <td><input type="text" class="form-control" name="mentor_award[]" required></td>
+                            <td><input type="date" class="form-control" name="mentor_date_awarded[]" required></td>
+                            <td><input type="number" class="form-control" name="mentor_score[]" step="0.01" min="0" required></td>
+                            <td><input type="url" class="form-control" name="mentor_evidence_link[]" placeholder="http://example.com/evidence" required></td>
+                            <td><button type="button" class="btn btn-danger btn-sm delete-row">Delete</button></td>
+                        </tr>
+                    <?php endfor; ?>
                 </tbody>
             </table>
-            <button class="btn btn-success mt-3 add-row" data-table-id="academic-programs-table">Add Row</button>
         </div>
+        <button type="button" class="btn btn-success mt-3 add-row" data-table-id="mentor-table">Add Row</button>
     </div>
 
     <!-- Save Button -->
-    <div class="col-12 mt-5">
-        <button class="btn btn-success" id="save-criterion-b">Save Criterion B</button>
-    </div>
-
-    <!-- Delete Confirmation Modal -->
-    <div class="modal fade" id="deleteRowModal" tabindex="-1" aria-labelledby="deleteRowModalLabel" aria-hidden="true">
-        <div class="modal-dialog modal-dialog-centered">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title text-danger" id="deleteRowModalLabel">Confirm Deletion</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <div class="modal-body">
-                    Are you sure you want to delete this row? This action cannot be undone.
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
-                    <button type="button" class="btn btn-danger" id="confirm-delete-row">Delete</button>
-                </div>
-            </div>
-        </div>
+    <div class="d-flex justify-content-end mt-5">
+        <button type="submit" class="btn btn-success" id="save-criterion-c">Save Criterion C</button>
     </div>
 </div>
