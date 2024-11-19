@@ -194,12 +194,11 @@
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
-        <button type="button" class="btn btn-danger" id="confirm-delete-row" data-bs-dismiss="modal">Delete</button>
+        <button type="button" class="btn btn-danger" id="confirm-delete-row">Delete</button>
       </div>
     </div>
   </div>
 </div>
-
 
 <!-- Save Confirmation Modal -->
 <div class="modal fade" id="saveConfirmationModal" tabindex="-1" aria-labelledby="saveConfirmationModalLabel" aria-hidden="true">
@@ -219,6 +218,23 @@
   </div>
 </div>
 
+<!-- Save Error Modal -->
+<div class="modal fade" id="saveErrorModal" tabindex="-1" aria-labelledby="saveErrorModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title text-danger" id="saveErrorModalLabel">Save Failed</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        Please complete all required fields before saving.
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">OK</button>
+      </div>
+    </div>
+  </div>
+</div>
 
 
 <script>
@@ -226,6 +242,8 @@ document.addEventListener('DOMContentLoaded', () => {
     const addRowButtons = document.querySelectorAll('.add-row');
     let deleteRowTarget = null;
     const deleteModal = new bootstrap.Modal(document.getElementById('deleteRowModal'));
+    const saveConfirmationModal = new bootstrap.Modal(document.getElementById('saveConfirmationModal'));
+    const saveErrorModal = new bootstrap.Modal(document.getElementById('saveErrorModal'));
 
     // Function to create a new table row
     const createTableRow = (tableId) => {
@@ -260,6 +278,7 @@ document.addEventListener('DOMContentLoaded', () => {
         button.addEventListener('click', () => {
             const tableId = button.getAttribute('data-table-id');
             createTableRow(tableId);
+            setTimeout(calculateOverallScores, 100); // Recalculate after adding row
         });
     });
 
@@ -311,64 +330,60 @@ document.addEventListener('DOMContentLoaded', () => {
         document.getElementById('supervisor-overall-score').value = supervisorAverage;
         document.getElementById('supervisor-faculty-overall-score').value = (supervisorAverage * 0.4).toFixed(2);
 
-        // Total Faculty Score
-        const totalFacultyScore = (parseFloat(document.getElementById('faculty-overall-score').value) + parseFloat(document.getElementById('supervisor-faculty-overall-score').value)).toFixed(2);
+        // Total Faculty Score (Optional)
+        // const facultyScore = (parseFloat(document.getElementById('faculty-overall-score').value) + parseFloat(document.getElementById('supervisor-faculty-overall-score').value)).toFixed(2);
         // You can display this total if needed
     };
 
     // Event listeners for input changes to recalculate scores
-    document.querySelectorAll('.rating-input').forEach(input => {
-        input.addEventListener('input', calculateOverallScores);
-    });
-
-    // Recalculate scores on row addition or deletion
-    document.querySelectorAll('.add-row').forEach(button => {
-        button.addEventListener('click', () => {
-            setTimeout(calculateOverallScores, 100); // Delay to ensure the new row is added
-        });
+    document.addEventListener('input', (e) => {
+        if (e.target.classList.contains('rating-input')) {
+            calculateOverallScores();
+        }
     });
 
     // Save Criterion A
-    document.getElementById('save-criterion-a').addEventListener('click', () => {
-        // Implement form validation and submission via AJAX or form POST
-        // Example:
-        // Validate all required fields
-        const forms = document.querySelectorAll('#criterion-a input[required], #criterion-a select[required]');
-        let valid = true;
-        forms.forEach(field => {
-            if (!field.checkValidity()) {
-                field.classList.add('is-invalid');
-                valid = false;
-            } else {
-                field.classList.remove('is-invalid');
-            }
-        });
-
-        if (valid) {
-            // Collect form data and send to the server
-            // Example using Fetch API:
-            const formData = new FormData(document.querySelector('#criterion-a form') || document.body);
-            fetch('path/to/save_endpoint.php', {
-                method: 'POST',
-                body: formData
-            })
-            .then(response => response.json())
-            .then(data => {
-                if (data.success) {
-                    // Show success message
-                    alert('Criterion A saved successfully!');
-                } else {
-                    // Show error message
-                    alert('Error saving Criterion A: ' + data.message);
-                }
-            })
-            .catch(error => {
-                console.error('Error:', error);
-                alert('An unexpected error occurred.');
-            });
+document.getElementById('save-criterion-a').addEventListener('click', () => {
+    // Validate all required fields
+    const requiredFields = document.querySelectorAll('#criterion-a input[required], #criterion-a select[required]');
+    let isValid = true;
+    requiredFields.forEach(field => {
+        if (!field.checkValidity()) {
+            field.classList.add('is-invalid');
+            isValid = false;
         } else {
-            alert('Please fill out all required fields correctly.');
+            field.classList.remove('is-invalid');
         }
     });
+
+    if (isValid) {
+        // Collect form data
+        const formData = new FormData(document.querySelector('#criterion-a form') || document.body);
+        
+        // Send data via Fetch API
+        fetch('path/to/save_endpoint.php', { // Update the URL accordingly
+            method: 'POST',
+            body: formData
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                saveConfirmationModal.show();
+            } else {
+                // Show server-side error modal
+                saveErrorModal.show();
+            }
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            // Show unexpected error modal
+            saveErrorModal.show();
+        });
+    } else {
+        // Show validation error modal
+        saveErrorModal.show();
+    }
+});
+
 });
 </script>
