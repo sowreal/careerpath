@@ -11,6 +11,7 @@
 
 
 
+
 <script>
     const SELECTOR_SIDEBAR_WRAPPER = ".sidebar-wrapper";
     const Default = {

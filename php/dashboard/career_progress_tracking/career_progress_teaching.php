@@ -41,15 +41,11 @@ if ($_SESSION['role'] != 'Regular Instructor' && $_SESSION['role'] != 'Contract 
 }
 ?>
 
-
-
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <?php require_once BASE_PATH . '/php/includes/header.php'; ?>
 </head>
-
 
 <body class="layout-fixed sidebar-expand-lg bg-body-tertiary"> <!--begin::App Wrapper-->
     <div class="app-wrapper"> 
@@ -60,7 +56,6 @@ if ($_SESSION['role'] != 'Regular Instructor' && $_SESSION['role'] != 'Contract 
         <!--begin::Sidebar-->
         <?php require_once BASE_PATH . '/php/includes/sidebar_faculty.php'; ?> 
         <!--end::Sidebar--> 
-        
 
         <!--begin::App Main-->
         <main class="app-main">
@@ -69,19 +64,19 @@ if ($_SESSION['role'] != 'Regular Instructor' && $_SESSION['role'] != 'Contract 
                 <!-- Standalone Header -->
                 <div class="app-content-header">
                     <div class="container-fluid">
-                        <div class="row align-items-top">
-                            <div class="col-sm-6 mb-6">
+                        <div class="row align-items-start">
+                            <div class="col-sm-6 mb-5">
                                 <!-- Change Evaluation Number dynamically-->
                                 <h3 class="mb-0">Teaching Performance (KRA I) - <span id="evaluation-number">Evaluation #: 2024-047</span></h3> 
                             </div>
-                        </div>
-                    </div>
-                    <div class="col-sm-6 pe-4 mt-4">
-                        <div class="d-flex">
-                            <!-- MODAL: Button Trigger -->
-                            <button id="select-evaluation-btn" class="btn btn-success" data-toggle="modal" data-target="#evaluationModal">
-                                Select Evaluation
-                            </button>
+                            <div class="col-sm-6 pe-4 mt-4">
+                                <div class="d-flex justify-content-end">
+                                    <!-- MODAL: Button Trigger -->
+                                    <button id="select-evaluation-btn" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#evaluationModal">
+                                        Select Evaluation
+                                    </button>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -90,7 +85,6 @@ if ($_SESSION['role'] != 'Regular Instructor' && $_SESSION['role'] != 'Contract 
                 <!-- KRA I Content -->
                 <?php require_once BASE_PATH . '/php/includes/career_progress_tracking/teaching/kra1.php';?>
 
-                
                 <!-- Container for Criteria -->
                 <div class="card mt-4">
                     <div class="card-header">
@@ -115,62 +109,42 @@ if ($_SESSION['role'] != 'Regular Instructor' && $_SESSION['role'] != 'Contract 
 
                     <!-- Criterions section -->
                     <div class="card-body">
-                        <div class="tab-content" id="kra-tab-content">
-                            <!-- Tab 1: Criterion A: Teaching Effectiveness -->
-                            <?php require_once BASE_PATH . '/php/includes/career_progress_tracking/teaching/criterion_a.php'; ?> 
-                            <!-- Tab 2: Criterion B: Curriculum & Material Development -->
-                            <?php require_once BASE_PATH . '/php/includes/career_progress_tracking/teaching/criterion_b.php'; ?> 
-                            <!-- Tab 3: Criterion C: Thesis & Mentorship Services -->
-                            <?php require_once BASE_PATH . '/php/includes/career_progress_tracking/teaching/criterion_c.php'; ?> 
-                        </div>
+                        <form id="kra-form" novalidate>
+                            <div class="tab-content" id="kra-tab-content">
+                                <!-- Tab 1: Criterion A: Teaching Effectiveness -->
+                                <?php require_once BASE_PATH . '/php/includes/career_progress_tracking/teaching/criterion_a.php'; ?> 
+                                <!-- Tab 2: Criterion B: Curriculum & Material Development -->
+                                <?php require_once BASE_PATH . '/php/includes/career_progress_tracking/teaching/criterion_b.php'; ?> 
+                                <!-- Tab 3: Criterion C: Thesis & Mentorship Services -->
+                                <?php require_once BASE_PATH . '/php/includes/career_progress_tracking/teaching/criterion_c.php'; ?> 
+                            </div>
+                        </form>
                     </div>
+
+
                 </div>
 
                 <!-- MODAL SECTION -->
                 <?php require_once BASE_PATH . '/php/includes/career_progress_tracking/teaching/modals.php'; ?>
 
             </div>
-
-
-
-
-
-                
-
-                
-            </div>
         </main>
         <!--end::App Main-->
 
-        
-        
-        
         <!--begin::Footer-->   
             <?php require_once BASE_PATH . '/php/includes/footer.php'; ?> 
         <!--end::Footer-->
     </div> 
     <!--end::App Wrapper--> 
-    
-        
+
     <!--begin::Script--> 
     <?php require_once BASE_PATH . '/php/includes/dashboard_default_scripts.php'; ?> 
 
     <!-- Script Links for Chart.js -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
-
-    
-
-
     <!-- Visualization scripts -->
-    <script>
-        <?php require_once BASE_PATH . '/php/includes/career_progress_tracking/teaching/js/teaching.js'; ?>
-    </script>
-
-
-
+    <script src="<?php echo BASE_URL; ?>/php/includes/career_progress_tracking/teaching/js/teaching.js"></script> <!-- Changed from PHP include to src attribute -->
 
 </body>
 </html>
-
-

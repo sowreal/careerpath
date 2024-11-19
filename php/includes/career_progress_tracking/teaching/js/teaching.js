@@ -46,34 +46,6 @@ document.addEventListener('DOMContentLoaded', function () {
         });
     }  
     
-
-
-    // Save Button Functionality for each Criterion
-    const saveCriterionA = document.getElementById('save-criterion-a');
-    if (saveCriterionA) {
-        saveCriterionA.addEventListener('click', function () {
-            // Save logic for Criterion A
-            alert('Criterion A saved!');
-        });
-    }
-
-    const saveCriterionB = document.getElementById('save-criterion-b');
-    if (saveCriterionB) {
-        saveCriterionB.addEventListener('click', function () {
-            // Save logic for Criterion B
-            alert('Criterion B saved!');
-        });
-    }
-
-    const saveCriterionC = document.getElementById('save-criterion-c');
-    if (saveCriterionC) {
-        saveCriterionC.addEventListener('click', function () {
-            // Save logic for Criterion C
-            alert('Criterion C saved!');
-        });
-    }
-
-
     // JavaScript to dynamically add and remove bg-success and text-white on tabs on 2nd container
     const tabs = document.querySelectorAll('#kra-tabs .nav-link');
     if (tabs.length > 0) {

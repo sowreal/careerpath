@@ -1,23 +1,22 @@
 <!-- Modal: Evaluation selection -->
-<div class="modal fade" id="evaluationModal" tabindex="-1" role="dialog" aria-labelledby="evaluationModalLabel" aria-hidden="true">
-    <div class="modal-dialog" role="document">
-        <div class="modal-content">
-        <div class="modal-header bg-success text-white">
-            <h5 class="modal-title" id="evaluationModalLabel">Select Evaluation Cycle</h5>
-            <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" data-dismiss="modal" aria-label="Close"></button>
-        </div>
-
-        <div class="modal-body">
-            <ul id="evaluation-list" class="list-group">
-            <!-- Dynamically populated list of evaluations -->
-            </ul>
-        </div>
-        <div class="modal-footer">
-            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-        </div>
-        </div>
+<div class="modal fade" id="evaluationModal" tabindex="-1" aria-labelledby="evaluationModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="evaluationModalLabel">Select Evaluation</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <!-- Modal content goes here -->
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button> <!-- Added data-bs-dismiss attribute -->
+        <button type="button" class="btn btn-success">Select</button>
+      </div>
     </div>
+  </div>
 </div>
+
 
 <!-- Modal for Viewing Remarks -->
 <div class="modal fade" id="remarksModal" tabindex="-1" aria-labelledby="remarksModalLabel" aria-hidden="true">

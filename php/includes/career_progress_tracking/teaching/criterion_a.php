@@ -1,10 +1,11 @@
 <!-- careerpath/php/includes/career_progress_tracking/teaching/criterion_a.php -->
 <div class="tab-pane fade show active" id="criterion-a" role="tabpanel" aria-labelledby="tab-criterion-a">
-    <h4 class="mb-4 pb-2 border-bottom border-3 border-success">CRITERION A: Teaching Effectiveness (Max = 60 Points)</h4>
-    <p>
-        <strong>FACULTY PERFORMANCE:</strong> Enter the average rating received by the faculty per semester.<br>  
-        For newly appointed faculty from private HEI, LUCs, TESDA/DepEd schools who decide to proceed with the evaluation, enter "0" for semesters without student and supervisor evaluations.
-    </p>
+    <h4 class="mb-4 pb-2 border-bottom border-3 border-success"><strong>CRITERION A: Teaching Effectiveness (Max = 60 Points)</strong></h4>
+    
+    <h5><strong>1. FACULTY PERFORMANCE:</strong> Enter the average rating received by the faculty per semester.<br>  
+    For newly appointed faculty from private HEI, LUCs, TESDA/DepEd schools who decide to proceed with the evaluation, 
+    enter "0" for semesters without student and supervisor evaluations.
+    </h5>
 
     <div class="row">
         <!-- Student Evaluation Section -->
@@ -177,9 +178,12 @@
 
     <!-- Save Button -->
     <div class="d-flex justify-content-end mt-5">
-        <button type="button" class="btn btn-success" id="save-criterion-a">Save Criterion A</button>
+        <button type="submit" class="btn btn-success" id="save-criterion-a">Save Criterion A</button> <!-- Changed type to 'submit' -->
     </div>
+
 </div>
+
+
 
 <!-- Delete Confirmation Modal -->
 <div class="modal fade" id="deleteRowModal" tabindex="-1" aria-labelledby="deleteRowModalLabel" aria-hidden="true">
@@ -227,7 +231,7 @@
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
       <div class="modal-body">
-        Please complete all required fields before saving.
+        <!-- Dynamic error message will be inserted here -->
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">OK</button>
@@ -238,38 +242,60 @@
 
 
 <script>
-document.addEventListener('DOMContentLoaded', () => {
+    document.addEventListener('DOMContentLoaded', () => {
     const addRowButtons = document.querySelectorAll('.add-row');
     let deleteRowTarget = null;
     const deleteModal = new bootstrap.Modal(document.getElementById('deleteRowModal'));
     const saveConfirmationModal = new bootstrap.Modal(document.getElementById('saveConfirmationModal'));
     const saveErrorModal = new bootstrap.Modal(document.getElementById('saveErrorModal'));
+    const kraForm = document.getElementById('kra-form'); // Form reference
 
     // Function to create a new table row
     const createTableRow = (tableId) => {
         const tableBody = document.querySelector(`#${tableId} tbody`);
         const newRow = document.createElement('tr');
 
-        newRow.innerHTML = `
-            <td>
-                <input type="text" class="form-control" name="${tableId}_evaluation_period[]" placeholder="Enter Evaluation Period" required>
-            </td>
-            <td>
-                <input type="number" class="form-control rating-input" name="${tableId}_rating_1[]" placeholder="0.00" step="0.01" min="0" max="5" required>
-            </td>
-            <td>
-                <input type="number" class="form-control rating-input" name="${tableId}_rating_2[]" placeholder="0.00" step="0.01" min="0" max="5" required>
-            </td>
-            <td>
-                <input type="url" class="form-control" name="${tableId}_evidence_link[]" placeholder="http://example.com/evidence" pattern="https?://.+" required>
-            </td>
-            <td>
-                ${tableId.includes('student') ? `<input type="text" class="form-control" name="${tableId}_remarks[]" placeholder="Enter remarks">` : ''}
-            </td>
-            <td>
-                <button type="button" class="btn btn-danger btn-sm delete-row" aria-label="Delete row">Delete</button>
-            </td>
-        `;
+        if (tableId === 'student-evaluation-table') {
+            newRow.innerHTML = `
+                <td>
+                    <input type="text" class="form-control" name="student_evaluation_period[]" placeholder="Enter Evaluation Period" required>
+                </td>
+                <td>
+                    <input type="number" class="form-control rating-input" name="student_rating_1[]" placeholder="0.00" step="0.01" min="0" max="5" required>
+                </td>
+                <td>
+                    <input type="number" class="form-control rating-input" name="student_rating_2[]" placeholder="0.00" step="0.01" min="0" max="5" required>
+                </td>
+                <td>
+                    <input type="url" class="form-control" name="student_evidence_link[]" placeholder="http://example.com/evidence" pattern="https?://.+" required>
+                </td>
+                <td>
+                    <input type="text" class="form-control" name="student_remarks[]" placeholder="Enter remarks">
+                </td>
+                <td>
+                    <button type="button" class="btn btn-danger btn-sm delete-row" aria-label="Delete row">Delete</button>
+                </td>
+            `;
+        } else if (tableId === 'supervisor-evaluation-table') {
+            newRow.innerHTML = `
+                <td>
+                    <input type="text" class="form-control" name="supervisor_evaluation_period[]" placeholder="Enter Evaluation Period" required>
+                </td>
+                <td>
+                    <input type="number" class="form-control rating-input" name="supervisor_rating_1[]" placeholder="0.00" step="0.01" min="0" max="5" required>
+                </td>
+                <td>
+                    <input type="number" class="form-control rating-input" name="supervisor_rating_2[]" placeholder="0.00" step="0.01" min="0" max="5" required>
+                </td>
+                <td>
+                    <input type="url" class="form-control" name="supervisor_evidence_link[]" placeholder="http://example.com/evidence" pattern="https?://.+" required>
+                </td>
+                <td>
+                    <button type="button" class="btn btn-danger btn-sm delete-row" aria-label="Delete row">Delete</button>
+                </td>
+            `;
+        }
+
         tableBody.appendChild(newRow);
     };
 
@@ -342,48 +368,50 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
 
-    // Save Criterion A
-document.getElementById('save-criterion-a').addEventListener('click', () => {
-    // Validate all required fields
-    const requiredFields = document.querySelectorAll('#criterion-a input[required], #criterion-a select[required]');
-    let isValid = true;
-    requiredFields.forEach(field => {
-        if (!field.checkValidity()) {
-            field.classList.add('is-invalid');
-            isValid = false;
-        } else {
+    // Handle Form Submission
+    kraForm.addEventListener('submit', (e) => {
+        e.preventDefault(); // Prevent the form from submitting
+
+        // Manual Validation of Required Fields
+        let isValid = true;
+        const requiredFields = document.querySelectorAll('#kra-form input[required], #kra-form select[required]');
+        requiredFields.forEach(field => {
+            const value = field.value.trim();
+
+            // Basic non-empty validation
+            if (!value) {
+                field.classList.add('is-invalid');
+                isValid = false;
+                return; // Skip further validation for this field
+            }
+
+            // Additional validation for URL fields
+            if (field.type === 'url') {
+                const urlPattern = /^(https?:\/\/).+/;
+                if (!urlPattern.test(value)) {
+                    field.classList.add('is-invalid');
+                    isValid = false;
+                    return;
+                }
+            }
+
+            // Remove invalid class if validation passes
             field.classList.remove('is-invalid');
+        });
+
+        if (isValid) {
+            // Simulate a successful save since no backend endpoint exists
+            // You can replace this with an actual AJAX request to save data
+            setTimeout(() => {
+                saveConfirmationModal.show();
+            }, 500);
+        } else {
+            // Show validation error modal
+            document.getElementById('saveErrorModalLabel').textContent = 'Save Failed';
+            document.querySelector('#saveErrorModal .modal-body').textContent = 'Please complete all required fields before saving.';
+            saveErrorModal.show();
         }
     });
-
-    if (isValid) {
-        // Collect form data
-        const formData = new FormData(document.querySelector('#criterion-a form') || document.body);
-        
-        // Send data via Fetch API
-        fetch('path/to/save_endpoint.php', { // Update the URL accordingly
-            method: 'POST',
-            body: formData
-        })
-        .then(response => response.json())
-        .then(data => {
-            if (data.success) {
-                saveConfirmationModal.show();
-            } else {
-                // Show server-side error modal
-                saveErrorModal.show();
-            }
-        })
-        .catch(error => {
-            console.error('Error:', error);
-            // Show unexpected error modal
-            saveErrorModal.show();
-        });
-    } else {
-        // Show validation error modal
-        saveErrorModal.show();
-    }
 });
 
-});
 </script>
