@@ -109,18 +109,15 @@ if ($_SESSION['role'] != 'Regular Instructor' && $_SESSION['role'] != 'Contract 
 
                     <!-- Criterions section -->
                     <div class="card-body">
-                        <form id="kra-form" novalidate>
-                            <div class="tab-content" id="kra-tab-content">
-                                <!-- Tab 1: Criterion A: Teaching Effectiveness -->
-                                <?php require_once BASE_PATH . '/php/includes/career_progress_tracking/teaching/criterion_a.php'; ?> 
-                                <!-- Tab 2: Criterion B: Curriculum & Material Development -->
-                                <?php require_once BASE_PATH . '/php/includes/career_progress_tracking/teaching/criterion_b.php'; ?> 
-                                <!-- Tab 3: Criterion C: Thesis & Mentorship Services -->
-                                <?php require_once BASE_PATH . '/php/includes/career_progress_tracking/teaching/criterion_c.php'; ?> 
-                            </div>
-                        </form>
+                        <div class="tab-content" id="kra-tab-content">
+                            <!-- Tab 1: Criterion A: Teaching Effectiveness -->
+                            <?php require_once BASE_PATH . '/php/includes/career_progress_tracking/teaching/criterion_a.php'; ?> 
+                            <!-- Tab 2: Criterion B: Curriculum & Material Development -->
+                            <?php require_once BASE_PATH . '/php/includes/career_progress_tracking/teaching/criterion_b.php'; ?> 
+                            <!-- Tab 3: Criterion C: Thesis & Mentorship Services -->
+                            <?php require_once BASE_PATH . '/php/includes/career_progress_tracking/teaching/criterion_c.php'; ?> 
+                        </div>
                     </div>
-
 
                 </div>
 

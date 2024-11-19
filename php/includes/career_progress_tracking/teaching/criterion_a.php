@@ -84,11 +84,11 @@
             <div class="mt-5">
                 <div class="row g-3 justify-content-end">
                     <div class="col-md-4">
-                        <label for="student-overall-score" class="form-label">Overall Average Rating:</label>
+                        <label for="student-overall-score" class="form-label"><strong>Overall Average Rating:</strong></label>
                         <input type="number" class="form-control" id="student-overall-score" name="student_overall_score" readonly>
                     </div>
                     <div class="col-md-4">
-                        <label for="faculty-overall-score" class="form-label">Faculty Score:</label>
+                        <label for="faculty-overall-score" class="form-label"><strong>Faculty Score:</strong></label>
                         <input type="number" class="form-control" id="faculty-overall-score" name="faculty_overall_score" readonly>
                     </div>
                 </div>
@@ -164,11 +164,11 @@
             <div class="mt-5">
                 <div class="row g-3 justify-content-end">
                     <div class="col-md-4">
-                        <label for="supervisor-overall-score" class="form-label">Overall Average Rating:</label>
+                        <label for="supervisor-overall-score" class="form-label"><strong>Overall Average Rating:</strong></label>
                         <input type="number" class="form-control" id="supervisor-overall-score" name="supervisor_overall_score" readonly>
                     </div>
                     <div class="col-md-4">
-                        <label for="supervisor-faculty-overall-score" class="form-label">Faculty Score:</label>
+                        <label for="supervisor-faculty-overall-score" class="form-label"><strong>Faculty Score:</strong></label>
                         <input type="number" class="form-control" id="supervisor-faculty-overall-score" name="supervisor_faculty_overall_score" readonly>
                     </div>
                 </div>
@@ -178,7 +178,7 @@
 
     <!-- Save Button -->
     <div class="d-flex justify-content-end mt-5">
-        <button type="submit" class="btn btn-success" id="save-criterion-a">Save Criterion A</button> <!-- Changed type to 'submit' -->
+        <button type="button" class="btn btn-success" id="save-criterion-a">Save Criterion A</button> <!-- Ensure type="button" -->
     </div>
 
 </div>
@@ -243,175 +243,176 @@
 
 <script>
     document.addEventListener('DOMContentLoaded', () => {
-    const addRowButtons = document.querySelectorAll('.add-row');
-    let deleteRowTarget = null;
-    const deleteModal = new bootstrap.Modal(document.getElementById('deleteRowModal'));
-    const saveConfirmationModal = new bootstrap.Modal(document.getElementById('saveConfirmationModal'));
-    const saveErrorModal = new bootstrap.Modal(document.getElementById('saveErrorModal'));
-    const kraForm = document.getElementById('kra-form'); // Form reference
+        const addRowButtons = document.querySelectorAll('.add-row');
+        let deleteRowTarget = null;
+        const deleteModal = new bootstrap.Modal(document.getElementById('deleteRowModal'));
+        const saveConfirmationModal = new bootstrap.Modal(document.getElementById('saveConfirmationModal'));
+        const saveErrorModal = new bootstrap.Modal(document.getElementById('saveErrorModal'));
 
-    // Function to create a new table row
-    const createTableRow = (tableId) => {
-        const tableBody = document.querySelector(`#${tableId} tbody`);
-        const newRow = document.createElement('tr');
+        // Function to create a new table row
+        const createTableRow = (tableId) => {
+            const tableBody = document.querySelector(`#${tableId} tbody`);
+            const newRow = document.createElement('tr');
 
-        if (tableId === 'student-evaluation-table') {
-            newRow.innerHTML = `
-                <td>
-                    <input type="text" class="form-control" name="student_evaluation_period[]" placeholder="Enter Evaluation Period" required>
-                </td>
-                <td>
-                    <input type="number" class="form-control rating-input" name="student_rating_1[]" placeholder="0.00" step="0.01" min="0" max="5" required>
-                </td>
-                <td>
-                    <input type="number" class="form-control rating-input" name="student_rating_2[]" placeholder="0.00" step="0.01" min="0" max="5" required>
-                </td>
-                <td>
-                    <input type="url" class="form-control" name="student_evidence_link[]" placeholder="http://example.com/evidence" pattern="https?://.+" required>
-                </td>
-                <td>
-                    <input type="text" class="form-control" name="student_remarks[]" placeholder="Enter remarks">
-                </td>
-                <td>
-                    <button type="button" class="btn btn-danger btn-sm delete-row" aria-label="Delete row">Delete</button>
-                </td>
-            `;
-        } else if (tableId === 'supervisor-evaluation-table') {
-            newRow.innerHTML = `
-                <td>
-                    <input type="text" class="form-control" name="supervisor_evaluation_period[]" placeholder="Enter Evaluation Period" required>
-                </td>
-                <td>
-                    <input type="number" class="form-control rating-input" name="supervisor_rating_1[]" placeholder="0.00" step="0.01" min="0" max="5" required>
-                </td>
-                <td>
-                    <input type="number" class="form-control rating-input" name="supervisor_rating_2[]" placeholder="0.00" step="0.01" min="0" max="5" required>
-                </td>
-                <td>
-                    <input type="url" class="form-control" name="supervisor_evidence_link[]" placeholder="http://example.com/evidence" pattern="https?://.+" required>
-                </td>
-                <td>
-                    <button type="button" class="btn btn-danger btn-sm delete-row" aria-label="Delete row">Delete</button>
-                </td>
-            `;
-        }
-
-        tableBody.appendChild(newRow);
-    };
-
-    // Add row event listeners
-    addRowButtons.forEach(button => {
-        button.addEventListener('click', () => {
-            const tableId = button.getAttribute('data-table-id');
-            createTableRow(tableId);
-            setTimeout(calculateOverallScores, 100); // Recalculate after adding row
-        });
-    });
-
-    // Delegate delete button clicks
-    document.addEventListener('click', (e) => {
-        if (e.target && e.target.classList.contains('delete-row')) {
-            deleteRowTarget = e.target.closest('tr');
-            deleteModal.show();
-        }
-    });
-
-    // Confirm deletion
-    document.getElementById('confirm-delete-row').addEventListener('click', () => {
-        if (deleteRowTarget) {
-            deleteRowTarget.remove();
-            deleteRowTarget = null;
-            deleteModal.hide();
-            calculateOverallScores();
-        }
-    });
-
-    // Calculate Overall Scores
-    const calculateOverallScores = () => {
-        // Student Evaluation Calculations
-        let studentTotal = 0;
-        let studentCount = 0;
-        document.querySelectorAll('#student-evaluation-table tbody tr').forEach(row => {
-            const rating1 = parseFloat(row.querySelector('input[name="student_rating_1[]"]').value) || 0;
-            const rating2 = parseFloat(row.querySelector('input[name="student_rating_2[]"]').value) || 0;
-            const average = (rating1 + rating2) / 2;
-            studentTotal += average;
-            studentCount++;
-        });
-        const studentAverage = studentCount ? (studentTotal / studentCount).toFixed(2) : 0;
-        document.getElementById('student-overall-score').value = studentAverage;
-        document.getElementById('faculty-overall-score').value = (studentAverage * 0.6).toFixed(2);
-
-        // Supervisor Evaluation Calculations
-        let supervisorTotal = 0;
-        let supervisorCount = 0;
-        document.querySelectorAll('#supervisor-evaluation-table tbody tr').forEach(row => {
-            const rating1 = parseFloat(row.querySelector('input[name="supervisor_rating_1[]"]').value) || 0;
-            const rating2 = parseFloat(row.querySelector('input[name="supervisor_rating_2[]"]').value) || 0;
-            const average = (rating1 + rating2) / 2;
-            supervisorTotal += average;
-            supervisorCount++;
-        });
-        const supervisorAverage = supervisorCount ? (supervisorTotal / supervisorCount).toFixed(2) : 0;
-        document.getElementById('supervisor-overall-score').value = supervisorAverage;
-        document.getElementById('supervisor-faculty-overall-score').value = (supervisorAverage * 0.4).toFixed(2);
-
-        // Total Faculty Score (Optional)
-        // const facultyScore = (parseFloat(document.getElementById('faculty-overall-score').value) + parseFloat(document.getElementById('supervisor-faculty-overall-score').value)).toFixed(2);
-        // You can display this total if needed
-    };
-
-    // Event listeners for input changes to recalculate scores
-    document.addEventListener('input', (e) => {
-        if (e.target.classList.contains('rating-input')) {
-            calculateOverallScores();
-        }
-    });
-
-    // Handle Form Submission
-    kraForm.addEventListener('submit', (e) => {
-        e.preventDefault(); // Prevent the form from submitting
-
-        // Manual Validation of Required Fields
-        let isValid = true;
-        const requiredFields = document.querySelectorAll('#kra-form input[required], #kra-form select[required]');
-        requiredFields.forEach(field => {
-            const value = field.value.trim();
-
-            // Basic non-empty validation
-            if (!value) {
-                field.classList.add('is-invalid');
-                isValid = false;
-                return; // Skip further validation for this field
+            if (tableId === 'student-evaluation-table') {
+                newRow.innerHTML = `
+                    <td>
+                        <input type="text" class="form-control" name="student_evaluation_period[]" placeholder="Enter Evaluation Period" required>
+                    </td>
+                    <td>
+                        <input type="number" class="form-control rating-input" name="student_rating_1[]" placeholder="0.00" step="0.01" min="0" max="5" required>
+                    </td>
+                    <td>
+                        <input type="number" class="form-control rating-input" name="student_rating_2[]" placeholder="0.00" step="0.01" min="0" max="5" required>
+                    </td>
+                    <td>
+                        <input type="url" class="form-control" name="student_evidence_link[]" placeholder="http://example.com/evidence" pattern="https?://.+" required>
+                    </td>
+                    <td>
+                        <input type="text" class="form-control" name="student_remarks[]" placeholder="Enter remarks">
+                    </td>
+                    <td>
+                        <button type="button" class="btn btn-danger btn-sm delete-row" aria-label="Delete row">Delete</button>
+                    </td>
+                `;
+            } else if (tableId === 'supervisor-evaluation-table') {
+                newRow.innerHTML = `
+                    <td>
+                        <input type="text" class="form-control" name="supervisor_evaluation_period[]" placeholder="Enter Evaluation Period" required>
+                    </td>
+                    <td>
+                        <input type="number" class="form-control rating-input" name="supervisor_rating_1[]" placeholder="0.00" step="0.01" min="0" max="5" required>
+                    </td>
+                    <td>
+                        <input type="number" class="form-control rating-input" name="supervisor_rating_2[]" placeholder="0.00" step="0.01" min="0" max="5" required>
+                    </td>
+                    <td>
+                        <input type="url" class="form-control" name="supervisor_evidence_link[]" placeholder="http://example.com/evidence" pattern="https?://.+" required>
+                    </td>
+                    <td>
+                        <button type="button" class="btn btn-danger btn-sm delete-row" aria-label="Delete row">Delete</button>
+                    </td>
+                `;
             }
 
-            // Additional validation for URL fields
-            if (field.type === 'url') {
-                const urlPattern = /^(https?:\/\/).+/;
-                if (!urlPattern.test(value)) {
-                    field.classList.add('is-invalid');
-                    isValid = false;
-                    return;
+            tableBody.appendChild(newRow);
+        };
+
+        // Add row event listeners
+        addRowButtons.forEach(button => {
+            button.addEventListener('click', () => {
+                const tableId = button.getAttribute('data-table-id');
+                createTableRow(tableId);
+                setTimeout(calculateOverallScores, 100); // Recalculate after adding row
+            });
+        });
+
+        // Delegate delete button clicks
+        document.addEventListener('click', (e) => {
+            if (e.target && e.target.classList.contains('delete-row')) {
+                deleteRowTarget = e.target.closest('tr');
+                deleteModal.show();
+            }
+        });
+
+        // Confirm deletion
+        document.getElementById('confirm-delete-row').addEventListener('click', () => {
+            if (deleteRowTarget) {
+                deleteRowTarget.remove();
+                deleteRowTarget = null;
+                deleteModal.hide();
+                calculateOverallScores();
+            }
+        });
+
+        // Calculate Overall Scores
+        const calculateOverallScores = () => {
+            // Student Evaluation Calculations
+            let studentTotal = 0;
+            let studentCount = 0;
+            document.querySelectorAll('#student-evaluation-table tbody tr').forEach(row => {
+                const rating1 = parseFloat(row.querySelector('input[name="student_rating_1[]"]').value) || 0;
+                const rating2 = parseFloat(row.querySelector('input[name="student_rating_2[]"]').value) || 0;
+                const average = (rating1 + rating2) / 2;
+                studentTotal += average;
+                studentCount++;
+            });
+            const studentAverage = studentCount ? (studentTotal / studentCount).toFixed(2) : 0;
+            document.getElementById('student-overall-score').value = studentAverage;
+            document.getElementById('faculty-overall-score').value = (studentAverage * 0.6).toFixed(2);
+
+            // Supervisor Evaluation Calculations
+            let supervisorTotal = 0;
+            let supervisorCount = 0;
+            document.querySelectorAll('#supervisor-evaluation-table tbody tr').forEach(row => {
+                const rating1 = parseFloat(row.querySelector('input[name="supervisor_rating_1[]"]').value) || 0;
+                const rating2 = parseFloat(row.querySelector('input[name="supervisor_rating_2[]"]').value) || 0;
+                const average = (rating1 + rating2) / 2;
+                supervisorTotal += average;
+                supervisorCount++;
+            });
+            const supervisorAverage = supervisorCount ? (supervisorTotal / supervisorCount).toFixed(2) : 0;
+            document.getElementById('supervisor-overall-score').value = supervisorAverage;
+            document.getElementById('supervisor-faculty-overall-score').value = (supervisorAverage * 0.4).toFixed(2);
+
+            // Total Faculty Score (Optional)
+            // const facultyScore = (parseFloat(document.getElementById('faculty-overall-score').value) + parseFloat(document.getElementById('supervisor-faculty-overall-score').value)).toFixed(2);
+            // You can display this total if needed
+        };
+
+        // Event listeners for input changes to recalculate scores
+        document.addEventListener('input', (e) => {
+            if (e.target.classList.contains('rating-input')) {
+                calculateOverallScores();
+            }
+        });
+
+        // Handle "Save Criterion A" Button Click
+        const saveCriterionA = document.getElementById('save-criterion-a');
+        if (saveCriterionA) {
+            saveCriterionA.addEventListener('click', () => {
+                // Manual Validation of Required Fields within Criterion A
+                let isValid = true;
+                // Select all required inputs and selects within Criterion A
+                const criterionAFields = document.querySelectorAll('#criterion-a input[required], #criterion-a select[required]');
+                criterionAFields.forEach(field => {
+                    const value = field.value.trim();
+
+                    // Basic non-empty validation
+                    if (!value) {
+                        field.classList.add('is-invalid');
+                        isValid = false;
+                        return; // Skip further validation for this field
+                    }
+
+                    // Additional validation for URL fields
+                    if (field.type === 'url') {
+                        const urlPattern = /^(https?:\/\/).+/;
+                        if (!urlPattern.test(value)) {
+                            field.classList.add('is-invalid');
+                            isValid = false;
+                            return;
+                        }
+                    }
+
+                    // Remove invalid class if validation passes
+                    field.classList.remove('is-invalid');
+                });
+
+                if (isValid) {
+                    // Simulate a successful save since no backend endpoint exists
+                    // You can replace this with an actual AJAX request to save data
+                    setTimeout(() => {
+                        saveConfirmationModal.show();
+                    }, 500);
+                } else {
+                    // Show validation error modal
+                    document.getElementById('saveErrorModalLabel').textContent = 'Save Failed';
+                    document.querySelector('#saveErrorModal .modal-body').textContent = 'Please complete all required fields before saving.';
+                    saveErrorModal.show();
                 }
-            }
-
-            // Remove invalid class if validation passes
-            field.classList.remove('is-invalid');
-        });
-
-        if (isValid) {
-            // Simulate a successful save since no backend endpoint exists
-            // You can replace this with an actual AJAX request to save data
-            setTimeout(() => {
-                saveConfirmationModal.show();
-            }, 500);
-        } else {
-            // Show validation error modal
-            document.getElementById('saveErrorModalLabel').textContent = 'Save Failed';
-            document.querySelector('#saveErrorModal .modal-body').textContent = 'Please complete all required fields before saving.';
-            saveErrorModal.show();
+            });
         }
     });
-});
-
 </script>
+
