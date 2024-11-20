@@ -1,6 +1,6 @@
 <?php
-include('../../session.php'); // Ensure the user is logged in
-include('../../connection.php'); // Include the database connection
+include('../../session.php');
+include('../../connection.php');
 require_once '../../config.php';
 
 // Define variables for Page Titles and Sidebar Active effects
@@ -45,6 +45,10 @@ if ($_SESSION['role'] != 'Regular Instructor' && $_SESSION['role'] != 'Contract 
 <html lang="en">
 <head>
     <?php require_once BASE_PATH . '/php/includes/header.php'; ?>
+    <!-- Pass user ID to JavaScript -->
+    <script>
+        const userId = <?php echo json_encode($_SESSION['user_id']); ?>;
+    </script>
 </head>
 
 <body class="layout-fixed sidebar-expand-lg bg-body-tertiary"> <!--begin::App Wrapper-->
@@ -67,11 +71,11 @@ if ($_SESSION['role'] != 'Regular Instructor' && $_SESSION['role'] != 'Contract 
                         <div class="row align-items-start">
                             <div class="col-sm-6 mb-5">
                                 <!-- Change Evaluation Number dynamically-->
-                                <h3 class="mb-0">Teaching Performance (KRA I) - <span id="evaluation-number">Evaluation #: 2024-047</span></h3> 
+                                <h3 class="mb-0">Teaching Performance (KRA I) - <span id="evaluation-number">Evaluation #:</span></h3> 
                             </div>
                             <div class="col-sm-6 pe-4 mt-4">
                                 <div class="d-flex justify-content-end">
-                                    <!-- MODAL: Button Trigger -->
+                                    <!-- Button for Select Evaluation Modal -->
                                     <button id="select-evaluation-btn" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#evaluationModal">
                                         Select Evaluation
                                     </button>
@@ -81,6 +85,8 @@ if ($_SESSION['role'] != 'Regular Instructor' && $_SESSION['role'] != 'Contract 
                     </div>
                 </div>
 
+                <!-- Hidden input to store request_id -->
+                <input type="hidden" id="hidden-request-id" name="request_id" value="">
 
                 <!-- KRA I Content -->
                 <?php require_once BASE_PATH . '/php/includes/career_progress_tracking/teaching/kra1.php';?>
@@ -141,7 +147,7 @@ if ($_SESSION['role'] != 'Regular Instructor' && $_SESSION['role'] != 'Contract 
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
     <!-- Visualization scripts -->
-    <script src="<?php echo BASE_URL; ?>/php/includes/career_progress_tracking/teaching/js/teaching.js"></script> <!-- Changed from PHP include to src attribute -->
+    <script src="<?php echo BASE_URL; ?>/php/includes/career_progress_tracking/teaching/js/teaching.js"></script>
 
 </body>
 </html>

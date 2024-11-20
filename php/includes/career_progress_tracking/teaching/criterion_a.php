@@ -1,5 +1,5 @@
 <!-- careerpath/php/includes/career_progress_tracking/teaching/criterion_a.php -->
-<div class="tab-pane fade show active" id="criterion-a" role="tabpanel" aria-labelledby="tab-criterion-a">
+<div class="tab-pane fade show active criterion-tab" id="criterion-a" role="tabpanel" aria-labelledby="tab-criterion-a">
     <h4 class="mb-4 pb-2 border-bottom border-3 border-success"><strong>CRITERION A: Teaching Effectiveness (Max = 60 Points)</strong></h4>
     
     <h5><strong>1. FACULTY PERFORMANCE:</strong> Enter the average rating received by the faculty per semester.<br>  
@@ -178,7 +178,7 @@
 
     <!-- Save Button -->
     <div class="d-flex justify-content-end mt-5">
-        <button type="button" class="btn btn-success" id="save-criterion-a">Save Criterion A</button> <!-- Ensure type="button" -->
+        <button type="button" class="btn btn-success" id="save-criterion-a">Save Criterion A</button>
     </div>
 
 </div>
@@ -367,26 +367,38 @@
             }
         });
 
-        // Handle "Save Criterion A" Button Click
+
+        // Save Criterion A
         const saveCriterionA = document.getElementById('save-criterion-a');
         if (saveCriterionA) {
             saveCriterionA.addEventListener('click', () => {
+                // Check if an evaluation is selected
+                const requestId = document.getElementById('hidden-request-id').value;
+                if (!requestId) {
+                    // Show error modal
+                    document.getElementById('saveErrorModalLabel').textContent = 'Save Failed';
+                    document.querySelector('#saveErrorModal .modal-body').textContent = 'Please select an evaluation before saving.';
+                    saveErrorModal.show();
+                    return;
+                }
+
                 // Manual Validation of Required Fields within Criterion A
                 let isValid = true;
-                // Select all required inputs and selects within Criterion A
-                const criterionAFields = document.querySelectorAll('#criterion-a input[required], #criterion-a select[required]');
+
+                // Collect all input fields and selects within Criterion A
+                const criterionAFields = document.querySelectorAll('#criterion-a input, #criterion-a select');
                 criterionAFields.forEach(field => {
                     const value = field.value.trim();
 
-                    // Basic non-empty validation
-                    if (!value) {
+                    // Basic non-empty validation for required fields
+                    if (field.hasAttribute('required') && !value) {
                         field.classList.add('is-invalid');
                         isValid = false;
-                        return; // Skip further validation for this field
+                        return; 
                     }
 
                     // Additional validation for URL fields
-                    if (field.type === 'url') {
+                    if (field.type === 'url' && field.hasAttribute('required')) {
                         const urlPattern = /^(https?:\/\/).+/;
                         if (!urlPattern.test(value)) {
                             field.classList.add('is-invalid');
@@ -400,11 +412,58 @@
                 });
 
                 if (isValid) {
-                    // Simulate a successful save since no backend endpoint exists
-                    // You can replace this with an actual AJAX request to save data
-                    setTimeout(() => {
-                        saveConfirmationModal.show();
-                    }, 500);
+                    // Prepare data for saving
+                    const userId = window.userId;
+                    const criterionAData = {};
+
+                    // Collect all field values
+                    criterionAFields.forEach(field => {
+                        const name = field.name;
+                        const value = field.value.trim();
+
+                        if (name.endsWith('[]')) {
+                            const key = name.slice(0, -2);
+                            if (!criterionAData[key]) {
+                                criterionAData[key] = [];
+                            }
+                            criterionAData[key].push(value);
+                        } else {
+                            criterionAData[name] = value;
+                        }
+                    });
+
+                    // Log data being sent
+                    console.log('criterionAData:', criterionAData);
+
+                    // Add user_id and request_id
+                    criterionAData['user_id'] = userId;
+                    criterionAData['request_id'] = requestId;
+
+                    // Send data to the backend via AJAX
+                    fetch('../../includes/career_progress_tracking/teaching/save_criterion_a.php', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify(criterionAData),
+                    })
+                        .then(response => response.json())
+                        .then(data => {
+                            if (data.success) {
+                                // Show success modal
+                                saveConfirmationModal.show();
+                            } else {
+                                // Show error modal
+                                document.getElementById('saveErrorModalLabel').textContent = 'Save Failed';
+                                document.querySelector('#saveErrorModal .modal-body').textContent = data.error || 'An unexpected error occurred.';
+                                saveErrorModal.show();
+                            }
+                        })
+                        .catch(err => {
+                            console.error('Error saving data:', err);
+                            // Show error modal
+                            document.getElementById('saveErrorModalLabel').textContent = 'Save Failed';
+                            document.querySelector('#saveErrorModal .modal-body').textContent = 'A network error occurred. Please try again.';
+                            saveErrorModal.show();
+                        });
                 } else {
                     // Show validation error modal
                     document.getElementById('saveErrorModalLabel').textContent = 'Save Failed';
@@ -413,6 +472,15 @@
                 }
             });
         }
-    });
+
+        // // Disable fields initially
+        // function disableFields() {
+        //     document.querySelectorAll('.criterion-tab input, .criterion-tab textarea, .criterion-tab select')
+        //         .forEach(field => field.disabled = true);
+        // }
+        // disableFields(); // Call on page load
+
+        });
+
 </script>
 
