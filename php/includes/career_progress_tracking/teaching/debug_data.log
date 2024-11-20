@@ -12,18 +12,20 @@ Array
 
     [student_rating_1] => Array
         (
-            [0] => 50
-            [1] => 50
-            [2] => 50
-            [3] => 50
+            [0] => 50.00
+            [1] => 50.00
+            [2] => 50.00
+            [3] => 50.00
+            [4] => 60
         )
 
     [student_rating_2] => Array
         (
-            [0] => 50
-            [1] => 50
-            [2] => 50
-            [3] => 50
+            [0] => 50.00
+            [1] => 50.00
+            [2] => 50.00
+            [3] => 50.00
+            [4] => 60
         )
 
     [student_evidence_link] => Array
@@ -32,18 +34,16 @@ Array
             [1] => http://afdsgsfgh.com/asdag
             [2] => http://afdsgsfgh.com/asdag
             [3] => http://afdsgsfgh.com/asdag
+            [4] => http://afdsgsfgh.com/asdagasd
         )
 
-    [student_remarks] => Array
+    [student_evaluation_period] => Array
         (
-            [0] => 
-            [1] => 
-            [2] => 
-            [3] => 
+            [0] => AY 2023-2024
         )
 
-    [student_overall_score] => 50.00
-    [faculty_overall_score] => 18.00
+    [student_overall_score] => 52.00
+    [faculty_overall_score] => 18.72
     [supervisor_divisor] => 0
     [supervisor_reason] => not_applicable
     [supervisor_evaluation_period] => Array
@@ -52,22 +52,25 @@ Array
             [1] => AY 2020-2021
             [2] => AY 2021-2022
             [3] => AY 2022-2023
+            [4] => AY 2023-2024
         )
 
     [supervisor_rating_1] => Array
         (
-            [0] => 60
-            [1] => 60
-            [2] => 60
-            [3] => 60
+            [0] => 60.00
+            [1] => 60.00
+            [2] => 60.00
+            [3] => 60.00
+            [4] => 50
         )
 
     [supervisor_rating_2] => Array
         (
-            [0] => 60
-            [1] => 60
-            [2] => 60
-            [3] => 60
+            [0] => 60.00
+            [1] => 60.00
+            [2] => 60.00
+            [3] => 60.00
+            [4] => 50
         )
 
     [supervisor_evidence_link] => Array
@@ -76,17 +79,10 @@ Array
             [1] => http://afdsgsfgh.com/asdag
             [2] => http://afdsgsfgh.com/asdag
             [3] => http://afdsgsfgh.com/asdag
+            [4] => http://afdsgsfgh.com/asdagasda
         )
 
-    [supervisor_remarks] => Array
-        (
-            [0] => 
-            [1] => 
-            [2] => 
-            [3] => 
-        )
-
-    [supervisor_overall_score] => 60.00
-    [supervisor_faculty_overall_score] => 24.00
+    [supervisor_overall_score] => 58.00
+    [supervisor_faculty_overall_score] => 23.20
     [request_id] => 5
 )

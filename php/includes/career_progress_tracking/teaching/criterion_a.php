@@ -63,10 +63,14 @@
                                     <input type="number" class="form-control rating-input" name="student_rating_2[]" placeholder="0.00" step="0.01" min="0" max="5" required>
                                 </td>
                                 <td>
-                                    <input type="url" class="form-control" name="student_evidence_link[]" placeholder="http://example.com/evidence" pattern="https?://.+" required>
+                                    <input type="url" class="form-control" name="student_evidence_link[]" placeholder="https://example.com/evidence" pattern="https?://.+" required>
                                 </td>
                                 <td>
-                                    <input type="text" class="form-control" name="student_remarks[]" placeholder="Enter remarks">
+                                    <button type="button" class="btn btn-primary btn-sm view-remarks"
+                                        data-first-remark=""
+                                        data-second-remark="">
+                                        View Remarks
+                                    </button>
                                 </td>
                                 <td>
                                     <button type="button" class="btn btn-danger btn-sm delete-row" aria-label="Delete row">Delete</button>
@@ -150,7 +154,11 @@
                                     <input type="url" class="form-control" name="supervisor_evidence_link[]" placeholder="http://example.com/evidence" pattern="https?://.+" required>
                                 </td>
                                 <td>
-                                    <input type="text" class="form-control" name="supervisor_remarks[]" placeholder="Enter remarks">
+                                    <button type="button" class="btn btn-primary btn-sm view-remarks"
+                                        data-first-remark=""
+                                        data-second-remark="">
+                                        View Remarks
+                                    </button>
                                 </td>
                                 <td>
                                     <button type="button" class="btn btn-danger btn-sm delete-row" aria-label="Delete row">Delete</button>
@@ -244,6 +252,30 @@
   </div>
 </div>
 
+<!-- Remarks Modal -->
+<div class="modal fade" id="remarksModal" tabindex="-1" aria-labelledby="remarksModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header bg-success text-white">
+        <h5 class="modal-title" id="remarksModalLabel">Remarks</h5>
+        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <p><strong>First Semester:</strong></p>
+        <p id="first-semester-remark"></p>
+        <p><strong>Second Semester:</strong></p>
+        <p id="second-semester-remark"></p>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-success" data-bs-dismiss="modal">OK</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+
+
 
 <script>
         // Populate Criterion A tables if data exists
@@ -271,7 +303,11 @@
                         <input type="url" class="form-control" name="student_evidence_link[]" value="${eval.evidence_link_first_semester}" pattern="https?://.+" required>
                     </td>
                     <td>
-                        <input type="text" class="form-control" name="student_remarks[]" value="${eval.remarks_first_semester}">
+                        <button type="button" class="btn btn-primary btn-sm view-remarks"
+                            data-first-remark="${eval.remarks_first_semester || ''}"
+                            data-second-remark="${eval.remarks_second_semester || ''}">
+                            View Remarks
+                        </button>
                     </td>
                     <td>
                         <button type="button" class="btn btn-danger btn-sm delete-row" aria-label="Delete row">Delete</button>
@@ -298,6 +334,13 @@
                     </td>
                     <td>
                         <input type="url" class="form-control" name="supervisor_evidence_link[]" value="${eval.evidence_link_first_semester}" pattern="https?://.+" required>
+                    </td>
+                    <td>
+                        <button type="button" class="btn btn-primary btn-sm view-remarks"
+                            data-first-remark="${eval.remarks_first_semester || ''}"
+                            data-second-remark="${eval.remarks_second_semester || ''}">
+                            View Remarks
+                        </button>
                     </td>
                     <td>
                         <button type="button" class="btn btn-danger btn-sm delete-row" aria-label="Delete row">Delete</button>
@@ -378,7 +421,11 @@
                         <input type="url" class="form-control" name="student_evidence_link[]" placeholder="http://example.com/evidence" pattern="https?://.+" required>
                     </td>
                     <td>
-                        <input type="text" class="form-control" name="student_remarks[]" placeholder="Enter remarks">
+                        <button type="button" class="btn btn-primary btn-sm view-remarks"
+                            data-first-remark=""
+                            data-second-remark="">
+                            View Remarks
+                        </button>
                     </td>
                     <td>
                         <button type="button" class="btn btn-danger btn-sm delete-row" aria-label="Delete row">Delete</button>
@@ -399,7 +446,11 @@
                         <input type="url" class="form-control" name="supervisor_evidence_link[]" placeholder="http://example.com/evidence" pattern="https?://.+" required>
                     </td>
                     <td>
-                        <input type="text" class="form-control" name="supervisor_remarks[]" placeholder="Enter remarks">
+                        <button type="button" class="btn btn-primary btn-sm view-remarks"
+                            data-first-remark=""
+                            data-second-remark="">
+                            View Remarks
+                        </button>
                     </td>
                     <td>
                         <button type="button" class="btn btn-danger btn-sm delete-row" aria-label="Delete row">Delete</button>
@@ -555,3 +606,20 @@
     });
 </script>
 
+<script>
+    // Event listener for View Remarks buttons
+    document.addEventListener('click', function (e) {
+    if (e.target && e.target.classList.contains('view-remarks')) {
+        const firstRemark = e.target.getAttribute('data-first-remark') || 'No remark for first semester.';
+        const secondRemark = e.target.getAttribute('data-second-remark') || 'No remark for second semester.';
+
+        // Set the modal content
+        document.getElementById('first-semester-remark').textContent = firstRemark;
+        document.getElementById('second-semester-remark').textContent = secondRemark;
+
+        // Show the modal
+        const remarksModal = new bootstrap.Modal(document.getElementById('remarksModal'));
+        remarksModal.show();
+    }
+    });
+</script>
