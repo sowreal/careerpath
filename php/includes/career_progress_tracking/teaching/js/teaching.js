@@ -77,18 +77,30 @@ document.addEventListener('DOMContentLoaded', function () {
     
     // Fetch data when an evaluation is selected.
     function fetchEvaluationData(requestId) {
-        fetch(`php/fetch_criterion_data.php?request_id=${requestId}`)
-        .then(response => response.json())
-        .then(data => {
-            if (data.success) {
-                // Populate the fields in Criterion tabs with fetched data
-                populateFields(data.criterion_data);
-            } else {
-                console.log('No data found for this evaluation. Ready for new entries.');
+        fetch(`../../includes/career_progress_tracking/teaching/fetch_criterion_data.php?request_id=${requestId}`)
+
+        .then(response => response.text()) // Get the raw text response
+        .then(text => {
+            console.log('Response text:', text); // Log the raw response
+    
+            try {
+                const data = JSON.parse(text); // Attempt to parse the JSON
+                console.log('Parsed data:', data);
+    
+                if (data.success) {
+                    // Populate the fields in Criterion tabs with fetched data
+                    populateFields(data.criterion_data);
+                } else {
+                    console.log('No data found for this evaluation. Ready for new entries.');
+                }
+            } catch (error) {
+                console.error('Error parsing JSON:', error);
             }
         })
         .catch(err => console.error('Error fetching data:', err));
     }
+    
+
 
     // Populate Criterion A tables if data exists
     function populateFields(data) {
@@ -106,10 +118,10 @@ document.addEventListener('DOMContentLoaded', function () {
                     <input type="text" class="form-control" name="evaluation_period[]" value="${eval.evaluation_period}" readonly>
                 </td>
                 <td>
-                    <input type="number" class="form-control rating-input" name="student_rating_1[]" value="${eval.overall_average_rating}" step="0.01" min="0" max="5" required>
+                    <input type="number" class="form-control rating-input" name="student_rating_1[]" value="${eval.first_semester_rating}" step="0.01" min="0" max="5" required>
                 </td>
                 <td>
-                    <input type="number" class="form-control rating-input" name="student_rating_2[]" value="${eval.overall_average_rating}" step="0.01" min="0" max="5" required>
+                    <input type="number" class="form-control rating-input" name="student_rating_2[]" value="${eval.second_semester_rating}" step="0.01" min="0" max="5" required>
                 </td>
                 <td>
                     <input type="url" class="form-control" name="student_evidence_link[]" value="${eval.evidence_link_first_semester}" pattern="https?://.+" required>
@@ -135,10 +147,10 @@ document.addEventListener('DOMContentLoaded', function () {
                     <input type="text" class="form-control" name="supervisor_evaluation_period[]" value="${eval.evaluation_period}" readonly>
                 </td>
                 <td>
-                    <input type="number" class="form-control rating-input" name="supervisor_rating_1[]" value="${eval.overall_average_rating}" step="0.01" min="0" max="5" required>
+                    <input type="number" class="form-control rating-input" name="supervisor_rating_1[]" value="${eval.first_semester_rating}" step="0.01" min="0" max="5" required>
                 </td>
                 <td>
-                    <input type="number" class="form-control rating-input" name="supervisor_rating_2[]" value="${eval.overall_average_rating}" step="0.01" min="0" max="5" required>
+                    <input type="number" class="form-control rating-input" name="supervisor_rating_2[]" value="${eval.second_semester_rating}" step="0.01" min="0" max="5" required>
                 </td>
                 <td>
                     <input type="url" class="form-control" name="supervisor_evidence_link[]" value="${eval.evidence_link_first_semester}" pattern="https?://.+" required>

@@ -1,10 +1,10 @@
 <?php
-ini_set('display_errors', 1);
-error_reporting(E_ALL);
+// Ensure no whitespace or new lines before the opening <?php tag
+
 session_start();
 header('Content-Type: application/json; charset=utf-8');
 
-include('../../connection.php'); // Adjust the path as necessary
+include('../../../connection.php'); // Adjust the path as necessary
 
 // Check if the user is logged in
 if (!isset($_SESSION['user_id'])) {
@@ -36,6 +36,7 @@ try {
     $stmt->execute();
     $supervisor_evaluations = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
+    // Output the JSON data
     echo json_encode([
         'success' => true,
         'criterion_data' => [
@@ -45,6 +46,7 @@ try {
     ]);
 
 } catch (PDOException $e) {
-    echo json_encode(['success' => false, 'error' => 'Database error: ' . $e->getMessage()]);
+    // Log the error instead of displaying it
+    error_log('Database error in fetch_criterion_data.php: ' . $e->getMessage());
+    echo json_encode(['success' => false, 'error' => 'An error occurred while fetching data.']);
 }
-?>

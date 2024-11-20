@@ -149,6 +149,9 @@
                                     <input type="url" class="form-control" name="supervisor_evidence_link[]" placeholder="http://example.com/evidence" pattern="https?://.+" required>
                                 </td>
                                 <td>
+                                    <input type="text" class="form-control" name="supervisor_remarks[]" placeholder="Enter remarks">
+                                </td>
+                                <td>
                                     <button type="button" class="btn btn-danger btn-sm delete-row" aria-label="Delete row">Delete</button>
                                 </td>
                             </tr>
