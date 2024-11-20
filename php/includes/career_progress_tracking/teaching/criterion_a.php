@@ -130,6 +130,7 @@
                             <th scope="col">1st Semester Rating</th>
                             <th scope="col">2nd Semester Rating</th>
                             <th scope="col">Link to Evidence</th>
+                            <th scope="col">Remarks</th>
                             <th scope="col">Actions</th>
                         </tr>
                     </thead>
@@ -245,6 +246,111 @@
 
 
 <script>
+        // Populate Criterion A tables if data exists
+        function populateFields(data) {
+            // Clear existing rows in the tables
+            clearTables();
+
+            // Populate student evaluations
+            const studentEvaluations = data.student_evaluations;
+            const studentTableBody = document.querySelector('#student-evaluation-table tbody');
+
+            studentEvaluations.forEach(eval => {
+                const newRow = document.createElement('tr');
+                newRow.innerHTML = `
+                    <td>
+                        <input type="text" class="form-control" name="evaluation_period[]" value="${eval.evaluation_period}" readonly>
+                    </td>
+                    <td>
+                        <input type="number" class="form-control rating-input" name="student_rating_1[]" value="${eval.first_semester_rating}" step="0.01" min="0" max="5" required>
+                    </td>
+                    <td>
+                        <input type="number" class="form-control rating-input" name="student_rating_2[]" value="${eval.second_semester_rating}" step="0.01" min="0" max="5" required>
+                    </td>
+                    <td>
+                        <input type="url" class="form-control" name="student_evidence_link[]" value="${eval.evidence_link_first_semester}" pattern="https?://.+" required>
+                    </td>
+                    <td>
+                        <input type="text" class="form-control" name="student_remarks[]" value="${eval.remarks_first_semester}">
+                    </td>
+                    <td>
+                        <button type="button" class="btn btn-danger btn-sm delete-row" aria-label="Delete row">Delete</button>
+                    </td>
+                `;
+                studentTableBody.appendChild(newRow);
+            });
+
+            // Populate supervisor evaluations
+            const supervisorEvaluations = data.supervisor_evaluations;
+            const supervisorTableBody = document.querySelector('#supervisor-evaluation-table tbody');
+
+            supervisorEvaluations.forEach(eval => {
+                const newRow = document.createElement('tr');
+                newRow.innerHTML = `
+                    <td>
+                        <input type="text" class="form-control" name="supervisor_evaluation_period[]" value="${eval.evaluation_period}" readonly>
+                    </td>
+                    <td>
+                        <input type="number" class="form-control rating-input" name="supervisor_rating_1[]" value="${eval.first_semester_rating}" step="0.01" min="0" max="5" required>
+                    </td>
+                    <td>
+                        <input type="number" class="form-control rating-input" name="supervisor_rating_2[]" value="${eval.second_semester_rating}" step="0.01" min="0" max="5" required>
+                    </td>
+                    <td>
+                        <input type="url" class="form-control" name="supervisor_evidence_link[]" value="${eval.evidence_link_first_semester}" pattern="https?://.+" required>
+                    </td>
+                    <td>
+                        <button type="button" class="btn btn-danger btn-sm delete-row" aria-label="Delete row">Delete</button>
+                    </td>
+                `;
+                supervisorTableBody.appendChild(newRow);
+            });
+
+            // Recalculate scores
+            calculateOverallScores();
+        }
+
+        function clearTables() {
+            document.querySelector('#student-evaluation-table tbody').innerHTML = '';
+            document.querySelector('#supervisor-evaluation-table tbody').innerHTML = '';
+        }
+
+        // Calculate Overall Scores
+        const calculateOverallScores = () => {
+            // Student Evaluation Calculations
+            let studentTotal = 0;
+            let studentCount = 0;
+            document.querySelectorAll('#student-evaluation-table tbody tr').forEach(row => {
+                const rating1 = parseFloat(row.querySelector('input[name="student_rating_1[]"]').value) || 0;
+                const rating2 = parseFloat(row.querySelector('input[name="student_rating_2[]"]').value) || 0;
+                const average = (rating1 + rating2) / 2;
+                studentTotal += average;
+                studentCount++;
+            });
+            const studentAverage = studentCount ? (studentTotal / studentCount).toFixed(2) : 0;
+            document.getElementById('student-overall-score').value = studentAverage;
+            document.getElementById('faculty-overall-score').value = (studentAverage * 0.36).toFixed(2);
+
+            // Supervisor Evaluation Calculations
+            let supervisorTotal = 0;
+            let supervisorCount = 0;
+            document.querySelectorAll('#supervisor-evaluation-table tbody tr').forEach(row => {
+                const rating1 = parseFloat(row.querySelector('input[name="supervisor_rating_1[]"]').value) || 0;
+                const rating2 = parseFloat(row.querySelector('input[name="supervisor_rating_2[]"]').value) || 0;
+                const average = (rating1 + rating2) / 2;
+                supervisorTotal += average;
+                supervisorCount++;
+            });
+            const supervisorAverage = supervisorCount ? (supervisorTotal / supervisorCount).toFixed(2) : 0;
+            document.getElementById('supervisor-overall-score').value = supervisorAverage;
+            document.getElementById('supervisor-faculty-overall-score').value = (supervisorAverage * 0.4).toFixed(2);
+
+            // Total Faculty Score (Optional)
+            // const facultyScore = (parseFloat(document.getElementById('faculty-overall-score').value) + parseFloat(document.getElementById('supervisor-faculty-overall-score').value)).toFixed(2);
+            // You can display this total if needed
+        };
+
+
     document.addEventListener('DOMContentLoaded', () => {
         const addRowButtons = document.querySelectorAll('.add-row');
         let deleteRowTarget = null;
@@ -293,6 +399,9 @@
                         <input type="url" class="form-control" name="supervisor_evidence_link[]" placeholder="http://example.com/evidence" pattern="https?://.+" required>
                     </td>
                     <td>
+                        <input type="text" class="form-control" name="supervisor_remarks[]" placeholder="Enter remarks">
+                    </td>
+                    <td>
                         <button type="button" class="btn btn-danger btn-sm delete-row" aria-label="Delete row">Delete</button>
                     </td>
                 `;
@@ -328,41 +437,7 @@
             }
         });
 
-        // Calculate Overall Scores
-        const calculateOverallScores = () => {
-            // Student Evaluation Calculations
-            let studentTotal = 0;
-            let studentCount = 0;
-            document.querySelectorAll('#student-evaluation-table tbody tr').forEach(row => {
-                const rating1 = parseFloat(row.querySelector('input[name="student_rating_1[]"]').value) || 0;
-                const rating2 = parseFloat(row.querySelector('input[name="student_rating_2[]"]').value) || 0;
-                const average = (rating1 + rating2) / 2;
-                studentTotal += average;
-                studentCount++;
-            });
-            const studentAverage = studentCount ? (studentTotal / studentCount).toFixed(2) : 0;
-            document.getElementById('student-overall-score').value = studentAverage;
-            document.getElementById('faculty-overall-score').value = (studentAverage * 0.36).toFixed(2);
-
-            // Supervisor Evaluation Calculations
-            let supervisorTotal = 0;
-            let supervisorCount = 0;
-            document.querySelectorAll('#supervisor-evaluation-table tbody tr').forEach(row => {
-                const rating1 = parseFloat(row.querySelector('input[name="supervisor_rating_1[]"]').value) || 0;
-                const rating2 = parseFloat(row.querySelector('input[name="supervisor_rating_2[]"]').value) || 0;
-                const average = (rating1 + rating2) / 2;
-                supervisorTotal += average;
-                supervisorCount++;
-            });
-            const supervisorAverage = supervisorCount ? (supervisorTotal / supervisorCount).toFixed(2) : 0;
-            document.getElementById('supervisor-overall-score').value = supervisorAverage;
-            document.getElementById('supervisor-faculty-overall-score').value = (supervisorAverage * 0.4).toFixed(2);
-
-            // Total Faculty Score (Optional)
-            // const facultyScore = (parseFloat(document.getElementById('faculty-overall-score').value) + parseFloat(document.getElementById('supervisor-faculty-overall-score').value)).toFixed(2);
-            // You can display this total if needed
-        };
-
+        
         // Event listeners for input changes to recalculate scores
         document.addEventListener('input', (e) => {
             if (e.target.classList.contains('rating-input')) {
@@ -370,6 +445,7 @@
             }
         });
 
+        
 
         // Save Criterion A
         const saveCriterionA = document.getElementById('save-criterion-a');
@@ -476,14 +552,6 @@
             });
         }
 
-        // // Disable fields initially
-        // function disableFields() {
-        //     document.querySelectorAll('.criterion-tab input, .criterion-tab textarea, .criterion-tab select')
-        //         .forEach(field => field.disabled = true);
-        // }
-        // disableFields(); // Call on page load
-
-        });
-
+    });
 </script>
 
