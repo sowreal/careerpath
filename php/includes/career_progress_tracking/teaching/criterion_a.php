@@ -47,7 +47,7 @@
                             <th scope="col">Actions</th>
                         </tr>
                     </thead>
-                    <tbody>
+                    <tbody><!-- 1st column row contents-->
                         <?php 
                             $evaluationPeriods = ["AY 2019-2020", "AY 2020-2021", "AY 2021-2022", "AY 2022-2023"];
                             foreach ($evaluationPeriods as $period): 
@@ -280,79 +280,151 @@
 <script>
         // Populate Criterion A tables if data exists
         function populateFields(data) {
-            // Clear existing rows in the tables
+            // Clear existing rows in the tables        // Function defined below
             clearTables();
+
+            // Helper function to add a template row
+            function addTemplateRow(tableId) {
+                const tableBody = document.querySelector(`#${tableId} tbody`);
+                const newRow = document.createElement('tr');
+
+                if (tableId === 'student-evaluation-table') {
+                    newRow.innerHTML = `
+                        <td>
+                            <input type="text" class="form-control" name="evaluation_period[]" placeholder="Enter Evaluation Period" required>
+                        </td>
+                        <td>
+                            <input type="number" class="form-control rating-input" name="student_rating_1[]" placeholder="0.00" step="0.01" min="0" max="5" required>
+                        </td>
+                        <td>
+                            <input type="number" class="form-control rating-input" name="student_rating_2[]" placeholder="0.00" step="0.01" min="0" max="5" required>
+                        </td>
+                        <td>
+                            <input type="url" class="form-control" name="student_evidence_link[]" placeholder="http://example.com/evidence" pattern="https?://.+" required>
+                        </td>
+                        <td>
+                            <button type="button" class="btn btn-primary btn-sm view-remarks"
+                                data-first-remark=""
+                                data-second-remark="">
+                                View Remarks
+                            </button>
+                        </td>
+                        <td>
+                            <button type="button" class="btn btn-danger btn-sm delete-row" aria-label="Delete row">Delete</button>
+                        </td>
+                    `;
+                } else if (tableId === 'supervisor-evaluation-table') {
+                    newRow.innerHTML = `
+                        <td>
+                            <input type="text" class="form-control" name="supervisor_evaluation_period[]" placeholder="Enter Evaluation Period" required>
+                        </td>
+                        <td>
+                            <input type="number" class="form-control rating-input" name="supervisor_rating_1[]" placeholder="0.00" step="0.01" min="0" max="5" required>
+                        </td>
+                        <td>
+                            <input type="number" class="form-control rating-input" name="supervisor_rating_2[]" placeholder="0.00" step="0.01" min="0" max="5" required>
+                        </td>
+                        <td>
+                            <input type="url" class="form-control" name="supervisor_evidence_link[]" placeholder="http://example.com/evidence" pattern="https?://.+" required>
+                        </td>
+                        <td>
+                            <button type="button" class="btn btn-primary btn-sm view-remarks"
+                                data-first-remark=""
+                                data-second-remark="">
+                                View Remarks
+                            </button>
+                        </td>
+                        <td>
+                            <button type="button" class="btn btn-danger btn-sm delete-row" aria-label="Delete row">Delete</button>
+                        </td>
+                    `;
+                }
+
+                tableBody.appendChild(newRow);
+            }
 
             // Populate student evaluations
             const studentEvaluations = data.student_evaluations;
             const studentTableBody = document.querySelector('#student-evaluation-table tbody');
 
-            studentEvaluations.forEach(eval => {
-                const newRow = document.createElement('tr');
-                newRow.innerHTML = `
-                    <td>
-                        <input type="text" class="form-control" name="evaluation_period[]" value="${eval.evaluation_period}" readonly>
-                    </td>
-                    <td>
-                        <input type="number" class="form-control rating-input" name="student_rating_1[]" value="${eval.first_semester_rating}" step="0.01" min="0" max="5" required>
-                    </td>
-                    <td>
-                        <input type="number" class="form-control rating-input" name="student_rating_2[]" value="${eval.second_semester_rating}" step="0.01" min="0" max="5" required>
-                    </td>
-                    <td>
-                        <input type="url" class="form-control" name="student_evidence_link[]" value="${eval.evidence_link_first_semester}" pattern="https?://.+" required>
-                    </td>
-                    <td>
-                        <button type="button" class="btn btn-primary btn-sm view-remarks"
-                            data-first-remark="${eval.remarks_first_semester || ''}"
-                            data-second-remark="${eval.remarks_second_semester || ''}">
-                            View Remarks
-                        </button>
-                    </td>
-                    <td>
-                        <button type="button" class="btn btn-danger btn-sm delete-row" aria-label="Delete row">Delete</button>
-                    </td>
-                `;
-                studentTableBody.appendChild(newRow);
-            });
+            if (studentEvaluations && studentEvaluations.length > 0) {
+                studentEvaluations.forEach(eval => {
+                    const newRow = document.createElement('tr');
+                    newRow.innerHTML = `
+                        <td>
+                            <input type="text" class="form-control" name="evaluation_period[]" value="${eval.evaluation_period}" readonly>
+                        </td>
+                        <td>
+                            <input type="number" class="form-control rating-input" name="student_rating_1[]" value="${eval.first_semester_rating}" step="0.01" min="0" max="5" required>
+                        </td>
+                        <td>
+                            <input type="number" class="form-control rating-input" name="student_rating_2[]" value="${eval.second_semester_rating}" step="0.01" min="0" max="5" required>
+                        </td>
+                        <td>
+                            <input type="url" class="form-control" name="student_evidence_link[]" value="${eval.evidence_link_first_semester}" pattern="https?://.+" required>
+                        </td>
+                        <td>
+                            <button type="button" class="btn btn-primary btn-sm view-remarks"
+                                data-first-remark="${eval.remarks_first_semester || ''}"
+                                data-second-remark="${eval.remarks_second_semester || ''}">
+                                View Remarks
+                            </button>
+                        </td>
+                        <td>
+                            <button type="button" class="btn btn-danger btn-sm delete-row" aria-label="Delete row">Delete</button>
+                        </td>
+                    `;
+                    studentTableBody.appendChild(newRow);
+                });
+            } else {
+                // Add a template row if no student evaluations
+                addTemplateRow('student-evaluation-table');
+            }
 
             // Populate supervisor evaluations
             const supervisorEvaluations = data.supervisor_evaluations;
             const supervisorTableBody = document.querySelector('#supervisor-evaluation-table tbody');
 
-            supervisorEvaluations.forEach(eval => {
-                const newRow = document.createElement('tr');
-                newRow.innerHTML = `
-                    <td>
-                        <input type="text" class="form-control" name="supervisor_evaluation_period[]" value="${eval.evaluation_period}" readonly>
-                    </td>
-                    <td>
-                        <input type="number" class="form-control rating-input" name="supervisor_rating_1[]" value="${eval.first_semester_rating}" step="0.01" min="0" max="5" required>
-                    </td>
-                    <td>
-                        <input type="number" class="form-control rating-input" name="supervisor_rating_2[]" value="${eval.second_semester_rating}" step="0.01" min="0" max="5" required>
-                    </td>
-                    <td>
-                        <input type="url" class="form-control" name="supervisor_evidence_link[]" value="${eval.evidence_link_first_semester}" pattern="https?://.+" required>
-                    </td>
-                    <td>
-                        <button type="button" class="btn btn-primary btn-sm view-remarks"
-                            data-first-remark="${eval.remarks_first_semester || ''}"
-                            data-second-remark="${eval.remarks_second_semester || ''}">
-                            View Remarks
-                        </button>
-                    </td>
-                    <td>
-                        <button type="button" class="btn btn-danger btn-sm delete-row" aria-label="Delete row">Delete</button>
-                    </td>
-                `;
-                supervisorTableBody.appendChild(newRow);
-            });
+            if (supervisorEvaluations && supervisorEvaluations.length > 0) {
+                supervisorEvaluations.forEach(eval => {
+                    const newRow = document.createElement('tr');
+                    newRow.innerHTML = `
+                        <td>
+                            <input type="text" class="form-control" name="supervisor_evaluation_period[]" value="${eval.evaluation_period}" readonly>
+                        </td>
+                        <td>
+                            <input type="number" class="form-control rating-input" name="supervisor_rating_1[]" value="${eval.first_semester_rating}" step="0.01" min="0" max="5" required>
+                        </td>
+                        <td>
+                            <input type="number" class="form-control rating-input" name="supervisor_rating_2[]" value="${eval.second_semester_rating}" step="0.01" min="0" max="5" required>
+                        </td>
+                        <td>
+                            <input type="url" class="form-control" name="supervisor_evidence_link[]" value="${eval.evidence_link_first_semester}" pattern="https?://.+" required>
+                        </td>
+                        <td>
+                            <button type="button" class="btn btn-primary btn-sm view-remarks"
+                                data-first-remark="${eval.remarks_first_semester || ''}"
+                                data-second-remark="${eval.remarks_second_semester || ''}">
+                                View Remarks
+                            </button>
+                        </td>
+                        <td>
+                            <button type="button" class="btn btn-danger btn-sm delete-row" aria-label="Delete row">Delete</button>
+                        </td>
+                    `;
+                    supervisorTableBody.appendChild(newRow);
+                });
+            } else {
+                // Add a template row if no supervisor evaluations
+                addTemplateRow('supervisor-evaluation-table');
+            }
 
             // Recalculate scores
             calculateOverallScores();
         }
 
+
+        // Function for clearing tables
         function clearTables() {
             document.querySelector('#student-evaluation-table tbody').innerHTML = '';
             document.querySelector('#supervisor-evaluation-table tbody').innerHTML = '';
@@ -392,6 +464,45 @@
             // const facultyScore = (parseFloat(document.getElementById('faculty-overall-score').value) + parseFloat(document.getElementById('supervisor-faculty-overall-score').value)).toFixed(2);
             // You can display this total if needed
         };
+
+        // Add template row to the table when no data is present
+        function addTemplateRow(tableId) {
+            const tableBody = document.querySelector(`#${tableId} tbody`);
+            const newRow = document.createElement('tr');
+
+            if (tableId === 'student-evaluation-table') {
+                newRow.innerHTML = `
+                    <!-- Template row HTML for student evaluations -->
+                    <td>
+                        <input type="text" class="form-control" name="student_evaluation_period[]" placeholder="Enter Evaluation Period" required>
+                    </td>
+                    <!-- Add other cells as needed -->
+                    <td>
+                        <button type="button" class="btn btn-primary btn-sm view-remarks" data-first-remark="" data-second-remark="">View Remarks</button>
+                    </td>
+                    <td>
+                        <button type="button" class="btn btn-danger btn-sm delete-row">Delete</button>
+                    </td>
+                `;
+            } else if (tableId === 'supervisor-evaluation-table') {
+                newRow.innerHTML = `
+                    <!-- Template row HTML for supervisor evaluations -->
+                    <td>
+                        <input type="text" class="form-control" name="supervisor_evaluation_period[]" placeholder="Enter Evaluation Period" required>
+                    </td>
+                    <!-- Add other cells as needed -->
+                    <td>
+                        <button type="button" class="btn btn-primary btn-sm view-remarks" data-first-remark="" data-second-remark="">View Remarks</button>
+                    </td>
+                    <td>
+                        <button type="button" class="btn btn-danger btn-sm delete-row">Delete</button>
+                    </td>
+                `;
+            }
+
+            tableBody.appendChild(newRow);
+        }
+
 
 
     document.addEventListener('DOMContentLoaded', () => {
