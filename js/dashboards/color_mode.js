@@ -1,4 +1,5 @@
 // Color Mode Toggler
+
     (() => {
     "use strict";
 

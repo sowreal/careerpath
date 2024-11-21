@@ -26,12 +26,12 @@
             <li class="nav-item"> <a class="nav-link" href="#" data-lte-toggle="fullscreen"> <i data-lte-icon="maximize" class="bi bi-arrows-fullscreen"></i> <i data-lte-icon="minimize" class="bi bi-fullscreen-exit" style="display: none;"></i> </a> </li> <!--end::Fullscreen Toggle--> <!--begin::User Menu Dropdown-->
             <li class="nav-item dropdown user-menu"> 
                 <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown"> 
-                    <img src="<?php echo (!empty($_SESSION['profile_picture'])) ?  BASE_URL . '/uploads/' . $_SESSION['profile_picture'] : BASE_URL . '/img/cropped-SLSU_Logo-1.png'; ?>" class="user-image rounded-circle shadow" alt="User Image"> 
+                    <img src="<?php echo (!empty($_SESSION['profile_picture'])) ?  BASE_URL . '/' . 'uploads/' . $_SESSION['profile_picture'] : BASE_URL . '/img/cropped-SLSU_Logo-1.png'; ?>" class="user-image rounded-circle shadow" alt="User Image"> 
                     <span class="d-none d-md-inline"><?php echo $_SESSION['first_name'] . ' ' . $_SESSION['last_name'];?></span>
                 </a>
                 <ul class="dropdown-menu dropdown-menu-lg dropdown-menu-end"> 
                     <!--begin::User Image-->
-                    <li class="user-header text-bg-success"> <img src="<?php echo (!empty($_SESSION['profile_picture'])) ? BASE_URL . '/uploads/' . $_SESSION['profile_picture'] : BASE_URL . '/img/cropped-SLSU_Logo-1.png'; ?>" class="rounded-circle shadow" alt="User Image">
+                    <li class="user-header text-bg-success"> <img src="<?php echo (!empty($_SESSION['profile_picture'])) ? BASE_URL . '/' . 'uploads/' . $_SESSION['profile_picture'] : BASE_URL . '/img/cropped-SLSU_Logo-1.png'; ?>" class="rounded-circle shadow" alt="User Image">
                         <p>
                         <h4><?php echo $_SESSION['first_name'] . ' ' . $_SESSION['last_name'];?></h4> 
                             <?php echo $_SESSION['faculty_rank'] . '<br>' . $_SESSION['department'];?>

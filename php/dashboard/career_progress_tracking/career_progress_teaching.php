@@ -1,6 +1,6 @@
 <?php
-include('../../session.php'); // Ensure the user is logged in
-include('../../connection.php'); // Include the database connection
+include('../../session.php');
+include('../../connection.php');
 require_once '../../config.php';
 
 // Define variables for Page Titles and Sidebar Active effects
@@ -41,15 +41,15 @@ if ($_SESSION['role'] != 'Regular Instructor' && $_SESSION['role'] != 'Contract 
 }
 ?>
 
-
-
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <?php require_once BASE_PATH . '/php/includes/header.php'; ?>
+    <!-- Pass user ID to JavaScript -->
+    <script>
+        const userId = <?php echo json_encode($_SESSION['user_id']); ?>;
+    </script>
 </head>
-
 
 <body class="layout-fixed sidebar-expand-lg bg-body-tertiary"> <!--begin::App Wrapper-->
     <div class="app-wrapper"> 
@@ -60,7 +60,6 @@ if ($_SESSION['role'] != 'Regular Instructor' && $_SESSION['role'] != 'Contract 
         <!--begin::Sidebar-->
         <?php require_once BASE_PATH . '/php/includes/sidebar_faculty.php'; ?> 
         <!--end::Sidebar--> 
-        
 
         <!--begin::App Main-->
         <main class="app-main">
@@ -69,28 +68,30 @@ if ($_SESSION['role'] != 'Regular Instructor' && $_SESSION['role'] != 'Contract 
                 <!-- Standalone Header -->
                 <div class="app-content-header">
                     <div class="container-fluid">
-                        <div class="row align-items-top">
-                            <div class="col-sm-6 mb-6">
+                        <div class="row align-items-start">
+                            <div class="col-sm-6 mb-5">
                                 <!-- Change Evaluation Number dynamically-->
-                                <h3 class="mb-0">Teaching Performance (KRA I) - <span id="evaluation-number">Evaluation #: 2024-047</span></h3> 
+                                <h3 class="mb-2"><strong>KRA I:</strong> Teaching Performance<br></h3>
+                                <h4 class="mb-0"><span id="evaluation-number">Evaluation #: <small><i class="text-danger">Please select evaluation number.</i></small></span></h4>
                             </div>
-                        </div>
-                    </div>
-                    <div class="col-sm-6 pe-4 mt-4">
-                        <div class="d-flex">
-                            <!-- MODAL: Button Trigger -->
-                            <button id="select-evaluation-btn" class="btn btn-success" data-toggle="modal" data-target="#evaluationModal">
-                                Select Evaluation
-                            </button>
+                            <div class="col-sm-6 pe-4 mt-4">
+                                <div class="d-flex justify-content-end">
+                                    <!-- Button for Select Evaluation Modal -->
+                                    <button id="select-evaluation-btn" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#evaluationModal">
+                                        Select Evaluation
+                                    </button>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
 
+                <!-- Hidden input to store request_id -->
+                <input type="hidden" id="hidden-request-id" name="request_id" value="">
 
                 <!-- KRA I Content -->
                 <?php require_once BASE_PATH . '/php/includes/career_progress_tracking/teaching/kra1.php';?>
 
-                
                 <!-- Container for Criteria -->
                 <div class="card mt-4">
                     <div class="card-header">
@@ -124,53 +125,30 @@ if ($_SESSION['role'] != 'Regular Instructor' && $_SESSION['role'] != 'Contract 
                             <?php require_once BASE_PATH . '/php/includes/career_progress_tracking/teaching/criterion_c.php'; ?> 
                         </div>
                     </div>
+
                 </div>
 
                 <!-- MODAL SECTION -->
                 <?php require_once BASE_PATH . '/php/includes/career_progress_tracking/teaching/modals.php'; ?>
 
             </div>
-
-
-
-
-
-                
-
-                
-            </div>
         </main>
         <!--end::App Main-->
 
-        
-        
-        
         <!--begin::Footer-->   
             <?php require_once BASE_PATH . '/php/includes/footer.php'; ?> 
         <!--end::Footer-->
     </div> 
     <!--end::App Wrapper--> 
-    
-        
+
     <!--begin::Script--> 
     <?php require_once BASE_PATH . '/php/includes/dashboard_default_scripts.php'; ?> 
 
     <!-- Script Links for Chart.js -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
-
-    
-
-
     <!-- Visualization scripts -->
-    <script>
-        <?php require_once BASE_PATH . '/php/includes/career_progress_tracking/teaching/js/teaching.js'; ?>
-    </script>
-
-
-
+    <script src="<?php echo BASE_URL; ?>/php/includes/career_progress_tracking/teaching/js/teaching.js"></script>
 
 </body>
 </html>
-
-
