@@ -71,7 +71,8 @@ if ($_SESSION['role'] != 'Regular Instructor' && $_SESSION['role'] != 'Contract 
                         <div class="row align-items-start">
                             <div class="col-sm-6 mb-5">
                                 <!-- Change Evaluation Number dynamically-->
-                                <h3 class="mb-0">Teaching Performance (KRA I) - <span id="evaluation-number">Evaluation #:</span></h3> 
+                                <h3 class="mb-2"><strong>KRA I:</strong> Teaching Performance<br></h3>
+                                <h4 class="mb-0"><span id="evaluation-number">Evaluation #: <small><i class="text-danger">Please select evaluation number.</i></small></span></h4>
                             </div>
                             <div class="col-sm-6 pe-4 mt-4">
                                 <div class="d-flex justify-content-end">
