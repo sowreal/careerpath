@@ -54,7 +54,7 @@
                         ?>
                             <tr>
                                 <td>
-                                    <input type="text" class="form-control" name="evaluation_period[]" value="<?php echo htmlspecialchars($period); ?>" readonly>
+                                    <input type="text" class="form-control" name="student_evaluation_period[]" value="<?php echo htmlspecialchars($period); ?>" readonly>
                                 </td>
                                 <td>
                                     <input type="number" class="form-control rating-input" name="student_rating_1[]" placeholder="0.00" step="0.01" min="0" max="5" required>
@@ -291,7 +291,7 @@
                 if (tableId === 'student-evaluation-table') {
                     newRow.innerHTML = `
                         <td>
-                            <input type="text" class="form-control" name="evaluation_period[]" placeholder="Enter Evaluation Period" required>
+                            <input type="text" class="form-control" name="student_evaluation_period[]" placeholder="Enter Evaluation Period" required>
                         </td>
                         <td>
                             <input type="number" class="form-control rating-input" name="student_rating_1[]" placeholder="0.00" step="0.01" min="0" max="5" required>
@@ -352,7 +352,7 @@
                     const newRow = document.createElement('tr');
                     newRow.innerHTML = `
                         <td>
-                            <input type="text" class="form-control" name="evaluation_period[]" value="${eval.evaluation_period}" readonly>
+                            <input type="text" class="form-control" name="student_evaluation_period[]" value="${eval.evaluation_period}" readonly>
                         </td>
                         <td>
                             <input type="number" class="form-control rating-input" name="student_rating_1[]" value="${eval.first_semester_rating}" step="0.01" min="0" max="5" required>

@@ -35,7 +35,7 @@ if (!$request_id) {
 }
 
 // Now, process the data
-$student_evaluation_periods = isset($data['evaluation_period']) ? $data['evaluation_period'] : [];
+$student_evaluation_periods = isset($data['student_evaluation_period']) ? $data['student_evaluation_period'] : [];
 $student_rating_1 = isset($data['student_rating_1']) ? $data['student_rating_1'] : [];
 $student_rating_2 = isset($data['student_rating_2']) ? $data['student_rating_2'] : [];
 $student_evidence_link = isset($data['student_evidence_link']) ? $data['student_evidence_link'] : [];
