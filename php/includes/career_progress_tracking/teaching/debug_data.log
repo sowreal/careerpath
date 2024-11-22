@@ -7,20 +7,23 @@ Array
             [0] => AY 2020 - 2021
             [1] => AY 2021 - 2022
             [2] => AY 2022 - 2023
+            [3] => AY 2023 - 2024
         )
 
     [student_rating_1] => Array
         (
-            [0] => 50.00
-            [1] => 60
-            [2] => 60
+            [0] => 60.00
+            [1] => 60.00
+            [2] => 60.00
+            [3] => 60.00
         )
 
     [student_rating_2] => Array
         (
-            [0] => 50.00
-            [1] => 60
-            [2] => 60
+            [0] => 60.00
+            [1] => 60.00
+            [2] => 60.00
+            [3] => 60.00
         )
 
     [student_evidence_link] => Array
@@ -28,10 +31,19 @@ Array
             [0] => http://eadfgsfg.com/dszgbsdgh
             [1] => http://eadfgsfg.com/dszgbsdgh
             [2] => http://eadfgsfg.com/dszgbsdgh
+            [3] => http://eadfgsfg.com/dszgbsdgh
         )
 
-    [student_overall_score] => 56.67
-    [faculty_overall_score] => 20.40
+    [student_remarks] => Array
+        (
+            [0] => |
+            [1] => |
+            [2] => |
+            [3] => |
+        )
+
+    [student_overall_score] => 60.00
+    [faculty_overall_score] => 21.60
     [supervisor_divisor] => 0
     [supervisor_reason] => not_applicable
     [supervisor_evaluation_period] => Array
@@ -39,6 +51,7 @@ Array
             [0] => AY 2020 - 2021
             [1] => AY 2022 - 2023
             [2] => AY 2023 - 2024
+            [3] => AY 2024 - 2025
         )
 
     [supervisor_rating_1] => Array
@@ -46,6 +59,7 @@ Array
             [0] => 50.00
             [1] => 50.00
             [2] => 50.00
+            [3] => 50.00
         )
 
     [supervisor_rating_2] => Array
@@ -53,6 +67,7 @@ Array
             [0] => 50.00
             [1] => 50.00
             [2] => 50.00
+            [3] => 50.00
         )
 
     [supervisor_evidence_link] => Array
@@ -60,6 +75,15 @@ Array
             [0] => http://eadfgsfg.com/dszgbsdgh
             [1] => http://eadfgsfg.com/dszgbsdgh
             [2] => http://eadfgsfg.com/dszgbsdgh
+            [3] => http://eadfgsfg.com/dszgbsdgh
+        )
+
+    [supervisor_remarks] => Array
+        (
+            [0] => |
+            [1] => |
+            [2] => |
+            [3] => |
         )
 
     [supervisor_overall_score] => 50.00
