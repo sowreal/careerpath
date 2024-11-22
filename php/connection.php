@@ -1,11 +1,12 @@
 <?php
+// Docker setup 
 $host = 'db';  // This should match the service name in docker-compose
 $db = 'careerpath';  // Matches the MYSQL_DATABASE in docker-compose
 $user = 'user';  // Matches MYSQL_USER in docker-compose
 $pass = 'password';  // Matches MYSQL_PASSWORD in docker-compose
 $charset = 'utf8mb4';
 
-// Old XAMPP Set Up
+// Old XAMPP setup
 // $host = '127.0.0.1';
 // $db = 'careerpath';  
 // $user = 'root';  
