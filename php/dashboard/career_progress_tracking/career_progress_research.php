@@ -99,17 +99,17 @@ if ($_SESSION['role'] != 'Regular Instructor' && $_SESSION['role'] != 'Contract 
                         <ul class="nav nav-tabs card-header-tabs" id="kra-tabs" role="tablist">
                             <li class="nav-item">
                                 <button class="nav-link active bg-success text-white" id="tab-criterion-a" data-bs-toggle="tab" data-bs-target="#criterion-a" type="button" role="tab">
-                                    Criterion A: Teaching Effectiveness
+                                    Criterion A: Research Outputs
                                 </button>
                             </li>
                             <li class="nav-item">
                                 <button class="nav-link" id="tab-criterion-b" data-bs-toggle="tab" data-bs-target="#criterion-b" type="button" role="tab">
-                                    Criterion B: Curriculum & Material Development
+                                    Criterion B: Inventions
                                 </button>
                             </li>
                             <li class="nav-item">
                                 <button class="nav-link" id="tab-criterion-c" data-bs-toggle="tab" data-bs-target="#criterion-c" type="button" role="tab">
-                                    Criterion C: Thesis & Mentorship Services
+                                    Criterion C: Creative Works
                                 </button>
                             </li>
                         </ul>
@@ -118,11 +118,11 @@ if ($_SESSION['role'] != 'Regular Instructor' && $_SESSION['role'] != 'Contract 
                     <!-- Criterions section -->
                     <div class="card-body">
                         <div class="tab-content" id="kra-tab-content">
-                            <!-- Tab 1: Criterion A: Teaching Effectiveness -->
+                            <!-- Tab 1: Criterion A: Research Outputs -->
+                            <?php require_once BASE_PATH . '/php/includes/career_progress_tracking/research/criterion_a.php'; ?> 
+                            <!-- Tab 2: Criterion B: Inventions -->
 
-                            <!-- Tab 2: Criterion B: Curriculum & Material Development -->
-
-                            <!-- Tab 3: Criterion C: Thesis & Mentorship Services -->
+                            <!-- Tab 3: Criterion C: Creative Works -->
 
                         </div>
                     </div>
