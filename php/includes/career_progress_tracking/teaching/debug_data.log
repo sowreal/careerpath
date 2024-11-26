@@ -1,64 +1,92 @@
 Array
 (
-    [student_divisor] => 0
-    [student_reason] => not_applicable
-    [evaluation_period] => Array
+    [student_divisor] => 1
+    [student_reason] => Not Applicable
+    [student_evaluation_period] => Array
         (
-            [0] => AY 2022-2023
+            [0] => AY 2020 - 2021
+            [1] => AY 2021 - 2022
+            [2] => AY 2022 - 2023
+            [3] => AY 2023 - 2024
         )
 
     [student_rating_1] => Array
         (
-            [0] => 60.00
+            [0] => 100
+            [1] => 100
+            [2] => 100
+            [3] => 100
         )
 
     [student_rating_2] => Array
         (
-            [0] => 60.00
+            [0] => 100
+            [1] => 100
+            [2] => 100
+            [3] => 100
         )
 
     [student_evidence_link] => Array
         (
-            [0] => http://afsg.comsfghdsgh/vdb
+            [0] => https://easxcvsdhb.com/sfdbgsdxghn
+            [1] => https://easxcvsdhb.com/sfdbgsdxghn
+            [2] => https://easxcvsdhb.com/sfdbgsdxghn
+            [3] => https://easxcvsdhb.com/sfdbgsdxghn
         )
 
-    [student_overall_score] => 60.00
-    [faculty_overall_score] => 21.60
-    [supervisor_divisor] => 0
-    [supervisor_reason] => not_applicable
+    [student_remarks] => Array
+        (
+            [0] => 
+            [1] => 
+            [2] => 
+            [3] => 
+        )
+
+    [student_overall_score] => 100.00
+    [faculty_overall_score] => 36.00
+    [supervisor_divisor] => 8
+    [supervisor_reason] => On Approved Study Leave
     [supervisor_evaluation_period] => Array
         (
-            [0] => AY 2020-2021
-            [1] => AY 2021-2022
-            [2] => AY 2022-2023
-            [3] => AY 2023-2024
+            [0] => AY 2020 - 2021
+            [1] => AY 2021 - 2022
+            [2] => AY 2022 - 2023
+            [3] => AY 2023 - 2024
         )
 
     [supervisor_rating_1] => Array
         (
-            [0] => 60.00
-            [1] => 60.00
-            [2] => 60.00
-            [3] => 50
+            [0] => 90
+            [1] => 90
+            [2] => 90
+            [3] => 90
         )
 
     [supervisor_rating_2] => Array
         (
-            [0] => 60.00
-            [1] => 60.00
-            [2] => 50
-            [3] => 60.00
+            [0] => 90
+            [1] => 90
+            [2] => 90
+            [3] => 90
         )
 
     [supervisor_evidence_link] => Array
         (
-            [0] => http://afsg.comsfghdsgh/vdb
-            [1] => http://afsg.comsfghdsgh/vdb
-            [2] => http://afsg.comsfghdsgh/vdb
-            [3] => http://afsg.comsfghdsgh/vdb
+            [0] => https://easxcvsdhb.com/sfdbgsdxghn
+            [1] => https://easxcvsdhb.com/sfdbgsdxghn
+            [2] => https://easxcvsdhb.com/sfdbgsdxghn
+            [3] => https://easxcvsdhb.com/sfdbgsdxghn
         )
 
-    [supervisor_overall_score] => 57.50
-    [supervisor_faculty_overall_score] => 23.00
-    [request_id] => 7
+    [supervisor_remarks] => Array
+        (
+            [0] => 
+            [1] => 
+            [2] => 
+            [3] => 
+        )
+
+    [supervisor_overall_score] => 90.00
+    [supervisor_faculty_overall_score] => 36.00
+    [request_id] => 1
 )
