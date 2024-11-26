@@ -1,7 +1,7 @@
 Array
 (
-    [student_divisor] => 0
-    [student_reason] => not_applicable
+    [student_divisor] => 1
+    [student_reason] => Not Applicable
     [student_evaluation_period] => Array
         (
             [0] => AY 2020 - 2021
@@ -12,81 +12,81 @@ Array
 
     [student_rating_1] => Array
         (
-            [0] => 60.00
-            [1] => 60.00
-            [2] => 60.00
-            [3] => 60.00
+            [0] => 100
+            [1] => 100
+            [2] => 100
+            [3] => 100
         )
 
     [student_rating_2] => Array
         (
-            [0] => 60.00
-            [1] => 60.00
-            [2] => 60.00
-            [3] => 60.00
+            [0] => 100
+            [1] => 100
+            [2] => 100
+            [3] => 100
         )
 
     [student_evidence_link] => Array
         (
-            [0] => http://eadfgsfg.com/dszgbsdgh
-            [1] => http://eadfgsfg.com/dszgbsdgh
-            [2] => http://eadfgsfg.com/dszgbsdgh
-            [3] => http://eadfgsfg.com/dszgbsdgh
+            [0] => https://easxcvsdhb.com/sfdbgsdxghn
+            [1] => https://easxcvsdhb.com/sfdbgsdxghn
+            [2] => https://easxcvsdhb.com/sfdbgsdxghn
+            [3] => https://easxcvsdhb.com/sfdbgsdxghn
         )
 
     [student_remarks] => Array
         (
-            [0] => |
-            [1] => |
-            [2] => |
-            [3] => |
+            [0] => 
+            [1] => 
+            [2] => 
+            [3] => 
         )
 
-    [student_overall_score] => 60.00
-    [faculty_overall_score] => 21.60
-    [supervisor_divisor] => 0
-    [supervisor_reason] => not_applicable
+    [student_overall_score] => 100.00
+    [faculty_overall_score] => 36.00
+    [supervisor_divisor] => 8
+    [supervisor_reason] => On Approved Study Leave
     [supervisor_evaluation_period] => Array
         (
             [0] => AY 2020 - 2021
-            [1] => AY 2022 - 2023
-            [2] => AY 2023 - 2024
-            [3] => AY 2024 - 2025
+            [1] => AY 2021 - 2022
+            [2] => AY 2022 - 2023
+            [3] => AY 2023 - 2024
         )
 
     [supervisor_rating_1] => Array
         (
-            [0] => 50.00
-            [1] => 50.00
-            [2] => 50.00
-            [3] => 50.00
+            [0] => 90
+            [1] => 90
+            [2] => 90
+            [3] => 90
         )
 
     [supervisor_rating_2] => Array
         (
-            [0] => 50.00
-            [1] => 50.00
-            [2] => 50.00
-            [3] => 50.00
+            [0] => 90
+            [1] => 90
+            [2] => 90
+            [3] => 90
         )
 
     [supervisor_evidence_link] => Array
         (
-            [0] => http://eadfgsfg.com/dszgbsdgh
-            [1] => http://eadfgsfg.com/dszgbsdgh
-            [2] => http://eadfgsfg.com/dszgbsdgh
-            [3] => http://eadfgsfg.com/dszgbsdgh
+            [0] => https://easxcvsdhb.com/sfdbgsdxghn
+            [1] => https://easxcvsdhb.com/sfdbgsdxghn
+            [2] => https://easxcvsdhb.com/sfdbgsdxghn
+            [3] => https://easxcvsdhb.com/sfdbgsdxghn
         )
 
     [supervisor_remarks] => Array
         (
-            [0] => |
-            [1] => |
-            [2] => |
-            [3] => |
+            [0] => 
+            [1] => 
+            [2] => 
+            [3] => 
         )
 
-    [supervisor_overall_score] => 50.00
-    [supervisor_faculty_overall_score] => 20.00
+    [supervisor_overall_score] => 90.00
+    [supervisor_faculty_overall_score] => 36.00
     [request_id] => 1
 )

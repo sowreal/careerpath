@@ -14,7 +14,8 @@
 
             <!-- Divisor Selection -->
             <div class="row g-4 align-items-center mb-4">
-                <div class="col-md-6">
+                <!-- Number of Semesters to Deduct -->
+                <div class="col-md-4">
                     <label for="student-divisor" class="form-label">Number of Semesters to Deduct from Divisor (if applicable):</label>
                     <select class="form-select" id="student-divisor" name="student_divisor">
                         <?php for ($i = 0; $i <= 8; $i++): ?>
@@ -22,15 +23,23 @@
                         <?php endfor; ?>
                     </select>
                 </div>
-                <div class="col-md-6">
+
+                <!-- Reason for Reducing the Divisor -->
+                <div class="col-md-4">
                     <label for="student-reason" class="form-label">Reason for Reducing the Divisor:</label>
                     <select class="form-select" id="student-reason" name="student_reason" required>
                         <option value="">Select Option</option>
-                        <option value="not_applicable">Not Applicable</option>
-                        <option value="on_approved_study_leave">On Approved Study Leave</option>
-                        <option value="on_approved_sabbatical_leave">On Approved Sabbatical Leave</option>
-                        <option value="on_approved_maternity_leave">On Approved Maternity Leave</option>
+                        <option value="Not Applicable">Not Applicable</option>
+                        <option value="On Approved Study Leave">On Approved Study Leave</option>
+                        <option value="On Approved Sabbatical Leave">On Approved Sabbatical Leave</option>
+                        <option value="On Approved Maternity Leave">On Approved Maternity Leave</option>
                     </select>
+                </div>
+
+                <!-- Link to Evidence -->
+                <div class="col-md-4">
+                    <label for="student-evidence-link" class="form-label">Link to Evidence:</label>
+                    <input type="url" class="form-control" id="student-evidence-link" name="student_evidence_link" placeholder="https://example.com/evidence" required>
                 </div>
             </div>
 
@@ -63,7 +72,7 @@
                                     <input type="number" class="form-control rating-input" name="student_rating_2[]" placeholder="0.00" step="0.01" min="0" max="5" required>
                                 </td>
                                 <td>
-                                    <input type="url" class="form-control" name="student_evidence_link[]" placeholder="https://example.com/evidence" pattern="https?://.+" required>
+                                    <input type="url" class="form-control" name="student_evidence_link[]" placeholder="https://example.com/evidence" required>
                                 </td>
                                 <td>
                                     <button type="button" class="btn btn-primary btn-sm view-remarks"
@@ -105,7 +114,8 @@
 
             <!-- Divisor Selection -->
             <div class="row g-4 align-items-center mb-4">
-                <div class="col-md-6">
+                <!-- Number of Semesters to Deduct -->
+                <div class="col-md-4">
                     <label for="supervisor-divisor" class="form-label">Number of Semesters to Deduct from Divisor (if applicable):</label>
                     <select class="form-select" id="supervisor-divisor" name="supervisor_divisor">
                         <?php for ($i = 0; $i <= 8; $i++): ?>
@@ -113,15 +123,23 @@
                         <?php endfor; ?>
                     </select>
                 </div>
-                <div class="col-md-6">
+
+                <!-- Reason for Reducing the Divisor -->
+                <div class="col-md-4">
                     <label for="supervisor-reason" class="form-label">Reason for Reducing the Divisor:</label>
                     <select class="form-select" id="supervisor-reason" name="supervisor_reason" required>
                         <option value="">Select Option</option>
-                        <option value="not_applicable">Not Applicable</option>
-                        <option value="on_approved_study_leave">On Approved Study Leave</option>
-                        <option value="on_approved_sabbatical_leave">On Approved Sabbatical Leave</option>
-                        <option value="on_approved_maternity_leave">On Approved Maternity Leave</option>
+                        <option value="Not Applicable">Not Applicable</option>
+                        <option value="On Approved Study Leave">On Approved Study Leave</option>
+                        <option value="On Approved Sabbatical Leave">On Approved Sabbatical Leave</option>
+                        <option value="On Approved Maternity Leave">On Approved Maternity Leave</option>
                     </select>
+                </div>
+
+                <!-- Link to Evidence -->
+                <div class="col-md-4">
+                    <label for="supervisor-evidence-link" class="form-label">Link to Evidence:</label>
+                    <input type="url" class="form-control" id="supervisor-evidence-link" name="supervisor_evidence_link" placeholder="https://example.com/evidence" required>
                 </div>
             </div>
 
@@ -151,7 +169,7 @@
                                     <input type="number" class="form-control rating-input" name="supervisor_rating_2[]" placeholder="0.00" step="0.01" min="0" max="5" required>
                                 </td>
                                 <td>
-                                    <input type="url" class="form-control" name="supervisor_evidence_link[]" placeholder="http://example.com/evidence" pattern="https?://.+" required>
+                                    <input type="url" class="form-control" name="supervisor_evidence_link[]" placeholder="http://example.com/evidence" required>
                                 </td>
                                 <td>
                                     <button type="button" class="btn btn-primary btn-sm view-remarks"
@@ -275,8 +293,6 @@
 
 
 
-
-
 <script>
     // Helper function to add template rows
     function addTemplateRow(tableId, periods = []) {
@@ -296,10 +312,9 @@
                         <input type="number" class="form-control rating-input" name="${tableId === 'student-evaluation-table' ? 'student_rating_2[]' : 'supervisor_rating_2[]'}" placeholder="0.00" step="0.01" min="0" max="5" required>
                     </td>
                     <td>
-                        <input type="url" class="form-control" name="${tableId === 'student-evaluation-table' ? 'student_evidence_link[]' : 'supervisor_evidence_link[]'}" placeholder="https://example.com/evidence" pattern="https?://.+" required>
+                        <input type="url" class="form-control" name="${tableId === 'student-evaluation-table' ? 'student_evidence_link[]' : 'supervisor_evidence_link[]'}" placeholder="https://example.com/evidence" required>
                     </td>
                     <td>
-                        <input type="hidden" name="${tableId === 'student-evaluation-table' ? 'student_remarks[]' : 'supervisor_remarks[]'}" value="">
                         <button type="button" class="btn btn-primary btn-sm view-remarks"
                             data-first-remark=""
                             data-second-remark="">
@@ -326,10 +341,9 @@
                     <input type="number" class="form-control rating-input" name="${tableId === 'student-evaluation-table' ? 'student_rating_2[]' : 'supervisor_rating_2[]'}" placeholder="0.00" step="0.01" min="0" max="5" required>
                 </td>
                 <td>
-                    <input type="url" class="form-control" name="${tableId === 'student-evaluation-table' ? 'student_evidence_link[]' : 'supervisor_evidence_link[]'}" placeholder="https://example.com/evidence" pattern="https?://.+" required>
+                    <input type="url" class="form-control" name="${tableId === 'student-evaluation-table' ? 'student_evidence_link[]' : 'supervisor_evidence_link[]'}" placeholder="https://example.com/evidence" required>
                 </td>
                 <td>
-                    <input type="hidden" name="${tableId === 'student-evaluation-table' ? 'student_remarks[]' : 'supervisor_remarks[]'}" value="">
                     <button type="button" class="btn btn-primary btn-sm view-remarks"
                         data-first-remark=""
                         data-second-remark="">

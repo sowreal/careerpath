@@ -39,7 +39,6 @@ $student_evaluation_periods = isset($data['student_evaluation_period']) ? $data[
 $student_rating_1 = isset($data['student_rating_1']) ? $data['student_rating_1'] : [];
 $student_rating_2 = isset($data['student_rating_2']) ? $data['student_rating_2'] : [];
 $student_evidence_link = isset($data['student_evidence_link']) ? $data['student_evidence_link'] : [];
-$student_remarks = isset($data['student_remarks']) ? $data['student_remarks'] : [];
 
 $supervisor_evaluation_periods = isset($data['supervisor_evaluation_period']) ? $data['supervisor_evaluation_period'] : [];
 $supervisor_rating_1 = isset($data['supervisor_rating_1']) ? $data['supervisor_rating_1'] : [];
@@ -69,13 +68,11 @@ try {
             user_id, request_id, evaluation_period,
             first_semester_rating, second_semester_rating,
             evidence_link_first_semester, evidence_link_second_semester,
-            remarks_first_semester, remarks_second_semester,
             overall_average_rating, faculty_score
         ) VALUES (
             :user_id, :request_id, :evaluation_period,
             :first_semester_rating, :second_semester_rating,
             :evidence_link_first, :evidence_link_second,
-            :remarks_first, :remarks_second,
             :overall_average_rating, :faculty_score
         )
     ");
@@ -88,8 +85,6 @@ try {
             $rating2 = $student_rating_2[$i];
             $evidence_link1 = $student_evidence_link[$i]; // Assuming same link can be used for both semesters
             $evidence_link2 = $student_evidence_link[$i];
-            $remarks1 = isset($student_remarks[$i]) ? $student_remarks[$i] : '';
-            $remarks2 = isset($student_remarks[$i]) ? $student_remarks[$i] : '';
         
             // Calculate overall_average_rating and faculty_score
             $overall_average_rating = ($rating1 + $rating2) / 2;
@@ -103,8 +98,6 @@ try {
             $stmt->bindParam(':second_semester_rating', $rating2);
             $stmt->bindParam(':evidence_link_first', $evidence_link1, PDO::PARAM_STR);
             $stmt->bindParam(':evidence_link_second', $evidence_link2, PDO::PARAM_STR);
-            $stmt->bindParam(':remarks_first', $remarks1, PDO::PARAM_STR);
-            $stmt->bindParam(':remarks_second', $remarks2, PDO::PARAM_STR);
             $stmt->bindParam(':overall_average_rating', $overall_average_rating);
             $stmt->bindParam(':faculty_score', $faculty_score);
         
@@ -119,13 +112,11 @@ try {
             user_id, request_id, evaluation_period,
             first_semester_rating, second_semester_rating,
             evidence_link_first_semester, evidence_link_second_semester,
-            remarks_first_semester, remarks_second_semester,
             overall_average_rating, faculty_score
         ) VALUES (
             :user_id, :request_id, :evaluation_period,
             :first_semester_rating, :second_semester_rating,
             :evidence_link_first, :evidence_link_second,
-            :remarks_first, :remarks_second,
             :overall_average_rating, :faculty_score
         )
     ");
@@ -138,8 +129,6 @@ try {
             $rating2 = $supervisor_rating_2[$i];
             $evidence_link1 = $supervisor_evidence_link[$i];
             $evidence_link2 = $supervisor_evidence_link[$i];
-            $remarks1 = isset($supervisor_remarks[$i]) ? $supervisor_remarks[$i] : '';
-            $remarks2 = isset($supervisor_remarks[$i]) ? $supervisor_remarks[$i] : '';
 
             // Calculate overall_average_rating and faculty_score as needed
             $overall_average_rating = ($rating1 + $rating2) / 2;
@@ -153,8 +142,6 @@ try {
             $stmt->bindParam(':second_semester_rating', $rating2);
             $stmt->bindParam(':evidence_link_first', $evidence_link1, PDO::PARAM_STR);
             $stmt->bindParam(':evidence_link_second', $evidence_link2, PDO::PARAM_STR);
-            $stmt->bindParam(':remarks_first', $remarks1, PDO::PARAM_STR);
-            $stmt->bindParam(':remarks_second', $remarks2, PDO::PARAM_STR);
             $stmt->bindParam(':overall_average_rating', $overall_average_rating);
             $stmt->bindParam(':faculty_score', $faculty_score);
 
