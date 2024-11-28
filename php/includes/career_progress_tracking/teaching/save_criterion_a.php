@@ -1,175 +1,212 @@
 <?php
-ini_set('display_errors', 1);
-error_reporting(E_ALL);
-session_start();
-header('Content-Type: application/json; charset=utf-8');
+// save_criterion_a.php
 
-include('../../../connection.php'); // Adjust the path as necessary
+/**
+ * Handles AJAX submission from criterion_a.php.
+ * Saves user inputs into the database tables:
+ * - kra1_a_student_evaluation
+ * - kra1_a_supervisor_evaluation
+ * - kra1_a_metadata
+ * Uses PDO for database interactions with proper error handling.
+ */
 
-// Check if the user is logged in
-if (!isset($_SESSION['user_id'])) {
-    http_response_code(401);
-    echo json_encode(['success' => false, 'error' => 'Unauthorized']);
-    exit();
-}
+// Start session if not already started
+require_once '../../../session.php';
+// Include database connection
+require_once '../../../connection.php';
 
-// Get the POSTed data
-$data = json_decode(file_get_contents('php://input'), true);
+// Set header for JSON response
+header('Content-Type: application/json');
 
-if (json_last_error() !== JSON_ERROR_NONE) {
-    echo json_encode(['success' => false, 'error' => 'Invalid JSON input']);
-    exit();
-}
 
-// Log data received
-file_put_contents('debug_data.log', print_r($data, true));
-
-// Extract data
-$user_id = $_SESSION['user_id'];
-$request_id = isset($data['request_id']) ? $data['request_id'] : null;
-
-// Validate required fields
-if (!$request_id) {
-    echo json_encode(['success' => false, 'error' => 'Invalid request. Request ID is missing.']);
-    exit();
-}
-
-// Now, process the data
-$student_evaluation_periods = isset($data['student_evaluation_period']) ? $data['student_evaluation_period'] : [];
-$student_rating_1 = isset($data['student_rating_1']) ? $data['student_rating_1'] : [];
-$student_rating_2 = isset($data['student_rating_2']) ? $data['student_rating_2'] : [];
-$student_evidence_link = isset($data['student_evidence_link']) ? $data['student_evidence_link'] : [];
-$student_remarks = isset($data['student_remarks']) ? $data['student_remarks'] : [];
-
-$supervisor_evaluation_periods = isset($data['supervisor_evaluation_period']) ? $data['supervisor_evaluation_period'] : [];
-$supervisor_rating_1 = isset($data['supervisor_rating_1']) ? $data['supervisor_rating_1'] : [];
-$supervisor_rating_2 = isset($data['supervisor_rating_2']) ? $data['supervisor_rating_2'] : [];
-$supervisor_evidence_link = isset($data['supervisor_evidence_link']) ? $data['supervisor_evidence_link'] : [];
-
-// Begin transaction
-$conn->beginTransaction();
 
 try {
-    // First, delete any existing data for this user and request_id in the tables
-    // Delete student evaluations
-    $stmt = $conn->prepare("DELETE FROM kra1_a_student_evaluation WHERE user_id = :user_id AND request_id = :request_id");
-    $stmt->bindParam(':user_id', $user_id, PDO::PARAM_INT);
-    $stmt->bindParam(':request_id', $request_id, PDO::PARAM_INT);
-    $stmt->execute();
+    // Get raw POST data
+    $rawData = file_get_contents("php://input");
+    $data = json_decode($rawData, true);
 
-    // Delete supervisor evaluations
-    $stmt = $conn->prepare("DELETE FROM kra1_a_supervisor_evaluation WHERE user_id = :user_id AND request_id = :request_id");
-    $stmt->bindParam(':user_id', $user_id, PDO::PARAM_INT);
-    $stmt->bindParam(':request_id', $request_id, PDO::PARAM_INT);
-    $stmt->execute();
+    if (!$data) {
+        throw new Exception('No data received.');
+    }
 
-    // Insert student evaluations
-    $stmt = $conn->prepare("
+    // Begin transaction to ensure data integrity
+    $conn->beginTransaction();
+
+    // Retrieve the request_id (ensure it's provided)
+    $request_id = $_SESSION['request_id'] ?? $data['request_id'] ?? null;
+
+    if (!$request_id) {
+        throw new Exception('Request ID is missing.');
+    }
+
+    /**
+     * Process and Insert Student Evaluations
+     */
+    // Prepare SQL statement for student evaluations
+    $student_stmt = $conn->prepare("
         INSERT INTO kra1_a_student_evaluation (
-            user_id, request_id, evaluation_period,
-            first_semester_rating, second_semester_rating,
-            evidence_link_first_semester, evidence_link_second_semester,
-            remarks_first_semester, remarks_second_semester,
-            overall_average_rating, faculty_score
+            request_id,
+            evaluation_period,
+            first_semester_rating,
+            second_semester_rating,
+            evidence_link_first,
+            evidence_link_second,
+            overall_average_rating,
+            faculty_rating
         ) VALUES (
-            :user_id, :request_id, :evaluation_period,
-            :first_semester_rating, :second_semester_rating,
-            :evidence_link_first, :evidence_link_second,
-            :remarks_first, :remarks_second,
-            :overall_average_rating, :faculty_score
+            :request_id,
+            :evaluation_period,
+            :first_semester_rating,
+            :second_semester_rating,
+            :evidence_link_first,
+            :evidence_link_second,
+            :overall_average_rating,
+            :faculty_rating
         )
     ");
 
+    // Loop through student evaluation entries
+    $student_evaluation_periods = $data['student_evaluation_period'] ?? [];
+    foreach ($student_evaluation_periods as $index => $period) {
+        // Validate and sanitize inputs
+        $evaluation_period = htmlspecialchars($period);
+        $first_semester_rating = isset($data['student_rating_1'][$index]) ? floatval($data['student_rating_1'][$index]) : null;
+        $second_semester_rating = isset($data['student_rating_2'][$index]) ? floatval($data['student_rating_2'][$index]) : null;
+        $evidence_link_first = isset($data['student_evidence_link'][$index]) ? filter_var($data['student_evidence_link'][$index], FILTER_SANITIZE_URL) : null;
+        $evidence_link_second = null; // Adjust if you have separate links
+        $overall_average_rating = isset($data['student_overall_average'][$index]) ? floatval($data['student_overall_average'][$index]) : null;
+        $faculty_rating = isset($data['student_faculty_rating'][$index]) ? floatval($data['student_faculty_rating'][$index]) : null;
 
-    if (is_array($student_evaluation_periods)) {
-        for ($i = 0; $i < count($student_evaluation_periods); $i++) {
-            $evaluation_period = $student_evaluation_periods[$i];
-            $rating1 = $student_rating_1[$i];
-            $rating2 = $student_rating_2[$i];
-            $evidence_link1 = $student_evidence_link[$i]; // Assuming same link can be used for both semesters
-            $evidence_link2 = $student_evidence_link[$i];
-            $remarks1 = isset($student_remarks[$i]) ? $student_remarks[$i] : '';
-            $remarks2 = isset($student_remarks[$i]) ? $student_remarks[$i] : '';
-        
-            // Calculate overall_average_rating and faculty_score
-            $overall_average_rating = ($rating1 + $rating2) / 2;
-            $faculty_score = $overall_average_rating * 0.36;
-        
-            // Bind parameters
-            $stmt->bindParam(':user_id', $user_id, PDO::PARAM_INT);
-            $stmt->bindParam(':request_id', $request_id, PDO::PARAM_INT);
-            $stmt->bindParam(':evaluation_period', $evaluation_period, PDO::PARAM_STR);
-            $stmt->bindParam(':first_semester_rating', $rating1);
-            $stmt->bindParam(':second_semester_rating', $rating2);
-            $stmt->bindParam(':evidence_link_first', $evidence_link1, PDO::PARAM_STR);
-            $stmt->bindParam(':evidence_link_second', $evidence_link2, PDO::PARAM_STR);
-            $stmt->bindParam(':remarks_first', $remarks1, PDO::PARAM_STR);
-            $stmt->bindParam(':remarks_second', $remarks2, PDO::PARAM_STR);
-            $stmt->bindParam(':overall_average_rating', $overall_average_rating);
-            $stmt->bindParam(':faculty_score', $faculty_score);
-        
-            $stmt->execute();
-        }
-        
+        // Execute the prepared statement
+        $student_stmt->execute([
+            ':request_id' => $request_id,
+            ':evaluation_period' => $evaluation_period,
+            ':first_semester_rating' => $first_semester_rating,
+            ':second_semester_rating' => $second_semester_rating,
+            ':evidence_link_first' => $evidence_link_first,
+            ':evidence_link_second' => $evidence_link_second,
+            ':overall_average_rating' => $overall_average_rating,
+            ':faculty_rating' => $faculty_rating
+        ]);
     }
 
-    // Insert supervisor evaluations
-    $stmt = $conn->prepare("
+    /**
+     * Process and Insert Supervisor Evaluations
+     */
+    // Prepare SQL statement for supervisor evaluations
+    $supervisor_stmt = $conn->prepare("
         INSERT INTO kra1_a_supervisor_evaluation (
-            user_id, request_id, evaluation_period,
-            first_semester_rating, second_semester_rating,
-            evidence_link_first_semester, evidence_link_second_semester,
-            remarks_first_semester, remarks_second_semester,
-            overall_average_rating, faculty_score
+            request_id,
+            evaluation_period,
+            first_semester_rating,
+            second_semester_rating,
+            evidence_link_first,
+            evidence_link_second,
+            overall_average_rating,
+            faculty_rating
         ) VALUES (
-            :user_id, :request_id, :evaluation_period,
-            :first_semester_rating, :second_semester_rating,
-            :evidence_link_first, :evidence_link_second,
-            :remarks_first, :remarks_second,
-            :overall_average_rating, :faculty_score
+            :request_id,
+            :evaluation_period,
+            :first_semester_rating,
+            :second_semester_rating,
+            :evidence_link_first,
+            :evidence_link_second,
+            :overall_average_rating,
+            :faculty_rating
         )
     ");
 
+    // Loop through supervisor evaluation entries
+    $supervisor_evaluation_periods = $data['supervisor_evaluation_period'] ?? [];
+    foreach ($supervisor_evaluation_periods as $index => $period) {
+        // Validate and sanitize inputs
+        $evaluation_period = htmlspecialchars($period);
+        $first_semester_rating = isset($data['supervisor_rating_1'][$index]) ? floatval($data['supervisor_rating_1'][$index]) : null;
+        $second_semester_rating = isset($data['supervisor_rating_2'][$index]) ? floatval($data['supervisor_rating_2'][$index]) : null;
+        $evidence_link_first = isset($data['supervisor_evidence_link'][$index]) ? filter_var($data['supervisor_evidence_link'][$index], FILTER_SANITIZE_URL) : null;
+        $evidence_link_second = null; // Adjust if you have separate links
+        $overall_average_rating = isset($data['supervisor_overall_average'][$index]) ? floatval($data['supervisor_overall_average'][$index]) : null;
+        $faculty_rating = isset($data['supervisor_faculty_rating'][$index]) ? floatval($data['supervisor_faculty_overall_score'][$index]) : null;
 
-    if (is_array($supervisor_evaluation_periods)) {
-        for ($i = 0; $i < count($supervisor_evaluation_periods); $i++) {
-            $evaluation_period = $supervisor_evaluation_periods[$i];
-            $rating1 = $supervisor_rating_1[$i];
-            $rating2 = $supervisor_rating_2[$i];
-            $evidence_link1 = $supervisor_evidence_link[$i];
-            $evidence_link2 = $supervisor_evidence_link[$i];
-            $remarks1 = isset($supervisor_remarks[$i]) ? $supervisor_remarks[$i] : '';
-            $remarks2 = isset($supervisor_remarks[$i]) ? $supervisor_remarks[$i] : '';
-
-            // Calculate overall_average_rating and faculty_score as needed
-            $overall_average_rating = ($rating1 + $rating2) / 2;
-            $faculty_score = $overall_average_rating * 0.36; // As per your calculation
-
-            // Bind parameters
-            $stmt->bindParam(':user_id', $user_id, PDO::PARAM_INT);
-            $stmt->bindParam(':request_id', $request_id, PDO::PARAM_INT);
-            $stmt->bindParam(':evaluation_period', $evaluation_period, PDO::PARAM_STR);
-            $stmt->bindParam(':first_semester_rating', $rating1);
-            $stmt->bindParam(':second_semester_rating', $rating2);
-            $stmt->bindParam(':evidence_link_first', $evidence_link1, PDO::PARAM_STR);
-            $stmt->bindParam(':evidence_link_second', $evidence_link2, PDO::PARAM_STR);
-            $stmt->bindParam(':remarks_first', $remarks1, PDO::PARAM_STR);
-            $stmt->bindParam(':remarks_second', $remarks2, PDO::PARAM_STR);
-            $stmt->bindParam(':overall_average_rating', $overall_average_rating);
-            $stmt->bindParam(':faculty_score', $faculty_score);
-
-            $stmt->execute();
-        }
+        // Execute the prepared statement
+        $supervisor_stmt->execute([
+            ':request_id' => $request_id,
+            ':evaluation_period' => $evaluation_period,
+            ':first_semester_rating' => $first_semester_rating,
+            ':second_semester_rating' => $second_semester_rating,
+            ':evidence_link_first' => $evidence_link_first,
+            ':evidence_link_second' => $evidence_link_second,
+            ':overall_average_rating' => $overall_average_rating,
+            ':faculty_rating' => $faculty_rating
+        ]);
     }
 
-    // Commit transaction
+    // Get the last inserted evaluation_ids for metadata linkage
+    $student_evaluation_id = $conn->lastInsertId(); // After student evaluations
+    $supervisor_evaluation_id = $conn->lastInsertId(); // After supervisor evaluations
+
+    /**
+     * Process and Insert Metadata
+     */
+    // Prepare SQL statement for metadata
+    $metadata_stmt = $conn->prepare("
+        INSERT INTO kra1_a_metadata (
+            student_evaluation_id,
+            supervisor_evaluation_id,
+            student_semesters_to_deduct,
+            student_reason_for_reduction,
+            supervisor_semesters_to_deduct,
+            supervisor_reason_for_reduction,
+            student_evidence_link,
+            supervisor_evidence_link
+        ) VALUES (
+            :student_evaluation_id,
+            :supervisor_evaluation_id,
+            :student_semesters_to_deduct,
+            :student_reason_for_reduction,
+            :supervisor_semesters_to_deduct,
+            :supervisor_reason_for_reduction,
+            :student_evidence_link,
+            :supervisor_evidence_link
+        )
+    ");
+
+    // Sanitize and validate metadata inputs
+    $student_semesters_to_deduct = intval($data['student_divisor'] ?? 0);
+    $student_reason_for_reduction = htmlspecialchars($data['student_reason'] ?? '');
+    $supervisor_semesters_to_deduct = intval($data['supervisor_divisor'] ?? 0);
+    $supervisor_reason_for_reduction = htmlspecialchars($data['supervisor_reason'] ?? '');
+    $student_evidence_link_main = filter_var($data['student_evidence_link_main'] ?? '', FILTER_SANITIZE_URL);
+    $supervisor_evidence_link_main = filter_var($data['supervisor_evidence_link_main'] ?? '', FILTER_SANITIZE_URL);
+
+    // Execute the prepared statement
+    $metadata_stmt->execute([
+        ':student_evaluation_id' => $student_evaluation_id,
+        ':supervisor_evaluation_id' => $supervisor_evaluation_id,
+        ':student_semesters_to_deduct' => $student_semesters_to_deduct,
+        ':student_reason_for_reduction' => $student_reason_for_reduction,
+        ':supervisor_semesters_to_deduct' => $supervisor_semesters_to_deduct,
+        ':supervisor_reason_for_reduction' => $supervisor_reason_for_reduction,
+        ':student_evidence_link' => $student_evidence_link_main,
+        ':supervisor_evidence_link' => $supervisor_evidence_link_main
+    ]);
+
+    // Commit the transaction after all inserts
     $conn->commit();
 
+    // Return success response
     echo json_encode(['success' => true]);
+    exit();
 
-} catch (PDOException $e) {
-    // Rollback transaction
-    $conn->rollBack();
-    echo json_encode(['success' => false, 'error' => 'Database error: ' . $e->getMessage()]);
+} catch (Exception $e) {
+    // Rollback the transaction on any error
+    if ($conn->inTransaction()) {
+        $conn->rollBack();
+    }
+    // Log the error
+    error_log("Error saving Criterion A data: " . $e->getMessage());
+    // Return error response
+    echo json_encode(['success' => false, 'error' => 'Failed to save data. Please try again.']);
+    exit();
 }
 ?>

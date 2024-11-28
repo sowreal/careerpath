@@ -1,6 +1,6 @@
 <?php
 session_start();
-include('../../../connection.php'); // Include your database connection using PDO
+include '../../../connection.php'; // Include your database connection using PDO
 
 // Check if the user is logged in
 if (!isset($_SESSION['user_id'])) {
