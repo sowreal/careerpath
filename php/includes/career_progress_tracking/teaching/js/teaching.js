@@ -1,5 +1,3 @@
-// teaching.js
-
 document.addEventListener('DOMContentLoaded', function () {
     // Evaluation Selection Handler
     document.getElementById('select-evaluation-btn').addEventListener('click', function () {
@@ -8,34 +6,34 @@ document.addEventListener('DOMContentLoaded', function () {
 
         // Fetch evaluations via AJAX
         fetch('../../includes/career_progress_tracking/teaching/fetch_evaluations.php', { method: 'POST' })
-            .then(response => {
-                if (!response.ok) throw new Error('Failed to fetch evaluations');
-                return response.json();
-            })
-            .then(data => {
-                if (data.length > 0) {
-                    modalBody.innerHTML = data.map(eval => {
-                        const createdDate = new Date(eval.created_at);
-                        const options = { year: 'numeric', month: 'short', day: 'numeric', hour: 'numeric', minute: 'numeric' };
-                        const formattedDate = createdDate.toLocaleDateString(undefined, options);
-                        const evaluationNumber = `Evaluation #:${eval.request_id}`;
+        .then(response => {
+            if (!response.ok) throw new Error('Failed to fetch evaluations');
+            return response.json();
+        })
+        .then(data => {
+            if (data.length > 0) {
+                modalBody.innerHTML = data.map(eval => {
+                    const createdDate = new Date(eval.created_at);
+                    const options = { year: 'numeric', month: 'short', day: 'numeric', hour: 'numeric', minute: 'numeric' };
+                    const formattedDate = createdDate.toLocaleDateString(undefined, options);
+                    const evaluationNumber = `Evaluation #:${eval.request_id}`;
 
-                        return `
-                            <div class="form-check">
-                                <input class="form-check-input" type="radio" name="evaluation" id="eval-${eval.request_id}" value="${eval.request_id}">
-                                <label class="form-check-label" for="eval-${eval.request_id}">
-                                    ${evaluationNumber} (Created: ${formattedDate})
-                                </label>
-                            </div>`;
-                    }).join('');
-                } else {
-                    modalBody.innerHTML = '<p>No evaluations found.</p>';
-                }
-            })
-            .catch(err => {
-                console.error(err);
-                modalBody.innerHTML = '<p>Error loading evaluations. Please try again later.</p>';
-            });
+                    return `
+                        <div class="form-check">
+                            <input class="form-check-input" type="radio" name="evaluation" id="eval-${eval.request_id}" value="${eval.request_id}">
+                            <label class="form-check-label" for="eval-${eval.request_id}">
+                                ${evaluationNumber} (Created: ${formattedDate})
+                            </label>
+                        </div>`;
+                }).join('');
+            } else {
+                modalBody.innerHTML = '<p>No evaluations found.</p><p>Click <a href="career_progress_request.php">HERE</a> to create a new one.</p>';
+            }
+        })
+        .catch(err => {
+            console.error(err);
+            modalBody.innerHTML = '<p>Error loading evaluations. Please try again later.</p>';
+        });
     });
 
     // Modal button handler for selecting evaluation number
@@ -137,9 +135,21 @@ document.addEventListener('DOMContentLoaded', function () {
         });
     }
 
-    // Define enableFields function (if generic)
-    function enableFields() {
-        // Generic enabling logic if needed
-        // Otherwise, keep it empty or remove if not used
+    function ajaxPost(url, data) {
+        return $.ajax({
+            type: 'POST',
+            url: url,
+            data: data,
+            dataType: 'json'
+        });
+    }
+    
+    function ajaxGet(url, params) {
+        return $.ajax({
+            type: 'GET',
+            url: url,
+            data: params,
+            dataType: 'json'
+        });
     }
 });

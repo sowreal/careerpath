@@ -1,185 +1,85 @@
-// Assuming you're within a DOMContentLoaded event listener
-    document.addEventListener('DOMContentLoaded', () => {
-        // Calculate Overall Scores
-        const calculateOverallScores = () => {
-            // Student Evaluation Calculations
-            let studentTotalRating = 0;
-            let studentRatingCount = 0;
+// careerpath/php/includes/career_progress_tracking/teaching/js/criterion_a.js
 
-            const studentReason = document.getElementById('student-reason').value;
-            const studentDeductSemesters = parseInt(document.getElementById('student-divisor').value) || 0;
-            const studentTotalSemesters = 8 - studentDeductSemesters;
+$(document).ready(function() {
+    // Save Criterion A
+    $('#save-criterion-a').click(function(e) {
+        e.preventDefault();
 
-            document.querySelectorAll('#student-evaluation-table tbody tr').forEach(row => {
-                const rating1 = parseFloat(row.querySelector('input[name="student_rating_1[]"]').value) || 0;
-                const rating2 = parseFloat(row.querySelector('input[name="student_rating_2[]"]').value) || 0;
+        let formData = $('#criterion-a-form').serialize();
 
-                studentTotalRating += rating1 + rating2;
-                studentRatingCount += 2;
-            });
-
-            let studentOverallAverageRating;
-            if (studentReason === "Not Applicable" || studentReason === "") {
-                studentOverallAverageRating = studentRatingCount ? (studentTotalRating / studentRatingCount) : 0;
-            } else {
-                studentOverallAverageRating = studentTotalSemesters ? (studentTotalRating / studentTotalSemesters) : 0;
-            }
-
-            const studentFacultyRating = (studentOverallAverageRating * 0.36).toFixed(2);
-
-            document.getElementById('student-overall-score').value = studentOverallAverageRating.toFixed(2);
-            document.getElementById('faculty-overall-score').value = studentFacultyRating;
-
-            // Supervisor Evaluation Calculations
-            let supervisorTotalRating = 0;
-            let supervisorRatingCount = 0;
-
-            const supervisorReason = document.getElementById('supervisor-reason').value;
-            const supervisorDeductSemesters = parseInt(document.getElementById('supervisor-divisor').value) || 0;
-            const supervisorTotalSemesters = 8 - supervisorDeductSemesters;
-
-            document.querySelectorAll('#supervisor-evaluation-table tbody tr').forEach(row => {
-                const rating1 = parseFloat(row.querySelector('input[name="supervisor_rating_1[]"]').value) || 0;
-                const rating2 = parseFloat(row.querySelector('input[name="supervisor_rating_2[]"]').value) || 0;
-
-                supervisorTotalRating += rating1 + rating2;
-                supervisorRatingCount += 2;
-            });
-
-            let supervisorOverallAverageRating;
-            if (supervisorReason === "Not Applicable" || supervisorReason === "") {
-                supervisorOverallAverageRating = supervisorRatingCount ? (supervisorTotalRating / supervisorRatingCount) : 0;
-            } else {
-                supervisorOverallAverageRating = supervisorTotalSemesters ? (supervisorTotalRating / supervisorTotalSemesters) : 0;
-            }
-
-            const supervisorFacultyRating = (supervisorOverallAverageRating * 0.24).toFixed(2);
-
-            document.getElementById('supervisor-overall-score').value = supervisorOverallAverageRating.toFixed(2);
-            document.getElementById('supervisor-faculty-overall-score').value = supervisorFacultyRating;
-        };
-
-        // Trigger calculation on input change
-        document.querySelectorAll('#criterion-a input, #criterion-a select').forEach(input => {
-            input.addEventListener('input', calculateOverallScores);
-        });
-
-        // Save Criterion A via AJAX
-        const saveCriterionA = document.getElementById('save-criterion-a');
-        if (saveCriterionA) {
-            saveCriterionA.addEventListener('click', () => {
-                // Check if an evaluation is selected
-                const requestId = document.getElementById('hidden-request-id').value;
-                if (!requestId) {
-                    // Show error modal
-                    document.getElementById('saveErrorModalLabel').textContent = 'Save Failed';
-                    document.querySelector('#saveErrorModal .modal-body').textContent = 'Please select an evaluation before saving.';
-                    new bootstrap.Modal(document.getElementById('saveErrorModal')).show();
-                    return;
-                }
-
-                // Manual Validation of Required Fields within Criterion A
-                let isValid = true;
-
-                // Collect all input fields and selects within Criterion A
-                const criterionAFields = document.querySelectorAll('#criterion-a input, #criterion-a select');
-                criterionAFields.forEach(field => {
-                    const value = field.value.trim();
-
-                    // Basic non-empty validation for required fields
-                    if (field.hasAttribute('required') && !value) {
-                        field.classList.add('is-invalid');
-                        isValid = false;
-                    } else {
-                        field.classList.remove('is-invalid');
-                    }
-
-                    // Additional validation for URL fields
-                    if (field.type === 'url' && field.hasAttribute('required')) {
-                        const urlPattern = /^(https?:\/\/).+/;
-                        if (!urlPattern.test(value)) {
-                            field.classList.add('is-invalid');
-                            isValid = false;
-                        } else {
-                            field.classList.remove('is-invalid');
-                        }
-                    }
-                });
-
-                if (isValid) {
-                    // Prepare data for saving
-                    const criterionAData = {};
-
-                    // Collect all field values
-                    criterionAFields.forEach(field => {
-                        const name = field.name;
-                        const value = field.value.trim();
-
-                        if (name.endsWith('[]')) {
-                            const key = name.slice(0, -2);
-                            if (!Array.isArray(criterionAData[key])) {
-                                criterionAData[key] = [];
-                            }
-                            criterionAData[key].push(value);
-                        } else {
-                            criterionAData[name] = value;
-                        }
-                    });
-
-                    // Add calculated fields for student evaluations
-                    criterionAData['student_overall_average'] = [];
-                    criterionAData['student_faculty_rating'] = [];
-                    document.querySelectorAll('#student-evaluation-table tbody tr').forEach(row => {
-                        const overallAverage = row.querySelector('input[name="student_overall_average[]"]').value;
-                        criterionAData['student_overall_average'].push(overallAverage);
-                        const facultyRating = (parseFloat(overallAverage) * 0.36).toFixed(2);
-                        criterionAData['student_faculty_rating'].push(facultyRating);
-                    });
-
-                    // Add calculated fields for supervisor evaluations
-                    criterionAData['supervisor_overall_average'] = [];
-                    criterionAData['supervisor_faculty_overall_score'] = [];
-                    document.querySelectorAll('#supervisor-evaluation-table tbody tr').forEach(row => {
-                        const overallAverage = row.querySelector('input[name="supervisor_overall_average[]"]').value;
-                        criterionAData['supervisor_overall_average'].push(overallAverage);
-                        const facultyRating = (parseFloat(overallAverage) * 0.24).toFixed(2);
-                        criterionAData['supervisor_faculty_overall_score'].push(facultyRating);
-                    });
-
-                    // Add request_id
-                    criterionAData['request_id'] = requestId;
-
-                    // Send data to the backend via AJAX
-                    fetch('save_criterion_a.php', {
-                        method: 'POST',
-                        headers: { 'Content-Type': 'application/json' },
-                        body: JSON.stringify(criterionAData),
-                    })
-                        .then(response => response.json())
-                        .then(data => {
-                            if (data.success) {
-                                // Show success modal
-                                new bootstrap.Modal(document.getElementById('saveConfirmationModal')).show();
-                            } else {
-                                // Show error modal
-                                document.getElementById('saveErrorModalLabel').textContent = 'Save Failed';
-                                document.querySelector('#saveErrorModal .modal-body').textContent = data.error || 'An unexpected error occurred.';
-                                new bootstrap.Modal(document.getElementById('saveErrorModal')).show();
-                            }
-                        })
-                        .catch(err => {
-                            console.error('Error saving data:', err);
-                            // Show error modal
-                            document.getElementById('saveErrorModalLabel').textContent = 'Save Failed';
-                            document.querySelector('#saveErrorModal .modal-body').textContent = 'A network error occurred. Please try again.';
-                            new bootstrap.Modal(document.getElementById('saveErrorModal')).show();
-                        });
+        ajaxPost('save_criterion_a.php', formData)
+            .done(function(response) {
+                if (response.status === 'success') {
+                    $('#saveConfirmationModal').modal('show');
                 } else {
-                    // Show validation error modal
-                    document.getElementById('saveErrorModalLabel').textContent = 'Save Failed';
-                    document.querySelector('#saveErrorModal .modal-body').textContent = 'Please complete all required fields before saving.';
-                    new bootstrap.Modal(document.getElementById('saveErrorModal')).show();
+                    $('#saveErrorModal .modal-body').text(response.message);
+                    $('#saveErrorModal').modal('show');
                 }
+            })
+            .fail(function() {
+                $('#saveErrorModal .modal-body').text('An unexpected error occurred.');
+                $('#saveErrorModal').modal('show');
             });
-        }
     });
+
+    // Fetch Criterion A Data (if editing)
+    function fetchCriterionA(request_id) {
+        ajaxGet('fetch_criterion_a.php', { request_id: request_id })
+            .done(function(response) {
+                if (response.status === 'success') {
+                    // Populate the form with fetched data
+                    // Implement as needed
+                } else {
+                    $('#saveErrorModal .modal-body').text(response.message);
+                    $('#saveErrorModal').modal('show');
+                }
+            })
+            .fail(function() {
+                $('#saveErrorModal .modal-body').text('Failed to fetch data.');
+                $('#saveErrorModal').modal('show');
+            });
+    }
+
+    // Example: Initialize fetch if request_id is available
+    // let request_id = $('#hidden-request-id').val();
+    // if(request_id) fetchCriterionA(request_id);
+
+    // Handle Delete Row
+    let rowToDelete;
+    $(document).on('click', '.delete-row', function() {
+        rowToDelete = $(this).closest('tr');
+        $('#deleteRowModal').modal('show');
+    });
+
+    $('#confirm-delete-row').click(function() {
+        rowToDelete.remove();
+        $('#deleteRowModal').modal('hide');
+    });
+
+    // Handle Remarks Modal
+    $(document).on('click', '.view-remarks', function() {
+        let firstRemark = $(this).data('first-remark') || 'No remarks.';
+        let secondRemark = $(this).data('second-remark') || 'No remarks.';
+        $('#first-semester-remark').text(firstRemark);
+        $('#second-semester-remark').text(secondRemark);
+        $('#remarksModal').modal('show');
+    });
+
+    // Add Row Functionality
+    $('.add-row').click(function() {
+        let tableId = $(this).data('table-id');
+        let table = $('#' + tableId + ' tbody');
+        let newRow = `<tr>
+            <td><input type="text" class="form-control" name="${tableId === 'student-evaluation-table' ? 'student_evaluation_period[]' : 'supervisor_evaluation_period[]'}" value=""></td>
+            <td><input type="number" class="form-control rating-input" name="${tableId === 'student-evaluation-table' ? 'student_rating_1[]' : 'supervisor_rating_1[]'}" placeholder="0.00" step="0.01" min="0" max="5" required></td>
+            <td><input type="number" class="form-control rating-input" name="${tableId === 'student-evaluation-table' ? 'student_rating_2[]' : 'supervisor_rating_2[]'}" placeholder="0.00" step="0.01" min="0" max="5" required></td>
+            <td><input type="url" class="form-control" name="${tableId === 'student-evaluation-table' ? 'student_evidence_link[]' : 'supervisor_evidence_link[]'}" placeholder="https://example.com/evidence" pattern="https?://.+" required></td>
+            <td><button type="button" class="btn btn-primary btn-sm view-remarks" data-first-remark="" data-second-remark="">View Remarks</button></td>
+            <td><button type="button" class="btn btn-danger btn-sm delete-row" aria-label="Delete row">Delete</button></td>
+        </tr>`;
+        table.append(newRow);
+    });
+
+    // Calculate Overall Scores (Implement as needed)
+    // You can add event listeners to input fields to calculate and update the overall scores
+});

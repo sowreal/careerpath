@@ -18,8 +18,6 @@
 </div>
 
 
-
-
 <!-- Modal for Viewing Remarks -->
 <div class="modal fade" id="remarksModal" tabindex="-1" aria-labelledby="remarksModalLabel" aria-hidden="true">
     <div class="modal-dialog">

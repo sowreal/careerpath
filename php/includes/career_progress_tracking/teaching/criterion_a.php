@@ -54,7 +54,7 @@
                                 <th scope="col">Actions</th>
                             </tr>
                         </thead>
-                        <tbody><!-- 1st column row contents-->
+                        <tbody>
                             <?php 
                                 $evaluationPeriods = ["AY 2019 - 2020", "AY 2020 - 2021", "AY 2021 - 2022", "AY 2022 - 2023"];
                                 foreach ($evaluationPeriods as $period): 
@@ -163,7 +163,7 @@
                                         <input type="number" class="form-control rating-input" name="supervisor_rating_2[]" placeholder="0.00" step="0.01" min="0" max="5" required>
                                     </td>
                                     <td>
-                                        <input type="url" class="form-control" name="supervisor_evidence_link[]" placeholder="http://example.com/evidence" pattern="https?://.+" required>
+                                        <input type="url" class="form-control" name="supervisor_evidence_link[]" placeholder="https://example.com/evidence" pattern="https?://.+" required>
                                     </td>
                                     <td>
                                         <button type="button" class="btn btn-primary btn-sm view-remarks"
@@ -200,14 +200,8 @@
             </div>
         </div>
 
-        <!-- Hidden Inputs for Calculated Fields -->
-        <input type="hidden" name="student_overall_average[]" />
-        <input type="hidden" name="student_faculty_rating[]" />
-        <input type="hidden" name="supervisor_overall_average[]" />
-        <input type="hidden" name="supervisor_faculty_overall_score[]" />
-
         <!-- Hidden Request ID -->
-        <input type="hidden" id="hidden-request-id" name="request_id" value="<?php echo $_SESSION['request_id']; ?>">
+        <!-- <input type="hidden" id="hidden-request-id" name="request_id" value="<?php echo $_SESSION['request_id']; ?>"> -->
 
         <!-- Save Button -->
         <div class="d-flex justify-content-end mt-5">

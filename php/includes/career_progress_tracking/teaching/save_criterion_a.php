@@ -1,212 +1,101 @@
 <?php
 // save_criterion_a.php
 
-/**
- * Handles AJAX submission from criterion_a.php.
- * Saves user inputs into the database tables:
- * - kra1_a_student_evaluation
- * - kra1_a_supervisor_evaluation
- * - kra1_a_metadata
- * Uses PDO for database interactions with proper error handling.
- */
-
 // Start session if not already started
 require_once '../../../session.php';
 // Include database connection
 require_once '../../../connection.php';
 
-// Set header for JSON response
 header('Content-Type: application/json');
 
-
-
 try {
-    // Get raw POST data
-    $rawData = file_get_contents("php://input");
-    $data = json_decode($rawData, true);
-
-    if (!$data) {
-        throw new Exception('No data received.');
-    }
-
-    // Begin transaction to ensure data integrity
+    // Start transaction
     $conn->beginTransaction();
 
-    // Retrieve the request_id (ensure it's provided)
-    $request_id = $_SESSION['request_id'] ?? $data['request_id'] ?? null;
+    // Retrieve and sanitize POST data
+    $request_id = $_POST['request_id']; // Ensure this is passed securely, e.g., via session
 
-    if (!$request_id) {
-        throw new Exception('Request ID is missing.');
-    }
+    // Student Evaluation Data
+    $student_evaluations = $_POST['student_evaluation_period'];
+    $student_ratings1 = $_POST['student_rating_1'];
+    $student_ratings2 = $_POST['student_rating_2'];
+    $student_evidence_links = $_POST['student_evidence_link'];
 
-    /**
-     * Process and Insert Student Evaluations
-     */
-    // Prepare SQL statement for student evaluations
-    $student_stmt = $conn->prepare("
-        INSERT INTO kra1_a_student_evaluation (
-            request_id,
-            evaluation_period,
-            first_semester_rating,
-            second_semester_rating,
-            evidence_link_first,
-            evidence_link_second,
-            overall_average_rating,
-            faculty_rating
-        ) VALUES (
-            :request_id,
-            :evaluation_period,
-            :first_semester_rating,
-            :second_semester_rating,
-            :evidence_link_first,
-            :evidence_link_second,
-            :overall_average_rating,
-            :faculty_rating
-        )
-    ");
+    // Supervisor Evaluation Data
+    $supervisor_evaluations = $_POST['supervisor_evaluation_period'];
+    $supervisor_ratings1 = $_POST['supervisor_rating_1'];
+    $supervisor_ratings2 = $_POST['supervisor_rating_2'];
+    $supervisor_evidence_links = $_POST['supervisor_evidence_link'];
 
-    // Loop through student evaluation entries
-    $student_evaluation_periods = $data['student_evaluation_period'] ?? [];
-    foreach ($student_evaluation_periods as $index => $period) {
-        // Validate and sanitize inputs
-        $evaluation_period = htmlspecialchars($period);
-        $first_semester_rating = isset($data['student_rating_1'][$index]) ? floatval($data['student_rating_1'][$index]) : null;
-        $second_semester_rating = isset($data['student_rating_2'][$index]) ? floatval($data['student_rating_2'][$index]) : null;
-        $evidence_link_first = isset($data['student_evidence_link'][$index]) ? filter_var($data['student_evidence_link'][$index], FILTER_SANITIZE_URL) : null;
-        $evidence_link_second = null; // Adjust if you have separate links
-        $overall_average_rating = isset($data['student_overall_average'][$index]) ? floatval($data['student_overall_average'][$index]) : null;
-        $faculty_rating = isset($data['student_faculty_rating'][$index]) ? floatval($data['student_faculty_rating'][$index]) : null;
+    // Metadata
+    $student_divisor = $_POST['student_divisor'];
+    $student_reason = $_POST['student_reason'];
+    $supervisor_divisor = $_POST['supervisor_divisor'];
+    $supervisor_reason = $_POST['supervisor_reason'];
 
-        // Execute the prepared statement
-        $student_stmt->execute([
-            ':request_id' => $request_id,
-            ':evaluation_period' => $evaluation_period,
-            ':first_semester_rating' => $first_semester_rating,
-            ':second_semester_rating' => $second_semester_rating,
-            ':evidence_link_first' => $evidence_link_first,
-            ':evidence_link_second' => $evidence_link_second,
-            ':overall_average_rating' => $overall_average_rating,
-            ':faculty_rating' => $faculty_rating
+    // Insert Student Evaluations
+    $stmt = $conn->prepare("INSERT INTO kra1_a_student_evaluation 
+        (request_id, evaluation_period, first_semester_rating, second_semester_rating, evidence_link_first, evidence_link_second) 
+        VALUES (?, ?, ?, ?, ?, ?)");
+
+    foreach ($student_evaluations as $index => $period) {
+        $stmt->execute([
+            $request_id,
+            htmlspecialchars($period),
+            $student_ratings1[$index],
+            $student_ratings2[$index],
+            htmlspecialchars($student_evidence_links[$index]),
+            htmlspecialchars($student_evidence_links[$index]) // Assuming same link for both semesters
+        ]);
+        $student_eval_id = $conn->lastInsertId();
+
+        // Insert Metadata
+        $metaStmt = $conn->prepare("INSERT INTO kra1_a_metadata 
+            (student_evaluation_id, supervisor_evaluation_id, student_semesters_to_deduct, student_reason_for_reduction, supervisor_semesters_to_deduct, supervisor_reason_for_reduction, student_evidence_link, supervisor_evidence_link) 
+            VALUES (?, ?, ?, ?, ?, ?, ?, ?)");
+        // Placeholder for supervisor_evaluation_id, will update later
+        $metaStmt->execute([
+            $student_eval_id,
+            0, // Temporary, update after supervisor eval insertion
+            $student_divisor,
+            htmlspecialchars($student_reason),
+            $supervisor_divisor,
+            htmlspecialchars($supervisor_reason),
+            htmlspecialchars($student_evidence_links[$index]),
+            htmlspecialchars($supervisor_evidence_links[$index])
         ]);
     }
 
-    /**
-     * Process and Insert Supervisor Evaluations
-     */
-    // Prepare SQL statement for supervisor evaluations
-    $supervisor_stmt = $conn->prepare("
-        INSERT INTO kra1_a_supervisor_evaluation (
-            request_id,
-            evaluation_period,
-            first_semester_rating,
-            second_semester_rating,
-            evidence_link_first,
-            evidence_link_second,
-            overall_average_rating,
-            faculty_rating
-        ) VALUES (
-            :request_id,
-            :evaluation_period,
-            :first_semester_rating,
-            :second_semester_rating,
-            :evidence_link_first,
-            :evidence_link_second,
-            :overall_average_rating,
-            :faculty_rating
-        )
-    ");
+    // Insert Supervisor Evaluations
+    $stmt = $conn->prepare("INSERT INTO kra1_a_supervisor_evaluation 
+        (request_id, evaluation_period, first_semester_rating, second_semester_rating, evidence_link_first, evidence_link_second) 
+        VALUES (?, ?, ?, ?, ?, ?)");
 
-    // Loop through supervisor evaluation entries
-    $supervisor_evaluation_periods = $data['supervisor_evaluation_period'] ?? [];
-    foreach ($supervisor_evaluation_periods as $index => $period) {
-        // Validate and sanitize inputs
-        $evaluation_period = htmlspecialchars($period);
-        $first_semester_rating = isset($data['supervisor_rating_1'][$index]) ? floatval($data['supervisor_rating_1'][$index]) : null;
-        $second_semester_rating = isset($data['supervisor_rating_2'][$index]) ? floatval($data['supervisor_rating_2'][$index]) : null;
-        $evidence_link_first = isset($data['supervisor_evidence_link'][$index]) ? filter_var($data['supervisor_evidence_link'][$index], FILTER_SANITIZE_URL) : null;
-        $evidence_link_second = null; // Adjust if you have separate links
-        $overall_average_rating = isset($data['supervisor_overall_average'][$index]) ? floatval($data['supervisor_overall_average'][$index]) : null;
-        $faculty_rating = isset($data['supervisor_faculty_rating'][$index]) ? floatval($data['supervisor_faculty_overall_score'][$index]) : null;
+    foreach ($supervisor_evaluations as $index => $period) {
+        $stmt->execute([
+            $request_id,
+            htmlspecialchars($period),
+            $supervisor_ratings1[$index],
+            $supervisor_ratings2[$index],
+            htmlspecialchars($supervisor_evidence_links[$index]),
+            htmlspecialchars($supervisor_evidence_links[$index]) // Assuming same link for both semesters
+        ]);
+        $supervisor_eval_id = $conn->lastInsertId();
 
-        // Execute the prepared statement
-        $supervisor_stmt->execute([
-            ':request_id' => $request_id,
-            ':evaluation_period' => $evaluation_period,
-            ':first_semester_rating' => $first_semester_rating,
-            ':second_semester_rating' => $second_semester_rating,
-            ':evidence_link_first' => $evidence_link_first,
-            ':evidence_link_second' => $evidence_link_second,
-            ':overall_average_rating' => $overall_average_rating,
-            ':faculty_rating' => $faculty_rating
+        // Update Metadata with supervisor_evaluation_id
+        $updateMetaStmt = $conn->prepare("UPDATE kra1_a_metadata SET supervisor_evaluation_id = ? WHERE student_evaluation_id = ?");
+        $updateMetaStmt->execute([
+            $supervisor_eval_id,
+            $student_eval_id // Assuming 1-to-1 correspondence
         ]);
     }
 
-    // Get the last inserted evaluation_ids for metadata linkage
-    $student_evaluation_id = $conn->lastInsertId(); // After student evaluations
-    $supervisor_evaluation_id = $conn->lastInsertId(); // After supervisor evaluations
-
-    /**
-     * Process and Insert Metadata
-     */
-    // Prepare SQL statement for metadata
-    $metadata_stmt = $conn->prepare("
-        INSERT INTO kra1_a_metadata (
-            student_evaluation_id,
-            supervisor_evaluation_id,
-            student_semesters_to_deduct,
-            student_reason_for_reduction,
-            supervisor_semesters_to_deduct,
-            supervisor_reason_for_reduction,
-            student_evidence_link,
-            supervisor_evidence_link
-        ) VALUES (
-            :student_evaluation_id,
-            :supervisor_evaluation_id,
-            :student_semesters_to_deduct,
-            :student_reason_for_reduction,
-            :supervisor_semesters_to_deduct,
-            :supervisor_reason_for_reduction,
-            :student_evidence_link,
-            :supervisor_evidence_link
-        )
-    ");
-
-    // Sanitize and validate metadata inputs
-    $student_semesters_to_deduct = intval($data['student_divisor'] ?? 0);
-    $student_reason_for_reduction = htmlspecialchars($data['student_reason'] ?? '');
-    $supervisor_semesters_to_deduct = intval($data['supervisor_divisor'] ?? 0);
-    $supervisor_reason_for_reduction = htmlspecialchars($data['supervisor_reason'] ?? '');
-    $student_evidence_link_main = filter_var($data['student_evidence_link_main'] ?? '', FILTER_SANITIZE_URL);
-    $supervisor_evidence_link_main = filter_var($data['supervisor_evidence_link_main'] ?? '', FILTER_SANITIZE_URL);
-
-    // Execute the prepared statement
-    $metadata_stmt->execute([
-        ':student_evaluation_id' => $student_evaluation_id,
-        ':supervisor_evaluation_id' => $supervisor_evaluation_id,
-        ':student_semesters_to_deduct' => $student_semesters_to_deduct,
-        ':student_reason_for_reduction' => $student_reason_for_reduction,
-        ':supervisor_semesters_to_deduct' => $supervisor_semesters_to_deduct,
-        ':supervisor_reason_for_reduction' => $supervisor_reason_for_reduction,
-        ':student_evidence_link' => $student_evidence_link_main,
-        ':supervisor_evidence_link' => $supervisor_evidence_link_main
-    ]);
-
-    // Commit the transaction after all inserts
+    // Commit transaction
     $conn->commit();
 
-    // Return success response
-    echo json_encode(['success' => true]);
-    exit();
-
+    echo json_encode(['status' => 'success', 'message' => 'Criterion A saved successfully.']);
 } catch (Exception $e) {
-    // Rollback the transaction on any error
-    if ($conn->inTransaction()) {
-        $conn->rollBack();
-    }
-    // Log the error
-    error_log("Error saving Criterion A data: " . $e->getMessage());
-    // Return error response
-    echo json_encode(['success' => false, 'error' => 'Failed to save data. Please try again.']);
-    exit();
+    $conn->rollBack();
+    echo json_encode(['status' => 'error', 'message' => $e->getMessage()]);
 }
 ?>
