@@ -45,9 +45,9 @@ document.addEventListener('DOMContentLoaded', function () {
             // Update the header
             document.getElementById('evaluation-number').textContent = `Evaluation #: ${requestId}`;
 
-            // Store request_id and enable fields
-            document.getElementById('hidden-request-id').value = requestId;
-            enableFields();
+            // **Set the correct hidden input**
+            document.getElementById('request_id').value = requestId;
+            console.log('request_id set to:', requestId); // Debugging
 
             // Fetch data for the selected evaluation
             fetchEvaluationData(requestId);
@@ -64,6 +64,7 @@ document.addEventListener('DOMContentLoaded', function () {
             errorModal.show();
         }
     });
+
 
     // Generic Fetch Evaluation Data Function (if needed later)
     function fetchEvaluationData(requestId) {

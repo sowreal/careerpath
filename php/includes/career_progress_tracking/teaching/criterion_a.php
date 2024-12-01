@@ -1,4 +1,8 @@
 <!-- careerpath/php/includes/career_progress_tracking/teaching/criterion_a.php -->
+<?php 
+require_once '../../session.php';
+?>
+
 <div class="tab-pane fade show active criterion-tab" id="criterion-a" role="tabpanel" aria-labelledby="tab-criterion-a">
     <h4 class="mb-4 pb-2 border-bottom border-3 border-success"><strong>CRITERION A: Teaching Effectiveness (Max = 60 Points)</strong></h4>
     
@@ -9,7 +13,8 @@
 
     <form id="criterion-a-form">
         <div class="row">
-            
+        <input type="hidden" id="request_id" name="request_id" value="<?php echo htmlspecialchars($request_id); ?>">
+
             <!-- Student Evaluation Section -->
             <div class="col-12 mt-5">
                 <h5 class="mb-4 pb-2 border-bottom border-2 border-success">1.1 Student Evaluation (60%)</h5>
@@ -33,6 +38,9 @@
                             <option value="On Approved Sabbatical Leave">On Approved Sabbatical Leave</option>
                             <option value="On Approved Maternity Leave">On Approved Maternity Leave</option>
                         </select>
+                        <div class="invalid-feedback">
+                            Please select a valid option.
+                        </div>
                     </div>
                     <!-- Link to Evidence -->
                     <div class="col-md-4">
@@ -64,10 +72,10 @@
                                         <input type="text" class="form-control" name="student_evaluation_period[]" value="<?php echo htmlspecialchars($period); ?>">
                                     </td>
                                     <td>
-                                        <input type="number" class="form-control rating-input" name="student_rating_1[]" placeholder="0.00" step="0.01" min="0" max="5" required>
+                                        <input type="number" class="form-control rating-input" name="student_rating_1[]" placeholder="0.00" required>
                                     </td>
                                     <td>
-                                        <input type="number" class="form-control rating-input" name="student_rating_2[]" placeholder="0.00" step="0.01" min="0" max="5" required>
+                                        <input type="number" class="form-control rating-input" name="student_rating_2[]" placeholder="0.00" required>
                                     </td>
                                     <td>
                                         <input type="url" class="form-control" name="student_evidence_link[]" placeholder="https://example.com/evidence" pattern="https?://.+" required>
@@ -95,12 +103,12 @@
                 <div class="mt-5">
                     <div class="row g-3 justify-content-end">
                         <div class="col-md-4">
-                            <label for="student-overall-score" class="form-label"><strong>Overall Average Rating:</strong></label>
-                            <input type="number" class="form-control" id="student-overall-score" name="student_overall_score" readonly>
+                            <label for="student_overall_score" class="form-label"><strong>Overall Average Rating:</strong></label>
+                            <input type="number" class="form-control" id="student_overall_score" name="student_overall_score" readonly>
                         </div>
                         <div class="col-md-4">
-                            <label for="faculty-overall-score" class="form-label"><strong>Faculty Score:</strong></label>
-                            <input type="number" class="form-control" id="faculty-overall-score" name="faculty_overall_score" readonly>
+                            <label for="student_faculty_overall_score" class="form-label"><strong>Faculty Score:</strong></label>
+                            <input type="number" class="form-control" id="student_faculty_overall_score" name="student_faculty_overall_score" readonly>
                         </div>
                     </div>
                 </div>
@@ -157,10 +165,10 @@
                                         <input type="text" class="form-control" name="supervisor_evaluation_period[]" value="<?php echo htmlspecialchars($period); ?>">
                                     </td>
                                     <td>
-                                        <input type="number" class="form-control rating-input" name="supervisor_rating_1[]" placeholder="0.00" step="0.01" min="0" max="5" required>
+                                        <input type="number" class="form-control rating-input" name="supervisor_rating_1[]" placeholder="0.00" required>
                                     </td>
                                     <td>
-                                        <input type="number" class="form-control rating-input" name="supervisor_rating_2[]" placeholder="0.00" step="0.01" min="0" max="5" required>
+                                        <input type="number" class="form-control rating-input" name="supervisor_rating_2[]" placeholder="0.00" required>
                                     </td>
                                     <td>
                                         <input type="url" class="form-control" name="supervisor_evidence_link[]" placeholder="https://example.com/evidence" pattern="https?://.+" required>
@@ -189,19 +197,16 @@
                     <div class="row g-3 justify-content-end">
                         <div class="col-md-4">
                             <label for="supervisor-overall-score" class="form-label"><strong>Overall Average Rating:</strong></label>
-                            <input type="number" class="form-control" id="supervisor-overall-score" name="supervisor_overall_score" readonly>
+                            <input type="number" class="form-control" id="supervisor-overall-score" name="supervisor-overall-score" readonly>
                         </div>
                         <div class="col-md-4">
                             <label for="supervisor-faculty-overall-score" class="form-label"><strong>Faculty Score:</strong></label>
-                            <input type="number" class="form-control" id="supervisor-faculty-overall-score" name="supervisor_faculty_overall_score" readonly>
+                            <input type="number" class="form-control" id="supervisor-faculty-overall-score" name="supervisor-faculty-overall-score" readonly>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
-
-        <!-- Hidden Request ID -->
-        <!-- <input type="hidden" id="hidden-request-id" name="request_id" value="<?php echo $_SESSION['request_id']; ?>"> -->
 
         <!-- Save Button -->
         <div class="d-flex justify-content-end mt-5">
