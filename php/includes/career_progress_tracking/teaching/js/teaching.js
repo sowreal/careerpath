@@ -45,6 +45,15 @@ document.addEventListener('DOMContentLoaded', function () {
             // Update the header
             document.getElementById('evaluation-number').textContent = `Evaluation #: ${requestId}`;
 
+            // Set the input field value
+            const requestIdInput = document.getElementById('request_id');
+            if (requestIdInput) {
+                requestIdInput.value = requestId;
+                console.log('request_id set to:', requestId);
+            } else {
+                console.error('Input field with id "request_id" not found.');
+            }
+
             // **Set the correct hidden input**
             document.getElementById('request_id').value = requestId;
             console.log('request_id set to:', requestId); // Debugging

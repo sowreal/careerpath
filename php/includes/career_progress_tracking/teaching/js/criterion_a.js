@@ -8,7 +8,6 @@ document.getElementById('save-criterion-a').addEventListener('click', function (
     calculateOverallScores();
 
     const requestId = document.getElementById('request_id').value;
-    console.log('Request ID before saving:', requestId); // Debugging
 
 
     // Gather Student Evaluations

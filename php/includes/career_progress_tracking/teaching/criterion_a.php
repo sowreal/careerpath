@@ -1,8 +1,4 @@
 <!-- careerpath/php/includes/career_progress_tracking/teaching/criterion_a.php -->
-<?php 
-require_once '../../session.php';
-?>
-
 <div class="tab-pane fade show active criterion-tab" id="criterion-a" role="tabpanel" aria-labelledby="tab-criterion-a">
     <h4 class="mb-4 pb-2 border-bottom border-3 border-success"><strong>CRITERION A: Teaching Effectiveness (Max = 60 Points)</strong></h4>
     
@@ -13,7 +9,8 @@ require_once '../../session.php';
 
     <form id="criterion-a-form">
         <div class="row">
-        <input type="hidden" id="request_id" name="request_id" value="<?php echo htmlspecialchars($request_id); ?>">
+        <!-- Hidden Input for request_id -->
+        <input type="hidden" id="request_id" name="request_id" value="" readonly>
 
             <!-- Student Evaluation Section -->
             <div class="col-12 mt-5">
