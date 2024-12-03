@@ -1,162 +1,177 @@
 <?php
-ini_set('display_errors', 1);
-error_reporting(E_ALL);
-session_start();
-header('Content-Type: application/json; charset=utf-8');
+include_once '../../../session.php';
+header('Content-Type: application/json');
+include_once '../../../connection.php';
 
-include('../../../connection.php'); // Adjust the path as necessary
-
-// Check if the user is logged in
+// Check if user is logged in
 if (!isset($_SESSION['user_id'])) {
     http_response_code(401);
-    echo json_encode(['success' => false, 'error' => 'Unauthorized']);
+    echo json_encode(['error' => 'Unauthorized']);
     exit();
 }
 
-// Get the POSTed data
 $data = json_decode(file_get_contents('php://input'), true);
 
-if (json_last_error() !== JSON_ERROR_NONE) {
-    echo json_encode(['success' => false, 'error' => 'Invalid JSON input']);
+$request_id = isset($data['request_id']) ? intval($data['request_id']) : 0;
+
+// Validate request_id
+if ($request_id <= 0) {
+    http_response_code(400);
+    echo json_encode(['error' => 'Please select an evaluation ID']);
     exit();
 }
 
-// Log data received
-file_put_contents('debug_data.log', print_r($data, true));
-
-// Extract data
-$user_id = $_SESSION['user_id'];
-$request_id = isset($data['request_id']) ? $data['request_id'] : null;
-
-// Validate required fields
-if (!$request_id) {
-    echo json_encode(['success' => false, 'error' => 'Invalid request. Request ID is missing.']);
-    exit();
-}
-
-// Now, process the data
-$student_evaluation_periods = isset($data['student_evaluation_period']) ? $data['student_evaluation_period'] : [];
-$student_rating_1 = isset($data['student_rating_1']) ? $data['student_rating_1'] : [];
-$student_rating_2 = isset($data['student_rating_2']) ? $data['student_rating_2'] : [];
-$student_evidence_link = isset($data['student_evidence_link']) ? $data['student_evidence_link'] : [];
-
-$supervisor_evaluation_periods = isset($data['supervisor_evaluation_period']) ? $data['supervisor_evaluation_period'] : [];
-$supervisor_rating_1 = isset($data['supervisor_rating_1']) ? $data['supervisor_rating_1'] : [];
-$supervisor_rating_2 = isset($data['supervisor_rating_2']) ? $data['supervisor_rating_2'] : [];
-$supervisor_evidence_link = isset($data['supervisor_evidence_link']) ? $data['supervisor_evidence_link'] : [];
-
-// Begin transaction
-$conn->beginTransaction();
 
 try {
-    // First, delete any existing data for this user and request_id in the tables
-    // Delete student evaluations
-    $stmt = $conn->prepare("DELETE FROM kra1_a_student_evaluation WHERE user_id = :user_id AND request_id = :request_id");
-    $stmt->bindParam(':user_id', $user_id, PDO::PARAM_INT);
-    $stmt->bindParam(':request_id', $request_id, PDO::PARAM_INT);
-    $stmt->execute();
+    $conn->beginTransaction();
 
-    // Delete supervisor evaluations
-    $stmt = $conn->prepare("DELETE FROM kra1_a_supervisor_evaluation WHERE user_id = :user_id AND request_id = :request_id");
-    $stmt->bindParam(':user_id', $user_id, PDO::PARAM_INT);
-    $stmt->bindParam(':request_id', $request_id, PDO::PARAM_INT);
-    $stmt->execute();
+    // Upsert kra1_a_metadata
+    $stmt = $conn->prepare("SELECT metadata_id FROM kra1_a_metadata WHERE request_id = :request_id");
+    $stmt->execute([':request_id' => $request_id]);
+    $metadata = $stmt->fetch();
 
-    // Insert student evaluations
-    $stmt = $conn->prepare("
-        INSERT INTO kra1_a_student_evaluation (
-            user_id, request_id, evaluation_period,
-            first_semester_rating, second_semester_rating,
-            evidence_link_first_semester, evidence_link_second_semester,
-            overall_average_rating, faculty_score
-        ) VALUES (
-            :user_id, :request_id, :evaluation_period,
-            :first_semester_rating, :second_semester_rating,
-            :evidence_link_first, :evidence_link_second,
-            :overall_average_rating, :faculty_score
-        )
-    ");
-
-
-    if (is_array($student_evaluation_periods)) {
-        for ($i = 0; $i < count($student_evaluation_periods); $i++) {
-            $evaluation_period = $student_evaluation_periods[$i];
-            $rating1 = $student_rating_1[$i];
-            $rating2 = $student_rating_2[$i];
-            $evidence_link1 = $student_evidence_link[$i]; // Assuming same link can be used for both semesters
-            $evidence_link2 = $student_evidence_link[$i];
-        
-            // Calculate overall_average_rating and faculty_score
-            $overall_average_rating = ($rating1 + $rating2) / 2;
-            $faculty_score = $overall_average_rating * 0.36;
-        
-            // Bind parameters
-            $stmt->bindParam(':user_id', $user_id, PDO::PARAM_INT);
-            $stmt->bindParam(':request_id', $request_id, PDO::PARAM_INT);
-            $stmt->bindParam(':evaluation_period', $evaluation_period, PDO::PARAM_STR);
-            $stmt->bindParam(':first_semester_rating', $rating1);
-            $stmt->bindParam(':second_semester_rating', $rating2);
-            $stmt->bindParam(':evidence_link_first', $evidence_link1, PDO::PARAM_STR);
-            $stmt->bindParam(':evidence_link_second', $evidence_link2, PDO::PARAM_STR);
-            $stmt->bindParam(':overall_average_rating', $overall_average_rating);
-            $stmt->bindParam(':faculty_score', $faculty_score);
-        
-            $stmt->execute();
-        }
-        
+    if ($metadata) {
+        $metadata_id = $metadata['metadata_id'];
+        $update_meta = $conn->prepare("UPDATE kra1_a_metadata SET 
+            student_divisor = :student_divisor, 
+            student_reason = :student_reason, 
+            student_evidence_link = :student_evidence_link,
+            supervisor_divisor = :supervisor_divisor, 
+            supervisor_reason = :supervisor_reason, 
+            supervisor_evidence_link = :supervisor_evidence_link 
+            WHERE metadata_id = :metadata_id");
+        $update_meta->execute([
+            ':student_divisor' => $data['student_divisor'],
+            ':student_reason' => $data['student_reason'],
+            ':student_evidence_link' => $data['student_evidence_link'],
+            ':supervisor_divisor' => $data['supervisor_divisor'],
+            ':supervisor_reason' => $data['supervisor_reason'],
+            ':supervisor_evidence_link' => $data['supervisor_evidence_link'],
+            ':metadata_id' => $metadata_id
+        ]);
+    } else {
+        $insert_meta = $conn->prepare("INSERT INTO kra1_a_metadata 
+            (request_id, student_divisor, student_reason, student_evidence_link, 
+             supervisor_divisor, supervisor_reason, supervisor_evidence_link) 
+             VALUES 
+            (:request_id, :student_divisor, :student_reason, :student_evidence_link, 
+             :supervisor_divisor, :supervisor_reason, :supervisor_evidence_link)");
+        $insert_meta->execute([
+            ':request_id' => $request_id,
+            ':student_divisor' => $data['student_divisor'],
+            ':student_reason' => $data['student_reason'],
+            ':student_evidence_link' => $data['student_evidence_link'],
+            ':supervisor_divisor' => $data['supervisor_divisor'],
+            ':supervisor_reason' => $data['supervisor_reason'],
+            ':supervisor_evidence_link' => $data['supervisor_evidence_link']
+        ]);
     }
 
-    // Insert supervisor evaluations
-    $stmt = $conn->prepare("
-        INSERT INTO kra1_a_supervisor_evaluation (
-            user_id, request_id, evaluation_period,
-            first_semester_rating, second_semester_rating,
-            evidence_link_first_semester, evidence_link_second_semester,
-            overall_average_rating, faculty_score
-        ) VALUES (
-            :user_id, :request_id, :evaluation_period,
-            :first_semester_rating, :second_semester_rating,
-            :evidence_link_first, :evidence_link_second,
-            :overall_average_rating, :faculty_score
-        )
-    ");
-
-
-    if (is_array($supervisor_evaluation_periods)) {
-        for ($i = 0; $i < count($supervisor_evaluation_periods); $i++) {
-            $evaluation_period = $supervisor_evaluation_periods[$i];
-            $rating1 = $supervisor_rating_1[$i];
-            $rating2 = $supervisor_rating_2[$i];
-            $evidence_link1 = $supervisor_evidence_link[$i];
-            $evidence_link2 = $supervisor_evidence_link[$i];
-
-            // Calculate overall_average_rating and faculty_score as needed
-            $overall_average_rating = ($rating1 + $rating2) / 2;
-            $faculty_score = $overall_average_rating * 0.36; // As per your calculation
-
-            // Bind parameters
-            $stmt->bindParam(':user_id', $user_id, PDO::PARAM_INT);
-            $stmt->bindParam(':request_id', $request_id, PDO::PARAM_INT);
-            $stmt->bindParam(':evaluation_period', $evaluation_period, PDO::PARAM_STR);
-            $stmt->bindParam(':first_semester_rating', $rating1);
-            $stmt->bindParam(':second_semester_rating', $rating2);
-            $stmt->bindParam(':evidence_link_first', $evidence_link1, PDO::PARAM_STR);
-            $stmt->bindParam(':evidence_link_second', $evidence_link2, PDO::PARAM_STR);
-            $stmt->bindParam(':overall_average_rating', $overall_average_rating);
-            $stmt->bindParam(':faculty_score', $faculty_score);
-
-            $stmt->execute();
+    // Handle Student Evaluations
+    foreach ($data['student_evaluations'] as $eval) {
+        if (isset($eval['evaluation_id']) && $eval['evaluation_id'] > 0) {
+            $update_student = $conn->prepare("UPDATE kra1_a_student_evaluation SET 
+                evaluation_period = :evaluation_period,
+                first_semester_rating = :first_semester_rating,
+                second_semester_rating = :second_semester_rating,
+                evidence_link_first = :evidence_link_first,
+                evidence_link_second = :evidence_link_second,
+                remarks_first = :remarks_first,
+                remarks_second = :remarks_second,
+                overall_average_rating = :overall_average_rating,
+                faculty_rating = :faculty_rating
+                WHERE evaluation_id = :evaluation_id");
+            $update_student->execute([
+                ':evaluation_period' => $eval['evaluation_period'],
+                ':first_semester_rating' => $eval['first_semester_rating'],
+                ':second_semester_rating' => $eval['second_semester_rating'],
+                ':evidence_link_first' => $eval['evidence_link_first'],
+                ':evidence_link_second' => $eval['evidence_link_second'],
+                ':remarks_first' => $eval['remarks_first'],
+                ':remarks_second' => $eval['remarks_second'],
+                ':overall_average_rating' => $eval['overall_average_rating'],
+                ':faculty_rating' => $eval['faculty_rating'],
+                ':evaluation_id' => $eval['evaluation_id']
+            ]);
+        } else {
+            $insert_student = $conn->prepare("INSERT INTO kra1_a_student_evaluation 
+                (request_id, evaluation_period, first_semester_rating, second_semester_rating, 
+                 evidence_link_first, evidence_link_second, remarks_first, remarks_second, 
+                 overall_average_rating, faculty_rating) 
+                 VALUES 
+                (:request_id, :evaluation_period, :first_semester_rating, :second_semester_rating, 
+                 :evidence_link_first, :evidence_link_second, :remarks_first, :remarks_second, 
+                 :overall_average_rating, :faculty_rating)");
+            $insert_student->execute([
+                ':request_id' => $request_id,
+                ':evaluation_period' => $eval['evaluation_period'],
+                ':first_semester_rating' => $eval['first_semester_rating'],
+                ':second_semester_rating' => $eval['second_semester_rating'],
+                ':evidence_link_first' => $eval['evidence_link_first'],
+                ':evidence_link_second' => $eval['evidence_link_second'],
+                ':remarks_first' => $eval['remarks_first'],
+                ':remarks_second' => $eval['remarks_second'],
+                ':overall_average_rating' => $eval['overall_average_rating'],
+                ':faculty_rating' => $eval['faculty_rating']
+            ]);
         }
     }
 
-    // Commit transaction
+    // Handle Supervisor Evaluations
+    foreach ($data['supervisor_evaluations'] as $eval) {
+        if (isset($eval['evaluation_id']) && $eval['evaluation_id'] > 0) {
+            $update_supervisor = $conn->prepare("UPDATE kra1_a_supervisor_evaluation SET 
+                evaluation_period = :evaluation_period,
+                first_semester_rating = :first_semester_rating,
+                second_semester_rating = :second_semester_rating,
+                evidence_link_first = :evidence_link_first,
+                evidence_link_second = :evidence_link_second,
+                remarks_first = :remarks_first,
+                remarks_second = :remarks_second,
+                overall_average_rating = :overall_average_rating,
+                faculty_rating = :faculty_rating
+                WHERE evaluation_id = :evaluation_id");
+            $update_supervisor->execute([
+                ':evaluation_period' => $eval['evaluation_period'],
+                ':first_semester_rating' => $eval['first_semester_rating'],
+                ':second_semester_rating' => $eval['second_semester_rating'],
+                ':evidence_link_first' => $eval['evidence_link_first'],
+                ':evidence_link_second' => $eval['evidence_link_second'],
+                ':remarks_first' => $eval['remarks_first'],
+                ':remarks_second' => $eval['remarks_second'],
+                ':overall_average_rating' => $eval['overall_average_rating'],
+                ':faculty_rating' => $eval['faculty_rating'],
+                ':evaluation_id' => $eval['evaluation_id']
+            ]);
+        } else {
+            $insert_supervisor = $conn->prepare("INSERT INTO kra1_a_supervisor_evaluation 
+                (request_id, evaluation_period, first_semester_rating, second_semester_rating, 
+                 evidence_link_first, evidence_link_second, remarks_first, remarks_second, 
+                 overall_average_rating, faculty_rating) 
+                 VALUES 
+                (:request_id, :evaluation_period, :first_semester_rating, :second_semester_rating, 
+                 :evidence_link_first, :evidence_link_second, :remarks_first, :remarks_second, 
+                 :overall_average_rating, :faculty_rating)");
+            $insert_supervisor->execute([
+                ':request_id' => $request_id,
+                ':evaluation_period' => $eval['evaluation_period'],
+                ':first_semester_rating' => $eval['first_semester_rating'],
+                ':second_semester_rating' => $eval['second_semester_rating'],
+                ':evidence_link_first' => $eval['evidence_link_first'],
+                ':evidence_link_second' => $eval['evidence_link_second'],
+                ':remarks_first' => $eval['remarks_first'],
+                ':remarks_second' => $eval['remarks_second'],
+                ':overall_average_rating' => $eval['overall_average_rating'],
+                ':faculty_rating' => $eval['faculty_rating']
+            ]);
+        }
+    }
+
     $conn->commit();
-
-    echo json_encode(['success' => true]);
-
-} catch (PDOException $e) {
-    // Rollback transaction
+    echo json_encode(['success' => 'Criterion A saved successfully']);
+} catch (Exception $e) {
     $conn->rollBack();
-    echo json_encode(['success' => false, 'error' => 'Database error: ' . $e->getMessage()]);
+    http_response_code(500);
+    echo json_encode(['error' => 'Failed to save data: ' . $e->getMessage()]);
 }
 ?>

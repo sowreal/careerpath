@@ -18,26 +18,23 @@
 </div>
 
 
-
-
 <!-- Modal for Viewing Remarks -->
 <div class="modal fade" id="remarksModal" tabindex="-1" aria-labelledby="remarksModalLabel" aria-hidden="true">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="remarksModalLabel">Semester Remarks</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-            <div class="modal-body">
-                <h6>1st Semester Remarks:</h6>
-                <p id="remarks1Content"></p>
-                <hr>
-                <h6>2nd Semester Remarks:</h6>
-                <p id="remarks2Content"></p>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-            </div>
-        </div>
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header bg-success text-white">
+        <h5 class="modal-title" id="remarksModalLabel">Remarks</h5>
+        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <p><strong>First Semester:</strong></p>
+        <p id="first-semester-remark"></p>
+        <p><strong>Second Semester:</strong></p>
+        <p id="second-semester-remark"></p>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-success" data-bs-dismiss="modal">OK</button>
+      </div>
     </div>
+  </div>
 </div>

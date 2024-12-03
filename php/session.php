@@ -41,8 +41,7 @@ if (!isset($_SESSION['first_name']) || !isset($_SESSION['last_name'])) {
         $_SESSION['alt_email'] = $user['alt_email'];
         $_SESSION['phone_number'] = $user['phone_number'];
         $_SESSION['faculty_rank'] = $user['faculty_rank'];
-        $_SESSION['career_goals'] = $user['career_goals']; // Optional for career tracking
-        $_SESSION['profile_picture'] = $user['profile_picture']; // Optional for profile display
+        $_SESSION['profile_picture'] = $user['profile_picture']; // For profile display
         $_SESSION['created_at'] = $user['created_at'];
         $_SESSION['last_updated'] = $user['last_updated'];
     } else {

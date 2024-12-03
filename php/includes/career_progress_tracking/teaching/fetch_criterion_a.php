@@ -1,0 +1,47 @@
+<?php
+header('Content-Type: application/json');
+
+try {
+    // Include the database connection
+    require_once '../../../connection.php';
+
+    // Get request_id from GET or POST
+    $request_id = isset($_GET['request_id']) ? intval($_GET['request_id']) :
+                 (isset($_POST['request_id']) ? intval($_POST['request_id']) : 0);
+
+    if ($request_id <= 0) {
+        throw new Exception("Invalid request ID.");
+    }
+
+    // Fetch kra1_a_metadata
+    $stmt = $conn->prepare("SELECT * FROM kra1_a_metadata WHERE request_id = ?");
+    $stmt->execute([$request_id]);
+    $metadata = $stmt->fetch();
+
+    // Fetch Student Evaluations
+    $stmt = $conn->prepare("SELECT * FROM kra1_a_student_evaluation WHERE request_id = ?");
+    $stmt->execute([$request_id]);
+    $student_evaluations = $stmt->fetchAll();
+
+    // Fetch Supervisor Evaluations
+    $stmt = $conn->prepare("SELECT * FROM kra1_a_supervisor_evaluation WHERE request_id = ?");
+    $stmt->execute([$request_id]);
+    $supervisor_evaluations = $stmt->fetchAll();
+
+    // Prepare response
+    $response = [
+        'success' => true,
+        'metadata' => $metadata,
+        'student_evaluations' => $student_evaluations,
+        'supervisor_evaluations' => $supervisor_evaluations
+    ];
+
+    echo json_encode($response);
+
+} catch (Exception $e) {
+    echo json_encode([
+        'success' => false,
+        'error' => $e->getMessage()
+    ]);
+}
+?>

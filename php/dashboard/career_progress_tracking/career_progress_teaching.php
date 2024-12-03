@@ -1,6 +1,6 @@
 <?php
-include('../../session.php');
-include('../../connection.php');
+require_once '../../session.php';
+require_once '../../connection.php';
 require_once '../../config.php';
 
 // Define variables for Page Titles and Sidebar Active effects
@@ -87,7 +87,7 @@ if ($_SESSION['role'] != 'Regular Instructor' && $_SESSION['role'] != 'Contract 
                 </div>
 
                 <!-- Hidden input to store request_id -->
-                <input type="hidden" id="hidden-request-id" name="request_id" value="">
+                <input type="hidden" id="request-id" name="request_id" value="">
 
                 <!-- KRA I Content -->
                 <?php require_once BASE_PATH . '/php/includes/career_progress_tracking/teaching/kra1.php';?>
@@ -147,7 +147,9 @@ if ($_SESSION['role'] != 'Regular Instructor' && $_SESSION['role'] != 'Contract 
     <!-- Script Links for Chart.js -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
-    <!-- Visualization scripts -->
+    <!-- Include Criterion A-specific JS -->
+    <script src="<?php echo BASE_URL; ?>/php/includes/career_progress_tracking/teaching/js/criterion_a.js"></script>
+    <!-- Career Progress Teaching Scripts -->
     <script src="<?php echo BASE_URL; ?>/php/includes/career_progress_tracking/teaching/js/teaching.js"></script>
 
 </body>
