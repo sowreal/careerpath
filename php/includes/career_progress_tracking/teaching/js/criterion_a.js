@@ -130,6 +130,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
             // Validate the divisor
             if (isNaN(divisor) || divisor < 0 || divisor > TOTAL_SEMESTERS) {
+                console.warn(`Invalid divisor value "${divisorSelect.value}" in "${divisorId}". Defaulting to 0.`);
                 divisor = 0; // Default to 0 if invalid
             }
 
@@ -141,7 +142,7 @@ document.addEventListener('DOMContentLoaded', function () {
             let denominator;
             if (reason === '' || reason === 'not_applicable') {
                 // Simple average: sum of ratings / number of ratings
-                denominator = 0; // Will count the number of ratings
+                denominator = null; // Indicate that denominator should be number of ratings
             } else {
                 // Adjusted average: sum of ratings / (8 - divisor)
                 denominator = TOTAL_SEMESTERS - divisor;
@@ -152,22 +153,20 @@ document.addEventListener('DOMContentLoaded', function () {
             const evaluationTable = document.getElementById(`${sectionPrefix}-evaluation-table`);
             const ratingInputs = evaluationTable.querySelectorAll('input[name*="_rating_1[]"], input[name*="_rating_2[]"]');
 
-            // Sum all the ratings and count them if needed
+            // Sum all the ratings
             let totalRating = 0;
             let ratingCount = 0;
             ratingInputs.forEach(input => {
                 const rating = parseFloat(input.value);
                 if (!isNaN(rating)) {
                     totalRating += rating;
-                    if (denominator === 0) { // Only count ratings if simple average
-                        ratingCount += 1;
-                    }
+                    ratingCount += 1;
                 }
             });
 
             // Calculate the overall average rating
             let overallAverageRating;
-            if (denominator === 0) {
+            if (denominator === null) {
                 // Simple average
                 overallAverageRating = ratingCount > 0 ? (totalRating / ratingCount) : 0;
             } else {
@@ -186,7 +185,7 @@ document.addEventListener('DOMContentLoaded', function () {
             console.log(`${sectionPrefix.charAt(0).toUpperCase() + sectionPrefix.slice(1)} Calculation:`);
             console.log(`Divisor (${divisorId}): ${divisor}`);
             console.log(`Reason (${reasonId}): ${reason}`);
-            if (denominator === 0) {
+            if (denominator === null) {
                 console.log(`Using simple average: Total Rating = ${totalRating}, Count = ${ratingCount}`);
             } else {
                 console.log(`Using adjusted average: Total Rating = ${totalRating}, Denominator = ${denominator}`);
