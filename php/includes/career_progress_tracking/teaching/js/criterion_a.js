@@ -113,75 +113,126 @@ document.addEventListener('DOMContentLoaded', function () {
 
     // Calculate Overall Scores for Criterion A
     const calculateOverallScores = () => {
-        // Helper function to calculate ratings
-        const calculateRatings = (divisorId, overallScoreId, facultyScoreId, multiplier) => {
-            let totalRating = 0;
-            let ratingCount = 0;
+        const TOTAL_SEMESTERS = 8;
 
-            // Get the divisor value; default to 0 if not selected or invalid
-            const divisor = parseInt(document.getElementById(divisorId).value, 10);
-            const validDivisor = !isNaN(divisor) && divisor >= 0 ? divisor : 0;
-            const totalSemesters = 8 - validDivisor;
+        /**
+         * Calculates the overall and faculty scores for a given section.
+         * @param {string} divisorId - The ID of the divisor select element.
+         * @param {string} reasonId - The ID of the reason select element.
+         * @param {string} overallScoreId - The ID of the overall score input element.
+         * @param {string} facultyScoreId - The ID of the faculty score input element.
+         * @param {number} multiplier - The multiplier for calculating the faculty score.
+         */
+        const calculateSectionScores = (divisorId, reasonId, overallScoreId, facultyScoreId, multiplier) => {
+            // Get the divisor value
+            const divisorSelect = document.getElementById(divisorId);
+            let divisor = parseInt(divisorSelect.value, 10);
 
-            // Select all rating rows within the corresponding table
-            const tablePrefix = divisorId.includes('student') ? 'student' : 'supervisor';
-            const rows = document.querySelectorAll(`#${tablePrefix}-evaluation-table tbody tr`);
-
-            console.log(`Calculating ${tablePrefix.charAt(0).toUpperCase() + tablePrefix.slice(1)} Evaluations: ${rows.length} rows found.`);
-
-            rows.forEach((row, index) => {
-                const rating1Input = row.querySelector('input[name*="_rating_1[]"]');
-                const rating2Input = row.querySelector('input[name*="_rating_2[]"]');
-
-                const rating1 = parseFloat(rating1Input.value) || 0;
-                const rating2 = parseFloat(rating2Input.value) || 0;
-
-                console.log(`Row ${index + 1}: Rating 1 = ${rating1}, Rating 2 = ${rating2}`);
-
-                totalRating += rating1 + rating2;
-                ratingCount += 2;
-            });
-
-            let overallAverageRating;
-
-            if (validDivisor === 0) {
-                // Not Applicable: Simple average of all ratings
-                overallAverageRating = ratingCount > 0 ? (totalRating / ratingCount) : 0;
-            } else {
-                // Applicable Divisor: Sum of ratings divided by (8 - Divisor)
-                overallAverageRating = totalSemesters > 0 ? (totalRating / totalSemesters) : 0;
+            // Validate the divisor
+            if (isNaN(divisor) || divisor < 0 || divisor > TOTAL_SEMESTERS) {
+                divisor = 0; // Default to 0 if invalid
             }
 
-            const facultyRating = (overallAverageRating * multiplier).toFixed(2);
+            // Get the reason value
+            const reasonSelect = document.getElementById(reasonId);
+            const reason = reasonSelect.value;
 
-            console.log(`${tablePrefix.charAt(0).toUpperCase() + tablePrefix.slice(1)} Overall Average Rating: ${overallAverageRating}`);
-            console.log(`${tablePrefix.charAt(0).toUpperCase() + tablePrefix.slice(1)} Faculty Rating: ${facultyRating}`);
+            // Determine the denominator based on the reason
+            let denominator;
+            if (reason === '' || reason === 'not_applicable') {
+                // Simple average: sum of ratings / number of ratings
+                denominator = 0; // Will count the number of ratings
+            } else {
+                // Adjusted average: sum of ratings / (8 - divisor)
+                denominator = TOTAL_SEMESTERS - divisor;
+            }
 
-            // Update DOM Elements
+            // Select the appropriate evaluation table
+            const sectionPrefix = divisorId.includes('student') ? 'student' : 'supervisor';
+            const evaluationTable = document.getElementById(`${sectionPrefix}-evaluation-table`);
+            const ratingInputs = evaluationTable.querySelectorAll('input[name*="_rating_1[]"], input[name*="_rating_2[]"]');
+
+            // Sum all the ratings and count them if needed
+            let totalRating = 0;
+            let ratingCount = 0;
+            ratingInputs.forEach(input => {
+                const rating = parseFloat(input.value);
+                if (!isNaN(rating)) {
+                    totalRating += rating;
+                    if (denominator === 0) { // Only count ratings if simple average
+                        ratingCount += 1;
+                    }
+                }
+            });
+
+            // Calculate the overall average rating
+            let overallAverageRating;
+            if (denominator === 0) {
+                // Simple average
+                overallAverageRating = ratingCount > 0 ? (totalRating / ratingCount) : 0;
+            } else {
+                // Adjusted average
+                overallAverageRating = denominator > 0 ? (totalRating / denominator) : 0;
+            }
+
+            // Calculate the faculty score
+            const facultyScore = (overallAverageRating * multiplier).toFixed(2);
+
+            // Update the DOM with the calculated scores
             document.getElementById(overallScoreId).value = overallAverageRating.toFixed(2);
-            document.getElementById(facultyScoreId).value = facultyRating;
+            document.getElementById(facultyScoreId).value = facultyScore;
+
+            // Debugging Logs
+            console.log(`${sectionPrefix.charAt(0).toUpperCase() + sectionPrefix.slice(1)} Calculation:`);
+            console.log(`Divisor (${divisorId}): ${divisor}`);
+            console.log(`Reason (${reasonId}): ${reason}`);
+            if (denominator === 0) {
+                console.log(`Using simple average: Total Rating = ${totalRating}, Count = ${ratingCount}`);
+            } else {
+                console.log(`Using adjusted average: Total Rating = ${totalRating}, Denominator = ${denominator}`);
+            }
+            console.log(`Overall Average Rating: ${overallAverageRating.toFixed(2)}`);
+            console.log(`Faculty Score: ${facultyScore}`);
         };
 
-        // Calculate Student Scores
-        calculateRatings('student-divisor', 'student_overall_score', 'student_faculty_overall_score', 0.36);
+        // Calculate scores for Student Evaluation
+        calculateSectionScores(
+            'student-divisor',
+            'student-reason',
+            'student_overall_score',
+            'student_faculty_overall_score',
+            0.36
+        );
 
-        // Calculate Supervisor Scores
-        calculateRatings('supervisor-divisor', 'supervisor-overall-score', 'supervisor-faculty-overall-score', 0.24);
+        // Calculate scores for Supervisor's Evaluation
+        calculateSectionScores(
+            'supervisor-divisor',
+            'supervisor-reason',
+            'supervisor-overall-score',
+            'supervisor-faculty-overall-score',
+            0.24
+        );
     };
 
+    // Event Listeners for Real-Time Calculations
 
-    // Event Delegation for Rating Inputs
+    // Recalculate scores when any rating input changes
     document.addEventListener('input', function (e) {
-        if (e.target.matches('.rating-input')) {
+        if (e.target.classList.contains('rating-input')) {
             calculateOverallScores();
         }
     });
 
-    // Event Delegation for Select Inputs
+    // Recalculate scores when divisor or reason selects change
     document.addEventListener('change', function (e) {
         if (e.target.matches('select[name*="divisor"], select[name*="reason"]')) {
             calculateOverallScores();
         }
+    });
+
+    // Initial calculation on page load
+    document.addEventListener('DOMContentLoaded', function () {
+        calculateOverallScores();
     });
 
     // Add Row Functionality
@@ -193,10 +244,11 @@ document.addEventListener('DOMContentLoaded', function () {
             const newRow = document.createElement('tr');
             newRow.setAttribute('data-evaluation-id', '0'); // Assign '0' to new rows
 
-            const periodName = tableId.includes('student') ? 'student_evaluation_period[]' : 'supervisor_evaluation_period[]';
-            const rating1Name = tableId.includes('student') ? 'student_rating_1[]' : 'supervisor_rating_1[]';
-            const rating2Name = tableId.includes('student') ? 'student_rating_2[]' : 'supervisor_rating_2[]';
-            const evidenceLinkName = tableId.includes('student') ? 'student_evidence_link[]' : 'supervisor_evidence_link[]';
+            const isStudent = tableId.includes('student');
+            const periodName = isStudent ? 'student_evaluation_period[]' : 'supervisor_evaluation_period[]';
+            const rating1Name = isStudent ? 'student_rating_1[]' : 'supervisor_rating_1[]';
+            const rating2Name = isStudent ? 'student_rating_2[]' : 'supervisor_rating_2[]';
+            const evidenceLinkName = isStudent ? 'student_evidence_link[]' : 'supervisor_evidence_link[]';
 
             console.log(`Input Names: ${periodName}, ${rating1Name}, ${rating2Name}, ${evidenceLinkName}`);
 

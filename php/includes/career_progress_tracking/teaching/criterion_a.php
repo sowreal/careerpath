@@ -20,7 +20,7 @@
                 <div class="row g-4 align-items-center mb-4">
                     <div class="col-md-4">
                         <label for="student-divisor" class="form-label">Number of Semesters to Deduct from Divisor (if applicable):</label>
-                        <select class="form-select" id="student-divisor" name="student_divisor">
+                        <select class="form-select" id="student-divisor" name="student-divisor">
                             <?php for ($i = 0; $i <= 7; $i++): ?>
                                 <option value="<?php echo $i; ?>"><?php echo $i; ?></option>
                             <?php endfor; ?>
@@ -28,12 +28,12 @@
                     </div>
                     <div class="col-md-4">
                         <label for="student-reason" class="form-label">Reason for Reducing the Divisor:</label>
-                        <select class="form-select" id="student-reason" name="student_reason" required>
+                        <select class="form-select" id="student-reason" name="student-reason" required>
                             <option value="">Select Option</option>
-                            <option value="0">Not Applicable</option>
-                            <option value="1">On Approved Study Leave</option>
-                            <option value="2">On Approved Sabbatical Leave</option>
-                            <option value="3">On Approved Maternity Leave</option>
+                            <option value="not_applicable">Not Applicable</option>
+                            <option value="study_leave">On Approved Study Leave</option>
+                            <option value="sabbatical_leave">On Approved Sabbatical Leave</option>
+                            <option value="maternity_leave">On Approved Maternity Leave</option>
                         </select>
                         <div class="invalid-feedback">
                             Please select a valid option.
@@ -119,7 +119,7 @@
                 <div class="row g-4 align-items-center mb-4">
                     <div class="col-md-4">
                         <label for="supervisor-divisor" class="form-label">Number of Semesters to Deduct from Divisor (if applicable):</label>
-                        <select class="form-select" id="supervisor-divisor" name="supervisor_divisor">
+                        <select class="form-select" id="supervisor-divisor" name="supervisor-divisor">
                             <?php for ($i = 0; $i <= 7; $i++): ?>
                                 <option value="<?php echo $i; ?>"><?php echo $i; ?></option>
                             <?php endfor; ?>
@@ -127,12 +127,12 @@
                     </div>
                     <div class="col-md-4">
                         <label for="supervisor-reason" class="form-label">Reason for Reducing the Divisor:</label>
-                        <select class="form-select" id="supervisor-reason" name="supervisor_reason" required>
+                        <select class="form-select" id="supervisor-reason" name="supervisor-reason" required>
                             <option value="">Select Option</option>
-                            <option value="0">Not Applicable</option>
-                            <option value="1">On Approved Study Leave</option>
-                            <option value="2">On Approved Sabbatical Leave</option>
-                            <option value="3">On Approved Maternity Leave</option>
+                            <option value="not_applicable">Not Applicable</option>
+                            <option value="study_leave">On Approved Study Leave</option>
+                            <option value="sabbatical_leave">On Approved Sabbatical Leave</option>
+                            <option value="maternity_leave">On Approved Maternity Leave</option>
                         </select>
                     </div>
                     <!-- Link to Evidence -->
@@ -213,13 +213,12 @@
 </div>
 
 
-
 <!-- Delete Confirmation Modal -->
 <div class="modal fade" id="deleteRowModal" tabindex="-1" aria-labelledby="deleteRowModalLabel" aria-hidden="true">
-  <div class="modal-dialog">
+  <div class="modal-dialog modal-dialog-centered">
     <div class="modal-content">
       <div class="modal-header"> 
-        <h5 class="modal-title" id="deleteRowModalLabel">Confirm Deletion</h5>
+        <h5 class="modal-title text-danger" id="deleteRowModalLabel">Confirm Deletion</h5>
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
       <div class="modal-body">
@@ -235,9 +234,9 @@
 
 <!-- Delete Success Modal -->
 <div class="modal fade" id="deleteSuccessModal" tabindex="-1" aria-labelledby="deleteSuccessModalLabel" aria-hidden="true">
-  <div class="modal-dialog">
+  <div class="modal-dialog modal-dialog-centered">
     <div class="modal-content">
-      <div class="modal-header"> 
+      <div class="modal-header bg-success text-white"> 
         <h5 class="modal-title" id="deleteSuccessModalLabel">Deletion Successful</h5>
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
@@ -253,10 +252,10 @@
 
 <!-- Delete Error Modal -->
 <div class="modal fade" id="deleteErrorModal" tabindex="-1" aria-labelledby="deleteErrorModalLabel" aria-hidden="true">
-  <div class="modal-dialog">
+  <div class="modal-dialog modal-dialog-centered">
     <div class="modal-content">
       <div class="modal-header"> 
-        <h5 class="modal-title" id="deleteErrorModalLabel">Deletion Failed</h5>
+        <h5 class="modal-title text-danger" id="deleteErrorModalLabel">Deletion Failed</h5>
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
       <div class="modal-body">
@@ -273,8 +272,8 @@
 <div class="modal fade" id="saveConfirmationModal" tabindex="-1" aria-labelledby="saveConfirmationModalLabel" aria-hidden="true">
   <div class="modal-dialog modal-dialog-centered">
     <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title text-success" id="saveConfirmationModalLabel">Save Successful</h5>
+      <div class="modal-header bg-success text-white">
+        <h5 class="modal-title" id="saveConfirmationModalLabel">Save Successful</h5>
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
       <div class="modal-body">
