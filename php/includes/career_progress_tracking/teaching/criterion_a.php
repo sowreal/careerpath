@@ -269,27 +269,5 @@
   </div>
 </div>
 
-<!-- Remarks Modal -->
-<div class="modal fade" id="remarksModal" tabindex="-1" aria-labelledby="remarksModalLabel" aria-hidden="true">
-  <div class="modal-dialog modal-dialog-centered">
-    <div class="modal-content">
-      <div class="modal-header bg-success text-white">
-        <h5 class="modal-title" id="remarksModalLabel">Remarks</h5>
-        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
-      </div>
-      <div class="modal-body">
-        <p><strong>First Semester:</strong></p>
-        <p id="first-semester-remark"></p>
-        <p><strong>Second Semester:</strong></p>
-        <p id="second-semester-remark"></p>
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-success" data-bs-dismiss="modal">OK</button>
-      </div>
-    </div>
-  </div>
-</div>
 
 
-<!-- Include Criterion A-specific JS -->
-<script src="<?php echo BASE_URL; ?>/php/includes/career_progress_tracking/teaching/js/criterion_a.js"></script>

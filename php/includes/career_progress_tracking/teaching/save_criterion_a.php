@@ -17,9 +17,10 @@ $request_id = isset($data['request_id']) ? intval($data['request_id']) : 0;
 // Validate request_id
 if ($request_id <= 0) {
     http_response_code(400);
-    echo json_encode(['error' => 'Invalid Request ID']);
+    echo json_encode(['error' => 'Please select an evaluation ID']);
     exit();
 }
+
 
 try {
     $conn->beginTransaction();

@@ -1,52 +1,47 @@
 <?php
-// careerpath/php/includes/career_progress_tracking/teaching/fetch_criterion_a.php
 header('Content-Type: application/json');
-session_start();
-require_once '../../../connection.php'; // Include your DB connection
 
-$response = ['status' => 'error', 'message' => 'Invalid request'];
+try {
+    // Include the database connection
+    require_once '../../../connection.php';
 
-if ($_SERVER['REQUEST_METHOD'] === 'GET') {
-    $request_id = $_GET['request_id'] ?? null;
-    $evaluation_number = $_GET['evaluation_number'] ?? null;
+    // Get request_id from GET or POST
+    $request_id = isset($_GET['request_id']) ? intval($_GET['request_id']) :
+                 (isset($_POST['request_id']) ? intval($_POST['request_id']) : 0);
 
-    if (!$request_id || !$evaluation_number) {
-        echo json_encode($response);
-        exit;
+    if ($request_id <= 0) {
+        throw new Exception("Invalid request ID.");
     }
 
-    try {
-        // Fetch Metadata
-        $stmt = $pdo->prepare("SELECT * FROM kra1_a_metadata WHERE request_id = ?");
-        $stmt->execute([$request_id]);
-        $metadata = $stmt->fetch(PDO::FETCH_ASSOC);
+    // Fetch kra1_a_metadata
+    $stmt = $conn->prepare("SELECT * FROM kra1_a_metadata WHERE request_id = ?");
+    $stmt->execute([$request_id]);
+    $metadata = $stmt->fetch();
 
-        // Fetch Student Evaluations
-        $stmt = $pdo->prepare("SELECT * FROM kra1_a_student_evaluation WHERE request_id = ?");
-        $stmt->execute([$request_id]);
-        $student_evaluations = $stmt->fetchAll(PDO::FETCH_ASSOC);
+    // Fetch Student Evaluations
+    $stmt = $conn->prepare("SELECT * FROM kra1_a_student_evaluation WHERE request_id = ?");
+    $stmt->execute([$request_id]);
+    $student_evaluations = $stmt->fetchAll();
 
-        // Fetch Supervisor Evaluations
-        $stmt = $pdo->prepare("SELECT * FROM kra1_a_supervisor_evaluation WHERE request_id = ?");
-        $stmt->execute([$request_id]);
-        $supervisor_evaluations = $stmt->fetchAll(PDO::FETCH_ASSOC);
+    // Fetch Supervisor Evaluations
+    $stmt = $conn->prepare("SELECT * FROM kra1_a_supervisor_evaluation WHERE request_id = ?");
+    $stmt->execute([$request_id]);
+    $supervisor_evaluations = $stmt->fetchAll();
 
-        $data = [
-            'student_semesters_to_deduct' => $metadata['student_semesters_to_deduct'] ?? 0,
-            'student_reason_for_reduction' => $metadata['student_reason_for_reduction'] ?? '',
-            'student_evidence_link' => $metadata['student_evidence_link'] ?? '',
-            'student_evaluations' => $student_evaluations,
-            'supervisor_semesters_to_deduct' => $metadata['supervisor_semesters_to_deduct'] ?? 0,
-            'supervisor_reason_for_reduction' => $metadata['supervisor_reason_for_reduction'] ?? '',
-            'supervisor_evidence_link' => $metadata['supervisor_evidence_link'] ?? '',
-            'supervisor_evaluations' => $supervisor_evaluations
-        ];
+    // Prepare response
+    $response = [
+        'success' => true,
+        'metadata' => $metadata,
+        'student_evaluations' => $student_evaluations,
+        'supervisor_evaluations' => $supervisor_evaluations
+    ];
 
-        $response = ['status' => 'success', 'data' => $data];
-    } catch (Exception $e) {
-        $response = ['status' => 'error', 'message' => $e->getMessage()];
-    }
+    echo json_encode($response);
+
+} catch (Exception $e) {
+    echo json_encode([
+        'success' => false,
+        'error' => $e->getMessage()
+    ]);
 }
-
-echo json_encode($response);
 ?>

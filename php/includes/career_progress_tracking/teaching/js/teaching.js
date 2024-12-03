@@ -12,16 +12,16 @@ document.addEventListener('DOMContentLoaded', function () {
         })
         .then(data => {
             if (data.length > 0) {
-                modalBody.innerHTML = data.map(eval => {
-                    const createdDate = new Date(eval.created_at);
+                modalBody.innerHTML = data.map(evalItem => {
+                    const createdDate = new Date(evalItem.created_at);
                     const options = { year: 'numeric', month: 'short', day: 'numeric', hour: 'numeric', minute: 'numeric' };
                     const formattedDate = createdDate.toLocaleDateString(undefined, options);
-                    const evaluationNumber = `Evaluation #:${eval.request_id}`;
+                    const evaluationNumber = `Evaluation #: ${evalItem.request_id}`;
 
                     return `
                         <div class="form-check">
-                            <input class="form-check-input" type="radio" name="evaluation" id="eval-${eval.request_id}" value="${eval.request_id}">
-                            <label class="form-check-label" for="eval-${eval.request_id}">
+                            <input class="form-check-input" type="radio" name="evaluation" id="eval-${evalItem.request_id}" value="${evalItem.request_id}">
+                            <label class="form-check-label" for="eval-${evalItem.request_id}">
                                 ${evaluationNumber} (Created: ${formattedDate})
                             </label>
                         </div>`;
@@ -54,12 +54,12 @@ document.addEventListener('DOMContentLoaded', function () {
                 console.error('Input field with id "request_id" not found.');
             }
 
-            // **Set the correct hidden input**
-            document.getElementById('request_id').value = requestId;
-            console.log('request_id set to:', requestId); // Debugging
-
-            // Fetch data for the selected evaluation
-            fetchEvaluationData(requestId);
+            // Fetch data for the selected evaluation by calling Criterion A's fetch function
+            if (typeof fetchCriterionA === 'function') {
+                fetchCriterionA(requestId);
+            } else {
+                console.error('fetchCriterionA function is not defined.');
+            }
 
             // Hide the modal
             const evaluationModal = bootstrap.Modal.getInstance(document.getElementById('evaluationModal'));
@@ -73,28 +73,6 @@ document.addEventListener('DOMContentLoaded', function () {
             errorModal.show();
         }
     });
-
-
-    // Generic Fetch Evaluation Data Function (if needed later)
-    function fetchEvaluationData(requestId) {
-        fetch(`../../includes/career_progress_tracking/teaching/fetch_criterion_data.php?request_id=${requestId}`)
-            .then(response => response.text())
-            .then(text => {
-                console.log('Response text:', text);
-                try {
-                    const data = JSON.parse(text);
-                    console.log('Parsed data:', data);
-                    if (data.success) {
-                        populateFields(data.criterion_data);
-                    } else {
-                        console.log('No data found for this evaluation. Ready for new entries.');
-                    }
-                } catch (error) {
-                    console.error('Error parsing JSON:', error);
-                }
-            })
-            .catch(err => console.error('Error fetching data:', err));
-    }
 
     // Visualization: Doughnut Chart for Overall Performance
     const ctxDoughnut = document.getElementById('kraDoughnutChart');
@@ -145,6 +123,7 @@ document.addEventListener('DOMContentLoaded', function () {
         });
     }
 
+    // AJAX Helper Functions (if needed for other criteria)
     function ajaxPost(url, data) {
         return $.ajax({
             type: 'POST',
