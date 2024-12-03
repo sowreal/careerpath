@@ -248,73 +248,25 @@ document.addEventListener('DOMContentLoaded', function () {
 
     // Delete Row Functionality
     let rowToDelete;
-    let evaluationIdToDelete;
-
     document.addEventListener('click', function (e) {
         if (e.target.classList.contains('delete-row')) {
             rowToDelete = e.target.closest('tr');
-            evaluationIdToDelete = rowToDelete.getAttribute('data-evaluation-id') || '0';
-
-            // Show confirmation modal
             const deleteModal = new bootstrap.Modal(document.getElementById('deleteRowModal'));
             deleteModal.show();
         }
 
         if (e.target.id === 'confirm-delete-row') {
-            if (rowToDelete && evaluationIdToDelete !== '0') {
-                // Send delete request to server
-                fetch('../../includes/career_progress_tracking/teaching/delete_criterion_a.php', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json'
-                    },
-                    body: JSON.stringify({ evaluation_id: evaluationIdToDelete })
-                })
-                .then(response => response.json())
-                .then(data => {
-                    if (data.success) {
-                        // Remove the row from the table
-                        rowToDelete.remove();
-
-                        // Optionally, show a success message
-                        const successModal = new bootstrap.Modal(document.getElementById('deleteSuccessModal'));
-                        successModal.show();
-
-                        // Recalculate overall scores
-                        calculateOverallScores();
-                    } else {
-                        // Show error message
-                        const errorModal = new bootstrap.Modal(document.getElementById('deleteErrorModal'));
-                        document.querySelector('#deleteErrorModal .modal-body').textContent = data.error || 'Failed to delete evaluation.';
-                        errorModal.show();
-                    }
-                })
-                .catch(error => {
-                    console.error('Error:', error);
-                    const errorModal = new bootstrap.Modal(document.getElementById('deleteErrorModal'));
-                    document.querySelector('#deleteErrorModal .modal-body').textContent = 'An unexpected error occurred.';
-                    errorModal.show();
-                })
-                .finally(() => {
-                    // Reset variables and hide confirmation modal
-                    rowToDelete = null;
-                    evaluationIdToDelete = null;
-                    const deleteModal = bootstrap.Modal.getInstance(document.getElementById('deleteRowModal'));
-                    deleteModal.hide();
-                });
-            } else if (rowToDelete && evaluationIdToDelete === '0') {
-                // For new rows that haven't been saved yet, simply remove the row without server interaction
+            if (rowToDelete) {
                 rowToDelete.remove();
-                calculateOverallScores();
                 rowToDelete = null;
-                evaluationIdToDelete = null;
                 const deleteModal = bootstrap.Modal.getInstance(document.getElementById('deleteRowModal'));
                 deleteModal.hide();
+                calculateOverallScores();
             }
         }
     });
 
-    // View Remarks Functionality remains unchanged...
+    // View Remarks Functionality
     document.addEventListener('click', function (e) {
         if (e.target.classList.contains('view-remarks')) {
             const remarksFirst = e.target.getAttribute('data-first-remark') || 'No remarks.';
