@@ -113,79 +113,62 @@ document.addEventListener('DOMContentLoaded', function () {
 
     // Calculate Overall Scores for Criterion A
     const calculateOverallScores = () => {
-        // Student Evaluation Calculations
-        let studentTotalRating = 0;
-        let studentRatingCount = 0;
+        // Helper function to calculate ratings
+        const calculateRatings = (divisorId, overallScoreId, facultyScoreId, multiplier) => {
+            let totalRating = 0;
+            let ratingCount = 0;
 
-        const studentReason = document.getElementById('student-reason').value;
-        const studentDeductSemesters = parseInt(document.getElementById('student-divisor').value) || 0;
-        const studentTotalSemesters = 8 - studentDeductSemesters;
+            // Get the divisor value; default to 0 if not selected or invalid
+            const divisor = parseInt(document.getElementById(divisorId).value, 10);
+            const validDivisor = !isNaN(divisor) && divisor >= 0 ? divisor : 0;
+            const totalSemesters = 8 - validDivisor;
 
-        const studentRows = document.querySelectorAll('#student-evaluation-table tbody tr');
-        console.log(`Calculating Student Evaluations: ${studentRows.length} rows found.`);
-        
-        studentRows.forEach((row, index) => {
-            const rating1Input = row.querySelector('input[name="student_rating_1[]"]');
-            const rating2Input = row.querySelector('input[name="student_rating_2[]"]');
-            
-            const rating1 = parseFloat(rating1Input.value) || 0;
-            const rating2 = parseFloat(rating2Input.value) || 0;
+            // Select all rating rows within the corresponding table
+            const tablePrefix = divisorId.includes('student') ? 'student' : 'supervisor';
+            const rows = document.querySelectorAll(`#${tablePrefix}-evaluation-table tbody tr`);
 
-            console.log(`Row ${index + 1}: Rating 1 = ${rating1}, Rating 2 = ${rating2}`);
+            console.log(`Calculating ${tablePrefix.charAt(0).toUpperCase() + tablePrefix.slice(1)} Evaluations: ${rows.length} rows found.`);
 
-            studentTotalRating += rating1 + rating2;
-            studentRatingCount += 2;
-        });
+            rows.forEach((row, index) => {
+                const rating1Input = row.querySelector('input[name*="_rating_1[]"]');
+                const rating2Input = row.querySelector('input[name*="_rating_2[]"]');
 
-        const studentOverallAverageRating = (studentReason === "Not Applicable" || studentReason === "") ?
-            (studentRatingCount ? (studentTotalRating / studentRatingCount) : 0) :
-            (studentTotalSemesters ? (studentTotalRating / studentTotalSemesters) : 0);
+                const rating1 = parseFloat(rating1Input.value) || 0;
+                const rating2 = parseFloat(rating2Input.value) || 0;
 
-        const studentFacultyRating = (studentOverallAverageRating * 0.36).toFixed(2);
+                console.log(`Row ${index + 1}: Rating 1 = ${rating1}, Rating 2 = ${rating2}`);
 
-        console.log(`Student Overall Average Rating: ${studentOverallAverageRating}`);
-        console.log(`Student Faculty Rating: ${studentFacultyRating}`);
+                totalRating += rating1 + rating2;
+                ratingCount += 2;
+            });
 
-        document.getElementById('student_overall_score').value = studentOverallAverageRating.toFixed(2);
-        document.getElementById('student_faculty_overall_score').value = studentFacultyRating;
+            let overallAverageRating;
 
+            if (validDivisor === 0) {
+                // Not Applicable: Simple average of all ratings
+                overallAverageRating = ratingCount > 0 ? (totalRating / ratingCount) : 0;
+            } else {
+                // Applicable Divisor: Sum of ratings divided by (8 - Divisor)
+                overallAverageRating = totalSemesters > 0 ? (totalRating / totalSemesters) : 0;
+            }
 
-        // Supervisor Evaluation Calculations
-        let supervisorTotalRating = 0;
-        let supervisorRatingCount = 0;
+            const facultyRating = (overallAverageRating * multiplier).toFixed(2);
 
-        const supervisorReason = document.getElementById('supervisor-reason').value;
-        const supervisorDeductSemesters = parseInt(document.getElementById('supervisor-divisor').value) || 0;
-        const supervisorTotalSemesters = 8 - supervisorDeductSemesters;
+            console.log(`${tablePrefix.charAt(0).toUpperCase() + tablePrefix.slice(1)} Overall Average Rating: ${overallAverageRating}`);
+            console.log(`${tablePrefix.charAt(0).toUpperCase() + tablePrefix.slice(1)} Faculty Rating: ${facultyRating}`);
 
-        const supervisorRows = document.querySelectorAll('#supervisor-evaluation-table tbody tr');
-        console.log(`Calculating Supervisor Evaluations: ${supervisorRows.length} rows found.`);
-        
-        supervisorRows.forEach((row, index) => {
-            const rating1Input = row.querySelector('input[name="supervisor_rating_1[]"]');
-            const rating2Input = row.querySelector('input[name="supervisor_rating_2[]"]');
-            
-            const rating1 = parseFloat(rating1Input.value) || 0;
-            const rating2 = parseFloat(rating2Input.value) || 0;
+            // Update DOM Elements
+            document.getElementById(overallScoreId).value = overallAverageRating.toFixed(2);
+            document.getElementById(facultyScoreId).value = facultyRating;
+        };
 
-            console.log(`Row ${index + 1}: Rating 1 = ${rating1}, Rating 2 = ${rating2}`);
+        // Calculate Student Scores
+        calculateRatings('student-divisor', 'student_overall_score', 'student_faculty_overall_score', 0.36);
 
-            supervisorTotalRating += rating1 + rating2;
-            supervisorRatingCount += 2;
-        });
-
-        const supervisorOverallAverageRating = (supervisorReason === "Not Applicable" || supervisorReason === "") ?
-            (supervisorRatingCount ? (supervisorTotalRating / supervisorRatingCount) : 0) :
-            (supervisorTotalSemesters ? (supervisorTotalRating / supervisorTotalSemesters) : 0);
-
-        const supervisorFacultyRating = (supervisorOverallAverageRating * 0.24).toFixed(2);
-
-        console.log(`Supervisor Overall Average Rating: ${supervisorOverallAverageRating}`);
-        console.log(`Supervisor Faculty Rating: ${supervisorFacultyRating}`);
-
-        document.getElementById('supervisor-overall-score').value = supervisorOverallAverageRating.toFixed(2);
-        document.getElementById('supervisor-faculty-overall-score').value = supervisorFacultyRating;
+        // Calculate Supervisor Scores
+        calculateRatings('supervisor-divisor', 'supervisor-overall-score', 'supervisor-faculty-overall-score', 0.24);
     };
+
 
     // Event Delegation for Rating Inputs
     document.addEventListener('input', function (e) {
@@ -242,26 +225,74 @@ document.addEventListener('DOMContentLoaded', function () {
             tableBody.appendChild(newRow);
 
             // Optionally, trigger calculation if default values are set
-            // calculateOverallScores(); // Uncomment if you want to include default values in calculations
+            calculateOverallScores();
         });
     });
 
     // Delete Row Functionality
     let rowToDelete;
+    let evaluationIdToDelete;
+
     document.addEventListener('click', function (e) {
         if (e.target.classList.contains('delete-row')) {
             rowToDelete = e.target.closest('tr');
+            evaluationIdToDelete = rowToDelete.getAttribute('data-evaluation-id') || '0';
+
+            // Show confirmation modal
             const deleteModal = new bootstrap.Modal(document.getElementById('deleteRowModal'));
             deleteModal.show();
         }
 
         if (e.target.id === 'confirm-delete-row') {
-            if (rowToDelete) {
+            if (rowToDelete && evaluationIdToDelete !== '0') {
+                // Send delete request to server
+                fetch('../../includes/career_progress_tracking/teaching/delete_criterion_a.php', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ evaluation_id: evaluationIdToDelete })
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        // Remove the row from the table
+                        rowToDelete.remove();
+
+                        // Optionally, show a success message
+                        const successModal = new bootstrap.Modal(document.getElementById('deleteSuccessModal'));
+                        successModal.show();
+
+                        // Recalculate overall scores
+                        calculateOverallScores();
+                    } else {
+                        // Show error message
+                        const errorModal = new bootstrap.Modal(document.getElementById('deleteErrorModal'));
+                        document.querySelector('#deleteErrorModal .modal-body').textContent = data.error || 'Failed to delete evaluation.';
+                        errorModal.show();
+                    }
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    const errorModal = new bootstrap.Modal(document.getElementById('deleteErrorModal'));
+                    document.querySelector('#deleteErrorModal .modal-body').textContent = 'An unexpected error occurred.';
+                    errorModal.show();
+                })
+                .finally(() => {
+                    // Reset variables and hide confirmation modal
+                    rowToDelete = null;
+                    evaluationIdToDelete = null;
+                    const deleteModal = bootstrap.Modal.getInstance(document.getElementById('deleteRowModal'));
+                    deleteModal.hide();
+                });
+            } else if (rowToDelete && evaluationIdToDelete === '0') {
+                // For new rows that haven't been saved yet, simply remove the row without server interaction
                 rowToDelete.remove();
+                calculateOverallScores();
                 rowToDelete = null;
+                evaluationIdToDelete = null;
                 const deleteModal = bootstrap.Modal.getInstance(document.getElementById('deleteRowModal'));
                 deleteModal.hide();
-                calculateOverallScores();
             }
         }
     });

@@ -30,10 +30,10 @@
                         <label for="student-reason" class="form-label">Reason for Reducing the Divisor:</label>
                         <select class="form-select" id="student-reason" name="student_reason" required>
                             <option value="">Select Option</option>
-                            <option value="Not Applicable">Not Applicable</option>
-                            <option value="On Approved Study Leave">On Approved Study Leave</option>
-                            <option value="On Approved Sabbatical Leave">On Approved Sabbatical Leave</option>
-                            <option value="On Approved Maternity Leave">On Approved Maternity Leave</option>
+                            <option value="0">Not Applicable</option>
+                            <option value="1">On Approved Study Leave</option>
+                            <option value="2">On Approved Sabbatical Leave</option>
+                            <option value="3">On Approved Maternity Leave</option>
                         </select>
                         <div class="invalid-feedback">
                             Please select a valid option.
@@ -129,10 +129,10 @@
                         <label for="supervisor-reason" class="form-label">Reason for Reducing the Divisor:</label>
                         <select class="form-select" id="supervisor-reason" name="supervisor_reason" required>
                             <option value="">Select Option</option>
-                            <option value="Not Applicable">Not Applicable</option>
-                            <option value="On Approved Study Leave">On Approved Study Leave</option>
-                            <option value="On Approved Sabbatical Leave">On Approved Sabbatical Leave</option>
-                            <option value="On Approved Maternity Leave">On Approved Maternity Leave</option>
+                            <option value="0">Not Applicable</option>
+                            <option value="1">On Approved Study Leave</option>
+                            <option value="2">On Approved Sabbatical Leave</option>
+                            <option value="3">On Approved Maternity Leave</option>
                         </select>
                     </div>
                     <!-- Link to Evidence -->
