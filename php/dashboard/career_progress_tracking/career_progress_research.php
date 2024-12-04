@@ -90,7 +90,7 @@ if ($_SESSION['role'] != 'Regular Instructor' && $_SESSION['role'] != 'Contract 
                 <input type="hidden" id="request-id" name="request_id" value="">
 
                 <!-- KRA I Content -->
-                <?php require_once BASE_PATH . '/php/includes/career_progress_tracking/teaching/kra1.php';?>
+                <?php require_once BASE_PATH . '/php/includes/career_progress_tracking/research/kra2.php';?>
 
                 <!-- Container for Criteria -->
                 <div class="card mt-4">
@@ -149,7 +149,7 @@ if ($_SESSION['role'] != 'Regular Instructor' && $_SESSION['role'] != 'Contract 
 
     
     <!-- Career Progress Teaching Scripts -->
-    <script src="<?php echo BASE_URL; ?>/php/includes/career_progress_tracking/teaching/js/teaching.js"></script>
+    <script src="<?php echo BASE_URL; ?>/php/includes/career_progress_tracking/research/js/research.js"></script>
 
 </body>
 </html>

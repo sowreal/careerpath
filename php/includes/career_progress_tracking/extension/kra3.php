@@ -1,6 +1,6 @@
 <div class="card mt-4">
     <div class="card-header d-flex bg-success justify-content-between align-items-center text-white">
-        <h5 class="mb-0">Summary of KRA II</h5>
+        <h5 class="mb-0">Summary of KRA III</h5>
     </div>
     <div class="card-body">
         <div class="row">
@@ -39,10 +39,7 @@
                         </tbody>
                     </table>
                 </div>
-                <!-- <div class="col-md-4 mb-2 justify-content-end">
-                    <label for="student-overall-score" class="form-label"><strong>Grand Total Points for KRA II:</strong></label>
-                    <input type="number" class="form-control" value="90" readonly>
-                </div> -->
+                
             </div>
             
             <!-- Placeholder for Graphs -->

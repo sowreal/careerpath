@@ -1,6 +1,6 @@
 <!-- careerpath/php/includes/career_progress_tracking/teaching/criterion_b.php -->
 <div class="tab-pane fade" id="criterion-b" role="tabpanel" aria-labelledby="tab-criterion-b">
-    <h4 class="mb-4 pb-2 border-bottom border-3 border-success"><strong>CRITERION B - INVENTIONS (MAX = 100 POINTS)</strong></h4>
+    <h4 class="mb-4 pb-2 border-bottom border-3 border-success"><strong>CRITERION B - SERVICE TO THE COMMUNITY (MAX = 50 POINTS)</strong></h4>
 
     <h5><strong>1. For every instructional material developed and approved for use</strong></h5>
     <h5><strong>1.1 Patentable inventions, utility models and industrial design</strong></h5>

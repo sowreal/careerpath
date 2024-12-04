@@ -64,24 +64,101 @@ if ($_SESSION['role'] != 'Regular Instructor' && $_SESSION['role'] != 'Contract 
 
         <!--begin::App Main-->
         <main class="app-main">
-            <h1>CAREER PROGRESS PROFESSIONAL DEVELOPMENT PAGE</h1>
+            <div class="container-fluid">
+
+                <!-- Standalone Header -->
+                <div class="app-content-header">
+                    <div class="container-fluid">
+                        <div class="row align-items-start">
+                            <div class="col-sm-6 mb-5">
+                                <!-- Change Evaluation Number dynamically-->
+                                <h3 class="mb-2"><strong>KRA IV:</strong> Professional Development<br></h3>
+                                <h4 class="mb-0"><span id="evaluation-number">Evaluation #: <small><i class="text-danger">Please select evaluation number.</i></small></span></h4>
+                            </div>
+                            <div class="col-sm-6 pe-4 mt-4">
+                                <div class="d-flex justify-content-end">
+                                    <!-- Button for Select Evaluation Modal -->
+                                    <button id="select-evaluation-btn" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#evaluationModal">
+                                        Select Evaluation
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Hidden input to store request_id -->
+                <input type="hidden" id="request-id" name="request_id" value="">
+
+                <!-- KRA I Content -->
+                <?php require_once BASE_PATH . '/php/includes/career_progress_tracking/professional/kra4.php';?>
+
+                <!-- Container for Criteria -->
+                <div class="card mt-4">
+                    <div class="card-header">
+                        <ul class="nav nav-tabs card-header-tabs" id="kra-tabs" role="tablist">
+                            <li class="nav-item">
+                                <button class="nav-link active bg-success text-white" id="tab-criterion-a" data-bs-toggle="tab" data-bs-target="#criterion-a" type="button" role="tab">
+                                    Criterion A: Involvement in Professional Organization									
+                                </button>
+                            </li>
+                            <li class="nav-item">
+                                <button class="nav-link" id="tab-criterion-b" data-bs-toggle="tab" data-bs-target="#criterion-b" type="button" role="tab">
+                                    Criterion B: Continuing Development
+                                </button>
+                            </li>
+                            <li class="nav-item">
+                                <button class="nav-link" id="tab-criterion-c" data-bs-toggle="tab" data-bs-target="#criterion-c" type="button" role="tab">
+                                    Criterion C: Awards and Recognition
+                                </button>
+                            </li>
+                            <li class="nav-item">
+                                <button class="nav-link" id="tab-criterion-c" data-bs-toggle="tab" data-bs-target="#criterion-c" type="button" role="tab">
+                                    Criterion D: Bonus Indicators for Newly Appointed Faculty
+                                </button>
+                            </li>
+                        </ul>
+                    </div>
+
+                    <!-- Criterions section -->
+                    <div class="card-body">
+                        <div class="tab-content" id="kra-tab-content">
+                            <!-- Tab 1: Criterion A: Teaching Effectiveness -->
+                            <?php require_once BASE_PATH . '/php/includes/career_progress_tracking/research/criterion_a.php'; ?> 
+                            <!-- Tab 2: Criterion B: Curriculum & Material Development -->
+                            <?php require_once BASE_PATH . '/php/includes/career_progress_tracking/research/criterion_b.php'; ?> 
+                            <!-- Tab 3: Criterion C: Thesis & Mentorship Services -->
+                            <?php require_once BASE_PATH . '/php/includes/career_progress_tracking/research/criterion_c.php'; ?> 
+                        </div>
+                    </div>
+
+                </div>
+
+                <!-- MODAL SECTION -->
+                <?php require_once BASE_PATH . '/php/includes/career_progress_tracking/teaching/modals.php'; ?>
+
+            </div>
         </main>
         <!--end::App Main-->
         
         
         
         <!--begin::Footer-->   
-            <?php require_once('../../includes/footer.php'); ?> 
+        <?php require_once BASE_PATH . '/php/includes/footer.php'; ?> 
         <!--end::Footer-->
     </div> 
     <!--end::App Wrapper--> 
-    
-        
-    <!--begin::Script--> 
-    <?php require_once('../../includes/dashboard_default_scripts.php'); ?> 
 
+    <!--begin::Script--> 
+    <?php require_once BASE_PATH . '/php/includes/dashboard_default_scripts.php'; ?> 
+
+    <!-- Script Links for Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+    
+    <!-- Career Progress Teaching Scripts -->
+    <script src="<?php echo BASE_URL; ?>/php/includes/career_progress_tracking/research/js/research.js"></script>
 
 </body>
 </html>
-
 
