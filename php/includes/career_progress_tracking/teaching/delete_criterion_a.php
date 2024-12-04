@@ -1,13 +1,7 @@
 <?php
-// /php/includes/career_progress_tracking/teaching/delete_criterion_a.php
-
-// Start the session
 include_once '../../../session.php';
-
 // Set the response header to JSON
 header('Content-Type: application/json');
-
-// Include the database connection
 include_once '../../../connection.php';
 
 // Check if the user is authenticated
@@ -27,21 +21,30 @@ if (!isset($data['evaluation_id']) || !is_numeric($data['evaluation_id']) || int
     exit();
 }
 
+if (!isset($data['table']) || !in_array($data['table'], ['student', 'supervisor'])) {
+    http_response_code(400); // Bad Request
+    echo json_encode(['error' => 'Invalid table specified.']);
+    exit();
+}
+
 $evaluation_id = intval($data['evaluation_id']);
+$table = $data['table'];
 
 try {
     // Begin Transaction
     $conn->beginTransaction();
 
-    // Delete from Student Evaluations Table
-    $stmt = $conn->prepare("DELETE FROM kra1_a_student_evaluation WHERE evaluation_id = :evaluation_id");
-    $stmt->bindParam(':evaluation_id', $evaluation_id, PDO::PARAM_INT);
-    $stmt->execute();
-
-    // Delete from Supervisor Evaluations Table
-    $stmt = $conn->prepare("DELETE FROM kra1_a_supervisor_evaluation WHERE evaluation_id = :evaluation_id");
-    $stmt->bindParam(':evaluation_id', $evaluation_id, PDO::PARAM_INT);
-    $stmt->execute();
+    if ($table === 'student') {
+        // Delete from Student Evaluations Table
+        $stmt = $conn->prepare("DELETE FROM kra1_a_student_evaluation WHERE evaluation_id = :evaluation_id");
+        $stmt->bindParam(':evaluation_id', $evaluation_id, PDO::PARAM_INT);
+        $stmt->execute();
+    } elseif ($table === 'supervisor') {
+        // Delete from Supervisor Evaluations Table
+        $stmt = $conn->prepare("DELETE FROM kra1_a_supervisor_evaluation WHERE evaluation_id = :evaluation_id");
+        $stmt->bindParam(':evaluation_id', $evaluation_id, PDO::PARAM_INT);
+        $stmt->execute();
+    }
 
     // Commit Transaction
     $conn->commit();

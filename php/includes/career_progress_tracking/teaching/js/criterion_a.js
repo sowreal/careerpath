@@ -113,8 +113,6 @@ document.addEventListener('DOMContentLoaded', function () {
 
     // Calculate Overall Scores for Criterion A
     const calculateOverallScores = () => {
-        const TOTAL_SEMESTERS = 8;
-
         /**
          * Calculates the overall and faculty scores for a given section.
          * @param {string} divisorId - The ID of the divisor select element.
@@ -129,7 +127,7 @@ document.addEventListener('DOMContentLoaded', function () {
             let divisor = parseInt(divisorSelect.value, 10);
 
             // Validate the divisor
-            if (isNaN(divisor) || divisor < 0 || divisor > TOTAL_SEMESTERS) {
+            if (isNaN(divisor) || divisor < 0 || divisor > 8) {
                 console.warn(`Invalid divisor value "${divisorSelect.value}" in "${divisorId}". Defaulting to 0.`);
                 divisor = 0; // Default to 0 if invalid
             }
@@ -137,16 +135,6 @@ document.addEventListener('DOMContentLoaded', function () {
             // Get the reason value
             const reasonSelect = document.getElementById(reasonId);
             const reason = reasonSelect.value;
-
-            // Determine the denominator based on the reason
-            let denominator;
-            if (reason === '' || reason === 'not_applicable') {
-                // Simple average: sum of ratings / number of ratings
-                denominator = null; // Indicate that denominator should be number of ratings
-            } else {
-                // Adjusted average: sum of ratings / (8 - divisor)
-                denominator = TOTAL_SEMESTERS - divisor;
-            }
 
             // Select the appropriate evaluation table
             const sectionPrefix = divisorId.includes('student') ? 'student' : 'supervisor';
@@ -164,34 +152,48 @@ document.addEventListener('DOMContentLoaded', function () {
                 }
             });
 
-            // Calculate the overall average rating
-            let overallAverageRating;
-            if (denominator === null) {
-                // Simple average
-                overallAverageRating = ratingCount > 0 ? (totalRating / ratingCount) : 0;
+            let overallAverageRating = 0;
+
+            // Apply calculation rules based on reason and divisor
+            if ((reason === '' || reason === 'not_applicable') || divisor === 0) {
+                // Simple average: average of all ratings
+                if (ratingCount > 0) {
+                    overallAverageRating = totalRating / ratingCount;
+                } else {
+                    overallAverageRating = 0;
+                }
+            } else if ((reason !== '' && reason !== 'not_applicable') && divisor > 0) {
+                // Adjusted average: sum of ratings / (8 - divisor)
+                const denominator = 8 - divisor;
+                if (denominator > 0) {
+                    overallAverageRating = totalRating / denominator;
+                } else {
+                    overallAverageRating = 0;
+                }
             } else {
-                // Adjusted average
-                overallAverageRating = denominator > 0 ? (totalRating / denominator) : 0;
+                // Fallback to simple average
+                if (ratingCount > 0) {
+                    overallAverageRating = totalRating / ratingCount;
+                } else {
+                    overallAverageRating = 0;
+                }
             }
 
             // Calculate the faculty score
-            const facultyScore = (overallAverageRating * multiplier).toFixed(2);
+            const facultyScore = overallAverageRating * multiplier;
 
             // Update the DOM with the calculated scores
             document.getElementById(overallScoreId).value = overallAverageRating.toFixed(2);
-            document.getElementById(facultyScoreId).value = facultyScore;
+            document.getElementById(facultyScoreId).value = facultyScore.toFixed(2);
 
             // Debugging Logs
             console.log(`${sectionPrefix.charAt(0).toUpperCase() + sectionPrefix.slice(1)} Calculation:`);
-            console.log(`Divisor (${divisorId}): ${divisor}`);
-            console.log(`Reason (${reasonId}): ${reason}`);
-            if (denominator === null) {
-                console.log(`Using simple average: Total Rating = ${totalRating}, Count = ${ratingCount}`);
-            } else {
-                console.log(`Using adjusted average: Total Rating = ${totalRating}, Denominator = ${denominator}`);
-            }
+            console.log(`Divisor: ${divisor}`);
+            console.log(`Reason: ${reason}`);
+            console.log(`Total Rating: ${totalRating}`);
+            console.log(`Rating Count: ${ratingCount}`);
             console.log(`Overall Average Rating: ${overallAverageRating.toFixed(2)}`);
-            console.log(`Faculty Score: ${facultyScore}`);
+            console.log(`Faculty Score: ${facultyScore.toFixed(2)}`);
         };
 
         // Calculate scores for Student Evaluation
@@ -213,8 +215,6 @@ document.addEventListener('DOMContentLoaded', function () {
         );
     };
 
-    // Event Listeners for Real-Time Calculations
-
     // Recalculate scores when any rating input changes
     document.addEventListener('input', function (e) {
         if (e.target.classList.contains('rating-input')) {
@@ -230,9 +230,8 @@ document.addEventListener('DOMContentLoaded', function () {
     });
 
     // Initial calculation on page load
-    document.addEventListener('DOMContentLoaded', function () {
-        calculateOverallScores();
-    });
+    calculateOverallScores();
+
 
     // Add Row Functionality
     document.querySelectorAll('.add-row').forEach(button => {
@@ -288,65 +287,87 @@ document.addEventListener('DOMContentLoaded', function () {
         if (e.target.classList.contains('delete-row')) {
             rowToDelete = e.target.closest('tr');
             evaluationIdToDelete = rowToDelete.getAttribute('data-evaluation-id') || '0';
-
+    
+            // Determine which table the row belongs to
+            const tableId = e.target.closest('table').id;
+            if (tableId === 'student-evaluation-table') {
+                tableToDeleteFrom = 'student';
+            } else if (tableId === 'supervisor-evaluation-table') {
+                tableToDeleteFrom = 'supervisor';
+            } else {
+                tableToDeleteFrom = null;
+            }
+    
             // Show confirmation modal
             const deleteModal = new bootstrap.Modal(document.getElementById('deleteRowModal'));
             deleteModal.show();
         }
-
+    
         if (e.target.id === 'confirm-delete-row') {
-            if (rowToDelete && evaluationIdToDelete !== '0') {
-                // Send delete request to server
-                fetch('../../includes/career_progress_tracking/teaching/delete_criterion_a.php', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json'
-                    },
-                    body: JSON.stringify({ evaluation_id: evaluationIdToDelete })
-                })
-                .then(response => response.json())
-                .then(data => {
-                    if (data.success) {
-                        // Remove the row from the table
-                        rowToDelete.remove();
-
-                        // Optionally, show a success message
-                        const successModal = new bootstrap.Modal(document.getElementById('deleteSuccessModal'));
-                        successModal.show();
-
-                        // Recalculate overall scores
-                        calculateOverallScores();
-                    } else {
-                        // Show error message
+            if (rowToDelete) {
+                if (evaluationIdToDelete !== '0') {
+                    // Prepare the payload with table information
+                    const payload = {
+                        evaluation_id: evaluationIdToDelete,
+                        table: tableToDeleteFrom
+                    };
+    
+                    // Send delete request to server
+                    fetch('../../includes/career_progress_tracking/teaching/delete_criterion_a.php', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify(payload)
+                    })
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.success) {
+                            // Remove the row from the table
+                            rowToDelete.remove();
+    
+                            // Optionally, show a success message
+                            const successModal = new bootstrap.Modal(document.getElementById('deleteSuccessModal'));
+                            successModal.show();
+    
+                            // Recalculate overall scores
+                            calculateOverallScores();
+                        } else {
+                            // Show error message
+                            const errorModal = new bootstrap.Modal(document.getElementById('deleteErrorModal'));
+                            document.querySelector('#deleteErrorModal .modal-body').textContent = data.error || 'Failed to delete evaluation.';
+                            errorModal.show();
+                        }
+                    })
+                    .catch(error => {
+                        console.error('Error:', error);
                         const errorModal = new bootstrap.Modal(document.getElementById('deleteErrorModal'));
-                        document.querySelector('#deleteErrorModal .modal-body').textContent = data.error || 'Failed to delete evaluation.';
+                        document.querySelector('#deleteErrorModal .modal-body').textContent = 'An unexpected error occurred.';
                         errorModal.show();
-                    }
-                })
-                .catch(error => {
-                    console.error('Error:', error);
-                    const errorModal = new bootstrap.Modal(document.getElementById('deleteErrorModal'));
-                    document.querySelector('#deleteErrorModal .modal-body').textContent = 'An unexpected error occurred.';
-                    errorModal.show();
-                })
-                .finally(() => {
-                    // Reset variables and hide confirmation modal
+                    })
+                    .finally(() => {
+                        // Reset variables and hide confirmation modal
+                        rowToDelete = null;
+                        evaluationIdToDelete = null;
+                        tableToDeleteFrom = null;
+                        const deleteModal = bootstrap.Modal.getInstance(document.getElementById('deleteRowModal'));
+                        deleteModal.hide();
+                    });
+                } else {
+                    // For new rows that haven't been saved yet, simply remove the row without server interaction
+                    rowToDelete.remove();
+                    calculateOverallScores();
                     rowToDelete = null;
                     evaluationIdToDelete = null;
+                    tableToDeleteFrom = null;
                     const deleteModal = bootstrap.Modal.getInstance(document.getElementById('deleteRowModal'));
                     deleteModal.hide();
-                });
-            } else if (rowToDelete && evaluationIdToDelete === '0') {
-                // For new rows that haven't been saved yet, simply remove the row without server interaction
-                rowToDelete.remove();
-                calculateOverallScores();
-                rowToDelete = null;
-                evaluationIdToDelete = null;
-                const deleteModal = bootstrap.Modal.getInstance(document.getElementById('deleteRowModal'));
-                deleteModal.hide();
+                }
             }
         }
     });
+    
+    
 
     // View Remarks Functionality
     document.addEventListener('click', function (e) {
