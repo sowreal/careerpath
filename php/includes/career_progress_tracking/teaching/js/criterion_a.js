@@ -405,12 +405,13 @@ document.addEventListener('DOMContentLoaded', function () {
             document.getElementById('supervisor-reason').value = data.metadata.supervisor_reason || '';
             document.getElementById('supervisor-evidence-link').value = data.metadata.supervisor_evidence_link || '';
         }
-
+    
         // Populate Student Evaluations
         if (data.student_evaluations) {
             const studentTableBody = document.querySelector('#student-evaluation-table tbody');
             studentTableBody.innerHTML = ''; // Clear existing rows
             data.student_evaluations.forEach(evalItem => {
+                console.log('Student Evaluation Item:', evalItem); // Debugging
                 const row = document.createElement('tr');
                 row.setAttribute('data-evaluation-id', evalItem.evaluation_id);
                 row.innerHTML = `
@@ -437,13 +438,17 @@ document.addEventListener('DOMContentLoaded', function () {
                 `;
                 studentTableBody.appendChild(row);
             });
+        } else {
+            // No data, add default empty rows
+            addDefaultStudentRows(studentTableBody);
         }
-
+    
         // Populate Supervisor Evaluations
         if (data.supervisor_evaluations) {
             const supervisorTableBody = document.querySelector('#supervisor-evaluation-table tbody');
             supervisorTableBody.innerHTML = ''; // Clear existing rows
             data.supervisor_evaluations.forEach(evalItem => {
+                console.log('Supervisor Evaluation Item:', evalItem); // Add this line for debugging
                 const row = document.createElement('tr');
                 row.setAttribute('data-evaluation-id', evalItem.evaluation_id);
                 row.innerHTML = `
@@ -470,10 +475,14 @@ document.addEventListener('DOMContentLoaded', function () {
                 `;
                 supervisorTableBody.appendChild(row);
             });
+        } else {
+            // No data, add default empty rows
+            addDefaultSupervisorRows(supervisorTableBody);
         }
-
+    
         calculateOverallScores();
     }
+    
 
     // Escape HTML to prevent XSS
     function escapeHTML(str) {
@@ -484,4 +493,70 @@ document.addEventListener('DOMContentLoaded', function () {
                   .replace(/"/g, "&quot;")
                   .replace(/'/g, "&#039;");
     }
+
+
+    function addDefaultStudentRows(tableBody) {
+        const defaultPeriods = ["AY 2019 - 2020", "AY 2020 - 2021", "AY 2021 - 2022", "AY 2022 - 2023"];
+        defaultPeriods.forEach(period => {
+            const row = document.createElement('tr');
+            row.setAttribute('data-evaluation-id', '0'); // New rows have evaluation_id = 0
+            row.innerHTML = `
+                <td>
+                    <input type="text" class="form-control" name="student_evaluation_period[]" value="${escapeHTML(period)}" required>
+                </td>
+                <td>
+                    <input type="number" class="form-control rating-input" name="student_rating_1[]" placeholder="0.00" required>
+                </td>
+                <td>
+                    <input type="number" class="form-control rating-input" name="student_rating_2[]" placeholder="0.00" required>
+                </td>
+                <td>
+                    <input type="url" class="form-control" name="student_evidence_link[]" placeholder="https://example.com/evidence" pattern="https?://.+" required>
+                </td>
+                <td>
+                    <button type="button" class="btn btn-primary btn-sm view-remarks" data-first-remark="" data-second-remark="">
+                        View Remarks
+                    </button>
+                </td>
+                <td>
+                    <button type="button" class="btn btn-danger btn-sm delete-row" aria-label="Delete row">Delete</button>
+                </td>
+            `;
+            tableBody.appendChild(row);
+        });
+    }
+    
+    function addDefaultSupervisorRows(tableBody) {
+        const defaultPeriods = ["AY 2019 - 2020", "AY 2020 - 2021", "AY 2021 - 2022", "AY 2022 - 2023"];
+        defaultPeriods.forEach(period => {
+            const row = document.createElement('tr');
+            row.setAttribute('data-evaluation-id', '0'); // New rows have evaluation_id = 0
+            row.innerHTML = `
+                <td>
+                    <input type="text" class="form-control" name="supervisor_evaluation_period[]" value="${escapeHTML(period)}" required>
+                </td>
+                <td>
+                    <input type="number" class="form-control rating-input" name="supervisor_rating_1[]" placeholder="0.00" required>
+                </td>
+                <td>
+                    <input type="number" class="form-control rating-input" name="supervisor_rating_2[]" placeholder="0.00" required>
+                </td>
+                <td>
+                    <input type="url" class="form-control" name="supervisor_evidence_link[]" placeholder="https://example.com/evidence" pattern="https?://.+" required>
+                </td>
+                <td>
+                    <button type="button" class="btn btn-primary btn-sm view-remarks" data-first-remark="" data-second-remark="">
+                        View Remarks
+                    </button>
+                </td>
+                <td>
+                    <button type="button" class="btn btn-danger btn-sm delete-row" aria-label="Delete row">Delete</button>
+                </td>
+            `;
+            tableBody.appendChild(row);
+        });
+    }
+    
+
+
 });
