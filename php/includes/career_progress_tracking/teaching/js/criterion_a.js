@@ -395,6 +395,7 @@ document.addEventListener('DOMContentLoaded', function () {
             .catch(error => console.error('Error fetching Criterion A:', error));
     };
 
+    // Populate form with data or default rows
     function populateForm(data) {
         // Populate Metadata
         if (data.metadata) {
@@ -406,9 +407,12 @@ document.addEventListener('DOMContentLoaded', function () {
             document.getElementById('supervisor-evidence-link').value = data.metadata.supervisor_evidence_link || '';
         }
     
+        // Define table bodies outside the if blocks
+        const studentTableBody = document.querySelector('#student-evaluation-table tbody');
+        const supervisorTableBody = document.querySelector('#supervisor-evaluation-table tbody');
+    
         // Populate Student Evaluations
-        if (data.student_evaluations) {
-            const studentTableBody = document.querySelector('#student-evaluation-table tbody');
+        if (data.student_evaluations && data.student_evaluations.length > 0) {
             studentTableBody.innerHTML = ''; // Clear existing rows
             data.student_evaluations.forEach(evalItem => {
                 console.log('Student Evaluation Item:', evalItem); // Debugging
@@ -440,15 +444,15 @@ document.addEventListener('DOMContentLoaded', function () {
             });
         } else {
             // No data, add default empty rows
+            console.log('No student evaluations found. Adding default rows.');
             addDefaultStudentRows(studentTableBody);
         }
     
         // Populate Supervisor Evaluations
-        if (data.supervisor_evaluations) {
-            const supervisorTableBody = document.querySelector('#supervisor-evaluation-table tbody');
+        if (data.supervisor_evaluations && data.supervisor_evaluations.length > 0) {
             supervisorTableBody.innerHTML = ''; // Clear existing rows
             data.supervisor_evaluations.forEach(evalItem => {
-                console.log('Supervisor Evaluation Item:', evalItem); // Add this line for debugging
+                console.log('Supervisor Evaluation Item:', evalItem); // Debugging
                 const row = document.createElement('tr');
                 row.setAttribute('data-evaluation-id', evalItem.evaluation_id);
                 row.innerHTML = `
@@ -477,11 +481,13 @@ document.addEventListener('DOMContentLoaded', function () {
             });
         } else {
             // No data, add default empty rows
+            console.log('No supervisor evaluations found. Adding default rows.');
             addDefaultSupervisorRows(supervisorTableBody);
         }
     
         calculateOverallScores();
     }
+    
     
 
     // Escape HTML to prevent XSS
@@ -494,7 +500,7 @@ document.addEventListener('DOMContentLoaded', function () {
                   .replace(/'/g, "&#039;");
     }
 
-
+    // Function for adding preset / default rows
     function addDefaultStudentRows(tableBody) {
         const defaultPeriods = ["AY 2019 - 2020", "AY 2020 - 2021", "AY 2021 - 2022", "AY 2022 - 2023"];
         defaultPeriods.forEach(period => {

@@ -61,6 +61,9 @@
                         </thead>
                         <tbody>
                             <!-- Rows will be populated by JavaScript -->
+
+                            <!-- Default Rows -->
+                             
                         </tbody>
                     </table>
                 </div>
