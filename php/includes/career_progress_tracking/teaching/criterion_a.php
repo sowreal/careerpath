@@ -63,7 +63,35 @@
                             <!-- Rows will be populated by JavaScript -->
 
                             <!-- Default Rows -->
-                             
+                            <?php 
+                                $evaluationPeriods = ["AY 2019 - 2020", "AY 2020 - 2021", "AY 2021 - 2022", "AY 2022 - 2023"];
+                                foreach ($evaluationPeriods as $period): 
+                            ?>
+                                <tr>
+                                    <td>
+                                        <input type="text" class="form-control" name="student_evaluation_period[]" value="<?php echo htmlspecialchars($period); ?>">
+                                    </td>
+                                    <td>
+                                        <input type="number" class="form-control rating-input" name="student_rating_1[]" placeholder="0.00" required>
+                                    </td>
+                                    <td>
+                                        <input type="number" class="form-control rating-input" name="student_rating_2[]" placeholder="0.00" required>
+                                    </td>
+                                    <td>
+                                        <input type="url" class="form-control" name="student_evidence_link[]" placeholder="https://example.com/evidence" pattern="https?://.+" required>
+                                    </td>
+                                    <td>
+                                        <button type="button" class="btn btn-primary btn-sm view-remarks"
+                                            data-first-remark=""
+                                            data-second-remark="">
+                                            View Remarks
+                                        </button>
+                                    </td>
+                                    <td>
+                                        <button type="button" class="btn btn-danger btn-sm delete-row" aria-label="Delete row">Delete</button>
+                                    </td>
+                                </tr>
+                            <?php endforeach; ?>
                         </tbody>
                     </table>
                 </div>
