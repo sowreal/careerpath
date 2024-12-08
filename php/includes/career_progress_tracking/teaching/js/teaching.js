@@ -64,6 +64,7 @@ document.addEventListener('DOMContentLoaded', function () {
             // Hide the modal
             const evaluationModal = bootstrap.Modal.getInstance(document.getElementById('evaluationModal'));
             evaluationModal.hide();
+            
 
         } else {
             // Show error modal instead of alert
@@ -74,7 +75,7 @@ document.addEventListener('DOMContentLoaded', function () {
         }
     });
 
-    // Visualization: Doughnut Chart for Overall Performance
+    // Visualization: Doughnut Chart for Overall Performance (Optional)
     const ctxDoughnut = document.getElementById('kraDoughnutChart');
     if (ctxDoughnut) {
         const kraDoughnutChart = new Chart(ctxDoughnut.getContext('2d'), {
@@ -109,7 +110,7 @@ document.addEventListener('DOMContentLoaded', function () {
         });
     }  
 
-    // JavaScript to dynamically add and remove bg-success and text-white on tabs on 2nd container
+    // JavaScript for tabs styling
     const tabs = document.querySelectorAll('#kra-tabs .nav-link');
     if (tabs.length > 0) {
         tabs.forEach(tab => {
@@ -120,25 +121,6 @@ document.addEventListener('DOMContentLoaded', function () {
                 // Add bg-success and text-white to the clicked tab
                 this.classList.add('bg-success', 'text-white');
             });
-        });
-    }
-
-    // AJAX Helper Functions (if needed for other criteria)
-    function ajaxPost(url, data) {
-        return $.ajax({
-            type: 'POST',
-            url: url,
-            data: data,
-            dataType: 'json'
-        });
-    }
-    
-    function ajaxGet(url, params) {
-        return $.ajax({
-            type: 'GET',
-            url: url,
-            data: params,
-            dataType: 'json'
         });
     }
 });

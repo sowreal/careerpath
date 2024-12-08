@@ -310,6 +310,3 @@
   </div>
 </div>
 
-
-<!-- Include Criterion A-specific JS -->
-<script src="<?php echo BASE_URL; ?>/php/includes/career_progress_tracking/teaching/js/criterion_a.js"></script>

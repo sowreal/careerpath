@@ -16,17 +16,21 @@ try {
     // Fetch kra1_a_metadata
     $stmt = $conn->prepare("SELECT * FROM kra1_a_metadata WHERE request_id = ?");
     $stmt->execute([$request_id]);
-    $metadata = $stmt->fetch(PDO::FETCH_ASSOC); // Add PDO::FETCH_ASSOC
+    // Fetch a single row from the result set as an associative array where the keys are column names
+    $metadata = $stmt->fetch(PDO::FETCH_ASSOC);
 
     // Fetch Student Evaluations
     $stmt = $conn->prepare("SELECT * FROM kra1_a_student_evaluation WHERE request_id = ?");
     $stmt->execute([$request_id]);
-    $student_evaluations = $stmt->fetchAll(PDO::FETCH_ASSOC); // Add PDO::FETCH_ASSOC
+    // Fetch all rows from the result set as an array of associative arrays, with each row's keys being column names
+    $student_evaluations = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
     // Fetch Supervisor Evaluations
     $stmt = $conn->prepare("SELECT * FROM kra1_a_supervisor_evaluation WHERE request_id = ?");
     $stmt->execute([$request_id]);
-    $supervisor_evaluations = $stmt->fetchAll(PDO::FETCH_ASSOC); // Add PDO::FETCH_ASSOC
+    // Fetch all rows from the result set as an array of associative arrays, with each row's keys being column names
+    $supervisor_evaluations = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
 
     // Prepare response
     $response = [
