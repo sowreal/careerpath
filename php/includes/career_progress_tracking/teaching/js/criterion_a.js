@@ -126,7 +126,6 @@ function populateMetadata(metadata) {
     document.getElementById('supervisor-overall-score').value = metadata.supervisor_overall_rating || 0;
     document.getElementById('supervisor-faculty-overall-score').value = metadata.supervisor_faculty_rating || 0;
 }
-// === FETCHING AND POPULATE END ===
 
 function fetchCriterionA(requestId) {
     return fetch(`../../includes/career_progress_tracking/teaching/fetch_criterion_a.php?request_id=${requestId}`)
@@ -145,6 +144,8 @@ function fetchCriterionA(requestId) {
             console.error('Error fetching data:', error);
         });
 }
+// === FETCHING AND POPULATE END ===
+
 
 document.addEventListener('DOMContentLoaded', function () {
     const form = document.getElementById('criterion-a-form');
@@ -178,6 +179,11 @@ document.addEventListener('DOMContentLoaded', function () {
         .then(data => {
             if (data.success) {
                 saveSuccessModal.show();
+                const requestId = document.getElementById('request_id').value.trim();
+                if (requestId) {
+                    // Re-fetch data to ensure new rows get updated evaluation_id
+                    fetchCriterionA(requestId);
+                }
             } else {
                 showErrorModal(data.error || 'An error occurred.');
             }
@@ -266,6 +272,151 @@ document.addEventListener('DOMContentLoaded', function () {
         saveErrorModal.show();
     }
     // === SAVING PROCESS END ===
+
+
+    // === ADD ROW FUNCTION START ===
+    document.querySelectorAll('.add-row').forEach(addBtn => {
+        addBtn.addEventListener('click', function() {
+            const tableId = this.getAttribute('data-table-id');
+            const tableBody = document.querySelector(`#${tableId} tbody`);
+            
+            // Determine if this is student or supervisor
+            const isStudent = tableId.includes('student');
+            const periodName = isStudent ? 'student_evaluation_period[]' : 'supervisor_evaluation_period[]';
+            const rating1Name = isStudent ? 'student_rating_1[]' : 'supervisor_rating_1[]';
+            const rating2Name = isStudent ? 'student_rating_2[]' : 'supervisor_rating_2[]';
+            const evidenceLinkName = isStudent ? 'student_evidence_link[]' : 'supervisor_evidence_link[]';
+
+            // Create a new row similar to the default row
+            const newRow = document.createElement('tr');
+            newRow.setAttribute('data-evaluation-id', '0'); // 0 means not saved yet
+
+            newRow.innerHTML = `
+                <td>
+                    <input type="text" class="form-control" name="${periodName}" value="AY 2023 - 2024" required>
+                </td>
+                <td>
+                    <input type="number" class="form-control rating-input" name="${rating1Name}" placeholder="0.00" required>
+                </td>
+                <td>
+                    <input type="number" class="form-control rating-input" name="${rating2Name}" placeholder="0.00" required>
+                </td>
+                <td>
+                    <input type="url" class="form-control" name="${evidenceLinkName}" placeholder="https://example.com/evidence" pattern="https?://.+" required>
+                </td>
+                <td>
+                    <button type="button" class="btn btn-primary btn-sm view-remarks" data-first-remark="" data-second-remark="">View Remarks</button>
+                </td>
+                <td>
+                    <button type="button" class="btn btn-danger btn-sm delete-row" aria-label="Delete row">Delete</button>
+                </td>
+            `;
+
+            tableBody.appendChild(newRow);
+
+            // Recalculate scores if needed
+            calculateOverallScores();
+        });
+    });
+    // === ADD ROW FUNCTION END ===
+
+
+    // === DELETE ROW FUNCTION START ===
+    let rowToDelete = null;
+    let evaluationIdToDelete = null;
+    let tableToDeleteFrom = null;
+
+    document.addEventListener('click', function(e) {
+        if (e.target.classList.contains('delete-row')) {
+            rowToDelete = e.target.closest('tr');
+            evaluationIdToDelete = rowToDelete.getAttribute('data-evaluation-id') || '0';
+
+            // Determine which table the row belongs to
+            const table = e.target.closest('table');
+            if (table.id === 'student-evaluation-table') {
+                tableToDeleteFrom = 'student';
+            } else if (table.id === 'supervisor-evaluation-table') {
+                tableToDeleteFrom = 'supervisor';
+            } else {
+                tableToDeleteFrom = null;
+            }
+
+            // Show confirmation modal
+            const deleteModal = new bootstrap.Modal(document.getElementById('deleteRowModal'));
+            deleteModal.show();
+        }
+    });
+
+    document.getElementById('confirm-delete-row').addEventListener('click', function() {
+        if (rowToDelete) {
+            if (evaluationIdToDelete !== '0' && tableToDeleteFrom) {
+                // Row exists in DB, send delete request
+                const payload = {
+                    evaluation_id: evaluationIdToDelete,
+                    table: tableToDeleteFrom
+                };
+
+                fetch('../../includes/career_progress_tracking/teaching/delete_criterion_a.php', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(payload)
+                })
+                .then(response => response.json())
+                .then(data => {
+                    const deleteModal = bootstrap.Modal.getInstance(document.getElementById('deleteRowModal'));
+                    deleteModal.hide();
+                    if (data.success) {
+                        // Remove the row from the table
+                        rowToDelete.remove();
+                        rowToDelete = null;
+                        evaluationIdToDelete = null;
+                        tableToDeleteFrom = null;
+
+                        // Show success message
+                        const successModal = new bootstrap.Modal(document.getElementById('deleteSuccessModal'));
+                        successModal.show();
+
+                        // Recalculate if needed
+                        calculateOverallScores();
+                    } else {
+                        // Show error message
+                        const errorModal = new bootstrap.Modal(document.getElementById('deleteErrorModal'));
+                        document.querySelector('#deleteErrorModal .modal-body').textContent = data.error || 'Failed to delete evaluation.';
+                        errorModal.show();
+                    }
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    const deleteModal = bootstrap.Modal.getInstance(document.getElementById('deleteRowModal'));
+                    deleteModal.hide();
+
+                    const errorModal = new bootstrap.Modal(document.getElementById('deleteErrorModal'));
+                    document.querySelector('#deleteErrorModal .modal-body').textContent = 'An unexpected error occurred.';
+                    errorModal.show();
+                });
+            } else {
+                // evaluation_id = 0 means never saved, just remove row from DOM
+                const deleteModal = bootstrap.Modal.getInstance(document.getElementById('deleteRowModal'));
+                deleteModal.hide();
+
+                rowToDelete.remove();
+                rowToDelete = null;
+                evaluationIdToDelete = null;
+                tableToDeleteFrom = null;
+
+                // Recalculate if needed
+                calculateOverallScores();
+
+                // Optionally show success modal for deletion
+                const successModal = new bootstrap.Modal(document.getElementById('deleteSuccessModal'));
+                successModal.show();
+            }
+        }
+    });
+    // === DELETE ROW FUNCTION END ===
+
 
     // === CALCULATION START ===
     function calculateOverallScores() {
