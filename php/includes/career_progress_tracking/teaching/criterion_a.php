@@ -20,7 +20,7 @@
                 <div class="row g-4 align-items-center mb-4">
                     <div class="col-md-4">
                         <label for="student-divisor" class="form-label">Number of Semesters to Deduct from Divisor (if applicable):</label>
-                        <select class="form-select" id="student-divisor" name="student_divisor">
+                        <select class="form-select" id="student-divisor" name="student-divisor">
                             <?php for ($i = 0; $i <= 7; $i++): ?>
                                 <option value="<?php echo $i; ?>"><?php echo $i; ?></option>
                             <?php endfor; ?>
@@ -28,12 +28,12 @@
                     </div>
                     <div class="col-md-4">
                         <label for="student-reason" class="form-label">Reason for Reducing the Divisor:</label>
-                        <select class="form-select" id="student-reason" name="student_reason" required>
+                        <select class="form-select" id="student-reason" name="student-reason" required>
                             <option value="">Select Option</option>
-                            <option value="Not Applicable">Not Applicable</option>
-                            <option value="On Approved Study Leave">On Approved Study Leave</option>
-                            <option value="On Approved Sabbatical Leave">On Approved Sabbatical Leave</option>
-                            <option value="On Approved Maternity Leave">On Approved Maternity Leave</option>
+                            <option value="not_applicable">Not Applicable</option>
+                            <option value="study_leave">On Approved Study Leave</option>
+                            <option value="sabbatical_leave">On Approved Sabbatical Leave</option>
+                            <option value="maternity_leave">On Approved Maternity Leave</option>
                         </select>
                         <div class="invalid-feedback">
                             Please select a valid option.
@@ -60,6 +60,9 @@
                             </tr>
                         </thead>
                         <tbody>
+                            <!-- Rows will be populated by JavaScript -->
+
+                            <!-- Default Rows -->
                             <?php 
                                 $evaluationPeriods = ["AY 2019 - 2020", "AY 2020 - 2021", "AY 2021 - 2022", "AY 2022 - 2023"];
                                 foreach ($evaluationPeriods as $period): 
@@ -119,7 +122,7 @@
                 <div class="row g-4 align-items-center mb-4">
                     <div class="col-md-4">
                         <label for="supervisor-divisor" class="form-label">Number of Semesters to Deduct from Divisor (if applicable):</label>
-                        <select class="form-select" id="supervisor-divisor" name="supervisor_divisor">
+                        <select class="form-select" id="supervisor-divisor" name="supervisor-divisor">
                             <?php for ($i = 0; $i <= 7; $i++): ?>
                                 <option value="<?php echo $i; ?>"><?php echo $i; ?></option>
                             <?php endfor; ?>
@@ -127,12 +130,12 @@
                     </div>
                     <div class="col-md-4">
                         <label for="supervisor-reason" class="form-label">Reason for Reducing the Divisor:</label>
-                        <select class="form-select" id="supervisor-reason" name="supervisor_reason" required>
+                        <select class="form-select" id="supervisor-reason" name="supervisor-reason" required>
                             <option value="">Select Option</option>
-                            <option value="Not Applicable">Not Applicable</option>
-                            <option value="On Approved Study Leave">On Approved Study Leave</option>
-                            <option value="On Approved Sabbatical Leave">On Approved Sabbatical Leave</option>
-                            <option value="On Approved Maternity Leave">On Approved Maternity Leave</option>
+                            <option value="not_applicable">Not Applicable</option>
+                            <option value="study_leave">On Approved Study Leave</option>
+                            <option value="sabbatical_leave">On Approved Sabbatical Leave</option>
+                            <option value="maternity_leave">On Approved Maternity Leave</option>
                         </select>
                     </div>
                     <!-- Link to Evidence -->
@@ -156,6 +159,9 @@
                             </tr>
                         </thead>
                         <tbody>
+                            <!-- Rows will be populated by JavaScript -->
+
+                            <!-- Default Rows -->
                             <?php foreach ($evaluationPeriods as $period): ?>
                                 <tr>
                                     <td>
@@ -213,21 +219,56 @@
 </div>
 
 
-
 <!-- Delete Confirmation Modal -->
 <div class="modal fade" id="deleteRowModal" tabindex="-1" aria-labelledby="deleteRowModalLabel" aria-hidden="true">
   <div class="modal-dialog modal-dialog-centered">
     <div class="modal-content">
-      <div class="modal-header">
+      <div class="modal-header"> 
         <h5 class="modal-title text-danger" id="deleteRowModalLabel">Confirm Deletion</h5>
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
       <div class="modal-body">
         Are you sure you want to delete this row? This action cannot be undone.
-      </div>
+        </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
         <button type="button" class="btn btn-danger" id="confirm-delete-row">Delete</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Delete Success Modal -->
+<div class="modal fade" id="deleteSuccessModal" tabindex="-1" aria-labelledby="deleteSuccessModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header bg-success text-white"> 
+        <h5 class="modal-title" id="deleteSuccessModalLabel">Deletion Successful</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        The row has been successfully deleted.
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-success" data-bs-dismiss="modal">OK</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Delete Error Modal -->
+<div class="modal fade" id="deleteErrorModal" tabindex="-1" aria-labelledby="deleteErrorModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header"> 
+        <h5 class="modal-title text-danger" id="deleteErrorModalLabel">Deletion Failed</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <!-- Error message will be injected here -->
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">OK</button>
       </div>
     </div>
   </div>
@@ -237,9 +278,9 @@
 <div class="modal fade" id="saveConfirmationModal" tabindex="-1" aria-labelledby="saveConfirmationModalLabel" aria-hidden="true">
   <div class="modal-dialog modal-dialog-centered">
     <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title text-success" id="saveConfirmationModalLabel">Save Successful</h5>
-        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      <div class="modal-header bg-success text-white">
+        <h5 class="modal-title" id="saveConfirmationModalLabel">Save Successful</h5>
+        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
       <div class="modal-body">
         Criterion A has been saved successfully!
@@ -268,6 +309,4 @@
     </div>
   </div>
 </div>
-
-
 

@@ -54,13 +54,12 @@ if ($_SESSION['role'] != 'Regular Instructor' && $_SESSION['role'] != 'Contract 
 <body class="layout-fixed sidebar-expand-lg bg-body-tertiary"> <!--begin::App Wrapper-->
     <div class="app-wrapper"> 
         <!--begin::Header-->
-        <?php require_once('../../includes/navbar.php'); ?>
+        <?php require_once BASE_PATH . '/php/includes/navbar.php'; ?>
         <!--end::Header--> 
         
         <!--begin::Sidebar-->
-        <?php require_once('../../includes/sidebar_faculty.php'); ?> 
+        <?php require_once BASE_PATH . '/php/includes/sidebar_faculty.php'; ?> 
         <!--end::Sidebar--> 
-        
 
         <!--begin::App Main-->
         <main class="app-main">
@@ -72,7 +71,7 @@ if ($_SESSION['role'] != 'Regular Instructor' && $_SESSION['role'] != 'Contract 
                         <div class="row align-items-start">
                             <div class="col-sm-6 mb-5">
                                 <!-- Change Evaluation Number dynamically-->
-                                <h3 class="mb-2"><strong>KRA II:</strong> Research, Innovation, and Creative work</h3> 
+                                <h3 class="mb-2"><strong>KRA II:</strong> Research, Innovation, and Creative Work<br></h3>
                                 <h4 class="mb-0"><span id="evaluation-number">Evaluation #: <small><i class="text-danger">Please select evaluation number.</i></small></span></h4>
                             </div>
                             <div class="col-sm-6 pe-4 mt-4">
@@ -88,9 +87,9 @@ if ($_SESSION['role'] != 'Regular Instructor' && $_SESSION['role'] != 'Contract 
                 </div>
 
                 <!-- Hidden input to store request_id -->
-                <input type="hidden" id="hidden-request-id" name="request_id" value="">
+                <input type="hidden" id="request-id" name="request_id" value="">
 
-                <!-- KRA II Content -->
+                <!-- KRA I Content -->
                 <?php require_once BASE_PATH . '/php/includes/career_progress_tracking/research/kra2.php';?>
 
                 <!-- Container for Criteria -->
@@ -118,18 +117,19 @@ if ($_SESSION['role'] != 'Regular Instructor' && $_SESSION['role'] != 'Contract 
                     <!-- Criterions section -->
                     <div class="card-body">
                         <div class="tab-content" id="kra-tab-content">
-                            <!-- Tab 1: Criterion A: Research Outputs -->
+                            <!-- Tab 1: Criterion A: Teaching Effectiveness -->
                             <?php require_once BASE_PATH . '/php/includes/career_progress_tracking/research/criterion_a.php'; ?> 
-                            <!-- Tab 2: Criterion B: Inventions -->
-
-                            <!-- Tab 3: Criterion C: Creative Works -->
-
+                            <!-- Tab 2: Criterion B: Curriculum & Material Development -->
+                            <?php require_once BASE_PATH . '/php/includes/career_progress_tracking/research/criterion_b.php'; ?> 
+                            <!-- Tab 3: Criterion C: Thesis & Mentorship Services -->
+                            <?php require_once BASE_PATH . '/php/includes/career_progress_tracking/research/criterion_c.php'; ?> 
                         </div>
                     </div>
 
                 </div>
 
                 <!-- MODAL SECTION -->
+                <?php require_once BASE_PATH . '/php/includes/career_progress_tracking/teaching/modals.php'; ?>
 
             </div>
         </main>
@@ -147,8 +147,9 @@ if ($_SESSION['role'] != 'Regular Instructor' && $_SESSION['role'] != 'Contract 
     <!-- Script Links for Chart.js -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
-    <!-- Visualization scripts -->
-    <script src="<?php echo BASE_URL; ?>/php/includes/career_progress_tracking/teaching/js/teaching.js"></script>
+    
+    <!-- Career Progress Teaching Scripts -->
+    <script src="<?php echo BASE_URL; ?>/php/includes/career_progress_tracking/research/js/research.js"></script>
 
 </body>
 </html>

@@ -1,6 +1,6 @@
 <!-- careerpath/php/includes/career_progress_tracking/teaching/criterion_a.php -->
 <div class="tab-pane fade show active criterion-tab" id="criterion-a" role="tabpanel" aria-labelledby="tab-criterion-a">
-    <h4 class="mb-4 pb-2 border-bottom border-3 border-success"><strong>CRITERION A - RESEARCH OUTPUTS (MAX = 100 POINTS)</strong></h4>
+    <h4 class="mb-4 pb-2 border-bottom border-3 border-success"><strong>CRITERION A - SERVICE TO THE INSTITUTION (MAX = 30 POINTS)</strong></h4>
     
     <h5><strong>1. FOR EVERY SCHOLARLY RESEARCH PAPER/EDUCATIONAL OR TECHNICAL ARTICLE AND OTHER OUTPUTS PUBLISHED:</strong></h5>
     
