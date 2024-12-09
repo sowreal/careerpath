@@ -1,12 +1,29 @@
 <?php
 // get_faculty_members.php
 
-include('../../session.php'); // Ensure the user is logged in
-include('../../connection.php'); // Include the database connection
+// Start output buffering to prevent any accidental output
+ob_start();
+
+// Set Content-Type header to JSON
+header('Content-Type: application/json');
+
+// Initialize response array
+$response = [
+    'table_data' => '',
+    'pagination' => ''
+];
+
+// Include necessary files
+include('../../session.php'); 
+include('../../connection.php'); 
 
 // Check user role
 if ($_SESSION['role'] != 'Human Resources') {
-    // Handle unauthorized access
+    // Return unauthorized access error as JSON
+    $response['error'] = 'Unauthorized access.';
+    echo json_encode($response);
+    // Clean (erase) the output buffer and turn off output buffering
+    ob_end_clean();
     exit();
 }
 
@@ -18,9 +35,13 @@ $page = isset($_GET['page']) ? (int)$_GET['page'] : 1;
 $limit = 10; // Number of entries per page
 $offset = ($page - 1) * $limit;
 
-// Build the query
-$sql = "SELECT id, first_name, middle_name, last_name, department, faculty_rank FROM users WHERE role IN ('Regular Instructor', 'Contract of Service Instructor', 'Human Resources')";
-$count_sql = "SELECT COUNT(*) FROM users WHERE role IN ('Regular Instructor', 'Contract of Service Instructor', 'Human Resources')";
+// Build the base query
+$sql = "SELECT id, first_name, middle_name, last_name, department, faculty_rank 
+        FROM users 
+        WHERE role IN ('Regular Instructor', 'Contract of Service Instructor', 'Human Resources')";
+$count_sql = "SELECT COUNT(*) 
+             FROM users 
+             WHERE role IN ('Regular Instructor', 'Contract of Service Instructor', 'Human Resources')";
 
 // Parameters array for prepared statements
 $params = [];
@@ -56,8 +77,16 @@ try {
     $total_results = $count_stmt->fetchColumn();
     $total_pages = ceil($total_results / $limit);
 } catch (PDOException $e) {
-    echo json_encode(['error' => "Error counting faculty data: " . $e->getMessage()]);
+    $response['error'] = "Error counting faculty data: " . $e->getMessage();
+    echo json_encode($response);
+    ob_end_clean();
     exit();
+}
+
+// Ensure the requested page does not exceed total pages
+if ($page > $total_pages && $total_pages > 0) {
+    $page = $total_pages;
+    $offset = ($page - 1) * $limit;
 }
 
 // Append ORDER BY and LIMIT clauses for pagination
@@ -78,7 +107,9 @@ try {
     $stmt->execute();
     $facultyMembers = $stmt->fetchAll(PDO::FETCH_ASSOC);
 } catch (PDOException $e) {
-    echo json_encode(['error' => "Error fetching faculty data: " . $e->getMessage()]);
+    $response['error'] = "Error fetching faculty data: " . $e->getMessage();
+    echo json_encode($response);
+    ob_end_clean();
     exit();
 }
 
@@ -86,7 +117,7 @@ try {
 $table_data = '';
 if ($facultyMembers) {
     foreach ($facultyMembers as $member) {
-        $fullName = htmlspecialchars($member['first_name'] . ' '. $member['middle_name'] .' ' . $member['last_name']);
+        $fullName = htmlspecialchars($member['first_name'] . ' ' . ($member['middle_name'] ? $member['middle_name'] . ' ' : '') . $member['last_name']);
         $department = htmlspecialchars($member['department']);
         $facultyRank = htmlspecialchars($member['faculty_rank']);
         $facultyId = $member['id'];
@@ -108,8 +139,9 @@ if ($facultyMembers) {
 $pagination = '';
 if ($total_pages > 1) {
     $pagination .= '<nav aria-label="Page navigation"><ul class="pagination faculty-pagination">';
+    
     // Previous page
-    $prev_disabled = $page <= 1 ? ' disabled' : '';
+    $prev_disabled = ($page <= 1) ? ' disabled' : '';
     $prev_page = max(1, $page - 1);
     $pagination .= '<li class="page-item' . $prev_disabled . '"><a class="page-link" href="#" data-page="' . $prev_page . '">Previous</a></li>';
 
@@ -126,7 +158,7 @@ if ($total_pages > 1) {
     }
 
     for ($i = $start; $i <= $end; $i++) {
-        $active = $page == $i ? ' active' : '';
+        $active = ($page == $i) ? ' active' : '';
         $pagination .= '<li class="page-item' . $active . '"><a class="page-link" href="#" data-page="' . $i . '">' . $i . '</a></li>';
     }
 
@@ -138,18 +170,19 @@ if ($total_pages > 1) {
     }
 
     // Next page
-    $next_disabled = $page >= $total_pages ? ' disabled' : '';
+    $next_disabled = ($page >= $total_pages) ? ' disabled' : '';
     $next_page = min($total_pages, $page + 1);
     $pagination .= '<li class="page-item' . $next_disabled . '"><a class="page-link" href="#" data-page="' . $next_page . '">Next</a></li>';
 
     $pagination .= '</ul></nav>';
 }
 
+// Assign to response
+$response['table_data'] = $table_data;
+$response['pagination'] = $pagination;
 
-// Return the data as JSON
-header('Content-Type: application/json');
-echo json_encode([
-    'table_data' => $table_data,
-    'pagination' => $pagination
-]);
+// Clean the output buffer and send the JSON response
+ob_clean();
+echo json_encode($response);
+exit();
 ?>

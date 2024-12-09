@@ -2,6 +2,7 @@
 document.addEventListener('DOMContentLoaded', function () {
     // Function to fetch faculty members based on filters
     function fetchFacultyMembers(page = 1) {
+        console.log(`Fetching faculty members for page: ${page}`);
         const searchInput = document.getElementById('searchInput');
         const departmentFilter = document.getElementById('departmentFilter');
         const facultyRankFilter = document.getElementById('facultyRankFilter');
@@ -18,22 +19,41 @@ document.addEventListener('DOMContentLoaded', function () {
         });
 
         fetch('faculty_management/get_faculty_members.php?' + params.toString())
-            .then(response => response.json())
-            .then(data => {
-                // Update the faculty members table
-                const tableBody = document.querySelector('#facultyMembersTable tbody');
-                if (tableBody) {
-                    tableBody.innerHTML = data.table_data;
-                }
+            .then(response => {
+                console.log('Received response:', response);
+                return response.text();
+            })
+            .then(text => {
+                console.log('Response text:', text);
+                try {
+                    const data = JSON.parse(text);
+                    if (data.error) {
+                        console.error('Backend Error:', data.error);
+                        alert(`Error: ${data.error}`);
+                        return;
+                    }
 
-                // Update the pagination
-                const paginationContainer = document.getElementById('facultyPagination');
-                if (paginationContainer) {
-                    paginationContainer.innerHTML = data.pagination;
-                }
+                    // Update the faculty members table
+                    const tableBody = document.querySelector('#facultyMembersTable tbody');
+                    if (tableBody) {
+                        tableBody.innerHTML = data.table_data;
+                    } else {
+                        console.error('Table body not found!');
+                    }
 
-                // Re-attach event listeners for "View Profile" buttons
-                attachViewProfileButtons();
+                    // Update the pagination
+                    const paginationContainer = document.getElementById('facultyPagination');
+                    if (paginationContainer) {
+                        paginationContainer.innerHTML = data.pagination;
+                    } else {
+                        console.error('Pagination container not found!');
+                    }
+
+                    // Re-attach event listeners for "View Profile" buttons
+                    attachViewProfileButtons();
+                } catch (e) {
+                    console.error('Error parsing JSON:', e);
+                }
             })
             .catch(error => {
                 console.error('Error fetching faculty members:', error);
@@ -45,6 +65,7 @@ document.addEventListener('DOMContentLoaded', function () {
         document.querySelectorAll('.view-profile-btn').forEach(function (button) {
             button.addEventListener('click', function () {
                 const facultyId = this.getAttribute('data-faculty-id');
+                console.log(`View Profile clicked for Faculty ID: ${facultyId}`);
                 // Fetch faculty data from backend
                 fetch(`faculty_management/get_faculty_details.php?faculty_id=${facultyId}`)
                     .then(response => response.json())
@@ -120,10 +141,14 @@ document.addEventListener('DOMContentLoaded', function () {
 
     // Handle pagination clicks using event delegation
     document.addEventListener('click', function (e) {
-        if (e.target.matches('.faculty-pagination a')) {
+        const link = e.target.closest('.faculty-pagination a');
+        if (link) {
             e.preventDefault();
-            const page = e.target.getAttribute('data-page');
-            fetchFacultyMembers(page);
+            const page = link.getAttribute('data-page');
+            if (page) {
+                console.log(`Pagination link clicked. Navigating to page: ${page}`);
+                fetchFacultyMembers(page);
+            }
         }
     });
 
@@ -169,6 +194,8 @@ document.addEventListener('DOMContentLoaded', function () {
     });
 });
 // END: Faculty Management Section
+
+
 
 
 // START: Profile Change Requests
