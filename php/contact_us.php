@@ -175,7 +175,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                                         </div>
                                     <?php endif; ?>
 
-                                    <form action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>" method="POST" novalidate>
+                                    <form id="contactForm" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>" method="POST" novalidate>
                                         <!-- CSRF Token -->
                                         <input type="hidden" name="csrf_token" value="<?php echo htmlspecialchars($_SESSION['csrf_token']); ?>">
 
@@ -209,7 +209,10 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
                                         <!-- Submit Button -->
                                         <div class="d-flex justify-content-end">
-                                            <button type="submit" class="btn btn-success">Send Message</button>
+                                            <button type="submit" class="btn btn-success" id="submitBtn">
+                                                <span id="submitText">Send Message</span>
+                                                <span class="spinner-border spinner-border-sm ms-2 d-none" role="status" aria-hidden="true" id="submitSpinner"></span>
+                                            </button>
                                         </div>
                                     </form>
                                 </div>
@@ -226,5 +229,29 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
     <!--begin::Script--> 
     <?php require_once BASE_PATH . '/php/includes/dashboard_default_scripts.php'; ?> 
+
+
+    <!-- Submit Button Handling Script -->
+    <script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const form = document.getElementById('contactForm');
+        const submitBtn = document.getElementById('submitBtn');
+        const submitText = document.getElementById('submitText');
+        const submitSpinner = document.getElementById('submitSpinner');
+
+        if (form) {
+            form.addEventListener('submit', function () {
+                // Disable the submit button to prevent multiple clicks
+                submitBtn.disabled = true;
+
+                // Change button text to indicate processing
+                submitText.textContent = 'Sending...';
+
+                // Show the spinner
+                submitSpinner.classList.remove('d-none');
+            });
+        }
+    });
+    </script>
 </body>
 </html>
