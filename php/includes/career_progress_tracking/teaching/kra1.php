@@ -39,10 +39,10 @@
                         </tbody>
                     </table>
                 </div>
-                <div class="col-md-4 mb-2 justify-content-end">
+                <!-- <div class="col-md-4 mb-2 justify-content-end">
                     <label for="student-overall-score" class="form-label"><strong>Grand Total Points for KRA II:</strong></label>
                     <input type="number" class="form-control" value="90" readonly>
-                </div>
+                </div> -->
             </div>
             <!-- Placeholder for Graphs -->
             <div class="col-md-6 d-flex flex-column align-items-center justify-content-center">
