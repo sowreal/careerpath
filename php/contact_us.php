@@ -10,6 +10,9 @@ require_once 'connection.php'; // Adjust the path as necessary
 // Include configuration
 require_once 'config.php'; // Ensure BASE_PATH is defined in config.php
 
+// Include send_email.php
+require_once BASE_PATH . '/php/send_email.php';
+
 // Initialize variables for error/success messages
 $success = '';
 $error = '';
@@ -61,8 +64,25 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 // Execute the statement
                 $stmt->execute();
 
-                // Success message
-                $success = "Your message has been sent successfully! We'll get back to you shortly.";
+                // Compose the email
+                $emailSubject = "New Contact Message: " . $subject;
+                $emailBody = "You have received a new contact message.\n\n" .
+                             "Name: " . $name . "\n" .
+                             "Email: " . $email . "\n" .
+                             "Subject: " . $subject . "\n" .
+                             "Message:\n" . $message . "\n\n" .
+                             "User ID: " . ($user_id ?? 'Guest') . "\n" .
+                             "Submitted At: " . date('Y-m-d H:i:s');
+
+                // Send the email to SUPPORT_EMAIL
+                $emailSent = sendEmail(SUPPORT_EMAIL, $emailSubject, $emailBody);
+
+                // Check if email was sent successfully
+                if ($emailSent) {
+                    $success = "Your message has been sent successfully! We'll get back to you shortly.";
+                } else {
+                    $error = "Your message was saved, but we couldn't send a confirmation email at this time.";
+                }
 
                 // Optionally, you can redirect to a thank-you page
                 // header("Location: thank_you.php");
@@ -122,7 +142,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                                 <?php if ($_SESSION['role'] == 'Human Resources'): ?>
                                     <li class="breadcrumb-item"><a href="<?php echo BASE_URL; ?>/php/dashboard_HR/dashboard_HR.php">Home</a></li>
                                 <?php else: ?>
-                                    <li class="breadcrumb-item"><a href="<?php echo BASE_URL; ?>/php/dashboard/dashboard_faculty.php">Home</a></li>
+                                    <li class="breadcrumb-item"><a href="<?php echo BASE_URL; ?>/php/dashboard_faculty.php">Home</a></li>
                                 <?php endif; ?>
                                 <li class="breadcrumb-item active" aria-current="page">Contact Us</li>
                             </ol>

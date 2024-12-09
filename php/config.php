@@ -14,3 +14,6 @@ define('BASE_URL', $protocol . $host . $projectDir);
 
 // Difine BASE_PATH dynamically
 define('BASE_PATH', $_SERVER['DOCUMENT_ROOT'] . $projectDir);
+
+// Define Support Email
+define('SUPPORT_EMAIL', 'no-reply@slsucareerpath.com');
