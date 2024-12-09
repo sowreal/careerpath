@@ -253,5 +253,22 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         }
     });
     </script>
+
+    <!-- Alert Fade-Out Script -->
+    <script>
+    document.addEventListener('DOMContentLoaded', function () {
+        // Select all alert elements
+        const alerts = document.querySelectorAll('.alert');
+
+        alerts.forEach(function (alert) {
+            // Automatically close the alert after 5 seconds
+            setTimeout(function () {
+                const bsAlert = new bootstrap.Alert(alert);
+                bsAlert.close();
+            }, 5000); // 5000 milliseconds = 5 seconds
+        });
+    });
+    </script>
+
 </body>
 </html>
