@@ -14,8 +14,9 @@ $response = [
 ];
 
 // Include necessary files
-include('../../session.php'); 
-include('../../connection.php'); 
+require_once '../../session.php'; 
+require_once '../../connection.php'; 
+require_once '../../config.php';
 
 // Check user role
 if ($_SESSION['role'] != 'Human Resources') {
@@ -127,7 +128,12 @@ if ($facultyMembers) {
         $table_data .= '<td>' . $department . '</td>';
         $table_data .= '<td>' . $facultyRank . '</td>';
         $table_data .= '<td>';
-        $table_data .= '<button type="button" class="btn btn-success view-profile-btn" data-faculty-id="' . $facultyId . '">View Profile</button>';
+        // Table row Buttons
+        $table_data .= '<div class="d-flex flex-column flex-md-row gap-2">';
+        $table_data .= '  <button type="button" class="btn btn-success btn-sm w-100 view-profile-btn" data-faculty-id="' . $facultyId . '">View Profile</button>';
+        $table_data .= '  <a href="career_progress_tracking/kra_summary_HR.php?faculty_id=' . $facultyId . '" class="btn btn-success btn-sm w-100">View Evaluation</a>';
+        $table_data .= '</div>';
+
         $table_data .= '</td>';
         $table_data .= '</tr>';
     }

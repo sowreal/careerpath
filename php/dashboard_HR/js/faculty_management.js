@@ -1,4 +1,6 @@
 // START: Faculty Management Section
+// faculty_management.js
+
 document.addEventListener('DOMContentLoaded', function () {
     // Function to fetch faculty members based on filters
     function fetchFacultyMembers(page = 1) {
@@ -19,41 +21,32 @@ document.addEventListener('DOMContentLoaded', function () {
         });
 
         fetch('faculty_management/get_faculty_members.php?' + params.toString())
-            .then(response => {
-                console.log('Received response:', response);
-                return response.text();
-            })
-            .then(text => {
-                console.log('Response text:', text);
-                try {
-                    const data = JSON.parse(text);
-                    if (data.error) {
-                        console.error('Backend Error:', data.error);
-                        alert(`Error: ${data.error}`);
-                        return;
-                    }
-
-                    // Update the faculty members table
-                    const tableBody = document.querySelector('#facultyMembersTable tbody');
-                    if (tableBody) {
-                        tableBody.innerHTML = data.table_data;
-                    } else {
-                        console.error('Table body not found!');
-                    }
-
-                    // Update the pagination
-                    const paginationContainer = document.getElementById('facultyPagination');
-                    if (paginationContainer) {
-                        paginationContainer.innerHTML = data.pagination;
-                    } else {
-                        console.error('Pagination container not found!');
-                    }
-
-                    // Re-attach event listeners for "View Profile" buttons
-                    attachViewProfileButtons();
-                } catch (e) {
-                    console.error('Error parsing JSON:', e);
+            .then(response => response.json())
+            .then(data => {
+                if (data.error) {
+                    console.error('Backend Error:', data.error);
+                    alert(`Error: ${data.error}`);
+                    return;
                 }
+
+                // Update the faculty members table
+                const tableBody = document.querySelector('#facultyMembersTable tbody');
+                if (tableBody) {
+                    tableBody.innerHTML = data.table_data;
+                } else {
+                    console.error('Table body not found!');
+                }
+
+                // Update the pagination
+                const paginationContainer = document.getElementById('facultyPagination');
+                if (paginationContainer) {
+                    paginationContainer.innerHTML = data.pagination;
+                } else {
+                    console.error('Pagination container not found!');
+                }
+
+                // Re-attach event listeners for "View Profile" buttons
+                attachViewProfileButtons();
             })
             .catch(error => {
                 console.error('Error fetching faculty members:', error);
