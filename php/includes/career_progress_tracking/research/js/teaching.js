@@ -1,41 +1,45 @@
 document.addEventListener('DOMContentLoaded', function () {
-    // Evaluation Selection Handler
+    
+    // For selecting evaluation numbers
     document.getElementById('select-evaluation-btn').addEventListener('click', function () {
-        const modalBody = document.querySelector('#evaluationModal .modal-body');
-        modalBody.innerHTML = '<p>Loading evaluations...</p>'; // Show loading message while fetching data
+    const modalBody = document.querySelector('#evaluationModal .modal-body');
+    modalBody.innerHTML = '<p>Loading evaluations...</p>'; // Show loading message while fetching data
 
-        // Fetch evaluations via AJAX
-        fetch('../../includes/career_progress_tracking/teaching/fetch_evaluations.php', { method: 'POST' })
+    // Fetch evaluations via AJAX
+    fetch('../../includes/career_progress_tracking/teaching/fetch_evaluations.php', { method: 'POST' })
         .then(response => {
             if (!response.ok) throw new Error('Failed to fetch evaluations');
             return response.json();
         })
         .then(data => {
             if (data.length > 0) {
-                modalBody.innerHTML = data.map(evalItem => {
-                    const createdDate = new Date(evalItem.created_at);
+                modalBody.innerHTML = data.map(eval => {
+                    // Format the creation date
+                    const createdDate = new Date(eval.created_at);
                     const options = { year: 'numeric', month: 'short', day: 'numeric', hour: 'numeric', minute: 'numeric' };
                     const formattedDate = createdDate.toLocaleDateString(undefined, options);
-                    const evaluationNumber = `Evaluation #: ${evalItem.request_id}`;
-
+        
+                    // Create the evaluation number in the format Eval-<request_id>
+                    const evaluationNumber = `Evaluation #:${eval.request_id}`;
+        
                     return `
-                        <div class="form-check">
-                            <input class="form-check-input" type="radio" name="evaluation" id="eval-${evalItem.request_id}" value="${evalItem.request_id}">
-                            <label class="form-check-label" for="eval-${evalItem.request_id}">
-                                ${evaluationNumber} (Created: ${formattedDate})
-                            </label>
-                        </div>`;
+                    <div class="form-check">
+                        <input class="form-check-input" type="radio" name="evaluation" id="eval-${eval.request_id}" value="${eval.request_id}">
+                        <label class="form-check-label" for="eval-${eval.request_id}">
+                            ${evaluationNumber} (Created: ${formattedDate})
+                        </label>
+                    </div>`;
                 }).join('');
             } else {
-                modalBody.innerHTML = '<p>No evaluations found.</p><p>Click <a href="career_progress_request.php">HERE</a> to create a new one.</p>';
+                modalBody.innerHTML = '<p>No evaluations found.</p>';
             }
-        })
+        })        
         .catch(err => {
             console.error(err);
             modalBody.innerHTML = '<p>Error loading evaluations. Please try again later.</p>';
         });
     });
-
+    
     // Modal button handler for selecting evaluation number
     document.getElementById('confirm-selection').addEventListener('click', function () {
         const selectedEvaluation = document.querySelector('input[name="evaluation"]:checked');
@@ -45,26 +49,16 @@ document.addEventListener('DOMContentLoaded', function () {
             // Update the header
             document.getElementById('evaluation-number').textContent = `Evaluation #: ${requestId}`;
 
-            // Set the input field value
-            const requestIdInput = document.getElementById('request_id');
-            if (requestIdInput) {
-                requestIdInput.value = requestId;
-                console.log('request_id set to:', requestId);
-            } else {
-                console.error('Input field with id "request_id" not found.');
-            }
+            // Store request_id and enable fields
+            document.getElementById('hidden-request-id').value = requestId;
+            enableFields();
 
-            // Fetch data for the selected evaluation by calling Criterion A's fetch function
-            if (typeof fetchCriterionA === 'function') {
-                fetchCriterionA(requestId);
-            } else {
-                console.error('fetchCriterionA function is not defined.');
-            }
+            // Fetch data for the selected evaluation
+            fetchEvaluationData(requestId);
 
             // Hide the modal
             const evaluationModal = bootstrap.Modal.getInstance(document.getElementById('evaluationModal'));
             evaluationModal.hide();
-            
 
         } else {
             // Show error modal instead of alert
@@ -75,7 +69,38 @@ document.addEventListener('DOMContentLoaded', function () {
         }
     });
 
-    // Visualization: Doughnut Chart for Overall Performance (Optional)
+    // Enable all input fields in Criterion tabs
+    function enableFields() {
+        document.querySelectorAll('.criterion-tab input, .criterion-tab textarea, .criterion-tab select')
+            .forEach(field => field.disabled = false);
+    }
+    
+    // Fetch data when an evaluation is selected.
+    function fetchEvaluationData(requestId) {
+        fetch(`../../includes/career_progress_tracking/teaching/fetch_criterion_data.php?request_id=${requestId}`)
+
+        .then(response => response.text()) // Get the raw text response
+        .then(text => {
+            console.log('Response text:', text); // Log the raw response
+    
+            try {
+                const data = JSON.parse(text); // Attempt to parse the JSON
+                console.log('Parsed data:', data);
+    
+                if (data.success) {
+                    // Populate the fields in Criterion tabs with fetched data
+                    populateFields(data.criterion_data);
+                } else {
+                    console.log('No data found for this evaluation. Ready for new entries.');
+                }
+            } catch (error) {
+                console.error('Error parsing JSON:', error);
+            }
+        })
+        .catch(err => console.error('Error fetching data:', err));
+    }
+    
+    // Visualization: Doughnut Chart for Overall Performance
     const ctxDoughnut = document.getElementById('kraDoughnutChart');
     if (ctxDoughnut) {
         const kraDoughnutChart = new Chart(ctxDoughnut.getContext('2d'), {
@@ -109,8 +134,8 @@ document.addEventListener('DOMContentLoaded', function () {
             }
         });
     }  
-
-    // JavaScript for tabs styling
+    
+    // JavaScript to dynamically add and remove bg-success and text-white on tabs on 2nd container
     const tabs = document.querySelectorAll('#kra-tabs .nav-link');
     if (tabs.length > 0) {
         tabs.forEach(tab => {
