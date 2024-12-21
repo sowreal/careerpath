@@ -257,7 +257,7 @@ function build_pagination_link($page, $search, $department, $faculty_rank) {
                 </div>
             </div>
 
-            <!-- Profile Change Requests Section -->
+            <!-- Profile Change Requests Section --> 
             <div class="container-fluid">
                 <div class="card mt-4">
                     <div class="card-header">
