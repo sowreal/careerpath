@@ -219,7 +219,7 @@
 </div>
 
 
-<!-- Delete Confirmation Modal -->
+<!-- Delete Row Confirmation Modal -->
 <div class="modal fade" id="deleteRowModal" tabindex="-1" aria-labelledby="deleteRowModalLabel" aria-hidden="true">
   <div class="modal-dialog modal-dialog-centered">
     <div class="modal-content">
@@ -309,4 +309,5 @@
     </div>
   </div>
 </div>
+
 

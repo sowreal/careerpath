@@ -9,7 +9,7 @@ require_once '../../../connection.php';
 
 // Check if user is logged in
 if (!isset($_SESSION['user_id'])) {
-    echo json_encode(['success'=>false,'error'=>'Unauthorized']);
+    echo json_encode(['success' => false, 'error' => 'Unauthorized']);
     exit();
 }
 
@@ -32,16 +32,41 @@ $student_faculty_rating = isset($data['student_faculty_rating']) ? $data['studen
 $supervisor_overall_rating = isset($data['supervisor_overall_rating']) ? $data['supervisor_overall_rating'] : null;
 $supervisor_faculty_rating = isset($data['supervisor_faculty_rating']) ? $data['supervisor_faculty_rating'] : null;
 
+// Extract deletions
+$deleted_evaluations = isset($data['deleted_evaluations']) && is_array($data['deleted_evaluations']) ? $data['deleted_evaluations'] : [
+    'student' => [],
+    'supervisor' => []
+];
+
 try {
     $conn->beginTransaction();
 
+    // === Handle Deletions ===
+    foreach ($deleted_evaluations as $table => $ids) {
+        if ($table === 'student') {
+            $stmt = $conn->prepare("DELETE FROM kra1_a_student_evaluation WHERE evaluation_id = :evaluation_id AND request_id = :request_id");
+        } elseif ($table === 'supervisor') {
+            $stmt = $conn->prepare("DELETE FROM kra1_a_supervisor_evaluation WHERE evaluation_id = :evaluation_id AND request_id = :request_id");
+        } else {
+            continue; // Skip invalid tables
+        }
+
+        foreach ($ids as $eval_id) {
+            $stmt->execute([
+                ':evaluation_id' => intval($eval_id),
+                ':request_id' => $request_id
+            ]);
+        }
+    }
+
+    // === Update or Insert Metadata ===
     // Check if metadata row exists
-    $meta_check = $conn->prepare("SELECT metadata_id FROM kra1_a_metadata WHERE request_id = :request_id");
+    $meta_check = $conn->prepare("SELECT metadata_id, student_divisor, student_reason, supervisor_divisor, supervisor_reason FROM kra1_a_metadata WHERE request_id = :request_id");
     $meta_check->execute([':request_id' => $request_id]);
-    $metadata = $meta_check->fetch();
+    $metadata = $meta_check->fetch(PDO::FETCH_ASSOC);
 
     if ($metadata) {
-        // Update metadata including new rating fields
+        // Update existing metadata
         $update_meta = $conn->prepare("UPDATE kra1_a_metadata SET 
             student_divisor = :student_divisor, 
             student_reason = :student_reason, 
@@ -68,7 +93,7 @@ try {
             ':metadata_id' => $metadata['metadata_id']
         ]);
     } else {
-        // Insert new metadata row with the new rating fields
+        // Insert new metadata row
         $insert_meta = $conn->prepare("INSERT INTO kra1_a_metadata 
             (request_id, student_divisor, student_reason, student_evidence_link, 
              supervisor_divisor, supervisor_reason, supervisor_evidence_link,
@@ -92,8 +117,7 @@ try {
         ]);
     }
 
-    // Upsert Student Evaluations
-    // Remove references to overall_average_rating and faculty_rating since these no longer exist in kra1_a_student_evaluation
+    // === Upsert Student Evaluations ===
     foreach ($student_evaluations as $eval) {
         if (!isset($eval['evaluation_period'])) {
             continue; // Skip invalid rows
@@ -139,8 +163,7 @@ try {
         }
     }
 
-    // Upsert Supervisor Evaluations
-    // Remove references to overall_average_rating and faculty_rating since these no longer exist in kra1_a_supervisor_evaluation
+    // === Upsert Supervisor Evaluations ===
     foreach ($supervisor_evaluations as $eval) {
         if (!isset($eval['evaluation_period'])) {
             continue; // Skip invalid rows
@@ -186,9 +209,66 @@ try {
         }
     }
 
+    // === Recalculate and Update Metadata ===
+    // Fetch updated evaluations for recalculation
+
+    // Fetch updated student evaluations
+    $stmt = $conn->prepare("SELECT first_semester_rating, second_semester_rating FROM kra1_a_student_evaluation WHERE request_id = :request_id");
+    $stmt->execute([':request_id' => $request_id]);
+    $student_evals = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+    // Calculate student ratings
+    $student_total = 0;
+    $student_count = 0;
+    foreach ($student_evals as $eval) {
+        $student_total += floatval($eval['first_semester_rating']);
+        $student_count++;
+        $student_total += floatval($eval['second_semester_rating']);
+        $student_count++;
+    }
+
+    $student_overall_rating = ($student_count > 0) ? ($student_total / $student_count) : 0;
+    $student_faculty_rating = $student_overall_rating * 0.36;
+
+    // Fetch updated supervisor evaluations
+    $stmt = $conn->prepare("SELECT first_semester_rating, second_semester_rating FROM kra1_a_supervisor_evaluation WHERE request_id = :request_id");
+    $stmt->execute([':request_id' => $request_id]);
+    $supervisor_evals = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+    // Calculate supervisor ratings
+    $supervisor_total = 0;
+    $supervisor_count = 0;
+    foreach ($supervisor_evals as $eval) {
+        $supervisor_total += floatval($eval['first_semester_rating']);
+        $supervisor_count++;
+        $supervisor_total += floatval($eval['second_semester_rating']);
+        $supervisor_count++;
+    }
+
+    $supervisor_overall_rating = ($supervisor_count > 0) ? ($supervisor_total / $supervisor_count) : 0;
+    $supervisor_faculty_rating = $supervisor_overall_rating * 0.24;
+
+    // Update metadata
+    if ($metadata) {
+        $stmt = $conn->prepare("UPDATE kra1_a_metadata SET 
+            student_overall_rating = :student_overall_rating,
+            student_faculty_rating = :student_faculty_rating,
+            supervisor_overall_rating = :supervisor_overall_rating,
+            supervisor_faculty_rating = :supervisor_faculty_rating
+            WHERE request_id = :request_id");
+        $stmt->execute([
+            ':student_overall_rating' => $student_overall_rating,
+            ':student_faculty_rating' => $student_faculty_rating,
+            ':supervisor_overall_rating' => $supervisor_overall_rating,
+            ':supervisor_faculty_rating' => $supervisor_faculty_rating,
+            ':request_id' => $request_id
+        ]);
+    }
+
     $conn->commit();
     echo json_encode(['success'=>true, 'message'=>'Criterion A saved successfully']);
 } catch (Exception $e) {
     $conn->rollBack();
     echo json_encode(['success'=>false,'error'=>'Failed to save data: '.$e->getMessage()]);
 }
+?>

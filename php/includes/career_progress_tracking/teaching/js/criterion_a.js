@@ -153,8 +153,32 @@ document.addEventListener('DOMContentLoaded', function () {
     const saveSuccessModal = new bootstrap.Modal(document.getElementById('saveConfirmationModal'));
     const saveErrorModal = new bootstrap.Modal(document.getElementById('saveErrorModal'));
 
+    // === DELETION TRACKING AND DIRTY FLAG START ===
+    // Initialize an object to track deleted evaluations
+    let deletedEvaluations = {
+        student: [],
+        supervisor: []
+    };
+
+    // Initialize a flag to track if the form has unsaved changes
+    let isFormDirty = false;
+
+    function markFormAsDirty() {
+        isFormDirty = true;
+        // Optionally, add a visual indicator (e.g., change save button color)
+        saveBtn.classList.add('btn-warning');
+    }
+
+    function markFormAsClean() {
+        isFormDirty = false;
+        // Remove visual indicators
+        saveBtn.classList.remove('btn-warning');
+    }
+    // === DELETION TRACKING AND DIRTY FLAG END ===
+    
+    
     // === SAVING PROCESS START ===
-    saveBtn.addEventListener('click', function () {
+    function saveCriterionA() {
         if (!form.checkValidity()) {
             form.classList.add('was-validated');
             return;
@@ -179,11 +203,11 @@ document.addEventListener('DOMContentLoaded', function () {
         .then(data => {
             if (data.success) {
                 saveSuccessModal.show();
-                const requestId = document.getElementById('request_id').value.trim();
-                if (requestId) {
-                    // Re-fetch data to ensure new rows get updated evaluation_id
-                    fetchCriterionA(requestId);
-                }
+                // Reset the deletedEvaluations list
+                deletedEvaluations = { student: [], supervisor: [] };
+                markFormAsClean();
+                // Re-fetch data if necessary
+                fetchCriterionA(requestId);
             } else {
                 showErrorModal(data.error || 'An error occurred.');
             }
@@ -192,6 +216,10 @@ document.addEventListener('DOMContentLoaded', function () {
             console.error('Error:', error);
             showErrorModal('Failed to save data. Please check console for details.');
         });
+    }
+
+    saveBtn.addEventListener('click', function () {
+        saveCriterionA();
     });
 
     function gatherPayload(requestId) {
@@ -263,7 +291,9 @@ document.addEventListener('DOMContentLoaded', function () {
             student_overall_rating: student_overall_rating,
             student_faculty_rating: student_faculty_rating,
             supervisor_overall_rating: supervisor_overall_rating,
-            supervisor_faculty_rating: supervisor_faculty_rating
+            supervisor_faculty_rating: supervisor_faculty_rating,
+            // Include deleted evaluations
+            deleted_evaluations: deletedEvaluations
         };
     }
 
@@ -316,16 +346,15 @@ document.addEventListener('DOMContentLoaded', function () {
 
             // Recalculate scores if needed
             calculateOverallScores();
+
+            // Mark form as dirty
+            markFormAsDirty();
         });
     });
     // === ADD ROW FUNCTION END ===
 
 
     // === DELETE ROW FUNCTION START ===
-    let rowToDelete = null;
-    let evaluationIdToDelete = null;
-    let tableToDeleteFrom = null;
-
     document.addEventListener('click', function(e) {
         if (e.target.classList.contains('delete-row')) {
             rowToDelete = e.target.closest('tr');
@@ -349,70 +378,29 @@ document.addEventListener('DOMContentLoaded', function () {
 
     document.getElementById('confirm-delete-row').addEventListener('click', function() {
         if (rowToDelete) {
+            const deleteModal = bootstrap.Modal.getInstance(document.getElementById('deleteRowModal'));
+            deleteModal.hide();
+
             if (evaluationIdToDelete !== '0' && tableToDeleteFrom) {
-                // Row exists in DB, send delete request
-                const payload = {
-                    evaluation_id: evaluationIdToDelete,
-                    table: tableToDeleteFrom
-                };
-
-                fetch('../../includes/career_progress_tracking/teaching/delete_criterion_a.php', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json'
-                    },
-                    body: JSON.stringify(payload)
-                })
-                .then(response => response.json())
-                .then(data => {
-                    const deleteModal = bootstrap.Modal.getInstance(document.getElementById('deleteRowModal'));
-                    deleteModal.hide();
-                    if (data.success) {
-                        // Remove the row from the table
-                        rowToDelete.remove();
-                        rowToDelete = null;
-                        evaluationIdToDelete = null;
-                        tableToDeleteFrom = null;
-
-                        // Show success message
-                        const successModal = new bootstrap.Modal(document.getElementById('deleteSuccessModal'));
-                        successModal.show();
-
-                        // Recalculate if needed
-                        calculateOverallScores();
-                    } else {
-                        // Show error message
-                        const errorModal = new bootstrap.Modal(document.getElementById('deleteErrorModal'));
-                        document.querySelector('#deleteErrorModal .modal-body').textContent = data.error || 'Failed to delete evaluation.';
-                        errorModal.show();
-                    }
-                })
-                .catch(error => {
-                    console.error('Error:', error);
-                    const deleteModal = bootstrap.Modal.getInstance(document.getElementById('deleteRowModal'));
-                    deleteModal.hide();
-
-                    const errorModal = new bootstrap.Modal(document.getElementById('deleteErrorModal'));
-                    document.querySelector('#deleteErrorModal .modal-body').textContent = 'An unexpected error occurred.';
-                    errorModal.show();
-                });
-            } else {
-                // evaluation_id = 0 means never saved, just remove row from DOM
-                const deleteModal = bootstrap.Modal.getInstance(document.getElementById('deleteRowModal'));
-                deleteModal.hide();
-
-                rowToDelete.remove();
-                rowToDelete = null;
-                evaluationIdToDelete = null;
-                tableToDeleteFrom = null;
-
-                // Recalculate if needed
-                calculateOverallScores();
-
-                // Optionally show success modal for deletion
-                const successModal = new bootstrap.Modal(document.getElementById('deleteSuccessModal'));
-                successModal.show();
+                // Add the evaluation ID to the deleted list
+                deletedEvaluations[tableToDeleteFrom].push(evaluationIdToDelete);
             }
+
+            // Remove the row from the table
+            rowToDelete.remove();
+            rowToDelete = null;
+            evaluationIdToDelete = null;
+            tableToDeleteFrom = null;
+
+            // Recalculate scores visually
+            calculateOverallScores();
+
+            // Mark form as dirty
+            markFormAsDirty();
+
+            // Show success message
+            const successModal = new bootstrap.Modal(document.getElementById('deleteSuccessModal'));
+            successModal.show();
         }
     });
     // === DELETE ROW FUNCTION END ===
@@ -456,22 +444,66 @@ document.addEventListener('DOMContentLoaded', function () {
         calculateSectionScores('student-divisor','student-reason','student_overall_score','student_faculty_overall_score',0.36);
         calculateSectionScores('supervisor-divisor','supervisor-reason','supervisor-overall-score','supervisor-faculty-overall-score',0.24);
     }
-    
+
     document.addEventListener('input', function (e) {
         if (e.target.classList.contains('rating-input')) {
             calculateOverallScores();
+            markFormAsDirty();
         }
     });
 
     document.addEventListener('change', function (e) {
         if (e.target.matches('#student-divisor, #student-reason, #supervisor-divisor, #supervisor-reason')) {
             calculateOverallScores();
+            markFormAsDirty();
         }
     });
 
     // Initial calculation run
     calculateOverallScores();
+    markFormAsClean();
     // === CALCULATION END ===
 
+
     // No automatic fetch on page load. fetchCriterionA is called from teaching.js after evaluation selected.
+
+
+    // === UNSAVED CHANGES PROMPT START ===
+    // Function to handle beforeunload
+    window.addEventListener('beforeunload', function (e) {
+        if (isFormDirty) {
+            e.preventDefault();
+            e.returnValue = ''; // Required for Chrome
+        }
+    });
+
+    // Function to intercept navigation clicks
+    document.addEventListener('click', function(e) {
+        const target = e.target;
+
+        // Check if the clicked element is a link or a button that navigates away
+        if ((target.tagName === 'A' && target.href) || 
+            (target.tagName === 'BUTTON' && target.getAttribute('data-action') === 'navigate')) {
+
+            if (isFormDirty) {
+                e.preventDefault();
+                // Store the href to navigate after confirmation
+                const href = target.tagName === 'A' ? target.href : target.getAttribute('data-href');
+
+                // Show the unsaved changes modal
+                const unsavedChangesModal = new bootstrap.Modal(document.getElementById('unsavedChangesModal'));
+                unsavedChangesModal.show();
+
+                // Handle confirmation
+                document.getElementById('confirm-navigation').addEventListener('click', function() {
+                    // Mark form as clean to prevent the beforeunload event
+                    markFormAsClean();
+                    // Navigate to the stored href
+                    window.location.href = href;
+                }, { once: true });
+            }
+        }
+    });
+    // === UNSAVED CHANGES PROMPT END ===
+
 });

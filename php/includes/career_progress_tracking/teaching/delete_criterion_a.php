@@ -1,3 +1,8 @@
+<!--  -->
+<!--  -->
+<!-- THIS FILE IS NO LONGER NEEDED. KEEP FOR BACKUP. -->
+<!--  -->
+<!--  -->
 <?php
 include_once '../../../session.php';
 // Set the response header to JSON
