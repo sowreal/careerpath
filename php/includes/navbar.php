@@ -5,24 +5,24 @@
         <ul class="navbar-nav">
             <li class="nav-item"> <a class="nav-link" data-lte-toggle="sidebar" href="#" role="button"> <i class="bi bi-list"></i> </a> </li>
             <?php if ($_SESSION['role'] == 'Human Resources'): ?>
-                <li class="nav-item d-none d-md-block"><a href="<?php echo BASE_URL; ?>/php/dashboard_HR/dashboard_HR.php" class="nav-link">Home</a></li>
+                <li class="nav-item d-none d-md-block"><a href="<?php echo BASE_URL; ?>/php/dashboard_HR/dashboard_HR.php" class="nav-link" data-navigation="true">Home</a></li>
             <?php else: ?>
-                <li class="nav-item d-none d-md-block"><a href="<?php echo BASE_URL; ?>/php/dashboard_faculty.php" class="nav-link">Home</a></li>
+                <li class="nav-item d-none d-md-block"><a href="<?php echo BASE_URL; ?>/php/dashboard_faculty.php" class="nav-link" data-navigation="true">Home</a></li>
             <?php endif; ?>
-            <li class="nav-item d-none d-md-block"> <a href="<?php echo BASE_URL ?>/php/contact_us.php" class="nav-link">Contact Us</a> </li>
+            <li class="nav-item d-none d-md-block"> <a href="<?php echo BASE_URL ?>/php/contact_us.php" class="nav-link" data-navigation="true">Contact Us</a> </li>
         </ul> <!--end::Start Navbar Links--> <!--begin::End Navbar Links-->
         
         <ul class="navbar-nav ms-auto"> 
             <!--begin::Notifications Dropdown Menu-->
             <li class="nav-item dropdown"> <a class="nav-link" data-bs-toggle="dropdown" href="#"> <i class="bi bi-bell-fill"></i> <span class="navbar-badge badge text-bg-warning">15</span> </a>
                 <div class="dropdown-menu dropdown-menu-lg dropdown-menu-end"> <span class="dropdown-item dropdown-header">15 Notifications</span>
-                    <div class="dropdown-divider"></div> <a href="<?php echo BASE_URL ?>/php/dashboard/notifications.php#" class="dropdown-item"> <i class="bi bi-envelope me-2"></i> 4 new messages
+                    <div class="dropdown-divider"></div> <a href="<?php echo BASE_URL ?>/php/dashboard/notifications.php#" class="dropdown-item" data-navigation="true"> <i class="bi bi-envelope me-2"></i> 4 new messages
                         <span class="float-end text-secondary fs-7">3 mins</span> </a>
-                    <div class="dropdown-divider"></div> <a href="<?php echo BASE_URL ?>/php/dashboard/notifications.php" class="dropdown-item"> <i class="bi bi-people-fill me-2"></i> 8 friend requests
+                    <div class="dropdown-divider"></div> <a href="<?php echo BASE_URL ?>/php/dashboard/notifications.php" class="dropdown-item" data-navigation="true"> <i class="bi bi-people-fill me-2"></i> 8 friend requests
                         <span class="float-end text-secondary fs-7">12 hours</span> </a>
-                    <div class="dropdown-divider"></div> <a href="<?php echo BASE_URL ?>/php/dashboard/notifications.php" class="dropdown-item"> <i class="bi bi-file-earmark-fill me-2"></i> 3 new reports
+                    <div class="dropdown-divider"></div> <a href="<?php echo BASE_URL ?>/php/dashboard/notifications.php" class="dropdown-item" data-navigation="true"> <i class="bi bi-file-earmark-fill me-2"></i> 3 new reports
                         <span class="float-end text-secondary fs-7">2 days</span> </a>
-                    <div class="dropdown-divider"></div> <a href="<?php echo BASE_URL ?>/php/dashboard/notifications.php" class="dropdown-item dropdown-footer">
+                    <div class="dropdown-divider"></div> <a href="<?php echo BASE_URL ?>/php/dashboard/notifications.php" class="dropdown-item dropdown-footer" data-navigation="true">
                         See All Notifications
                     </a>
                 </div>
@@ -55,8 +55,8 @@
                     <!--end::Menu Body--> 
                     
                     <!--begin::Menu Footer-->
-                    <li class="user-footer"> <a href="<?php echo BASE_URL ?>/php/dashboard/profile_management.php" class="btn btn-default btn-flat">Profile</a> 
-                    <a href="<?php echo BASE_URL ?>/php/logout.php" class="btn btn-default btn-flat float-end">Sign out</a> </li> <!--end::Menu Footer-->
+                    <li class="user-footer"> <a href="<?php echo BASE_URL ?>/php/dashboard/profile_management.php" class="btn btn-default btn-flat" data-navigation="true">Profile</a> 
+                    <a href="<?php echo BASE_URL ?>/php/logout.php" class="btn btn-default btn-flat float-end" data-navigation="true">Sign out</a> </li> <!--end::Menu Footer-->
                 </ul>
             </li> 
             <!--end::User Menu Dropdown-->

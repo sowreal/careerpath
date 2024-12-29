@@ -175,8 +175,7 @@ document.addEventListener('DOMContentLoaded', function () {
         saveBtn.classList.remove('btn-warning');
     }
     // === DELETION TRACKING AND DIRTY FLAG END ===
-    
-    
+
     // === SAVING PROCESS START ===
     function saveCriterionA() {
         if (!form.checkValidity()) {
@@ -355,6 +354,10 @@ document.addEventListener('DOMContentLoaded', function () {
 
 
     // === DELETE ROW FUNCTION START ===
+    let rowToDelete = null;
+    let evaluationIdToDelete = null;
+    let tableToDeleteFrom = null;
+
     document.addEventListener('click', function(e) {
         if (e.target.classList.contains('delete-row')) {
             rowToDelete = e.target.closest('tr');
@@ -465,45 +468,63 @@ document.addEventListener('DOMContentLoaded', function () {
     // === CALCULATION END ===
 
 
-    // No automatic fetch on page load. fetchCriterionA is called from teaching.js after evaluation selected.
-
-
     // === UNSAVED CHANGES PROMPT START ===
-    // Function to handle beforeunload
-    window.addEventListener('beforeunload', function (e) {
-        if (isFormDirty) {
-            e.preventDefault();
-            e.returnValue = ''; // Required for Chrome
+
+    // Variable to store the intended navigation URL
+    let intendedNavigationURL = null;
+
+    // Function to handle navigation after confirmation
+    function handleNavigation() {
+        if (intendedNavigationURL) {
+            // Prevent the beforeunload from triggering
+            markFormAsClean();
+            window.location.href = intendedNavigationURL;
+            intendedNavigationURL = null;
         }
-    });
+    }
 
-    // Function to intercept navigation clicks
+    // Attach the navigation handler once
+    document.getElementById('confirm-navigation').addEventListener('click', handleNavigation);
+
+    // Function to determine if a link is a real navigation
+    function isRealNavigation(linkElement) {
+        if (!linkElement) return false;
+        const href = linkElement.getAttribute('href');
+        // Exclude links with href="#" or javascript:void(0); or similar
+        return href && href !== '#' && !href.startsWith('javascript:');
+    }
+
+    // Listen for all click events on the document
     document.addEventListener('click', function(e) {
-        const target = e.target;
+        // Check if the clicked element or any of its parents is an <a> tag with data-navigation="true"
+        const link = e.target.closest('a[data-navigation="true"]');
+        const button = e.target.closest('button[data-action="navigate"]');
 
-        // Check if the clicked element is a link or a button that navigates away
-        if ((target.tagName === 'A' && target.href) || 
-            (target.tagName === 'BUTTON' && target.getAttribute('data-action') === 'navigate')) {
-
+        // Handle <a> tag clicks
+        if (link) {
             if (isFormDirty) {
                 e.preventDefault();
-                // Store the href to navigate after confirmation
-                const href = target.tagName === 'A' ? target.href : target.getAttribute('data-href');
+                intendedNavigationURL = link.href;
 
                 // Show the unsaved changes modal
                 const unsavedChangesModal = new bootstrap.Modal(document.getElementById('unsavedChangesModal'));
                 unsavedChangesModal.show();
+            }
+        }
+        // Handle buttons with data-action="navigate"
+        else if (button && button.getAttribute('data-action') === 'navigate') {
+            if (isFormDirty) {
+                e.preventDefault();
+                intendedNavigationURL = button.getAttribute('data-href');
 
-                // Handle confirmation
-                document.getElementById('confirm-navigation').addEventListener('click', function() {
-                    // Mark form as clean to prevent the beforeunload event
-                    markFormAsClean();
-                    // Navigate to the stored href
-                    window.location.href = href;
-                }, { once: true });
+                // Show the unsaved changes modal
+                const unsavedChangesModal = new bootstrap.Modal(document.getElementById('unsavedChangesModal'));
+                unsavedChangesModal.show();
             }
         }
     });
     // === UNSAVED CHANGES PROMPT END ===
 
+
 });
+

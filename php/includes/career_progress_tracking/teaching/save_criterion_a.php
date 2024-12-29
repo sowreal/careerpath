@@ -27,10 +27,10 @@ $student_evaluations = isset($data['student_evaluations']) && is_array($data['st
 $supervisor_evaluations = isset($data['supervisor_evaluations']) && is_array($data['supervisor_evaluations']) ? $data['supervisor_evaluations'] : [];
 
 // Extract new overall/faculty ratings from metadata fields
-$student_overall_rating = isset($data['student_overall_rating']) ? $data['student_overall_rating'] : null;
-$student_faculty_rating = isset($data['student_faculty_rating']) ? $data['student_faculty_rating'] : null;
-$supervisor_overall_rating = isset($data['supervisor_overall_rating']) ? $data['supervisor_overall_rating'] : null;
-$supervisor_faculty_rating = isset($data['supervisor_faculty_rating']) ? $data['supervisor_faculty_rating'] : null;
+$student_overall_rating = isset($data['student_overall_rating']) ? floatval($data['student_overall_rating']) : 0;
+$student_faculty_rating = isset($data['student_faculty_rating']) ? floatval($data['student_faculty_rating']) : 0;
+$supervisor_overall_rating = isset($data['supervisor_overall_rating']) ? floatval($data['supervisor_overall_rating']) : 0;
+$supervisor_faculty_rating = isset($data['supervisor_faculty_rating']) ? floatval($data['supervisor_faculty_rating']) : 0;
 
 // Extract deletions
 $deleted_evaluations = isset($data['deleted_evaluations']) && is_array($data['deleted_evaluations']) ? $data['deleted_evaluations'] : [
@@ -210,7 +210,11 @@ try {
     }
 
     // === Recalculate and Update Metadata ===
-    // Fetch updated evaluations for recalculation
+    // Fetch divisor and reason from metadata
+    $student_divisor = isset($data['student_divisor']) ? intval($data['student_divisor']) : 0;
+    $student_reason = isset($data['student_reason']) ? strtolower(trim($data['student_reason'])) : '';
+    $supervisor_divisor = isset($data['supervisor_divisor']) ? intval($data['supervisor_divisor']) : 0;
+    $supervisor_reason = isset($data['supervisor_reason']) ? strtolower(trim($data['supervisor_reason'])) : '';
 
     // Fetch updated student evaluations
     $stmt = $conn->prepare("SELECT first_semester_rating, second_semester_rating FROM kra1_a_student_evaluation WHERE request_id = :request_id");
@@ -227,7 +231,14 @@ try {
         $student_count++;
     }
 
-    $student_overall_rating = ($student_count > 0) ? ($student_total / $student_count) : 0;
+    // Calculate Overall Average Rating based on divisor and reason
+    if ($student_reason === '' || $student_reason === 'not_applicable' || $student_divisor === 0) {
+        $student_overall_rating = ($student_count > 0) ? ($student_total / $student_count) : 0;
+    } else {
+        $denominator = 8 - $student_divisor;
+        $student_overall_rating = ($denominator > 0) ? ($student_total / $denominator) : 0;
+    }
+
     $student_faculty_rating = $student_overall_rating * 0.36;
 
     // Fetch updated supervisor evaluations
@@ -245,23 +256,30 @@ try {
         $supervisor_count++;
     }
 
-    $supervisor_overall_rating = ($supervisor_count > 0) ? ($supervisor_total / $supervisor_count) : 0;
+    // Calculate Overall Average Rating based on divisor and reason
+    if ($supervisor_reason === '' || $supervisor_reason === 'not_applicable' || $supervisor_divisor === 0) {
+        $supervisor_overall_rating = ($supervisor_count > 0) ? ($supervisor_total / $supervisor_count) : 0;
+    } else {
+        $denominator = 8 - $supervisor_divisor;
+        $supervisor_overall_rating = ($denominator > 0) ? ($supervisor_total / $denominator) : 0;
+    }
+
     $supervisor_faculty_rating = $supervisor_overall_rating * 0.24;
 
-    // Update metadata
+    // Update metadata with recalculated ratings
     if ($metadata) {
         $stmt = $conn->prepare("UPDATE kra1_a_metadata SET 
             student_overall_rating = :student_overall_rating,
             student_faculty_rating = :student_faculty_rating,
             supervisor_overall_rating = :supervisor_overall_rating,
             supervisor_faculty_rating = :supervisor_faculty_rating
-            WHERE request_id = :request_id");
+            WHERE metadata_id = :metadata_id");
         $stmt->execute([
             ':student_overall_rating' => $student_overall_rating,
             ':student_faculty_rating' => $student_faculty_rating,
             ':supervisor_overall_rating' => $supervisor_overall_rating,
             ':supervisor_faculty_rating' => $supervisor_faculty_rating,
-            ':request_id' => $request_id
+            ':metadata_id' => $metadata['metadata_id']
         ]);
     }
 
