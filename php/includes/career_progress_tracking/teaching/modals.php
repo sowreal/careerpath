@@ -52,7 +52,7 @@
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
-        <button type="button" class="btn btn-primary" id="confirm-navigation">Leave Without Saving</button>
+        <button type="button" class="btn btn-danger" id="confirm-navigation">Leave Without Saving</button>
       </div>
     </div>
   </div>

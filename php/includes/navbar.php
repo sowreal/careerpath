@@ -7,7 +7,7 @@
             <?php if ($_SESSION['role'] == 'Human Resources'): ?>
                 <li class="nav-item d-none d-md-block"><a href="<?php echo BASE_URL; ?>/php/dashboard_HR/dashboard_HR.php" class="nav-link" data-navigation="true">Home</a></li>
             <?php else: ?>
-                <li class="nav-item d-none d-md-block"><a href="<?php echo BASE_URL; ?>/php/dashboard_faculty.php" class="nav-link" data-navigation="true">Home</a></li>
+                <li class="nav-item d-none d-md-block"><a href="<?php echo BASE_URL; ?>/php/dashboard/dashboard_faculty.php" class="nav-link" data-navigation="true">Home</a></li>
             <?php endif; ?>
             <li class="nav-item d-none d-md-block"> <a href="<?php echo BASE_URL ?>/php/contact_us.php" class="nav-link" data-navigation="true">Contact Us</a> </li>
         </ul> <!--end::Start Navbar Links--> <!--begin::End Navbar Links-->
