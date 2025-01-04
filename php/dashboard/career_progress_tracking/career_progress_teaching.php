@@ -90,7 +90,7 @@ if ($_SESSION['role'] != 'Regular Instructor' && $_SESSION['role'] != 'Contract 
                 <input type="hidden" id="request-id" name="request_id" value="">
 
                 <!-- KRA I Content -->
-                <?php require_once BASE_PATH . '/php/includes/career_progress_tracking/teaching/kra1.php';?>
+                <?php //require_once BASE_PATH . '/php/includes/career_progress_tracking/teaching/kra1.php';?> <!-- Removed KRA 1 Summary for now-->
 
                 <!-- Container for Criteria -->
                 <div class="card mt-4">

@@ -7,12 +7,12 @@ $isCPTActive = in_array($activePage, ['CPT', 'CPT_Request', 'CPT_Teaching', 'CPT
     <!--begin::Sidebar Brand-->
     <div class="sidebar-brand sidebar-bg-top"> 
         <!--begin::Brand Link--> 
-        <a href="<?php echo BASE_URL ?>/php/dashboard/dashboard_faculty.php" class="brand-link"> 
+        <a href="<?php echo BASE_URL ?>/php/dashboard/dashboard_faculty.php" class="brand-link" data-navigation="true"> 
             <!--begin::Brand Image--> 
-            <img src="<?php echo BASE_URL ?>/img/cropped-SLSU_Logo-1.png" alt="AdminLTE Logo" class="brand-image opacity-75 shadow"> <!--end::Brand Image--> 
+            <img src="<?php echo BASE_URL ?>/img/cropped-SLSU_Logo-1.png" alt="AdminLTE Logo" class="brand-image opacity-75 shadow" data-navigation="true"> <!--end::Brand Image--> 
 
             <!--begin::Brand Text--> 
-            <span class="brand-text fw-light">SLSU Career Path</span>
+            <span class="brand-text fw-light" data-navigation="true">SLSU Career Path</span>
             <!--end::Brand Text--> 
         </a><!--end::Brand Link--> 
     </div><!--end::Sidebar Brand--> 
