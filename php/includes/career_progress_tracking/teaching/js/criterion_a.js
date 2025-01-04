@@ -265,6 +265,13 @@ document.addEventListener('DOMContentLoaded', function () {
 
     // === MODAL AND AJAX START ===
     const uploadEvidenceModal = new bootstrap.Modal(document.getElementById('uploadEvidenceModal'));
+    const messageModal = new bootstrap.Modal(document.getElementById('messageModal')); // For displaying messages
+
+    // Function to show a message using the message modal
+    function showMessage(message) {
+        $('#messageModalBody').text(message);
+        messageModal.show();
+    }
 
     // Handle clicks on "Upload Evidence" buttons (using event delegation)
     $('#student-evaluation-table, #supervisor-evaluation-table').on('click', '.upload-evidence-btn', function() {
@@ -283,13 +290,17 @@ document.addEventListener('DOMContentLoaded', function () {
         $('#modal_evaluation_id').val(evaluationID);
         $('#modal_table_type').val(tableType);
 
-        // Display existing filenames in the modal
-        $('#firstSemesterFilename').text(existingFile1 ? existingFile1.split('/').pop() : '');
-        $('#secondSemesterFilename').text(existingFile2 ? existingFile2.split('/').pop() : '');
-
         // Clear any previous file selections
         $('#firstSemesterFile').val('');
         $('#secondSemesterFile').val('');
+
+        // NEW: Get filenames from the hidden inputs
+        const filename1 = row.find('input[name="evidence_file_1[]"]').val();
+        const filename2 = row.find('input[name="evidence_file_2[]"]').val();
+
+        // Display existing filenames in the modal, if any
+        $('#firstSemesterFilename').text(filename1 ? filename1.split('/').pop() : '');
+        $('#secondSemesterFilename').text(filename2 ? filename2.split('/').pop() : '');
 
         // Show the modal
         uploadEvidenceModal.show();
@@ -314,7 +325,7 @@ document.addEventListener('DOMContentLoaded', function () {
         if (firstSemesterFile) {
             const validFileTypes = ['application/pdf', 'application/msword', 'application/vnd.openxmlformats-officedocument.wordprocessingml.document', 'image/jpeg', 'image/png', 'application/vnd.ms-excel', 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'];
             if (!validFileTypes.includes(firstSemesterFile.type)) {
-                alert('Invalid file type for 1st Semester. Allowed types: PDF, DOC, DOCX, JPG, JPEG, PNG, XLSX, XLS');
+                showMessage('Invalid file type for 1st Semester. Allowed types: PDF, DOC, DOCX, JPG, JPEG, PNG, XLSX, XLS');
                 return;
             }
         }
@@ -322,9 +333,15 @@ document.addEventListener('DOMContentLoaded', function () {
         if (secondSemesterFile) {
             const validFileTypes = ['application/pdf', 'application/msword', 'application/vnd.openxmlformats-officedocument.wordprocessingml.document', 'image/jpeg', 'image/png', 'application/vnd.ms-excel', 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'];
             if (!validFileTypes.includes(secondSemesterFile.type)) {
-                alert('Invalid file type for 2nd Semester. Allowed types: PDF, DOC, DOCX, JPG, JPEG, PNG, XLSX, XLS');
+                showMessage('Invalid file type for 2nd Semester. Allowed types: PDF, DOC, DOCX, JPG, JPEG, PNG, XLSX, XLS');
                 return;
             }
+        }
+
+        // Check if both files are missing
+        if (!firstSemesterFile && !secondSemesterFile) {
+            showMessage('Please select at least one file to upload.');
+            return;
         }
 
         $.ajax({
@@ -358,13 +375,90 @@ document.addEventListener('DOMContentLoaded', function () {
 
                     uploadEvidenceModal.hide();
                     markFormAsDirty();
+                    showMessage('Files uploaded successfully!');
+
+                    // Refresh table data after successful upload
+                    const requestId = $('#request_id').val(); // Get the current request ID
+                    fetchCriterionA(requestId);
                 } else {
-                    alert('Upload failed: ' + response.error);
+                    showMessage('Upload failed: ' + response.error);
                 }
             },
             error: function(xhr, status, error) {
                 console.error(xhr.responseText);
-                alert('An error occurred during the upload.');
+                showMessage('An error occurred during the upload.');
+            }
+        });
+    });
+
+    // Handle file deletion in the modal
+    $('#deleteFile1, #deleteFile2').on('click', function() {
+        const semester = $(this).data('semester'); // 'sem1' or 'sem2'
+        const evaluationID = $('#modal_evaluation_id').val();
+        const tableType = $('#modal_table_type').val();
+        const requestID = $('#modal_request_id').val();
+        const table = $(`#${tableType}-evaluation-table`);
+
+        // Find the correct row based on evaluation ID
+        const row = table.find(`tr[data-evaluation-id="${evaluationID}"]`);
+
+        // Confirm deletion with the user (optional)
+        if (!confirm(`Are you sure you want to delete the file for ${semester}?`)) {
+            return;
+        }
+
+        // AJAX call to delete the file
+        $.ajax({
+            url: '../../includes/career_progress_tracking/teaching/delete_evidence.php', 
+            type: 'POST',
+            data: {
+                request_id: requestID,
+                evaluation_id: evaluationID,
+                table_type: tableType,
+                semester: semester,
+            },
+            dataType: 'json',
+            success: function(response) {
+                if (response.success) {
+                    // Update the hidden input in the row to an empty string
+                    row.find(`input[name="evidence_file_${semester.slice(-1)}[]"]`).val('');
+
+                    // Update the table cell content
+                    const newEvidenceContent = `
+                        <button type="button" class="btn btn-success btn-sm upload-evidence-btn" 
+                                data-request-id="${requestID}"
+                                data-evaluation-id="${evaluationID}"
+                                data-table-type="${tableType}">
+                            Upload Evidence
+                        </button>`;
+                    row.find('td:eq(3)').html(newEvidenceContent);
+
+                    // Clear the filename display in the modal
+                    $(`#${semester}Filename`).text('');
+
+                    // Display a success message using the modal
+                    showMessage(`File for ${semester} deleted successfully.`);
+
+                    // Automatically close the message modal after 2 seconds
+                    setTimeout(function() {
+                        $('#messageModal').modal('hide');
+                    }, 2000);
+
+                    // Close the upload modal
+                    uploadEvidenceModal.hide();
+
+                    markFormAsDirty();
+
+                    // Refresh table data after successful deletion
+                    const requestId = $('#request_id').val(); // Get the current request ID
+                    fetchCriterionA(requestId);
+                } else {
+                    showMessage('Error deleting file: ' + response.error);
+                }
+            },
+            error: function(xhr, status, error) {
+                console.error(xhr.responseText);
+                showMessage('An error occurred during the deletion.');
             }
         });
     });
