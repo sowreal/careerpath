@@ -90,6 +90,8 @@
                                             Upload Evidence
                                         </button>
                                         <input type="hidden" name="evaluation_id[]" value="<?php echo $evaluation_id; ?>">
+                                        <input type="hidden" name="evidence_file_1[]" value="">
+                                        <input type="hidden" name="evidence_file_2[]" value="">
                                     </td>
                                     <td>
                                         <button type="button" class="btn btn-success btn-sm view-remarks"
@@ -190,10 +192,12 @@
                                             <button type="button" class="btn btn-success btn-sm upload-evidence-btn" 
                                                     data-request-id="<?php echo $request_id ?? ''; ?>" 
                                                     data-evaluation-id="<?php echo $evaluation_id; ?>" 
-                                                    data-table-type="supervisor">
+                                                    data-table-type="student">
                                                 Upload Evidence
                                             </button>
                                             <input type="hidden" name="evaluation_id[]" value="<?php echo $evaluation_id; ?>">
+                                            <input type="hidden" name="evidence_file_1[]" value="">
+                                            <input type="hidden" name="evidence_file_2[]" value="">
                                         </td>
                                         <td>
                                             <button type="button" class="btn btn-success btn-sm view-remarks"
@@ -328,39 +332,3 @@
   </div>
 </div>
 
-<!-- Upload Evidence Modal -->
-<div class="modal" id="uploadEvidenceModal">
-  <div class="modal-dialog">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title">Upload Evidence</h5>
-        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-      </div>
-      <div class="modal-body">
-        <form id="evidenceUploadForm" enctype="multipart/form-data"> 
-
-          <div class="mb-3">
-            <label for="firstSemesterFile" class="form-label">1st Semester:</label>
-            <input type="file" class="form-control" id="firstSemesterFile" name="fileFirstSemester">
-            <div id="firstSemesterFilename" class="mt-2"></div>
-          </div>
-
-          <div class="mb-3">
-            <label for="secondSemesterFile" class="form-label">2nd Semester:</label>
-            <input type="file" class="form-control" id="secondSemesterFile" name="fileSecondSemester">
-            <div id="secondSemesterFilename" class="mt-2"></div>
-          </div>
-
-          <input type="hidden" id="modal_request_id" name="request_id">
-          <input type="hidden" id="modal_evaluation_id" name="evaluation_id">
-          <input type="hidden" id="modal_table_type" name="table_type">
-
-        </form>
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-        <button type="button" class="btn btn-primary" id="uploadEvidenceBtn">Upload</button>
-      </div>
-    </div>
-  </div>
-</div>

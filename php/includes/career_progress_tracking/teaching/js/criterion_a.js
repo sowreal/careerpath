@@ -27,6 +27,8 @@ function addDefaultStudentRows(tableBody) {
                     Upload Evidence
                 </button>
                 <input type="hidden" name="evaluation_id[]" value="${evaluation_id}">
+                <input type="hidden" name="evidence_file_1[]" value="">
+                <input type="hidden" name="evidence_file_2[]" value="">
             </td>
             <td><button type="button" class="btn btn-success btn-sm view-remarks" data-first-remark="" data-second-remark="">View Remarks</button></td>
             <td><button type="button" class="btn btn-danger btn-sm delete-row" aria-label="Delete row">Delete</button></td>
@@ -54,6 +56,8 @@ function addDefaultSupervisorRows(tableBody) {
                     Upload Evidence
                 </button>
                 <input type="hidden" name="evaluation_id[]" value="${evaluation_id}">
+                <input type="hidden" name="evidence_file_1[]" value="">
+                <input type="hidden" name="evidence_file_2[]" value="">
             </td>
             <td><button type="button" class="btn btn-success btn-sm view-remarks" data-first-remark="" data-second-remark="">View Remarks</button></td>
             <td><button type="button" class="btn btn-danger btn-sm delete-row" aria-label="Delete row">Delete</button></td>
@@ -79,12 +83,8 @@ function populateStudentTable(studentData) {
         // Construct the cell content based on whether evidence exists
         let evidenceCellContent = '';
         if (item.evidence_file_1 || item.evidence_file_2) {
-            // If evidence exists, display filenames (or other indicators)
+            // If evidence exists, we will display the "Change Evidence" button only
             evidenceCellContent = `
-                <span class="uploaded-evidence">
-                    ${item.evidence_file_1 ? `<i class="fas fa-file-alt"></i> ${item.evidence_file_1.split('/').pop()}` : ''}
-                    ${item.evidence_file_2 ? `<i class="fas fa-file-alt"></i> ${item.evidence_file_2.split('/').pop()}` : ''}
-                </span>
                 <button type="button" class="btn btn-success btn-sm upload-evidence-btn" 
                         data-request-id="${requestId}"
                         data-evaluation-id="${item.evaluation_id}"
@@ -111,11 +111,17 @@ function populateStudentTable(studentData) {
             <td>
                 ${evidenceCellContent}
                 <input type="hidden" name="evaluation_id[]" value="${item.evaluation_id}">
+                <input type="hidden" name="evidence_file_1[]" value="">
+                <input type="hidden" name="evidence_file_2[]" value="">
             </td>
             <td><button type="button" class="btn btn-success btn-sm view-remarks" data-first-remark="${escapeHTML(item.remarks_first || '')}" data-second-remark="${escapeHTML(item.remarks_second || '')}">View Remarks</button></td>
             <td><button type="button" class="btn btn-danger btn-sm delete-row" aria-label="Delete row">Delete</button></td>
         `;
+
+        // Set the values of the hidden inputs AFTER adding the row to the DOM
         tableBody.appendChild(tr);
+        tr.querySelector('input[name="evidence_file_1[]"]').value = item.evidence_file_1 || '';
+        tr.querySelector('input[name="evidence_file_2[]"]').value = item.evidence_file_2 || '';
     });
 }
 
@@ -136,12 +142,8 @@ function populateSupervisorTable(supervisorData) {
         // Construct the cell content based on whether evidence exists
         let evidenceCellContent = '';
         if (item.evidence_file_1 || item.evidence_file_2) {
-            // If evidence exists, display filenames (or other indicators)
+            // If evidence exists, we will display the "Change Evidence" button only
             evidenceCellContent = `
-                <span class="uploaded-evidence">
-                    ${item.evidence_file_1 ? `<i class="fas fa-file-alt"></i> ${item.evidence_file_1.split('/').pop()}` : ''}
-                    ${item.evidence_file_2 ? `<i class="fas fa-file-alt"></i> ${item.evidence_file_2.split('/').pop()}` : ''}
-                </span>
                 <button type="button" class="btn btn-success btn-sm upload-evidence-btn" 
                         data-request-id="${requestId}"
                         data-evaluation-id="${item.evaluation_id}"
@@ -168,11 +170,17 @@ function populateSupervisorTable(supervisorData) {
             <td>
                 ${evidenceCellContent}
                 <input type="hidden" name="evaluation_id[]" value="${item.evaluation_id}">
+                <input type="hidden" name="evidence_file_1[]" value="">
+                <input type="hidden" name="evidence_file_2[]" value="">
             </td>
             <td><button type="button" class="btn btn-success btn-sm view-remarks" data-first-remark="${escapeHTML(item.remarks_first || '')}" data-second-remark="${escapeHTML(item.remarks_second || '')}">View Remarks</button></td>
             <td><button type="button" class="btn btn-danger btn-sm delete-row" aria-label="Delete row">Delete</button></td>
         `;
+
+        // Set the values of the hidden inputs AFTER adding the row to the DOM
         tableBody.appendChild(tr);
+        tr.querySelector('input[name="evidence_file_1[]"]').value = item.evidence_file_1 || '';
+        tr.querySelector('input[name="evidence_file_2[]"]').value = item.evidence_file_2 || '';
     });
 }
 
@@ -264,22 +272,24 @@ document.addEventListener('DOMContentLoaded', function () {
         const requestID = button.data('request-id');
         const evaluationID = button.data('evaluation-id');
         const tableType = button.data('table-type');
+        const row = button.closest('tr'); // Get the parent <tr> element
 
-        // These should log correctly now
-        console.log("Button Request ID:", requestID);
-        console.log("Button Evaluation ID:", evaluationID);
-        console.log("Button Table Type:", tableType);
+        // Get existing file paths from hidden inputs, if they exist
+        const existingFile1 = row.find('input[name="evidence_file_1[]"]').val();
+        const existingFile2 = row.find('input[name="evidence_file_2[]"]').val();
 
         // Set hidden input values in the modal
         $('#modal_request_id').val(requestID);
         $('#modal_evaluation_id').val(evaluationID);
         $('#modal_table_type').val(tableType);
 
+        // Display existing filenames in the modal
+        $('#firstSemesterFilename').text(existingFile1 ? existingFile1.split('/').pop() : '');
+        $('#secondSemesterFilename').text(existingFile2 ? existingFile2.split('/').pop() : '');
+
         // Clear any previous file selections
         $('#firstSemesterFile').val('');
         $('#secondSemesterFile').val('');
-        $('#firstSemesterFilename').text('');
-        $('#secondSemesterFilename').text('');
 
         // Show the modal
         uploadEvidenceModal.show();
@@ -297,6 +307,25 @@ document.addEventListener('DOMContentLoaded', function () {
     // Handle "Upload" button click in the modal
     $('#uploadEvidenceBtn').on('click', function() {
         const formData = new FormData($('#evidenceUploadForm')[0]);
+        const firstSemesterFile = $('#firstSemesterFile')[0].files[0];
+        const secondSemesterFile = $('#secondSemesterFile')[0].files[0];
+
+        // Basic client-side validation
+        if (firstSemesterFile) {
+            const validFileTypes = ['application/pdf', 'application/msword', 'application/vnd.openxmlformats-officedocument.wordprocessingml.document', 'image/jpeg', 'image/png', 'application/vnd.ms-excel', 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'];
+            if (!validFileTypes.includes(firstSemesterFile.type)) {
+                alert('Invalid file type for 1st Semester. Allowed types: PDF, DOC, DOCX, JPG, JPEG, PNG, XLSX, XLS');
+                return;
+            }
+        }
+
+        if (secondSemesterFile) {
+            const validFileTypes = ['application/pdf', 'application/msword', 'application/vnd.openxmlformats-officedocument.wordprocessingml.document', 'image/jpeg', 'image/png', 'application/vnd.ms-excel', 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'];
+            if (!validFileTypes.includes(secondSemesterFile.type)) {
+                alert('Invalid file type for 2nd Semester. Allowed types: PDF, DOC, DOCX, JPG, JPEG, PNG, XLSX, XLS');
+                return;
+            }
+        }
 
         $.ajax({
             url: '../../includes/career_progress_tracking/teaching/upload_evidence_criterion_a.php',
@@ -313,15 +342,12 @@ document.addEventListener('DOMContentLoaded', function () {
                     const row = table.find(`tr[data-evaluation-id="${evaluationID}"]`);
                     const evidenceCell = row.find('td:eq(3)');
 
-                    // Update the evidence cell content
-                    let newEvidenceContent = `<span class="uploaded-evidence">`;
-                    if (response.paths.sem1) {
-                        newEvidenceContent += `<i class="fas fa-file-alt"></i> ${response.paths.sem1.split('/').pop()}<br>`;
-                    }
-                    if (response.paths.sem2) {
-                        newEvidenceContent += `<i class="fas fa-file-alt"></i> ${response.paths.sem2.split('/').pop()}<br>`;
-                    }
-                    newEvidenceContent += `</span>
+                    // Update the hidden inputs in the row with the new file paths
+                    row.find('input[name="evidence_file_1[]"]').val(response.paths.sem1);
+                    row.find('input[name="evidence_file_2[]"]').val(response.paths.sem2);
+
+                    // Update the evidence cell content to show "Change Evidence" button
+                    let newEvidenceContent = `
                         <button type="button" class="btn btn-success btn-sm upload-evidence-btn" 
                                 data-request-id="${$('#modal_request_id').val()}"
                                 data-evaluation-id="${evaluationID}"
@@ -507,6 +533,8 @@ document.addEventListener('DOMContentLoaded', function () {
             const periodName = isStudent ? 'student_evaluation_period[]' : 'supervisor_evaluation_period[]';
             const rating1Name = isStudent ? 'student_rating_1[]' : 'supervisor_rating_1[]';
             const rating2Name = isStudent ? 'student_rating_2[]' : 'supervisor_rating_2[]';
+            const evidenceFile1Name = isStudent ? 'evidence_file_1[]' : 'supervisor_evidence_file_1[]';
+            const evidenceFile2Name = isStudent ? 'evidence_file_2[]' : 'supervisor_evidence_file_2[]';
 
             // Generate a unique evaluation_id for the new row
             const new_evaluation_id = requestId + '_new_' + Date.now();
@@ -533,6 +561,8 @@ document.addEventListener('DOMContentLoaded', function () {
                         Upload Evidence
                     </button>
                     <input type="hidden" name="evaluation_id[]" value="${new_evaluation_id}">
+                    <input type="hidden" name="${evidenceFile1Name}" value="">
+                    <input type="hidden" name="${evidenceFile2Name}" value="">
                 </td>
                 <td>
                     <button type="button" class="btn btn-success btn-sm view-remarks" data-first-remark="" data-second-remark="">View Remarks</button>

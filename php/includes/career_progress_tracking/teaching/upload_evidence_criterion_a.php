@@ -36,6 +36,9 @@ try {
     $file1 = $_FILES['fileFirstSemester']  ?? null;
     $file2 = $_FILES['fileSecondSemester'] ?? null;
 
+    // Allowed file extensions
+    $allowedExtensions = ['pdf', 'doc', 'docx', 'jpg', 'jpeg', 'png', 'xlsx', 'xls'];
+
     // --- Using BASE_PATH for the uploads directory ---
     $uploadDir = BASE_PATH . '/uploads/career_progress_tracking/kra1_teaching/criterion_a/';
     if (!is_dir($uploadDir)) {
@@ -44,52 +47,54 @@ try {
         }
     }
 
-    // Function to generate or retrieve the file path (modified to use BASE_PATH)
-    function getFilePath($userID, $requestID, $evaluationID, $semester, $file, $uploadDir) {
+    // Function to generate or retrieve the file path
+    function getFilePath($userID, $requestID, $evaluationID, $semester, $file, $uploadDir, $allowedExtensions) {
         // Use the evaluation ID in the filename
         $baseName = "{$userID}_{$requestID}_{$evaluationID}_{$semester}";
-
+    
         // Check if a file with this base name already exists (regardless of extension)
-        $existingFiles = glob("{$uploadDir}{$baseName}.*");
+        $existingFiles = glob("{$uploadDir}/{$baseName}.*");
         if (!empty($existingFiles)) {
-            // If a file exists, return its path (we'll overwrite it later)
-            return $existingFiles[0];
+            // If a file exists, return its relative path for database storage
+            return str_replace(BASE_PATH, '', $existingFiles[0]);
         }
-
+    
         // If no file exists and a new file is provided, generate a new path with the extension of the uploaded file
         if ($file && $file['error'] === UPLOAD_ERR_OK) {
-            $ext = pathinfo($file['name'], PATHINFO_EXTENSION);
+            $ext = strtolower(pathinfo($file['name'], PATHINFO_EXTENSION));
+    
+            // Validate file extension
+            if (!in_array($ext, $allowedExtensions)) {
+                throw new Exception("Invalid file type. Allowed types: " . implode(", ", $allowedExtensions));
+            }
+    
             $uniqueName = "{$baseName}.{$ext}";
-            return "{$uploadDir}/{$uniqueName}";
+            return "uploads/career_progress_tracking/kra1_teaching/criterion_a/{$uniqueName}"; // Relative path
         }
-
+    
         return null;
     }
 
-    // Process files and get their paths (now absolute paths)
-    $absolutePaths = [
-        'sem1' => getFilePath($userID, $requestID, $evaluationID, 'sem1', $file1, $uploadDir),
-        'sem2' => getFilePath($userID, $requestID, $evaluationID, 'sem2', $file2, $uploadDir)
+    // Process files and get their paths (now relative paths)
+    $relativePaths = [
+        'sem1' => getFilePath($userID, $requestID, $evaluationID, 'sem1', $file1, $uploadDir, $allowedExtensions),
+        'sem2' => getFilePath($userID, $requestID, $evaluationID, 'sem2', $file2, $uploadDir, $allowedExtensions)
     ];
 
     // Move uploaded files to their respective paths (overwriting if necessary)
     if ($file1 && $file1['error'] === UPLOAD_ERR_OK) {
-        if (!move_uploaded_file($file1['tmp_name'], $absolutePaths['sem1'])) {
+        $targetPath = BASE_PATH . '/' . $relativePaths['sem1']; // Convert to absolute path for moving
+        if (!move_uploaded_file($file1['tmp_name'], $targetPath)) {
             throw new Exception('Failed to move first semester file.');
         }
     }
 
     if ($file2 && $file2['error'] === UPLOAD_ERR_OK) {
-        if (!move_uploaded_file($file2['tmp_name'], $absolutePaths['sem2'])) {
+        $targetPath = BASE_PATH . '/' . $relativePaths['sem2']; // Convert to absolute path for moving
+        if (!move_uploaded_file($file2['tmp_name'], $targetPath)) {
             throw new Exception('Failed to move second semester file.');
         }
     }
-
-    // --- Using BASE_URL for relative paths in the database ---
-    $relativePaths = [
-        'sem1' => $absolutePaths['sem1'] ? str_replace(BASE_PATH, '', $absolutePaths['sem1']) : null,
-        'sem2' => $absolutePaths['sem2'] ? str_replace(BASE_PATH, '', $absolutePaths['sem2']) : null
-    ];
 
     // Decide which table to update based on $tableType
     if ($tableType === 'student') {
