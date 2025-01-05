@@ -90,24 +90,24 @@ if ($_SESSION['role'] != 'Regular Instructor' && $_SESSION['role'] != 'Contract 
                 <input type="hidden" id="request-id" name="request_id" value="">
 
                 <!-- KRA I Content -->
-                <?php //require_once BASE_PATH . '/php/includes/career_progress_tracking/teaching/kra1.php';?> <!-- Removed KRA 1 Summary for now-->
+                <?php require_once BASE_PATH . '/php/includes/career_progress_tracking/teaching/kra1.php';?>
 
                 <!-- Container for Criteria -->
                 <div class="card mt-4">
                     <div class="card-header">
                         <ul class="nav nav-tabs card-header-tabs" id="kra-tabs" role="tablist">
                             <li class="nav-item">
-                                <button class="nav-link active bg-success text-white" id="tab-criterion-a" data-bs-toggle="tab" data-bs-target="#criterion-a" type="button" role="tab" data-navigation="true">
+                                <button class="nav-link active bg-success text-white" id="tab-criterion-a" data-bs-toggle="tab" data-bs-target="#criterion-a" type="button" role="tab">
                                     Criterion A: Teaching Effectiveness
                                 </button>
                             </li>
                             <li class="nav-item">
-                                <button class="nav-link" id="tab-criterion-b" data-bs-toggle="tab" data-bs-target="#criterion-b" type="button" role="tab" data-navigation="true">
+                                <button class="nav-link" id="tab-criterion-b" data-bs-toggle="tab" data-bs-target="#criterion-b" type="button" role="tab">
                                     Criterion B: Curriculum & Material Development
                                 </button>
                             </li>
                             <li class="nav-item">
-                                <button class="nav-link" id="tab-criterion-c" data-bs-toggle="tab" data-bs-target="#criterion-c" type="button" role="tab" data-navigation="true">
+                                <button class="nav-link" id="tab-criterion-c" data-bs-toggle="tab" data-bs-target="#criterion-c" type="button" role="tab">
                                     Criterion C: Thesis & Mentorship Services
                                 </button>
                             </li>

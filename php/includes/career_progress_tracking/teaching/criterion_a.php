@@ -7,7 +7,7 @@
     enter "0" for semesters without student and supervisor evaluations.
     </h5>
 
-    <form id="criterion-a-form">
+    <form id="criterion-a-form" enctype="multipart/form-data">
         <div class="row">
         <!-- Hidden Input for request_id -->
         <input type="hidden" id="request_id" name="request_id" value="" readonly>
@@ -39,11 +39,9 @@
                             Please select a valid option.
                         </div>
                     </div>
-                    <!-- Link to Evidence -->
-                    <div class="col-md-4">
-                        <label for="student-evidence-link" class="form-label">Link to Evidence:</label>
-                        <input type="url" class="form-control" id="student-evidence-link" name="student_evidence_link" placeholder="https://example.com/evidence" required>
-                    </div>
+                    
+                    <!-- REMOVED: Link to Evidence -->
+
                 </div>
 
                 <!-- Responsive Table -->
@@ -54,7 +52,7 @@
                                 <th scope="col">Evaluation Period</th>
                                 <th scope="col">1st Semester Rating</th>
                                 <th scope="col">2nd Semester Rating</th>
-                                <th scope="col">Link to Evidence</th>
+                                <th scope="col">Evidence</th> <!-- Changed: Column Header -->
                                 <th scope="col">Remarks</th>
                                 <th scope="col">Actions</th>
                             </tr>
@@ -64,8 +62,15 @@
 
                             <!-- Default Rows -->
                             <?php 
-                                $evaluationPeriods = ["AY 2019 - 2020", "AY 2020 - 2021", "AY 2021 - 2022", "AY 2022 - 2023"];
-                                foreach ($evaluationPeriods as $period): 
+                                // Define $evaluationPeriods if it's not already defined
+                                $evaluationPeriods = $evaluationPeriods ?? ["AY 2019 - 2020", "AY 2020 - 2021", "AY 2021 - 2022", "AY 2022 - 2023"];
+
+                                // Initialize $request_id to null if it's not set
+                                $request_id = $request_id ?? null;
+
+                                foreach ($evaluationPeriods as $index => $period): 
+                                    // Default evaluation_id using loop index
+                                    $evaluation_id = $request_id ? $request_id . '_' . $period . '_student' : "default_" . $index . "_student"; 
                             ?>
                                 <tr>
                                     <td>
@@ -78,10 +83,18 @@
                                         <input type="number" class="form-control rating-input" name="student_rating_2[]" placeholder="0.00" required>
                                     </td>
                                     <td>
-                                        <input type="url" class="form-control" name="student_evidence_link[]" placeholder="https://example.com/evidence" pattern="https?://.+" required>
+                                        <button type="button" class="btn btn-success btn-sm upload-evidence-btn" 
+                                                data-request-id="<?php echo $request_id ?? ''; ?>" 
+                                                data-evaluation-id="<?php echo $evaluation_id; ?>" 
+                                                data-table-type="student">
+                                            Upload Evidence
+                                        </button>
+                                        <input type="hidden" name="evaluation_id[]" value="<?php echo $evaluation_id; ?>">
+                                        <input type="hidden" name="evidence_file_1[]" value="">
+                                        <input type="hidden" name="evidence_file_2[]" value="">
                                     </td>
                                     <td>
-                                        <button type="button" class="btn btn-primary btn-sm view-remarks"
+                                        <button type="button" class="btn btn-success btn-sm view-remarks"
                                             data-first-remark=""
                                             data-second-remark="">
                                             View Remarks
@@ -138,11 +151,9 @@
                             <option value="maternity_leave">On Approved Maternity Leave</option>
                         </select>
                     </div>
-                    <!-- Link to Evidence -->
-                    <div class="col-md-4">
-                        <label for="supervisor-evidence-link" class="form-label">Link to Evidence:</label>
-                        <input type="url" class="form-control" id="supervisor-evidence-link" name="supervisor_evidence_link" placeholder="https://example.com/evidence" required>
-                    </div>
+                    
+                    <!-- REMOVED: Link to Evidence -->
+
                 </div>
 
                 <!-- Responsive Table -->
@@ -153,7 +164,7 @@
                                 <th scope="col">Evaluation Period</th>
                                 <th scope="col">1st Semester Rating</th>
                                 <th scope="col">2nd Semester Rating</th>
-                                <th scope="col">Link to Evidence</th>
+                                <th scope="col">Evidence</th> 
                                 <th scope="col">Remarks</th>
                                 <th scope="col">Actions</th>
                             </tr>
@@ -162,32 +173,44 @@
                             <!-- Rows will be populated by JavaScript -->
 
                             <!-- Default Rows -->
-                            <?php foreach ($evaluationPeriods as $period): ?>
-                                <tr>
-                                    <td>
-                                        <input type="text" class="form-control" name="supervisor_evaluation_period[]" value="<?php echo htmlspecialchars($period); ?>">
-                                    </td>
-                                    <td>
-                                        <input type="number" class="form-control rating-input" name="supervisor_rating_1[]" placeholder="0.00" required>
-                                    </td>
-                                    <td>
-                                        <input type="number" class="form-control rating-input" name="supervisor_rating_2[]" placeholder="0.00" required>
-                                    </td>
-                                    <td>
-                                        <input type="url" class="form-control" name="supervisor_evidence_link[]" placeholder="https://example.com/evidence" pattern="https?://.+" required>
-                                    </td>
-                                    <td>
-                                        <button type="button" class="btn btn-primary btn-sm view-remarks"
-                                            data-first-remark=""
-                                            data-second-remark="">
-                                            View Remarks
-                                        </button>
-                                    </td>
-                                    <td>
-                                        <button type="button" class="btn btn-danger btn-sm delete-row" aria-label="Delete row">Delete</button>
-                                    </td>
-                                </tr>
-                            <?php endforeach; ?>
+                            <?php 
+                                foreach ($evaluationPeriods as $index => $period): 
+                                    // Default evaluation_id using loop index
+                                    $evaluation_id = $request_id ? $request_id . '_' . $period . '_supervisor' : "default_" . $index . "_supervisor"; 
+                                ?>
+                                    <tr>
+                                        <td>
+                                            <input type="text" class="form-control" name="supervisor_evaluation_period[]" value="<?php echo htmlspecialchars($period); ?>">
+                                        </td>
+                                        <td>
+                                            <input type="number" class="form-control rating-input" name="supervisor_rating_1[]" placeholder="0.00" required>
+                                        </td>
+                                        <td>
+                                            <input type="number" class="form-control rating-input" name="supervisor_rating_2[]" placeholder="0.00" required>
+                                        </td>
+                                        <td>
+                                            <button type="button" class="btn btn-success btn-sm upload-evidence-btn" 
+                                                    data-request-id="<?php echo $request_id ?? ''; ?>" 
+                                                    data-evaluation-id="<?php echo $evaluation_id; ?>" 
+                                                    data-table-type="supervisor">
+                                                Upload Evidence
+                                            </button>
+                                            <input type="hidden" name="evaluation_id[]" value="<?php echo $evaluation_id; ?>">
+                                            <input type="hidden" name="evidence_file_1[]" value="">
+                                            <input type="hidden" name="evidence_file_2[]" value="">
+                                        </td>
+                                        <td>
+                                            <button type="button" class="btn btn-success btn-sm view-remarks"
+                                                data-first-remark=""
+                                                data-second-remark="">
+                                                View Remarks
+                                            </button>
+                                        </td>
+                                        <td>
+                                            <button type="button" class="btn btn-danger btn-sm delete-row" aria-label="Delete row">Delete</button>
+                                        </td>
+                                    </tr>
+                                <?php endforeach; ?>
                         </tbody>
                     </table>
                 </div>
@@ -218,8 +241,7 @@
     </form>
 </div>
 
-
-<!-- Delete Confirmation Modal -->
+<!-- Delete Row Confirmation Modal -->
 <div class="modal fade" id="deleteRowModal" tabindex="-1" aria-labelledby="deleteRowModalLabel" aria-hidden="true">
   <div class="modal-dialog modal-dialog-centered">
     <div class="modal-content">
