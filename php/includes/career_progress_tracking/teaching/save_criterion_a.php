@@ -6,6 +6,7 @@ ini_set('display_errors', 0);
 header('Content-Type: application/json');
 require_once '../../../session.php';
 require_once '../../../connection.php';
+require_once '../../../config.php';
 
 // Check if user is logged in
 if (!isset($_SESSION['user_id'])) {
@@ -18,7 +19,7 @@ $data = json_decode(file_get_contents('php://input'), true);
 // Validate request_id
 $request_id = isset($data['request_id']) ? intval($data['request_id']) : 0;
 if ($request_id <= 0) {
-    echo json_encode(['success'=>false,'error'=>'Please select an evaluation ID']);
+    echo json_encode(['success' => false, 'error' => 'Please select an evaluation ID']);
     exit();
 }
 
@@ -52,8 +53,9 @@ try {
         }
 
         foreach ($ids as $eval_id) {
+            // No need to check for 'new_' prefix here since they aren't added to deletedEvaluations in criterion_a.js
             $stmt->execute([
-                ':evaluation_id' => intval($eval_id),
+                ':evaluation_id' => $eval_id,
                 ':request_id' => $request_id
             ]);
         }
@@ -70,10 +72,8 @@ try {
         $update_meta = $conn->prepare("UPDATE kra1_a_metadata SET 
             student_divisor = :student_divisor, 
             student_reason = :student_reason, 
-            student_evidence_link = :student_evidence_link,
             supervisor_divisor = :supervisor_divisor, 
-            supervisor_reason = :supervisor_reason, 
-            supervisor_evidence_link = :supervisor_evidence_link,
+            supervisor_reason = :supervisor_reason,
             student_overall_rating = :student_overall_rating,
             student_faculty_rating = :student_faculty_rating,
             supervisor_overall_rating = :supervisor_overall_rating,
@@ -82,10 +82,8 @@ try {
         $update_meta->execute([
             ':student_divisor' => $data['student_divisor'],
             ':student_reason' => $data['student_reason'],
-            ':student_evidence_link' => $data['student_evidence_link'],
             ':supervisor_divisor' => $data['supervisor_divisor'],
             ':supervisor_reason' => $data['supervisor_reason'],
-            ':supervisor_evidence_link' => $data['supervisor_evidence_link'],
             ':student_overall_rating' => $student_overall_rating,
             ':student_faculty_rating' => $student_faculty_rating,
             ':supervisor_overall_rating' => $supervisor_overall_rating,
@@ -95,21 +93,19 @@ try {
     } else {
         // Insert new metadata row
         $insert_meta = $conn->prepare("INSERT INTO kra1_a_metadata 
-            (request_id, student_divisor, student_reason, student_evidence_link, 
-             supervisor_divisor, supervisor_reason, supervisor_evidence_link,
-             student_overall_rating, student_faculty_rating, supervisor_overall_rating, supervisor_faculty_rating) 
+            (request_id, student_divisor, student_reason, 
+            supervisor_divisor, supervisor_reason,
+            student_overall_rating, student_faculty_rating, supervisor_overall_rating, supervisor_faculty_rating) 
             VALUES 
-            (:request_id, :student_divisor, :student_reason, :student_evidence_link, 
-             :supervisor_divisor, :supervisor_reason, :supervisor_evidence_link,
-             :student_overall_rating, :student_faculty_rating, :supervisor_overall_rating, :supervisor_faculty_rating)");
+            (:request_id, :student_divisor, :student_reason, 
+            :supervisor_divisor, :supervisor_reason,
+            :student_overall_rating, :student_faculty_rating, :supervisor_overall_rating, :supervisor_faculty_rating)");
         $insert_meta->execute([
             ':request_id' => $request_id,
             ':student_divisor' => $data['student_divisor'],
             ':student_reason' => $data['student_reason'],
-            ':student_evidence_link' => $data['student_evidence_link'],
             ':supervisor_divisor' => $data['supervisor_divisor'],
             ':supervisor_reason' => $data['supervisor_reason'],
-            ':supervisor_evidence_link' => $data['supervisor_evidence_link'],
             ':student_overall_rating' => $student_overall_rating,
             ':student_faculty_rating' => $student_faculty_rating,
             ':supervisor_overall_rating' => $supervisor_overall_rating,
@@ -118,93 +114,146 @@ try {
     }
 
     // === Upsert Student Evaluations ===
+    $update_student = $conn->prepare("UPDATE kra1_a_student_evaluation SET
+        evaluation_period = :evaluation_period,
+        first_semester_rating = :first_semester_rating,
+        second_semester_rating = :second_semester_rating,
+        remarks_first = :remarks_first,
+        remarks_second = :remarks_second,
+        evidence_file_1 = :evidence_file_1,
+        evidence_file_2 = :evidence_file_2
+        WHERE evaluation_id = :evaluation_id AND request_id = :request_id");
+
+    $insert_student = $conn->prepare("INSERT INTO kra1_a_student_evaluation
+        (request_id, evaluation_period, first_semester_rating, second_semester_rating, remarks_first, remarks_second, evidence_file_1, evidence_file_2)
+        VALUES
+        (:request_id, :evaluation_period, :first_semester_rating, :second_semester_rating, :remarks_first, :remarks_second, :evidence_file_1, :evidence_file_2)");
+
     foreach ($student_evaluations as $eval) {
-        if (!isset($eval['evaluation_period'])) {
-            continue; // Skip invalid rows
-        }
-        if (isset($eval['evaluation_id']) && $eval['evaluation_id'] > 0) {
-            $update_student = $conn->prepare("UPDATE kra1_a_student_evaluation SET 
-                evaluation_period = :evaluation_period,
-                first_semester_rating = :first_semester_rating,
-                second_semester_rating = :second_semester_rating,
-                evidence_link_first = :evidence_link_first,
-                evidence_link_second = :evidence_link_second,
-                remarks_first = :remarks_first,
-                remarks_second = :remarks_second
-                WHERE evaluation_id = :evaluation_id AND request_id = :request_id");
-            $update_student->execute([
-                ':evaluation_period' => $eval['evaluation_period'],
-                ':first_semester_rating' => $eval['first_semester_rating'],
-                ':second_semester_rating' => $eval['second_semester_rating'],
-                ':evidence_link_first' => $eval['evidence_link_first'],
-                ':evidence_link_second' => $eval['evidence_link_second'],
-                ':remarks_first' => $eval['remarks_first'],
-                ':remarks_second' => $eval['remarks_second'],
-                ':evaluation_id' => $eval['evaluation_id'],
-                ':request_id' => $request_id
-            ]);
+        $eval_id = $eval['evaluation_id'];
+
+        // Fetch evidence file paths from the database for this evaluation_id
+        $stmt = $conn->prepare("SELECT evidence_file_1, evidence_file_2 FROM kra1_a_student_evaluation WHERE evaluation_id = :evaluation_id");
+        $stmt->execute([':evaluation_id' => $eval_id]);
+        $existing_files = $stmt->fetch(PDO::FETCH_ASSOC);
+
+        // Get the evidence file paths from the payload
+        $evidence_file_1 = $existing_files['evidence_file_1'] ?? '';
+        $evidence_file_2 = $existing_files['evidence_file_2'] ?? '';
+
+        $prefix = $request_id . '_' . str_replace(' ', '', $eval['evaluation_period']) . '_student_';
+
+        // Find the row in the DOM based on evaluation_id or a generated prefix for new rows
+        if (strpos($eval_id, 'new_') === 0) {
+            $selector = "tr[data-evaluation-id='" . $eval_id . "']";
         } else {
-            $insert_student = $conn->prepare("INSERT INTO kra1_a_student_evaluation 
-                (request_id, evaluation_period, first_semester_rating, second_semester_rating, 
-                 evidence_link_first, evidence_link_second, remarks_first, remarks_second) 
-                VALUES 
-                (:request_id, :evaluation_period, :first_semester_rating, :second_semester_rating, 
-                 :evidence_link_first, :evidence_link_second, :remarks_first, :remarks_second)");
+            $selector = "tr[data-evaluation-id^='" . $prefix . "']";
+        }
+        
+        // Check if the corresponding row exists in the DOM
+        if (isset($data['dom_row_selectors']) && array_key_exists($selector, $data['dom_row_selectors'])) {
+            $domRowData = $data['dom_row_selectors'][$selector];
+            $evidence_file_1 = $domRowData['evidence_file_1'] ?? $evidence_file_1;
+            $evidence_file_2 = $domRowData['evidence_file_2'] ?? $evidence_file_2;
+        }
+
+        if (strpos($eval_id, 'new_') === 0) {
+
+            // New row, perform an insert
             $insert_student->execute([
                 ':request_id' => $request_id,
                 ':evaluation_period' => $eval['evaluation_period'],
                 ':first_semester_rating' => $eval['first_semester_rating'],
                 ':second_semester_rating' => $eval['second_semester_rating'],
-                ':evidence_link_first' => $eval['evidence_link_first'],
-                ':evidence_link_second' => $eval['evidence_link_second'],
                 ':remarks_first' => $eval['remarks_first'],
-                ':remarks_second' => $eval['remarks_second']
+                ':remarks_second' => $eval['remarks_second'],
+                ':evidence_file_1' => $evidence_file_1,
+                ':evidence_file_2' => $evidence_file_2
+            ]);
+        } else {
+            // Existing row, perform an update
+            $update_student->execute([
+                ':evaluation_period' => $eval['evaluation_period'],
+                ':first_semester_rating' => $eval['first_semester_rating'],
+                ':second_semester_rating' => $eval['second_semester_rating'],
+                ':remarks_first' => $eval['remarks_first'],
+                ':remarks_second' => $eval['remarks_second'],
+                ':evidence_file_1' => $evidence_file_1,
+                ':evidence_file_2' => $evidence_file_2,
+                ':evaluation_id' => $eval_id,
+                ':request_id' => $request_id
             ]);
         }
     }
 
     // === Upsert Supervisor Evaluations ===
+    $update_supervisor = $conn->prepare("UPDATE kra1_a_supervisor_evaluation SET
+        evaluation_period = :evaluation_period,
+        first_semester_rating = :first_semester_rating,
+        second_semester_rating = :second_semester_rating,
+        remarks_first = :remarks_first,
+        remarks_second = :remarks_second,
+        evidence_file_1 = :evidence_file_1,
+        evidence_file_2 = :evidence_file_2
+        WHERE evaluation_id = :evaluation_id AND request_id = :request_id");
+
+    $insert_supervisor = $conn->prepare("INSERT INTO kra1_a_supervisor_evaluation
+        (request_id, evaluation_period, first_semester_rating, second_semester_rating, remarks_first, remarks_second, evidence_file_1, evidence_file_2)
+        VALUES
+        (:request_id, :evaluation_period, :first_semester_rating, :second_semester_rating, :remarks_first, :remarks_second, :evidence_file_1, :evidence_file_2)");
+
     foreach ($supervisor_evaluations as $eval) {
-        if (!isset($eval['evaluation_period'])) {
-            continue; // Skip invalid rows
-        }
-        if (isset($eval['evaluation_id']) && $eval['evaluation_id'] > 0) {
-            $update_supervisor = $conn->prepare("UPDATE kra1_a_supervisor_evaluation SET 
-                evaluation_period = :evaluation_period,
-                first_semester_rating = :first_semester_rating,
-                second_semester_rating = :second_semester_rating,
-                evidence_link_first = :evidence_link_first,
-                evidence_link_second = :evidence_link_second,
-                remarks_first = :remarks_first,
-                remarks_second = :remarks_second
-                WHERE evaluation_id = :evaluation_id AND request_id = :request_id");
-            $update_supervisor->execute([
-                ':evaluation_period' => $eval['evaluation_period'],
-                ':first_semester_rating' => $eval['first_semester_rating'],
-                ':second_semester_rating' => $eval['second_semester_rating'],
-                ':evidence_link_first' => $eval['evidence_link_first'],
-                ':evidence_link_second' => $eval['evidence_link_second'],
-                ':remarks_first' => $eval['remarks_first'],
-                ':remarks_second' => $eval['remarks_second'],
-                ':evaluation_id' => $eval['evaluation_id'],
-                ':request_id' => $request_id
-            ]);
+        $eval_id = $eval['evaluation_id'];
+
+        // Fetch evidence file paths from the database for this evaluation_id
+        $stmt = $conn->prepare("SELECT evidence_file_1, evidence_file_2 FROM kra1_a_supervisor_evaluation WHERE evaluation_id = :evaluation_id");
+        $stmt->execute([':evaluation_id' => $eval_id]);
+        $existing_files = $stmt->fetch(PDO::FETCH_ASSOC);
+
+        // Get the evidence file paths from the payload
+        $evidence_file_1 = $existing_files['evidence_file_1'] ?? '';
+        $evidence_file_2 = $existing_files['evidence_file_2'] ?? '';
+
+        $prefix = $request_id . '_' . str_replace(' ', '', $eval['evaluation_period']) . '_supervisor_';
+
+        // Find the row in the DOM based on evaluation_id or a generated prefix for new rows
+        if (strpos($eval_id, 'new_') === 0) {
+            $selector = "tr[data-evaluation-id='" . $eval_id . "']";
         } else {
-            $insert_supervisor = $conn->prepare("INSERT INTO kra1_a_supervisor_evaluation 
-                (request_id, evaluation_period, first_semester_rating, second_semester_rating, 
-                 evidence_link_first, evidence_link_second, remarks_first, remarks_second) 
-                VALUES 
-                (:request_id, :evaluation_period, :first_semester_rating, :second_semester_rating, 
-                 :evidence_link_first, :evidence_link_second, :remarks_first, :remarks_second)");
+            $selector = "tr[data-evaluation-id^='" . $prefix . "']";
+        }
+        
+        // Check if the corresponding row exists in the DOM
+        if (isset($data['dom_row_selectors']) && array_key_exists($selector, $data['dom_row_selectors'])) {
+            $domRowData = $data['dom_row_selectors'][$selector];
+            $evidence_file_1 = $domRowData['evidence_file_1'] ?? $evidence_file_1;
+            $evidence_file_2 = $domRowData['evidence_file_2'] ?? $evidence_file_2;
+        }
+
+        if (strpos($eval_id, 'new_') === 0) {
+            // New row, perform an insert
             $insert_supervisor->execute([
                 ':request_id' => $request_id,
                 ':evaluation_period' => $eval['evaluation_period'],
                 ':first_semester_rating' => $eval['first_semester_rating'],
                 ':second_semester_rating' => $eval['second_semester_rating'],
-                ':evidence_link_first' => $eval['evidence_link_first'],
-                ':evidence_link_second' => $eval['evidence_link_second'],
                 ':remarks_first' => $eval['remarks_first'],
-                ':remarks_second' => $eval['remarks_second']
+                ':remarks_second' => $eval['remarks_second'],
+                ':evidence_file_1' => $evidence_file_1,
+                ':evidence_file_2' => $evidence_file_2
+            ]);
+        } else {
+            // Existing row, perform an update
+            $update_supervisor->execute([
+                ':evaluation_period' => $eval['evaluation_period'],
+                ':first_semester_rating' => $eval['first_semester_rating'],
+                ':second_semester_rating' => $eval['second_semester_rating'],
+                ':remarks_first' => $eval['remarks_first'],
+                ':remarks_second' => $eval['remarks_second'],
+                ':evidence_file_1' => $evidence_file_1,
+                ':evidence_file_2' => $evidence_file_2,
+                ':evaluation_id' => $eval_id,
+                ':request_id' => $request_id
             ]);
         }
     }
@@ -284,9 +333,9 @@ try {
     }
 
     $conn->commit();
-    echo json_encode(['success'=>true, 'message'=>'Criterion A saved successfully']);
+    echo json_encode(['success' => true, 'message' => 'Criterion A saved successfully']);
 } catch (Exception $e) {
     $conn->rollBack();
-    echo json_encode(['success'=>false,'error'=>'Failed to save data: '.$e->getMessage()]);
+    echo json_encode(['success' => false, 'error' => 'Failed to save data: ' . $e->getMessage()]);
 }
 ?>

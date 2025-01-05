@@ -192,7 +192,7 @@
                                             <button type="button" class="btn btn-success btn-sm upload-evidence-btn" 
                                                     data-request-id="<?php echo $request_id ?? ''; ?>" 
                                                     data-evaluation-id="<?php echo $evaluation_id; ?>" 
-                                                    data-table-type="student">
+                                                    data-table-type="supervisor">
                                                 Upload Evidence
                                             </button>
                                             <input type="hidden" name="evaluation_id[]" value="<?php echo $evaluation_id; ?>">

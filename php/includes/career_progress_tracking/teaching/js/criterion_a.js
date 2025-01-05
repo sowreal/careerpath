@@ -10,11 +10,9 @@ function escapeHTML(str) {
 
 function addDefaultStudentRows(tableBody) {
     const defaultPeriods = ["AY 2019 - 2020", "AY 2020 - 2021", "AY 2021 - 2022", "AY 2022 - 2023"];
-    const requestId = document.getElementById('request_id').value.trim(); // Get current request_id
-    defaultPeriods.forEach((period, index) => {
-        const evaluation_id = `${requestId}_${period}_student`;
+    const requestId = document.getElementById('request_id').value.trim();
+    defaultPeriods.forEach(period => {
         const row = document.createElement('tr');
-        row.setAttribute('data-evaluation-id', evaluation_id);
         row.innerHTML = `
             <td><input type="text" class="form-control" name="student_evaluation_period[]" value="${escapeHTML(period)}" required></td>
             <td><input type="number" class="form-control rating-input" name="student_rating_1[]" placeholder="0.00" required></td>
@@ -22,11 +20,9 @@ function addDefaultStudentRows(tableBody) {
             <td>
                 <button type="button" class="btn btn-success btn-sm upload-evidence-btn" 
                         data-request-id="${requestId}"
-                        data-evaluation-id="${evaluation_id}"
                         data-table-type="student">
                     Upload Evidence
                 </button>
-                <input type="hidden" name="evaluation_id[]" value="${evaluation_id}">
                 <input type="hidden" name="evidence_file_1[]" value="">
                 <input type="hidden" name="evidence_file_2[]" value="">
             </td>
@@ -39,11 +35,9 @@ function addDefaultStudentRows(tableBody) {
 
 function addDefaultSupervisorRows(tableBody) {
     const defaultPeriods = ["AY 2019 - 2020", "AY 2020 - 2021", "AY 2021 - 2022", "AY 2022 - 2023"];
-    const requestId = document.getElementById('request_id').value.trim(); // Get current request_id
-    defaultPeriods.forEach((period, index) => {
-        const evaluation_id = `${requestId}_${period}_supervisor`;
+    const requestId = document.getElementById('request_id').value.trim();
+    defaultPeriods.forEach(period => {
         const row = document.createElement('tr');
-        row.setAttribute('data-evaluation-id', evaluation_id);
         row.innerHTML = `
             <td><input type="text" class="form-control" name="supervisor_evaluation_period[]" value="${escapeHTML(period)}" required></td>
             <td><input type="number" class="form-control rating-input" name="supervisor_rating_1[]" placeholder="0.00" required></td>
@@ -51,11 +45,9 @@ function addDefaultSupervisorRows(tableBody) {
             <td>
                 <button type="button" class="btn btn-success btn-sm upload-evidence-btn" 
                         data-request-id="${requestId}"
-                        data-evaluation-id="${evaluation_id}"
                         data-table-type="supervisor">
                     Upload Evidence
                 </button>
-                <input type="hidden" name="evaluation_id[]" value="${evaluation_id}">
                 <input type="hidden" name="evidence_file_1[]" value="">
                 <input type="hidden" name="evidence_file_2[]" value="">
             </td>
@@ -68,8 +60,8 @@ function addDefaultSupervisorRows(tableBody) {
 
 function populateStudentTable(studentData) {
     const tableBody = document.querySelector('#student-evaluation-table tbody');
-    const requestId = document.getElementById('request_id').value.trim(); // Get current request_id
-    tableBody.innerHTML = ''; 
+    const requestId = document.getElementById('request_id').value.trim();
+    tableBody.innerHTML = '';
 
     if (!studentData || studentData.length === 0) {
         addDefaultStudentRows(tableBody);
@@ -80,29 +72,17 @@ function populateStudentTable(studentData) {
         const tr = document.createElement('tr');
         tr.setAttribute('data-evaluation-id', item.evaluation_id);
 
-        // Construct the cell content based on whether evidence exists
-        let evidenceCellContent = '';
-        if (item.evidence_file_1 || item.evidence_file_2) {
-            // If evidence exists, we will display the "Change Evidence" button only
-            evidenceCellContent = `
-                <button type="button" class="btn btn-success btn-sm upload-evidence-btn" 
-                        data-request-id="${requestId}"
-                        data-evaluation-id="${item.evaluation_id}"
-                        data-table-type="student">
-                    Change Evidence
-                </button>
-            `;
-        } else {
-            // If no evidence, show the "Upload Evidence" button
-            evidenceCellContent = `
-                <button type="button" class="btn btn-success btn-sm upload-evidence-btn" 
-                        data-request-id="${requestId}"
-                        data-evaluation-id="${item.evaluation_id}"
-                        data-table-type="student">
-                    Upload Evidence
-                </button>
-            `;
-        }
+        let evidenceCellContent = `
+            <button type="button" class="btn btn-success btn-sm upload-evidence-btn" 
+                    data-request-id="${requestId}"
+                    data-evaluation-id="${item.evaluation_id}"
+                    data-table-type="student">
+                ${item.evidence_file_1 || item.evidence_file_2 ? 'Change Evidence' : 'Upload Evidence'}
+            </button>
+            <input type="hidden" name="evaluation_id[]" value="${item.evaluation_id}">
+            <input type="hidden" name="evidence_file_1[]" value="${item.evidence_file_1 || ''}">
+            <input type="hidden" name="evidence_file_2[]" value="${item.evidence_file_2 || ''}">
+        `;
 
         tr.innerHTML = `
             <td><input type="text" class="form-control" name="student_evaluation_period[]" value="${escapeHTML(item.evaluation_period || '')}" required></td>
@@ -110,24 +90,18 @@ function populateStudentTable(studentData) {
             <td><input type="number" class="form-control rating-input" name="student_rating_2[]" value="${item.second_semester_rating || ''}" placeholder="0.00" required></td>
             <td>
                 ${evidenceCellContent}
-                <input type="hidden" name="evaluation_id[]" value="${item.evaluation_id}">
-                <input type="hidden" name="evidence_file_1[]" value="">
-                <input type="hidden" name="evidence_file_2[]" value="">
             </td>
             <td><button type="button" class="btn btn-success btn-sm view-remarks" data-first-remark="${escapeHTML(item.remarks_first || '')}" data-second-remark="${escapeHTML(item.remarks_second || '')}">View Remarks</button></td>
             <td><button type="button" class="btn btn-danger btn-sm delete-row" aria-label="Delete row">Delete</button></td>
         `;
 
-        // Set the values of the hidden inputs AFTER adding the row to the DOM
         tableBody.appendChild(tr);
-        tr.querySelector('input[name="evidence_file_1[]"]').value = item.evidence_file_1 || '';
-        tr.querySelector('input[name="evidence_file_2[]"]').value = item.evidence_file_2 || '';
     });
 }
 
 function populateSupervisorTable(supervisorData) {
     const tableBody = document.querySelector('#supervisor-evaluation-table tbody');
-    const requestId = document.getElementById('request_id').value.trim(); // Get current request_id
+    const requestId = document.getElementById('request_id').value.trim();
     tableBody.innerHTML = '';
 
     if (!supervisorData || supervisorData.length === 0) {
@@ -139,29 +113,17 @@ function populateSupervisorTable(supervisorData) {
         const tr = document.createElement('tr');
         tr.setAttribute('data-evaluation-id', item.evaluation_id);
 
-        // Construct the cell content based on whether evidence exists
-        let evidenceCellContent = '';
-        if (item.evidence_file_1 || item.evidence_file_2) {
-            // If evidence exists, we will display the "Change Evidence" button only
-            evidenceCellContent = `
-                <button type="button" class="btn btn-success btn-sm upload-evidence-btn" 
-                        data-request-id="${requestId}"
-                        data-evaluation-id="${item.evaluation_id}"
-                        data-table-type="supervisor">
-                    Change Evidence
-                </button>
-            `;
-        } else {
-            // If no evidence, show the "Upload Evidence" button
-            evidenceCellContent = `
-                <button type="button" class="btn btn-success btn-sm upload-evidence-btn" 
-                        data-request-id="${requestId}"
-                        data-evaluation-id="${item.evaluation_id}"
-                        data-table-type="supervisor">
-                    Upload Evidence
-                </button>
-            `;
-        }
+        let evidenceCellContent = `
+            <button type="button" class="btn btn-success btn-sm upload-evidence-btn" 
+                    data-request-id="${requestId}"
+                    data-evaluation-id="${item.evaluation_id}"
+                    data-table-type="supervisor">
+                ${item.evidence_file_1 || item.evidence_file_2 ? 'Change Evidence' : 'Upload Evidence'}
+            </button>
+            <input type="hidden" name="evaluation_id[]" value="${item.evaluation_id}">
+            <input type="hidden" name="evidence_file_1[]" value="${item.evidence_file_1 || ''}">
+            <input type="hidden" name="evidence_file_2[]" value="${item.evidence_file_2 || ''}">
+        `;
 
         tr.innerHTML = `
             <td><input type="text" class="form-control" name="supervisor_evaluation_period[]" value="${escapeHTML(item.evaluation_period || '')}" required></td>
@@ -169,18 +131,12 @@ function populateSupervisorTable(supervisorData) {
             <td><input type="number" class="form-control rating-input" name="supervisor_rating_2[]" value="${item.second_semester_rating || ''}" placeholder="0.00" required></td>
             <td>
                 ${evidenceCellContent}
-                <input type="hidden" name="evaluation_id[]" value="${item.evaluation_id}">
-                <input type="hidden" name="evidence_file_1[]" value="">
-                <input type="hidden" name="evidence_file_2[]" value="">
             </td>
             <td><button type="button" class="btn btn-success btn-sm view-remarks" data-first-remark="${escapeHTML(item.remarks_first || '')}" data-second-remark="${escapeHTML(item.remarks_second || '')}">View Remarks</button></td>
             <td><button type="button" class="btn btn-danger btn-sm delete-row" aria-label="Delete row">Delete</button></td>
         `;
 
-        // Set the values of the hidden inputs AFTER adding the row to the DOM
         tableBody.appendChild(tr);
-        tr.querySelector('input[name="evidence_file_1[]"]').value = item.evidence_file_1 || '';
-        tr.querySelector('input[name="evidence_file_2[]"]').value = item.evidence_file_2 || '';
     });
 }
 
@@ -229,30 +185,22 @@ function fetchCriterionA(requestId) {
         .then(response => response.json())
         .then(data => {
             if (data.success) {
-                const studentTableBody = document.querySelector('#student-evaluation-table tbody');
-                const supervisorTableBody = document.querySelector('#supervisor-evaluation-table tbody');
-
-                // Add default rows if no data
-                if (!data.student_evaluations || data.student_evaluations.length === 0) {
-                    addDefaultStudentRows(studentTableBody);
-                } else {
-                    populateStudentTable(data.student_evaluations);
-                }
-
-                if (!data.supervisor_evaluations || data.supervisor_evaluations.length === 0) {
-                    addDefaultSupervisorRows(supervisorTableBody);
-                } else {
-                    populateSupervisorTable(data.supervisor_evaluations);
-                }
-
+                populateStudentTable(data.student_evaluations);
+                populateSupervisorTable(data.supervisor_evaluations);
                 populateMetadata(data.metadata);
                 return data;
             } else {
-                throw new Error(data.error || 'Failed to fetch Criterion A data.');
+                console.error('Error:', data.error);
+                showMessage('Failed to fetch data: ' + data.error);
+                addDefaultStudentRows(document.querySelector('#student-evaluation-table tbody'));
+                addDefaultSupervisorRows(document.querySelector('#supervisor-evaluation-table tbody'));
             }
         })
         .catch(error => {
             console.error('Error fetching data:', error);
+            showMessage('Failed to fetch data. Please check the console for details.');
+            addDefaultStudentRows(document.querySelector('#student-evaluation-table tbody'));
+            addDefaultSupervisorRows(document.querySelector('#supervisor-evaluation-table tbody'));
         });
 }
 // === FETCHING AND POPULATE END ===
@@ -500,7 +448,7 @@ document.addEventListener('DOMContentLoaded', function () {
         const requestId = document.getElementById('request_id').value.trim();
 
         if (!requestId || parseInt(requestId) <= 0) {
-            showErrorModal('Please select a valid evaluation ID.');
+            showMessage('Please select a valid evaluation ID.');
             return;
         }
 
@@ -514,22 +462,23 @@ document.addEventListener('DOMContentLoaded', function () {
         .then(response => response.json())
         .then(data => {
             if (data.success) {
-                saveSuccessModal.show();
+                showMessage('Criterion A data saved successfully!'); // Use message modal
                 // Reset the deletedEvaluations list
                 deletedEvaluations = { student: [], supervisor: [] };
                 markFormAsClean();
                 // Re-fetch data if necessary
                 fetchCriterionA(requestId);
             } else {
-                showErrorModal(data.error || 'An error occurred.');
+                showMessage(data.error || 'An error occurred while saving.'); // Use message modal
             }
         })
         .catch(error => {
             console.error('Error:', error);
-            showErrorModal('Failed to save data. Please check console for details.');
+            showMessage('Failed to save data. Please check the console for details.'); // Use message modal
         });
     }
 
+    // Attach saveCriterionA() to the save button's click event
     saveBtn.addEventListener('click', function () {
         saveCriterionA();
     });
@@ -537,82 +486,112 @@ document.addEventListener('DOMContentLoaded', function () {
     function gatherPayload(requestId) {
         // Collect student evaluations
         const studentEvaluations = [];
+        const domRowSelectors = {}; // Initialize domRowSelectors here
+    
         document.querySelectorAll('#student-evaluation-table tbody tr').forEach(row => {
-            const evaluation_id = parseInt(row.getAttribute('data-evaluation-id') || 0, 10);
+            const evaluation_id = row.getAttribute('data-evaluation-id');
             const evaluation_period = row.querySelector('input[name="student_evaluation_period[]"]').value.trim();
             const rating1Input = row.querySelector('input[name="student_rating_1[]"]');
             const rating2Input = row.querySelector('input[name="student_rating_2[]"]');
-            const evidence_link_first = row.querySelector('input[name="student_evidence_link[]"]').value.trim();
-            const evidence_link_second = evidence_link_first; 
-            const remarks_first = ''; 
-            const remarks_second = ''; 
-
+            const remarks_first = row.querySelector('.view-remarks').getAttribute('data-first-remark') || '';
+            const remarks_second = row.querySelector('.view-remarks').getAttribute('data-second-remark') || '';
+    
+            // Collect evidence file paths from hidden inputs
+            const evidenceFile1 = row.querySelector('input[name="evidence_file_1[]"]').value;
+            const evidenceFile2 = row.querySelector('input[name="evidence_file_2[]"]').value;
+    
+            // Determine the selector based on evaluation_id
+            let selector;
+            if (evaluation_id.startsWith('new_')) {
+                selector = `tr[data-evaluation-id='${evaluation_id}']`;
+            } else {
+                const prefix = requestId + '_' + evaluation_period.replace(/\s+/g, '') + '_student_';
+                selector = `tr[data-evaluation-id^='${prefix}']`;
+            }
+    
+            domRowSelectors[selector] = {
+                evidence_file_1: evidenceFile1,
+                evidence_file_2: evidenceFile2
+            };
+    
             studentEvaluations.push({
                 evaluation_id,
                 evaluation_period,
                 first_semester_rating: parseFloat(rating1Input.value) || 0,
                 second_semester_rating: parseFloat(rating2Input.value) || 0,
-                evidence_link_first,
-                evidence_link_second,
                 remarks_first,
                 remarks_second
             });
         });
-
+    
         // Collect supervisor evaluations
         const supervisorEvaluations = [];
         document.querySelectorAll('#supervisor-evaluation-table tbody tr').forEach(row => {
-            const evaluation_id = parseInt(row.getAttribute('data-evaluation-id') || 0, 10);
+            const evaluation_id = row.getAttribute('data-evaluation-id');
+
+            // Check if evaluation_id is null and handle it
+            if (!evaluation_id) {
+                console.error("Error: evaluation_id is null for a supervisor row:", row);
+                return; // Skip this row and continue to the next
+            }
+
             const evaluation_period = row.querySelector('input[name="supervisor_evaluation_period[]"]').value.trim();
             const rating1Input = row.querySelector('input[name="supervisor_rating_1[]"]');
             const rating2Input = row.querySelector('input[name="supervisor_rating_2[]"]');
-            const evidence_link_first = row.querySelector('input[name="supervisor_evidence_link[]"]').value.trim();
-            const evidence_link_second = evidence_link_first;
-            const remarks_first = '';
-            const remarks_second = '';
-
+            const remarks_first = row.querySelector('.view-remarks').getAttribute('data-first-remark') || '';
+            const remarks_second = row.querySelector('.view-remarks').getAttribute('data-second-remark') || '';
+    
+            // Collect evidence file paths from hidden inputs
+            const evidenceFile1 = row.querySelector('input[name="evidence_file_1[]"]').value;
+            const evidenceFile2 = row.querySelector('input[name="evidence_file_2[]"]').value;
+    
+            // Determine the selector based on evaluation_id
+            let selector;
+            if (evaluation_id.startsWith('new_')) {
+                selector = `tr[data-evaluation-id='${evaluation_id}']`;
+            } else {
+                const prefix = requestId + '_' + evaluation_period.replace(/\s+/g, '') + '_supervisor_';
+                selector = `tr[data-evaluation-id^='${prefix}']`;
+            }
+    
+            domRowSelectors[selector] = {
+                evidence_file_1: evidenceFile1,
+                evidence_file_2: evidenceFile2
+            };
+    
             supervisorEvaluations.push({
                 evaluation_id,
                 evaluation_period,
                 first_semester_rating: parseFloat(rating1Input.value) || 0,
                 second_semester_rating: parseFloat(rating2Input.value) || 0,
-                evidence_link_first,
-                evidence_link_second,
                 remarks_first,
                 remarks_second
             });
         });
-
-        // Now gather the metadata ratings from the top-level fields
+    
+        // Gather the metadata ratings from the top-level fields
         const student_overall_rating = parseFloat(document.getElementById('student_overall_score').value) || 0;
         const student_faculty_rating = parseFloat(document.getElementById('student_faculty_overall_score').value) || 0;
         const supervisor_overall_rating = parseFloat(document.getElementById('supervisor-overall-score').value) || 0;
         const supervisor_faculty_rating = parseFloat(document.getElementById('supervisor-faculty-overall-score').value) || 0;
-
+    
         return {
-            request_id: parseInt(requestId,10),
-            student_divisor: parseInt(document.getElementById('student-divisor').value,10) || 0,
+            request_id: parseInt(requestId, 10),
+            student_divisor: parseInt(document.getElementById('student-divisor').value, 10) || 0,
             student_reason: document.getElementById('student-reason').value,
-            student_evidence_link: document.getElementById('student-evidence-link').value,
-            supervisor_divisor: parseInt(document.getElementById('supervisor-divisor').value,10) || 0,
+            supervisor_divisor: parseInt(document.getElementById('supervisor-divisor').value, 10) || 0,
             supervisor_reason: document.getElementById('supervisor-reason').value,
-            supervisor_evidence_link: document.getElementById('supervisor-evidence-link').value,
             student_evaluations: studentEvaluations,
             supervisor_evaluations: supervisorEvaluations,
-            // Include new overall/faculty ratings in the payload as part of metadata
             student_overall_rating: student_overall_rating,
             student_faculty_rating: student_faculty_rating,
             supervisor_overall_rating: supervisor_overall_rating,
             supervisor_faculty_rating: supervisor_faculty_rating,
-            // Include deleted evaluations
-            deleted_evaluations: deletedEvaluations
+            deleted_evaluations: deletedEvaluations,
+            dom_row_selectors: domRowSelectors // Include the domRowSelectors object in the payload
         };
     }
 
-    function showErrorModal(message) {
-        document.querySelector('#saveErrorModal .modal-body').textContent = message;
-        saveErrorModal.show();
-    }
     // === SAVING PROCESS END ===
 
     // === ADD ROW FUNCTION START ===
@@ -620,26 +599,23 @@ document.addEventListener('DOMContentLoaded', function () {
         addBtn.addEventListener('click', function() {
             const tableId = this.getAttribute('data-table-id');
             const tableBody = document.querySelector(`#${tableId} tbody`);
-            const requestId = document.getElementById('request_id').value.trim(); // Get current request_id
+            const requestId = document.getElementById('request_id').value.trim();
 
-            // Determine if this is student or supervisor
             const isStudent = tableId.includes('student');
             const periodName = isStudent ? 'student_evaluation_period[]' : 'supervisor_evaluation_period[]';
             const rating1Name = isStudent ? 'student_rating_1[]' : 'supervisor_rating_1[]';
             const rating2Name = isStudent ? 'student_rating_2[]' : 'supervisor_rating_2[]';
-            const evidenceFile1Name = isStudent ? 'evidence_file_1[]' : 'supervisor_evidence_file_1[]';
-            const evidenceFile2Name = isStudent ? 'evidence_file_2[]' : 'supervisor_evidence_file_2[]';
+            const evidenceFile1Name = 'evidence_file_1[]';
+            const evidenceFile2Name = 'evidence_file_2[]';
 
-            // Generate a unique evaluation_id for the new row
             const new_evaluation_id = requestId + '_new_' + Date.now();
 
-            // Create a new row similar to the default row
             const newRow = document.createElement('tr');
             newRow.setAttribute('data-evaluation-id', new_evaluation_id);
 
             newRow.innerHTML = `
                 <td>
-                    <input type="text" class="form-control" name="${periodName}" value="AY 2023 - 2024" required>
+                    <input type="text" class="form-control" name="${periodName}" value="AY ${new Date().getFullYear()} - ${new Date().getFullYear() + 1}" required>
                 </td>
                 <td>
                     <input type="number" class="form-control rating-input" name="${rating1Name}" placeholder="0.00" required>
@@ -654,7 +630,6 @@ document.addEventListener('DOMContentLoaded', function () {
                             data-table-type="${isStudent ? 'student' : 'supervisor'}">
                         Upload Evidence
                     </button>
-                    <input type="hidden" name="evaluation_id[]" value="${new_evaluation_id}">
                     <input type="hidden" name="${evidenceFile1Name}" value="">
                     <input type="hidden" name="${evidenceFile2Name}" value="">
                 </td>
@@ -667,11 +642,7 @@ document.addEventListener('DOMContentLoaded', function () {
             `;
 
             tableBody.appendChild(newRow);
-
-            // Recalculate scores if needed
             calculateOverallScores();
-
-            // Mark form as dirty
             markFormAsDirty();
         });
     });
@@ -731,6 +702,25 @@ document.addEventListener('DOMContentLoaded', function () {
         }
     });
     // === DELETE ROW FUNCTION END ===
+
+    // === VIEW REMARKS START ===
+    $(document).on('click', '.view-remarks', function() {
+        const button = $(this);
+        const row = button.closest('tr');
+
+        // Get remarks from data attributes
+        const firstSemesterRemark = button.data('first-remark');
+        const secondSemesterRemark = button.data('second-remark');
+
+        // Populate the modal with remarks content
+        $('#first-semester-remark').text(firstSemesterRemark);
+        $('#second-semester-remark').text(secondSemesterRemark);
+
+        // Show the modal
+        const remarksModal = new bootstrap.Modal(document.getElementById('remarksModal'));
+        remarksModal.show();
+    });
+    // === VIEW REMARKS END ===
 
     // === CALCULATION START ===
     function calculateOverallScores() {
