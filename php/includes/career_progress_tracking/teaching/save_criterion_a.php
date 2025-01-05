@@ -115,147 +115,146 @@ try {
 
     // === Upsert Student Evaluations ===
     $update_student = $conn->prepare("UPDATE kra1_a_student_evaluation SET
-        evaluation_period = :evaluation_period,
-        first_semester_rating = :first_semester_rating,
-        second_semester_rating = :second_semester_rating,
-        remarks_first = :remarks_first,
-        remarks_second = :remarks_second,
-        evidence_file_1 = :evidence_file_1,
-        evidence_file_2 = :evidence_file_2
-        WHERE evaluation_id = :evaluation_id AND request_id = :request_id");
+    evaluation_period = :evaluation_period,
+    first_semester_rating = :first_semester_rating,
+    second_semester_rating = :second_semester_rating,
+    remarks_first = :remarks_first,
+    remarks_second = :remarks_second,
+    evidence_file_1 = :evidence_file_1,
+    evidence_file_2 = :evidence_file_2
+    WHERE evaluation_id = :evaluation_id AND request_id = :request_id");
 
     $insert_student = $conn->prepare("INSERT INTO kra1_a_student_evaluation
-        (request_id, evaluation_period, first_semester_rating, second_semester_rating, remarks_first, remarks_second, evidence_file_1, evidence_file_2)
-        VALUES
-        (:request_id, :evaluation_period, :first_semester_rating, :second_semester_rating, :remarks_first, :remarks_second, :evidence_file_1, :evidence_file_2)");
+    (request_id, evaluation_period, first_semester_rating, second_semester_rating, remarks_first, remarks_second, evidence_file_1, evidence_file_2)
+    VALUES
+    (:request_id, :evaluation_period, :first_semester_rating, :second_semester_rating, :remarks_first, :remarks_second, :evidence_file_1, :evidence_file_2)");
 
     foreach ($student_evaluations as $eval) {
-        $eval_id = $eval['evaluation_id'];
+    $eval_id = $eval['evaluation_id'];
 
-        // Fetch evidence file paths from the database for this evaluation_id
-        $stmt = $conn->prepare("SELECT evidence_file_1, evidence_file_2 FROM kra1_a_student_evaluation WHERE evaluation_id = :evaluation_id");
-        $stmt->execute([':evaluation_id' => $eval_id]);
-        $existing_files = $stmt->fetch(PDO::FETCH_ASSOC);
+    // Fetch evidence file paths from the database for this evaluation_id
+    $stmt = $conn->prepare("SELECT evidence_file_1, evidence_file_2 FROM kra1_a_student_evaluation WHERE evaluation_id = :evaluation_id");
+    $stmt->execute([':evaluation_id' => $eval_id]);
+    $existing_files = $stmt->fetch(PDO::FETCH_ASSOC);
 
-        // Get the evidence file paths from the payload
-        $evidence_file_1 = $existing_files['evidence_file_1'] ?? '';
-        $evidence_file_2 = $existing_files['evidence_file_2'] ?? '';
+    // Get the evidence file paths from the payload
+    $evidence_file_1 = $existing_files['evidence_file_1'] ?? '';
+    $evidence_file_2 = $existing_files['evidence_file_2'] ?? '';
 
-        $prefix = $request_id . '_' . str_replace(' ', '', $eval['evaluation_period']) . '_student_';
+    $prefix = $request_id . '_' . str_replace(' ', '', $eval['evaluation_period']) . '_student_';
 
-        // Find the row in the DOM based on evaluation_id or a generated prefix for new rows
-        if (strpos($eval_id, 'new_') === 0) {
-            $selector = "tr[data-evaluation-id='" . $eval_id . "']";
-        } else {
-            $selector = "tr[data-evaluation-id^='" . $prefix . "']";
-        }
-        
-        // Check if the corresponding row exists in the DOM
-        if (isset($data['dom_row_selectors']) && array_key_exists($selector, $data['dom_row_selectors'])) {
-            $domRowData = $data['dom_row_selectors'][$selector];
-            $evidence_file_1 = $domRowData['evidence_file_1'] ?? $evidence_file_1;
-            $evidence_file_2 = $domRowData['evidence_file_2'] ?? $evidence_file_2;
-        }
+    // Find the row in the DOM based on evaluation_id or a generated prefix for new rows
+    if ($eval_id === '0') {
+        $selector = "tr[data-evaluation-id='" . $eval_id . "']";
+    } else {
+        $selector = "tr[data-evaluation-id^='" . $prefix . "']";
+    }
 
-        if (strpos($eval_id, 'new_') === 0) {
+    // Check if the corresponding row exists in the DOM
+    if (isset($data['dom_row_selectors']) && array_key_exists($selector, $data['dom_row_selectors'])) {
+        $domRowData = $data['dom_row_selectors'][$selector];
+        $evidence_file_1 = $domRowData['evidence_file_1'] ?? $evidence_file_1;
+        $evidence_file_2 = $domRowData['evidence_file_2'] ?? $evidence_file_2;
+    }
 
-            // New row, perform an insert
-            $insert_student->execute([
-                ':request_id' => $request_id,
-                ':evaluation_period' => $eval['evaluation_period'],
-                ':first_semester_rating' => $eval['first_semester_rating'],
-                ':second_semester_rating' => $eval['second_semester_rating'],
-                ':remarks_first' => $eval['remarks_first'],
-                ':remarks_second' => $eval['remarks_second'],
-                ':evidence_file_1' => $evidence_file_1,
-                ':evidence_file_2' => $evidence_file_2
-            ]);
-        } else {
-            // Existing row, perform an update
-            $update_student->execute([
-                ':evaluation_period' => $eval['evaluation_period'],
-                ':first_semester_rating' => $eval['first_semester_rating'],
-                ':second_semester_rating' => $eval['second_semester_rating'],
-                ':remarks_first' => $eval['remarks_first'],
-                ':remarks_second' => $eval['remarks_second'],
-                ':evidence_file_1' => $evidence_file_1,
-                ':evidence_file_2' => $evidence_file_2,
-                ':evaluation_id' => $eval_id,
-                ':request_id' => $request_id
-            ]);
-        }
+    if ($eval_id === '0') {
+        // New row, perform an insert
+        $insert_student->execute([
+            ':request_id' => $request_id,
+            ':evaluation_period' => $eval['evaluation_period'],
+            ':first_semester_rating' => $eval['first_semester_rating'],
+            ':second_semester_rating' => $eval['second_semester_rating'],
+            ':remarks_first' => $eval['remarks_first'],
+            ':remarks_second' => $eval['remarks_second'],
+            ':evidence_file_1' => $evidence_file_1,
+            ':evidence_file_2' => $evidence_file_2
+        ]);
+    } else {
+        // Existing row, perform an update
+        $update_student->execute([
+            ':evaluation_period' => $eval['evaluation_period'],
+            ':first_semester_rating' => $eval['first_semester_rating'],
+            ':second_semester_rating' => $eval['second_semester_rating'],
+            ':remarks_first' => $eval['remarks_first'],
+            ':remarks_second' => $eval['remarks_second'],
+            ':evidence_file_1' => $evidence_file_1,
+            ':evidence_file_2' => $evidence_file_2,
+            ':evaluation_id' => $eval_id,
+            ':request_id' => $request_id
+        ]);
+    }
     }
 
     // === Upsert Supervisor Evaluations ===
     $update_supervisor = $conn->prepare("UPDATE kra1_a_supervisor_evaluation SET
-        evaluation_period = :evaluation_period,
-        first_semester_rating = :first_semester_rating,
-        second_semester_rating = :second_semester_rating,
-        remarks_first = :remarks_first,
-        remarks_second = :remarks_second,
-        evidence_file_1 = :evidence_file_1,
-        evidence_file_2 = :evidence_file_2
-        WHERE evaluation_id = :evaluation_id AND request_id = :request_id");
+    evaluation_period = :evaluation_period,
+    first_semester_rating = :first_semester_rating,
+    second_semester_rating = :second_semester_rating,
+    remarks_first = :remarks_first,
+    remarks_second = :remarks_second,
+    evidence_file_1 = :evidence_file_1,
+    evidence_file_2 = :evidence_file_2
+    WHERE evaluation_id = :evaluation_id AND request_id = :request_id");
 
     $insert_supervisor = $conn->prepare("INSERT INTO kra1_a_supervisor_evaluation
-        (request_id, evaluation_period, first_semester_rating, second_semester_rating, remarks_first, remarks_second, evidence_file_1, evidence_file_2)
-        VALUES
-        (:request_id, :evaluation_period, :first_semester_rating, :second_semester_rating, :remarks_first, :remarks_second, :evidence_file_1, :evidence_file_2)");
+    (request_id, evaluation_period, first_semester_rating, second_semester_rating, remarks_first, remarks_second, evidence_file_1, evidence_file_2)
+    VALUES
+    (:request_id, :evaluation_period, :first_semester_rating, :second_semester_rating, :remarks_first, :remarks_second, :evidence_file_1, :evidence_file_2)");
 
     foreach ($supervisor_evaluations as $eval) {
-        $eval_id = $eval['evaluation_id'];
+    $eval_id = $eval['evaluation_id'];
 
-        // Fetch evidence file paths from the database for this evaluation_id
-        $stmt = $conn->prepare("SELECT evidence_file_1, evidence_file_2 FROM kra1_a_supervisor_evaluation WHERE evaluation_id = :evaluation_id");
-        $stmt->execute([':evaluation_id' => $eval_id]);
-        $existing_files = $stmt->fetch(PDO::FETCH_ASSOC);
+    // Fetch evidence file paths from the database for this evaluation_id
+    $stmt = $conn->prepare("SELECT evidence_file_1, evidence_file_2 FROM kra1_a_supervisor_evaluation WHERE evaluation_id = :evaluation_id");
+    $stmt->execute([':evaluation_id' => $eval_id]);
+    $existing_files = $stmt->fetch(PDO::FETCH_ASSOC);
 
-        // Get the evidence file paths from the payload
-        $evidence_file_1 = $existing_files['evidence_file_1'] ?? '';
-        $evidence_file_2 = $existing_files['evidence_file_2'] ?? '';
+    // Get the evidence file paths from the payload
+    $evidence_file_1 = $existing_files['evidence_file_1'] ?? '';
+    $evidence_file_2 = $existing_files['evidence_file_2'] ?? '';
 
-        $prefix = $request_id . '_' . str_replace(' ', '', $eval['evaluation_period']) . '_supervisor_';
+    $prefix = $request_id . '_' . str_replace(' ', '', $eval['evaluation_period']) . '_supervisor_';
 
-        // Find the row in the DOM based on evaluation_id or a generated prefix for new rows
-        if (strpos($eval_id, 'new_') === 0) {
-            $selector = "tr[data-evaluation-id='" . $eval_id . "']";
-        } else {
-            $selector = "tr[data-evaluation-id^='" . $prefix . "']";
-        }
-        
-        // Check if the corresponding row exists in the DOM
-        if (isset($data['dom_row_selectors']) && array_key_exists($selector, $data['dom_row_selectors'])) {
-            $domRowData = $data['dom_row_selectors'][$selector];
-            $evidence_file_1 = $domRowData['evidence_file_1'] ?? $evidence_file_1;
-            $evidence_file_2 = $domRowData['evidence_file_2'] ?? $evidence_file_2;
-        }
+    // Find the row in the DOM based on evaluation_id or a generated prefix for new rows
+    if ($eval_id === '0') {
+        $selector = "tr[data-evaluation-id='" . $eval_id . "']";
+    } else {
+        $selector = "tr[data-evaluation-id^='" . $prefix . "']";
+    }
 
-        if (strpos($eval_id, 'new_') === 0) {
-            // New row, perform an insert
-            $insert_supervisor->execute([
-                ':request_id' => $request_id,
-                ':evaluation_period' => $eval['evaluation_period'],
-                ':first_semester_rating' => $eval['first_semester_rating'],
-                ':second_semester_rating' => $eval['second_semester_rating'],
-                ':remarks_first' => $eval['remarks_first'],
-                ':remarks_second' => $eval['remarks_second'],
-                ':evidence_file_1' => $evidence_file_1,
-                ':evidence_file_2' => $evidence_file_2
-            ]);
-        } else {
-            // Existing row, perform an update
-            $update_supervisor->execute([
-                ':evaluation_period' => $eval['evaluation_period'],
-                ':first_semester_rating' => $eval['first_semester_rating'],
-                ':second_semester_rating' => $eval['second_semester_rating'],
-                ':remarks_first' => $eval['remarks_first'],
-                ':remarks_second' => $eval['remarks_second'],
-                ':evidence_file_1' => $evidence_file_1,
-                ':evidence_file_2' => $evidence_file_2,
-                ':evaluation_id' => $eval_id,
-                ':request_id' => $request_id
-            ]);
-        }
+    // Check if the corresponding row exists in the DOM
+    if (isset($data['dom_row_selectors']) && array_key_exists($selector, $data['dom_row_selectors'])) {
+        $domRowData = $data['dom_row_selectors'][$selector];
+        $evidence_file_1 = $domRowData['evidence_file_1'] ?? $evidence_file_1;
+        $evidence_file_2 = $domRowData['evidence_file_2'] ?? $evidence_file_2;
+    }
+
+    if ($eval_id === '0') {
+        // New row, perform an insert
+        $insert_supervisor->execute([
+            ':request_id' => $request_id,
+            ':evaluation_period' => $eval['evaluation_period'],
+            ':first_semester_rating' => $eval['first_semester_rating'],
+            ':second_semester_rating' => $eval['second_semester_rating'],
+            ':remarks_first' => $eval['remarks_first'],
+            ':remarks_second' => $eval['remarks_second'],
+            ':evidence_file_1' => $evidence_file_1,
+            ':evidence_file_2' => $evidence_file_2
+        ]);
+    } else {
+        // Existing row, perform an update
+        $update_supervisor->execute([
+            ':evaluation_period' => $eval['evaluation_period'],
+            ':first_semester_rating' => $eval['first_semester_rating'],
+            ':second_semester_rating' => $eval['second_semester_rating'],
+            ':remarks_first' => $eval['remarks_first'],
+            ':remarks_second' => $eval['remarks_second'],
+            ':evidence_file_1' => $evidence_file_1,
+            ':evidence_file_2' => $evidence_file_2,
+            ':evaluation_id' => $eval_id,
+            ':request_id' => $request_id
+        ]);
+    }
     }
 
     // === Recalculate and Update Metadata ===

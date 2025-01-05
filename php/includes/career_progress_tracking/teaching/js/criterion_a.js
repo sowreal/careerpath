@@ -13,6 +13,7 @@ function addDefaultStudentRows(tableBody) {
     const requestId = document.getElementById('request_id').value.trim();
     defaultPeriods.forEach(period => {
         const row = document.createElement('tr');
+        row.setAttribute('data-evaluation-id', '0');
         row.innerHTML = `
             <td><input type="text" class="form-control" name="student_evaluation_period[]" value="${escapeHTML(period)}" required></td>
             <td><input type="number" class="form-control rating-input" name="student_rating_1[]" placeholder="0.00" required></td>
@@ -38,6 +39,7 @@ function addDefaultSupervisorRows(tableBody) {
     const requestId = document.getElementById('request_id').value.trim();
     defaultPeriods.forEach(period => {
         const row = document.createElement('tr');
+        row.setAttribute('data-evaluation-id', '0');
         row.innerHTML = `
             <td><input type="text" class="form-control" name="supervisor_evaluation_period[]" value="${escapeHTML(period)}" required></td>
             <td><input type="number" class="form-control rating-input" name="supervisor_rating_1[]" placeholder="0.00" required></td>
@@ -486,23 +488,20 @@ document.addEventListener('DOMContentLoaded', function () {
     function gatherPayload(requestId) {
         // Collect student evaluations
         const studentEvaluations = [];
-        const domRowSelectors = {}; // Initialize domRowSelectors here
+        const domRowSelectors = {};
     
         document.querySelectorAll('#student-evaluation-table tbody tr').forEach(row => {
-            const evaluation_id = row.getAttribute('data-evaluation-id');
+            const evaluation_id = row.getAttribute('data-evaluation-id'); // Treat as string
             const evaluation_period = row.querySelector('input[name="student_evaluation_period[]"]').value.trim();
             const rating1Input = row.querySelector('input[name="student_rating_1[]"]');
             const rating2Input = row.querySelector('input[name="student_rating_2[]"]');
             const remarks_first = row.querySelector('.view-remarks').getAttribute('data-first-remark') || '';
             const remarks_second = row.querySelector('.view-remarks').getAttribute('data-second-remark') || '';
-    
-            // Collect evidence file paths from hidden inputs
             const evidenceFile1 = row.querySelector('input[name="evidence_file_1[]"]').value;
             const evidenceFile2 = row.querySelector('input[name="evidence_file_2[]"]').value;
     
-            // Determine the selector based on evaluation_id
             let selector;
-            if (evaluation_id.startsWith('new_')) {
+            if (evaluation_id === '0') {
                 selector = `tr[data-evaluation-id='${evaluation_id}']`;
             } else {
                 const prefix = requestId + '_' + evaluation_period.replace(/\s+/g, '') + '_student_';
@@ -515,7 +514,7 @@ document.addEventListener('DOMContentLoaded', function () {
             };
     
             studentEvaluations.push({
-                evaluation_id,
+                evaluation_id, // Treat as string
                 evaluation_period,
                 first_semester_rating: parseFloat(rating1Input.value) || 0,
                 second_semester_rating: parseFloat(rating2Input.value) || 0,
@@ -527,27 +526,26 @@ document.addEventListener('DOMContentLoaded', function () {
         // Collect supervisor evaluations
         const supervisorEvaluations = [];
         document.querySelectorAll('#supervisor-evaluation-table tbody tr').forEach(row => {
-            const evaluation_id = row.getAttribute('data-evaluation-id');
-
-            // Check if evaluation_id is null and handle it
+            const evaluation_id = row.getAttribute('data-evaluation-id'); // Treat as string
+    
             if (!evaluation_id) {
-                console.error("Error: evaluation_id is null for a supervisor row:", row);
-                return; // Skip this row and continue to the next
+                console.error("Error: evaluation_id is null for a supervisor row");
+                console.log("Row element:", row);
+                console.log("Table:", row.closest('table'));
+                console.log("Request ID:", requestId);
+                return;
             }
-
+    
             const evaluation_period = row.querySelector('input[name="supervisor_evaluation_period[]"]').value.trim();
             const rating1Input = row.querySelector('input[name="supervisor_rating_1[]"]');
             const rating2Input = row.querySelector('input[name="supervisor_rating_2[]"]');
             const remarks_first = row.querySelector('.view-remarks').getAttribute('data-first-remark') || '';
             const remarks_second = row.querySelector('.view-remarks').getAttribute('data-second-remark') || '';
-    
-            // Collect evidence file paths from hidden inputs
             const evidenceFile1 = row.querySelector('input[name="evidence_file_1[]"]').value;
             const evidenceFile2 = row.querySelector('input[name="evidence_file_2[]"]').value;
     
-            // Determine the selector based on evaluation_id
             let selector;
-            if (evaluation_id.startsWith('new_')) {
+            if (evaluation_id === '0') {
                 selector = `tr[data-evaluation-id='${evaluation_id}']`;
             } else {
                 const prefix = requestId + '_' + evaluation_period.replace(/\s+/g, '') + '_supervisor_';
@@ -560,7 +558,7 @@ document.addEventListener('DOMContentLoaded', function () {
             };
     
             supervisorEvaluations.push({
-                evaluation_id,
+                evaluation_id, // Treat as string
                 evaluation_period,
                 first_semester_rating: parseFloat(rating1Input.value) || 0,
                 second_semester_rating: parseFloat(rating2Input.value) || 0,
@@ -611,7 +609,7 @@ document.addEventListener('DOMContentLoaded', function () {
             const new_evaluation_id = requestId + '_new_' + Date.now();
 
             const newRow = document.createElement('tr');
-            newRow.setAttribute('data-evaluation-id', new_evaluation_id);
+            newRow.setAttribute('data-evaluation-id', '0');
 
             newRow.innerHTML = `
                 <td>
