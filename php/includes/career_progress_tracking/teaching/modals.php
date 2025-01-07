@@ -71,13 +71,13 @@
                         <label for="firstSemesterFile" class="form-label">1st Semester:</label>
                         <input type="file" class="form-control" id="firstSemesterFile" name="fileFirstSemester" accept=".pdf, .doc, .docx, .jpg, .jpeg, .png, .xlsx, .xls">
                         <div id="firstSemesterFilename" class="mt-2"></div>
-                        <button type="button" class="btn btn-sm btn-danger mt-2" id="deleteFile1" data-semester="sem1">Delete</button>
+                        <button type="button" class="btn btn-sm btn-danger mt-2" id="deleteFile1" data-semester="sem1">Remove</button>
                     </div>
                     <div class="mb-3">
                         <label for="secondSemesterFile" class="form-label">2nd Semester:</label>
                         <input type="file" class="form-control" id="secondSemesterFile" name="fileSecondSemester" accept=".pdf, .doc, .docx, .jpg, .jpeg, .png, .xlsx, .xls">
                         <div id="secondSemesterFilename" class="mt-2"></div>
-                        <button type="button" class="btn btn-sm btn-danger mt-2" id="deleteFile2" data-semester="sem2">Delete</button>
+                        <button type="button" class="btn btn-sm btn-danger mt-2" id="deleteFile2" data-semester="sem2">Remove</button>
                     </div>
                     <input type="hidden" id="modal_request_id" name="request_id">
                     <input type="hidden" id="modal_evaluation_id" name="evaluation_id">
