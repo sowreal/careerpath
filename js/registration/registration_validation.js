@@ -13,9 +13,9 @@ function validateRequiredFields(step) {
 // Validation for Employee ID (Step 1)
 function validateEmployeeID() {
     const employeeID = document.querySelector('input[placeholder="Employee ID Number"]').value.trim();
-    const isValid = /^\d{3}-\d{3}$/.test(employeeID);
+    const isValid = /^[A-Z]{4}-[A-Z]{3}\d{4}$/.test(employeeID);
     if (!isValid) {
-        alert('Please enter a valid Employee ID Number in the format 123-456.');
+        alert('Employee ID must be in the format "ABCD-EFG1234"');
         return false;
     }
     return true;

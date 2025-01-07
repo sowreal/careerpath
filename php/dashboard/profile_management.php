@@ -166,7 +166,7 @@ if (isset($_GET['request'])) {
                                                 <!-- Email -->
                                                 <div class="mb-3">
                                                     <label for="email" class="form-label"><strong>Email:</strong></label>
-                                                    <input type="text" class="form-control" id="email" name="email" value="<?php echo $_SESSION['email']?>" required>
+                                                    <input type="text" class="form-control" id="email" name="email" value="<?php echo $_SESSION['email']?>" readonly>
                                                 </div>
 
                                                 <!-- Employee ID -->
