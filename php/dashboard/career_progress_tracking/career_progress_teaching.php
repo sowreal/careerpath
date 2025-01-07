@@ -98,17 +98,17 @@ if ($_SESSION['role'] != 'Regular Instructor' && $_SESSION['role'] != 'Contract 
                         <ul class="nav nav-tabs card-header-tabs" id="kra-tabs" role="tablist">
                             <li class="nav-item">
                                 <button class="nav-link active bg-success text-white" id="tab-criterion-a" data-bs-toggle="tab" data-bs-target="#criterion-a" type="button" role="tab" data-navigation="true">
-                                    Criterion A: Teaching Effectiveness
+                                    Criterion A
                                 </button>
                             </li>
                             <li class="nav-item">
                                 <button class="nav-link" id="tab-criterion-b" data-bs-toggle="tab" data-bs-target="#criterion-b" type="button" role="tab" data-navigation="true">
-                                    Criterion B: Curriculum & Material Development
+                                    Criterion B
                                 </button>
                             </li>
                             <li class="nav-item">
                                 <button class="nav-link" id="tab-criterion-c" data-bs-toggle="tab" data-bs-target="#criterion-c" type="button" role="tab" data-navigation="true">
-                                    Criterion C: Thesis & Mentorship Services
+                                    Criterion C
                                 </button>
                             </li>
                         </ul>
