@@ -39,9 +39,6 @@
                             Please select a valid option.
                         </div>
                     </div>
-                    
-                    <!-- REMOVED: Link to Evidence -->
-
                 </div>
 
                 <!-- Responsive Table -->
@@ -52,7 +49,7 @@
                                 <th scope="col">Evaluation Period</th>
                                 <th scope="col">1st Semester Rating</th>
                                 <th scope="col">2nd Semester Rating</th>
-                                <th scope="col">Evidence</th> <!-- Changed: Column Header -->
+                                <th scope="col">Evidence</th>
                                 <th scope="col">Remarks</th>
                                 <th scope="col">Actions</th>
                             </tr>
@@ -151,9 +148,6 @@
                             <option value="maternity_leave">On Approved Maternity Leave</option>
                         </select>
                     </div>
-                    
-                    <!-- REMOVED: Link to Evidence -->
-
                 </div>
 
                 <!-- Responsive Table -->
@@ -331,4 +325,3 @@
     </div>
   </div>
 </div>
-

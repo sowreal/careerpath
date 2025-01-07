@@ -54,20 +54,18 @@ document.addEventListener('DOMContentLoaded', function () {
                 console.error('Input field with id "request_id" not found.');
             }
 
-            // Fetch data for the selected evaluation by calling Criterion A's fetch function
-            if (typeof fetchCriterionA === 'function') {
-                fetchCriterionA(requestId);
+            // Fetch data for the selected evaluation by calling CriterionA's fetch function
+            if (window.CriterionA && typeof CriterionA.fetchCriterionA === 'function') {
+                CriterionA.fetchCriterionA(requestId);
             } else {
-                console.error('fetchCriterionA function is not defined.');
+                console.error('CriterionA.fetchCriterionA function is not defined.');
             }
 
             // Hide the modal
             const evaluationModal = bootstrap.Modal.getInstance(document.getElementById('evaluationModal'));
             evaluationModal.hide();
-            
-
         } else {
-            // Show error modal instead of alert
+            // Show error modal
             const errorModal = new bootstrap.Modal(document.getElementById('saveErrorModal'));
             document.getElementById('saveErrorModalLabel').textContent = 'Selection Failed';
             document.querySelector('#saveErrorModal .modal-body').textContent = 'Please select an evaluation.';
@@ -108,17 +106,14 @@ document.addEventListener('DOMContentLoaded', function () {
                 }
             }
         });
-    }  
+    }
 
     // JavaScript for tabs styling
     const tabs = document.querySelectorAll('#kra-tabs .nav-link');
     if (tabs.length > 0) {
         tabs.forEach(tab => {
             tab.addEventListener('click', function () {
-                // Remove bg-success and text-white from all tabs
                 tabs.forEach(t => t.classList.remove('bg-success', 'text-white'));
-
-                // Add bg-success and text-white to the clicked tab
                 this.classList.add('bg-success', 'text-white');
             });
         });

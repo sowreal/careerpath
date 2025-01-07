@@ -1,6 +1,6 @@
 <?php
 session_start();
-include '../../../connection.php'; // Include your database connection using PDO
+include '../../../connection.php';
 
 // Check if the user is logged in
 if (!isset($_SESSION['user_id'])) {
@@ -12,7 +12,6 @@ if (!isset($_SESSION['user_id'])) {
 $user_id = $_SESSION['user_id'];
 
 try {
-    // Prepare the SQL statement using PDO
     $sql = "SELECT request_id, created_at FROM request_form WHERE user_id = :user_id";
     $stmt = $conn->prepare($sql);
     $stmt->bindParam(':user_id', $user_id, PDO::PARAM_INT);
@@ -24,7 +23,6 @@ try {
         $request_id = $row['request_id'];
         $created_at = $row['created_at'];
 
-        // Generate evaluation number as per your format: concatenate 'created_at', 'user_id' and 'request_id'
         $evaluation_number = $created_at . '_' . $user_id . '_' . $request_id;
 
         $evaluations[] = [
@@ -40,3 +38,4 @@ try {
     http_response_code(500);
     echo json_encode(['error' => 'Database error: ' . $e->getMessage()]);
 }
+?>
