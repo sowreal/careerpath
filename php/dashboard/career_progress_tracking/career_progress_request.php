@@ -122,11 +122,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
                     // Get the unique request_id
                     $request_id = $conn->lastInsertId();
-                    $success = "Request submitted successfully! Your Request ID is: " . htmlspecialchars($request_id);
 
-                    // Optionally, redirect to a confirmation page
-                    // header("Location: confirmation.php?request_id=" . urlencode($request_id));
-                    // exit();
+                    // Success message with a button to generate PDF
+                    $success = "Request submitted successfully! Your Request ID is: " . htmlspecialchars($request_id) . ". <br><a href='../../includes/generate_pdf/pdf_request_form.php?request_id=" . urlencode($request_id) . "' class='btn btn-primary' target='_blank'>Download PDF</a>";
 
                 } catch (PDOException $e) {
                     // For debugging: Display the error message (remove in production)
@@ -140,7 +138,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     }
 }
 ?>
-
 
 <!DOCTYPE html>
 <html lang="en">
@@ -215,6 +212,12 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                                                     <input type="text" class="form-control mt-2" id="first_name" name="first_name" 
                                                            placeholder="Enter first name" 
                                                            value="<?php echo htmlspecialchars($_SESSION['first_name']); ?>" disabled>
+                                                </div>
+                                                <div class="form-group mt-3">
+                                                    <label for="middle_name">Middle Name</label>
+                                                    <input type="text" class="form-control mt-2" id="middle_name" name="middle_name" 
+                                                           placeholder="Enter middle name" 
+                                                           value="<?php echo htmlspecialchars($_SESSION['middle_name']); ?>" disabled>
                                                 </div>
                                                 <div class="form-group mt-3 mb-3">
                                                     <label for="email">Email</label>
