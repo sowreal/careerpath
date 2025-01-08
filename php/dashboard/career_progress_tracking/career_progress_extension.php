@@ -124,20 +124,20 @@ if ($_SESSION['role'] != 'Regular Instructor' && $_SESSION['role'] != 'Contract 
                     <!-- Criterions section -->
                     <div class="card-body">
                         <div class="tab-content" id="kra-tab-content">
-                            <!-- Tab 1: Criterion A: Teaching Effectiveness -->
+                            <!-- Tab 1: Criterion A: Service to the Institution -->
                             <?php require_once BASE_PATH . '/php/includes/career_progress_tracking/extension/criterion_a.php'; ?> 
-                            <!-- Tab 2: Criterion B: Curriculum & Material Development -->
+                            <!-- Tab 2: Criterion B: Service to the Community -->
                             <?php require_once BASE_PATH . '/php/includes/career_progress_tracking/extension/criterion_b.php'; ?> 
-                            <!-- Tab 3: Criterion C: Thesis & Mentorship Services -->
+                            <!-- Tab 3: Criterion C: Quality of Extension Services-->
                             <?php require_once BASE_PATH . '/php/includes/career_progress_tracking/extension/criterion_c.php'; ?> 
-                            <!-- Tab 4: Criterion C: Thesis & Mentorship Services -->
+                            <!-- Tab 4: Criterion D: Bonus Criterion -->
                             <?php require_once BASE_PATH . '/php/includes/career_progress_tracking/extension/criterion_d.php'; ?> 
                         </div>
                     </div>
 
                 </div>
 
-                <!-- MODAL SECTION -->
+                <!-- MODAL SECTION -->f
                 <?php require_once BASE_PATH . '/php/includes/career_progress_tracking/teaching/modals.php'; ?>
 
             </div>
