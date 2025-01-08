@@ -87,11 +87,11 @@ document.addEventListener('DOMContentLoaded', function () {
             }
 
             // Fetch data for the selected evaluation for Criterion C
-            // if (window.CriterionC && typeof CriterionC.fetchCriterionC === 'function') {
-            //     CriterionC.fetchCriterionC(requestId);
-            // } else {
-            //     console.error('CriterionC.fetchCriterionC function is not defined.');
-            // }
+            if (window.CriterionC && typeof CriterionC.fetchCriterionC === 'function') {
+                CriterionC.fetchCriterionC(requestId);
+            } else {
+                console.error('CriterionC.fetchCriterionC function is not defined.');
+            }
 
             // Hide the modal
             const evaluationModal = bootstrap.Modal.getInstance(document.getElementById('evaluationModal'));

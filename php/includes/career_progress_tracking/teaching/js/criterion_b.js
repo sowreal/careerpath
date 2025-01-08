@@ -361,8 +361,8 @@
         var saveBtn = document.getElementById('save-criterion-b');
         var deleteRowModal = new bootstrap.Modal(document.getElementById('deleteRowModal'));
         var deleteSuccessModal = new bootstrap.Modal(document.getElementById('deleteSuccessModal'));
-        var uploadSingleEvidenceModal = new bootstrap.Modal(document.getElementById('uploadSingleEvidenceModal'));
-        
+        var uploadSingleEvidenceModal = new bootstrap.Modal(document.getElementById('uploadSingleEvidenceModalB'));
+
         // Track deleted records
         var deletedRecords = {
             sole: [],
