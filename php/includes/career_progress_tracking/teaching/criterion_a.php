@@ -74,10 +74,10 @@
                                         <input type="text" class="form-control" name="student_evaluation_period[]" value="<?php echo htmlspecialchars($period); ?>">
                                     </td>
                                     <td>
-                                        <input type="number" class="form-control rating-input" name="student_rating_1[]" placeholder="0.00" required>
+                                        <input type="text" class="form-control rating-input" name="student_rating_1[]" placeholder="0.00" required>
                                     </td>
                                     <td>
-                                        <input type="number" class="form-control rating-input" name="student_rating_2[]" placeholder="0.00" required>
+                                        <input type="text" class="form-control rating-input" name="student_rating_2[]" placeholder="0.00" required>
                                     </td>
                                     <td>
                                         <button type="button" class="btn btn-success btn-sm upload-evidence-btn" 
@@ -114,11 +114,11 @@
                     <div class="row g-3 justify-content-end">
                         <div class="col-md-4">
                             <label for="student_overall_score" class="form-label"><strong>Overall Average Rating:</strong></label>
-                            <input type="number" class="form-control" id="student_overall_score" name="student_overall_score" readonly>
+                            <input type="text" class="form-control" id="student_overall_score" name="student_overall_score" readonly>
                         </div>
                         <div class="col-md-4">
                             <label for="student_faculty_overall_score" class="form-label"><strong>Faculty Score:</strong></label>
-                            <input type="number" class="form-control" id="student_faculty_overall_score" name="student_faculty_overall_score" readonly>
+                            <input type="text" class="form-control" id="student_faculty_overall_score" name="student_faculty_overall_score" readonly>
                         </div>
                     </div>
                 </div>
@@ -177,10 +177,10 @@
                                             <input type="text" class="form-control" name="supervisor_evaluation_period[]" value="<?php echo htmlspecialchars($period); ?>">
                                         </td>
                                         <td>
-                                            <input type="number" class="form-control rating-input" name="supervisor_rating_1[]" placeholder="0.00" required>
+                                            <input type="text" class="form-control rating-input" name="supervisor_rating_1[]" placeholder="0.00" required>
                                         </td>
                                         <td>
-                                            <input type="number" class="form-control rating-input" name="supervisor_rating_2[]" placeholder="0.00" required>
+                                            <input type="text" class="form-control rating-input" name="supervisor_rating_2[]" placeholder="0.00" required>
                                         </td>
                                         <td>
                                             <button type="button" class="btn btn-success btn-sm upload-evidence-btn" 
@@ -217,11 +217,11 @@
                     <div class="row g-3 justify-content-end">
                         <div class="col-md-4">
                             <label for="supervisor-overall-score" class="form-label"><strong>Overall Average Rating:</strong></label>
-                            <input type="number" class="form-control" id="supervisor-overall-score" name="supervisor-overall-score" readonly>
+                            <input type="text" class="form-control" id="supervisor-overall-score" name="supervisor-overall-score" readonly>
                         </div>
                         <div class="col-md-4">
                             <label for="supervisor-faculty-overall-score" class="form-label"><strong>Faculty Score:</strong></label>
-                            <input type="number" class="form-control" id="supervisor-faculty-overall-score" name="supervisor-faculty-overall-score" readonly>
+                            <input type="text" class="form-control" id="supervisor-faculty-overall-score" name="supervisor-faculty-overall-score" readonly>
                         </div>
                     </div>
                 </div>
