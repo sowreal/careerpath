@@ -218,7 +218,7 @@
         const saveBtn = document.getElementById('save-criterion-a');
         const saveErrorModal = new bootstrap.Modal(document.getElementById('saveErrorModal'));
         const messageModal = new bootstrap.Modal(document.getElementById('messageModal')); // For displaying messages
-        const uploadEvidenceModal = new bootstrap.Modal(document.getElementById('uploadEvidenceModal'));
+        const uploadEvidenceModal = new bootstrap.Modal(document.getElementById('uploadEvidenceModalA'));
 
         function showMessage(message) {
             $('#messageModalBody').text(message);
@@ -461,7 +461,7 @@
             $('#first-semester-remark').text(firstSemesterRemark);
             $('#second-semester-remark').text(secondSemesterRemark);
 
-            const remarksModal = new bootstrap.Modal(document.getElementById('remarksModal'));
+            const remarksModal = new bootstrap.Modal(document.getElementById('remarksModalA'));
             remarksModal.show();
         });
         // === REMARKS HANDLER END ===

@@ -18,7 +18,7 @@
 </div>
 
 <!-- Modal for Viewing Remarks -->
-<div class="modal fade" id="remarksModal" tabindex="-1" aria-labelledby="remarksModalLabel" aria-hidden="true">
+<div class="modal fade" id="remarksModalA" tabindex="-1" aria-labelledby="remarksModalALabel" aria-hidden="true">
   <div class="modal-dialog modal-dialog-centered">
     <div class="modal-content">
       <div class="modal-header bg-success text-white">
@@ -57,8 +57,8 @@
   </div>
 </div>
 
-<!-- Upload Evidence Modal -->
-<div class="modal fade" id="uploadEvidenceModal" tabindex="-1" aria-labelledby="uploadEvidenceModalLabel" aria-hidden="true">
+<!-- Upload Evidence Modal For Criterion A-->
+<div class="modal fade" id="uploadEvidenceModalA" tabindex="-1" aria-labelledby="uploadEvidenceModalALabel" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
@@ -91,6 +91,38 @@
         </div>
     </div>
 </div>
+
+<!-- Single-File Upload Modal for Criterion B and C-->
+<div class="modal fade" id="uploadSingleEvidenceModal" tabindex="-1" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="uploadSingleEvidenceModalLabel">Upload Evidence (Criterion B)</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <form id="b_singleEvidenceUploadForm" enctype="multipart/form-data">
+          <div class="mb-3">
+            <label for="singleBFileInput" class="form-label">Evidence File</label>
+            <input type="file" class="form-control" id="singleBFileInput" name="singleFileInput"
+                   accept=".pdf, .doc, .docx, .jpg, .jpeg, .png, .xlsx, .xls" />
+            <div class="small text-muted mt-1">Allowed: PDF, DOC, DOCX, JPG, JPEG, PNG, XLS, XLSX</div>
+            <div id="singleBFileName" class="mt-2"></div>
+          </div>
+          <input type="hidden" id="b_modal_request_id" name="modal_request_id" value="">
+          <input type="hidden" id="b_modal_subcriterion" name="modal_subcriterion" value="">
+          <input type="hidden" id="b_modal_record_id" name="modal_record_id" value="">
+          <input type="hidden" id="b_existing_file_path" name="existing_file_path" value="">
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-success" id="b_uploadSingleEvidenceBtn">Upload</button>
+      </div>
+    </div>
+  </div>
+</div>
+
 
 <!-- Generic Message Modal -->
 <div class="modal fade" id="messageModal" tabindex="-1" aria-labelledby="messageModalLabel" aria-hidden="true">

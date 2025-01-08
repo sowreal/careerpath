@@ -50,7 +50,7 @@ try {
 
     // File validation
     $fileKey = 'singleFileInput'; 
-    $file = $_FILES[$fileKey] ?? null;
+    $file = $_FILES['singleFileInput'] ?? null;
     if (!$file || $file['error'] !== UPLOAD_ERR_OK) {
         throw new Exception('No file was uploaded or an upload error occurred.');
     }

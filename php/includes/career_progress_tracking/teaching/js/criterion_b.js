@@ -143,8 +143,6 @@
     }
     window.showMessage = showMessage; // Make it accessible if needed by other scripts
 
-
-
     // === POPULATE TABLES ===
     // B.1 Sole Authorship
     function populateSoleAuthorship(soleData) {
@@ -361,10 +359,10 @@
     CriterionB.init = function () {
         var form = document.getElementById('criterion-b-form');
         var saveBtn = document.getElementById('save-criterion-b');
-        var uploadEvidenceModal = new bootstrap.Modal(document.getElementById('uploadEvidenceModal'));
         var deleteRowModal = new bootstrap.Modal(document.getElementById('deleteRowModal'));
         var deleteSuccessModal = new bootstrap.Modal(document.getElementById('deleteSuccessModal'));
-
+        var uploadSingleEvidenceModal = new bootstrap.Modal(document.getElementById('uploadSingleEvidenceModal'));
+        
         // Track deleted records
         var deletedRecords = {
             sole: [],
@@ -383,8 +381,53 @@
             saveBtn.classList.remove('btn-warning');
         }
 
-        // === EVENT DELEGATION FOR UPLOAD EVIDENCE ===
-        // We assume a single file per row for each sub-criterion in Criterion B
+        // === RE-CALCULATION LOGIC ===
+        // We'll do quick sums of "score-input" across each table
+        // (This is purely for user feedback; your final "official" score 
+        // is still computed on the server in save_criterion_b.php.)
+        function recalcSoleAuthorship() {
+            let total = 0;
+            $('#sole-authorship-table tbody tr').each(function() {
+                // If fields are empty or incomplete, you may want to set score = 0.
+                // But for a simple sum, we just parse the "score" input.
+                const scoreInput = $(this).find('input[name*="[score]"]');
+                const scoreVal = parseFloat(scoreInput.val()) || 0;
+                total += scoreVal;
+            });
+            $('#kra1_b_sole_authorship_total').val(total.toFixed(2));
+        }
+        function recalcCoAuthorship() {
+            let total = 0;
+            $('#co-authorship-table tbody tr').each(function() {
+                const scoreInput = $(this).find('input[name*="[score]"]');
+                const scoreVal = parseFloat(scoreInput.val()) || 0;
+                total += scoreVal;
+            });
+            $('#kra1_b_co_authorship_total').val(total.toFixed(2));
+        }
+        function recalcAcademicPrograms() {
+            let total = 0;
+            $('#academic-programs-table tbody tr').each(function() {
+                const scoreInput = $(this).find('input[name*="[score]"]');
+                const scoreVal = parseFloat(scoreInput.val()) || 0;
+                total += scoreVal;
+            });
+            $('#kra1_b_academic_programs_total').val(total.toFixed(2));
+        }
+        function recalcAll() {
+            recalcSoleAuthorship();
+            recalcCoAuthorship();
+            recalcAcademicPrograms();
+            markFormAsDirty();
+        }
+
+        // When the user types in a .score-input field (or changes a <select> that might affect the “score”),
+        // we re-calc. In your final, you might add checks for completeness, type, etc.
+        $(document).on('input change', '#sole-authorship-table .score-input, #co-authorship-table .score-input, #academic-programs-table .score-input', function() {
+            recalcAll();
+        });
+
+        // === SINGLE-FILE UPLOAD LOGIC ===
         $(document).on('click', '.upload-evidence-btn', function () {
             var button = $(this);
             var recordId = button.data('record-id');
@@ -402,32 +445,32 @@
             }
 
             // Store data in hidden fields inside the modal
-            $('#modal_request_id').val(requestId);
-            $('#modal_subcriterion').val(subcriterion);
-            $('#modal_record_id').val(recordId);
-            $('#existing_file_path').val(filePath || '');
+            $('#b_modal_request_id').val(requestId);
+            $('#b_modal_subcriterion').val(subcriterion);
+            $('#b_modal_record_id').val(recordId);
+            $('#b_existing_file_path').val(filePath || '');
 
             // Reset the file input
-            $('#singleFileInput').val('');
-            $('#singleFileName').text(filePath ? filePath.split('/').pop() : '');
+            $('#singleBFileInput').val('');
+            $('#singleBFileName').text(filePath ? filePath.split('/').pop() : '');
 
-            uploadEvidenceModal.show();
+            uploadSingleEvidenceModal.show();
         });
 
         // Show filename when changed
-        $('#singleFileInput').on('change', function () {
-            $('#singleFileName').text(this.files[0] ? this.files[0].name : '');
+        $('#singleBFileInput').on('change', function () {
+            $('#singleBFileName').text(this.files[0] ? this.files[0].name : '');
         });
 
         // Confirm Upload
-        $('#uploadSingleEvidenceBtn').on('click', function () {
-            var formData = new FormData($('#singleEvidenceUploadForm')[0]);
-            var fileInput = $('#singleFileInput')[0].files[0];
+        $('#b_uploadSingleEvidenceBtn').on('click', function () {
+            var formData = new FormData($('#b_singleEvidenceUploadForm')[0]);
+            var fileInput = $('#singleBFileInput')[0].files[0];
             if (!fileInput) {
                 showMessage('Please select a file to upload.');
                 return;
             }
-            // Optional: Validate file type, size, etc., as you did in Criterion A
+            // Validate file type, size, etc., if needed
             $.ajax({
                 url: '../../includes/career_progress_tracking/teaching/upload_evidence_criterion_b.php',
                 type: 'POST',
@@ -438,8 +481,8 @@
                 success: function (response) {
                     if (response.success) {
                         // Update the button data attribute and hidden input in the row
-                        var subcriterion = $('#modal_subcriterion').val();
-                        var recordId = $('#modal_record_id').val();
+                        var subcriterion = $('#b_modal_subcriterion').val();
+                        var recordId = $('#b_modal_record_id').val();
                         var filePath = response.path;
 
                         // Find the matching row
@@ -455,13 +498,12 @@
                         row.find('input[name*="[evidence_file]"]').val(filePath);
                         row.find('.upload-evidence-btn').data('file-path', filePath).text('Change Evidence');
 
-                        uploadEvidenceModal.hide();
+                        uploadSingleEvidenceModal.hide();
                         markFormAsDirty();
                         showMessage('File uploaded successfully!');
 
                         // Optionally, re-fetch data if needed
-                        var requestId = $('#request_id_b').val();
-                        CriterionB.fetchCriterionB(requestId);
+                        CriterionB.fetchCriterionB($('#request_id_b').val());
                     } else {
                         showMessage('Upload failed: ' + response.error);
                     }
@@ -507,7 +549,7 @@
                         row.find('.upload-evidence-btn').data('file-path', '').text('Upload Evidence');
 
                         showMessage('Evidence file deleted successfully.');
-                        uploadEvidenceModal.hide();
+                        uploadSingleEvidenceModal.hide();
                         markFormAsDirty();
 
                         var requestId = $('#request_id_b').val();
@@ -533,8 +575,8 @@
                 rowToDelete = e.target.closest('tr');
                 subcriterionToDelete = rowToDelete.hasAttribute('data-sole-id') ? 'sole'
                     : rowToDelete.hasAttribute('data-co-id') ? 'co'
-                    : rowToDelete.hasAttribute('data-acad-id') ? 'acad'
-                    : null;
+                        : rowToDelete.hasAttribute('data-acad-id') ? 'acad'
+                            : null;
 
                 recordIdToDelete = rowToDelete.getAttribute(`data-${subcriterionToDelete}-id`) || '0';
                 deleteRowModal.show();
@@ -543,24 +585,26 @@
 
         document.getElementById('confirm-delete-row').addEventListener('click', function () {
             if (rowToDelete) {
-                deleteRowModal.hide();
+                // Hide the delete confirmation modal *before* any further actions
+                deleteRowModal.hide(); 
+
                 if (recordIdToDelete !== '0' && subcriterionToDelete) {
                     deletedRecords[subcriterionToDelete].push(recordIdToDelete);
                 }
+
                 rowToDelete.remove();
                 rowToDelete = null;
                 recordIdToDelete = null;
                 subcriterionToDelete = null;
 
                 markFormAsDirty();
-                deleteSuccessModal.show();
             }
         });
 
         // === VIEW REMARKS HANDLER (if needed) ===
         $(document).on('click', '.view-remarks', function () {
             // If you track remarks for these rows, adapt similarly to Criterion A
-            showMessage('No remarks to display (placeholder).');
+            showMessage('No remarks to display.');
         });
 
         // === ADD ROW LOGIC FOR EACH SUB-CRITERION ===
