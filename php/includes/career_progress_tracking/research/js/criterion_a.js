@@ -1,5 +1,4 @@
 // /php/includes/career_progress_tracking/teaching/js/criterion_a.js
-
 document.addEventListener('DOMContentLoaded', function () {
     // Save Criterion A Handler
     document.getElementById('save-criterion-a').addEventListener('click', function () {

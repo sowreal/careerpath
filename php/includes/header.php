@@ -33,3 +33,27 @@
 <!-- Sidebar BG Override -->
 <link rel="stylesheet" href="<?php echo BASE_URL ?>/css/dashboard/faculty_overrides.css">
 <link rel="stylesheet" href="<?php echo BASE_URL ?>/css/dashboard/faculty_sidebar_footer.css">
+
+<style>
+/* Remove up-down arrows (spinners) for input fields */
+/* Chrome, Safari, Edge, Opera */
+input[type=number]::-webkit-outer-spin-button,
+input[type=number]::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
+
+/* General reset for all browsers */
+input[type=number] {
+    appearance: none;
+    margin: 0;
+}
+
+/* Firefox */
+input[type=number] {
+    -moz-appearance: textfield;
+}
+input[type=number]::-moz-focus-inner {
+    border: 0;
+}
+</style>
