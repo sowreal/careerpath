@@ -40,9 +40,9 @@
                                         <td><?php echo $index + 1; ?></td>
                                         <td><?php echo $requirement; ?></td>
                                         <?php for ($year = 2019; $year <= 2022; $year++): ?>
-                                            <td><input type="number" class="form-control" name="kra1_c_adviser[<?php echo $index; ?>][ay_<?php echo $year; ?>]" step="1" min="0" value="0"></td>
+                                            <td><input type="text" class="form-control" name="kra1_c_adviser[<?php echo $index; ?>][ay_<?php echo $year; ?>]" step="1" min="0" value="0"></td>
                                         <?php endfor; ?>
-                                        <td><input type="number" class="form-control score-input" name="kra1_c_adviser[<?php echo $index; ?>][score]" step="0.01" min="0" value="0.00"></td>
+                                        <td><input type="text" class="form-control score-input" name="kra1_c_adviser[<?php echo $index; ?>][score]" step="0.01" min="0" value="0.00"></td>
                                         <td>
                                             <input type="text" class="form-control evidence-link" name="kra1_c_adviser[<?php echo $index; ?>][evidence_link]" placeholder="Link to Evidence">
                                         </td>
@@ -62,7 +62,7 @@
                         <div class="row g-3 justify-content-end">
                             <div class="col-md-4">
                                 <label for="kra1_c_adviser_total" class="form-label"><strong>Total Score:</strong></label>
-                                <input type="number" class="form-control" id="kra1_c_adviser_total" name="kra1_c_adviser_total" readonly>
+                                <input type="text" class="form-control" id="kra1_c_adviser_total" name="kra1_c_adviser_total" readonly>
                             </div>
                         </div>
                     </div>
@@ -95,9 +95,9 @@
                                         <td><?php echo $index + 1; ?></td>
                                         <td><?php echo $requirement; ?></td>
                                         <?php for ($year = 2019; $year <= 2022; $year++): ?>
-                                            <td><input type="number" class="form-control" name="kra1_c_panel[<?php echo $index; ?>][ay_<?php echo $year; ?>]" step="1" min="0" value="0"></td>
+                                            <td><input type="text" class="form-control" name="kra1_c_panel[<?php echo $index; ?>][ay_<?php echo $year; ?>]" step="1" min="0" value="0"></td>
                                         <?php endfor; ?>
-                                        <td><input type="number" class="form-control score-input" name="kra1_c_panel[<?php echo $index; ?>][score]" step="0.01" min="0" value="0.00"></td>
+                                        <td><input type="text" class="form-control score-input" name="kra1_c_panel[<?php echo $index; ?>][score]" step="0.01" min="0" value="0.00"></td>
                                         <td>
                                             <input type="text" class="form-control evidence-link" name="kra1_c_panel[<?php echo $index; ?>][evidence_link]" placeholder="Link to Evidence">
                                         </td>
@@ -116,7 +116,7 @@
                         <div class="row g-3 justify-content-end">
                             <div class="col-md-4">
                                 <label for="kra1_c_panel_total" class="form-label"><strong>Total Score:</strong></label>
-                                <input type="number" class="form-control" id="kra1_c_panel_total" name="kra1_c_panel_total" readonly>
+                                <input type="text" class="form-control" id="kra1_c_panel_total" name="kra1_c_panel_total" readonly>
                             </div>
                         </div>
                     </div>
@@ -149,7 +149,7 @@
                                     <td><input type="text" class="form-control" name="kra1_c_mentor[<?php echo $i; ?>][organization]" required></td>
                                     <td><input type="text" class="form-control" name="kra1_c_mentor[<?php echo $i; ?>][award]" required></td>
                                     <td><input type="date" class="form-control" name="kra1_c_mentor[<?php echo $i; ?>][date_awarded]" required></td>
-                                    <td><input type="number" class="form-control score-input" name="kra1_c_mentor[<?php echo $i; ?>][score]" step="0.01" min="0" value="0.00" required></td>
+                                    <td><input type="text" class="form-control score-input" name="kra1_c_mentor[<?php echo $i; ?>][score]" step="0.01" min="0" value="0.00" required></td>
                                     <td>
                                         <input type="text" class="form-control evidence-link" name="kra1_c_mentor[<?php echo $i; ?>][evidence_link]" placeholder="Link to Evidence">
                                     </td>
@@ -168,7 +168,7 @@
                     <div class="row g-3 justify-content-end">
                         <div class="col-md-4">
                             <label for="kra1_c_mentor_total" class="form-label"><strong>Total Score:</strong></label>
-                            <input type="number" class="form-control" id="kra1_c_mentor_total" name="kra1_c_mentor_total" readonly>
+                            <input type="text" class="form-control" id="kra1_c_mentor_total" name="kra1_c_mentor_total" readonly>
                         </div>
                     </div>
                 </div>
