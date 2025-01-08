@@ -48,7 +48,7 @@
                                         </td>
                                         </td>
                                         <td>
-                                            <button type="button" class="btn btn-success btn-sm view-remarks">View Remarks</button>
+                                            <button type="button" class="btn btn-success btn-sm view-remarks-c">View Remarks</button>
                                         </td>
                                         <td><button type="button" class="btn btn-danger btn-sm delete-row">Delete</button></td>
                                     </tr>
@@ -102,7 +102,7 @@
                                             <input type="text" class="form-control evidence-link" name="kra1_c_panel[<?php echo $index; ?>][evidence_link]" placeholder="Link to Evidence">
                                         </td>
                                         <td>
-                                            <button type="button" class="btn btn-success btn-sm view-remarks">View Remarks</button>
+                                            <button type="button" class="btn btn-success btn-sm view-remarks-c">View Remarks</button>
                                         </td>
                                         <td><button type="button" class="btn btn-danger btn-sm delete-row">Delete</button></td>
                                     </tr>
@@ -154,7 +154,7 @@
                                         <input type="text" class="form-control evidence-link" name="kra1_c_mentor[<?php echo $i; ?>][evidence_link]" placeholder="Link to Evidence">
                                     </td>
                                     <td>
-                                        <button type="button" class="btn btn-success btn-sm view-remarks">View Remarks</button>
+                                        <button type="button" class="btn btn-success btn-sm view-remarks-c">View Remarks</button>
                                     </td>
                                     <td><button type="button" class="btn btn-danger btn-sm delete-row">Delete</button></td>
                                 </tr>
