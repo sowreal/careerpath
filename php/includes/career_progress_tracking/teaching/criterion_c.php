@@ -27,7 +27,7 @@
                                     <th scope="col">AY 2021-2022</th>
                                     <th scope="col">AY 2022-2023</th>
                                     <th scope="col">Faculty Score</th>
-                                    <th scope="col">Evidence</th>
+                                    <th scope="col">Link to Evidence</th>
                                     <th scope="col">Remarks</th>
                                     <th scope="col">Actions</th>
                                 </tr>
@@ -44,8 +44,8 @@
                                         <?php endfor; ?>
                                         <td><input type="number" class="form-control score-input" name="kra1_c_adviser[<?php echo $index; ?>][score]" step="0.01" min="0" value="0.00"></td>
                                         <td>
-                                            <button type="button" class="btn btn-success btn-sm upload-evidence-btn" data-subcriterion-id="adviser_<?php echo $index; ?>">Upload Evidence</button>
-                                            <input type="hidden" name="kra1_c_adviser[<?php echo $index; ?>][evidence_file]" value="">
+                                            <input type="text" class="form-control evidence-link" name="kra1_c_adviser[<?php echo $index; ?>][evidence_link]" placeholder="Link to Evidence">
+                                        </td>
                                         </td>
                                         <td>
                                             <button type="button" class="btn btn-success btn-sm view-remarks">View Remarks</button>
@@ -82,7 +82,7 @@
                                     <th scope="col">AY 2021-2022</th>
                                     <th scope="col">AY 2022-2023</th>
                                     <th scope="col">Faculty Score</th>
-                                    <th scope="col">Evidence</th>
+                                    <th scope="col">Link to Evidence</th>
                                     <th scope="col">Remarks</th>
                                     <th scope="col">Actions</th>
                                 </tr>
@@ -99,8 +99,7 @@
                                         <?php endfor; ?>
                                         <td><input type="number" class="form-control score-input" name="kra1_c_panel[<?php echo $index; ?>][score]" step="0.01" min="0" value="0.00"></td>
                                         <td>
-                                            <button type="button" class="btn btn-success btn-sm upload-evidence-btn" data-subcriterion-id="panel_<?php echo $index; ?>">Upload Evidence</button>
-                                            <input type="hidden" name="kra1_c_panel[<?php echo $index; ?>][evidence_file]" value="">
+                                            <input type="text" class="form-control evidence-link" name="kra1_c_panel[<?php echo $index; ?>][evidence_link]" placeholder="Link to Evidence">
                                         </td>
                                         <td>
                                             <button type="button" class="btn btn-success btn-sm view-remarks">View Remarks</button>
@@ -137,7 +136,7 @@
                                 <th scope="col">Award Received</th>
                                 <th scope="col">Date Awarded (mm/dd/yyyy)</th>
                                 <th scope="col">Faculty Score</th>
-                                <th scope="col">Evidence</th>
+                                <th scope="col">Link to Evidence</th>
                                 <th scope="col">Remarks</th>
                                 <th scope="col">Actions</th>
                             </tr>
@@ -152,8 +151,7 @@
                                     <td><input type="date" class="form-control" name="kra1_c_mentor[<?php echo $i; ?>][date_awarded]" required></td>
                                     <td><input type="number" class="form-control score-input" name="kra1_c_mentor[<?php echo $i; ?>][score]" step="0.01" min="0" value="0.00" required></td>
                                     <td>
-                                        <button type="button" class="btn btn-success btn-sm upload-evidence-btn" data-subcriterion-id="mentor_<?php echo $i; ?>">Upload Evidence</button>
-                                        <input type="hidden" name="kra1_c_mentor[<?php echo $i; ?>][evidence_file]" value="">
+                                        <input type="text" class="form-control evidence-link" name="kra1_c_mentor[<?php echo $i; ?>][evidence_link]" placeholder="Link to Evidence">
                                     </td>
                                     <td>
                                         <button type="button" class="btn btn-success btn-sm view-remarks">View Remarks</button>
