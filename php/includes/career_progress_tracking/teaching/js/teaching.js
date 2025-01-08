@@ -63,6 +63,15 @@ document.addEventListener('DOMContentLoaded', function () {
                 console.error('Input field with id "request_id_b" not found.');
             }
 
+             // Set the input field value for Criterion C
+            const requestIdInputC = document.getElementById('request_id_c');
+            if (requestIdInputC) {
+                requestIdInputC.value = requestId;
+                console.log('request_id_c set to:', requestId);
+            } else {
+                console.error('Input field with id "request_id_c" not found.');
+            }
+
             // Fetch data for the selected evaluation for Criterion A
             if (window.CriterionA && typeof CriterionA.fetchCriterionA === 'function') {
                 CriterionA.fetchCriterionA(requestId);
@@ -76,6 +85,13 @@ document.addEventListener('DOMContentLoaded', function () {
             } else {
                 console.error('CriterionB.fetchCriterionB function is not defined.');
             }
+
+            // Fetch data for the selected evaluation for Criterion C
+            // if (window.CriterionC && typeof CriterionC.fetchCriterionC === 'function') {
+            //     CriterionC.fetchCriterionC(requestId);
+            // } else {
+            //     console.error('CriterionC.fetchCriterionC function is not defined.');
+            // }
 
             // Hide the modal
             const evaluationModal = bootstrap.Modal.getInstance(document.getElementById('evaluationModal'));

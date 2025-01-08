@@ -154,6 +154,8 @@ if ($_SESSION['role'] != 'Regular Instructor' && $_SESSION['role'] != 'Contract 
     <script src="<?php echo BASE_URL; ?>/php/includes/career_progress_tracking/teaching/js/criterion_a.js"></script>
     <!-- Include Criterion B-specific JS -->
     <script src="<?php echo BASE_URL; ?>/php/includes/career_progress_tracking/teaching/js/criterion_b.js"></script>
+    <!-- Include Criterion C-specific JS -->
+    <script src="<?php echo BASE_URL; ?>/php/includes/career_progress_tracking/teaching/js/criterion_c.js"></script>
 
 </body>
 </html>

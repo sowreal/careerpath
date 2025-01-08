@@ -40,9 +40,9 @@
                                         <td><?php echo $index + 1; ?></td>
                                         <td><?php echo $requirement; ?></td>
                                         <?php for ($year = 2019; $year <= 2022; $year++): ?>
-                                            <td><input type="text" class="form-control" name="kra1_c_adviser[<?php echo $index; ?>][ay_<?php echo $year; ?>]" step="1" min="0" value="0"></td>
+                                            <td><input type="text" class="form-control" name="kra1_c_adviser[<?php echo $index; ?>][ay_<?php echo $year; ?>]" placeholder="0"></td>
                                         <?php endfor; ?>
-                                        <td><input type="text" class="form-control score-input" name="kra1_c_adviser[<?php echo $index; ?>][score]" step="0.01" min="0" value="0.00"></td>
+                                        <td><input type="text" class="form-control score-input" name="kra1_c_adviser[<?php echo $index; ?>][score]" placeholder="0" readonly></td>
                                         <td>
                                             <input type="text" class="form-control evidence-link" name="kra1_c_adviser[<?php echo $index; ?>][evidence_link]" placeholder="Link to Evidence">
                                         </td>
@@ -95,9 +95,9 @@
                                         <td><?php echo $index + 1; ?></td>
                                         <td><?php echo $requirement; ?></td>
                                         <?php for ($year = 2019; $year <= 2022; $year++): ?>
-                                            <td><input type="text" class="form-control" name="kra1_c_panel[<?php echo $index; ?>][ay_<?php echo $year; ?>]" step="1" min="0" value="0"></td>
+                                            <td><input type="text" class="form-control" name="kra1_c_panel[<?php echo $index; ?>][ay_<?php echo $year; ?>]" placeholder="0"></td>
                                         <?php endfor; ?>
-                                        <td><input type="text" class="form-control score-input" name="kra1_c_panel[<?php echo $index; ?>][score]" step="0.01" min="0" value="0.00"></td>
+                                        <td><input type="text" class="form-control score-input" name="kra1_c_panel[<?php echo $index; ?>][score]" placeholder="0" readonly></td>
                                         <td>
                                             <input type="text" class="form-control evidence-link" name="kra1_c_panel[<?php echo $index; ?>][evidence_link]" placeholder="Link to Evidence">
                                         </td>
@@ -145,11 +145,11 @@
                             <?php for ($i = 1; $i <= 3; $i++): ?>
                                 <tr>
                                     <td><?php echo $i; ?></td>
-                                    <td><input type="text" class="form-control" name="kra1_c_mentor[<?php echo $i; ?>][competition]" required></td>
-                                    <td><input type="text" class="form-control" name="kra1_c_mentor[<?php echo $i; ?>][organization]" required></td>
-                                    <td><input type="text" class="form-control" name="kra1_c_mentor[<?php echo $i; ?>][award]" required></td>
-                                    <td><input type="date" class="form-control" name="kra1_c_mentor[<?php echo $i; ?>][date_awarded]" required></td>
-                                    <td><input type="text" class="form-control score-input" name="kra1_c_mentor[<?php echo $i; ?>][score]" step="0.01" min="0" value="0.00" required></td>
+                                    <td><input type="text" class="form-control" name="kra1_c_mentor[<?php echo $i; ?>][competition]"></td>
+                                    <td><input type="text" class="form-control" name="kra1_c_mentor[<?php echo $i; ?>][organization]"></td>
+                                    <td><input type="text" class="form-control" name="kra1_c_mentor[<?php echo $i; ?>][award]"></td>
+                                    <td><input type="date" class="form-control" name="kra1_c_mentor[<?php echo $i; ?>][date_awarded]"></td>
+                                    <td><input type="text" class="form-control score-input" name="kra1_c_mentor[<?php echo $i; ?>][score]" placeholder="0" readonly></td>
                                     <td>
                                         <input type="text" class="form-control evidence-link" name="kra1_c_mentor[<?php echo $i; ?>][evidence_link]" placeholder="Link to Evidence">
                                     </td>
