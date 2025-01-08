@@ -126,6 +126,23 @@ $isCPTActive = in_array($activePage, ['CPT', 'CPT_Request', 'CPT_Teaching', 'CPT
                         <p><strong>Resources and Training</strong></p>
                     </a>
                 </li>
+
+                <!-- Separator/Header for Local Evaluator Tools -->
+                <li class="nav-item">
+                    <div class="d-flex align-items-center my-3">
+                        <hr class="flex-grow-1">
+                        <span class="mx-2 text-muted small text-uppercase">Local Evaluator Tools</span>
+                        <hr class="flex-grow-1">
+                    </div>
+                </li>
+
+                <!-- New Menu Item: Local Evaluator Tools -->
+                <li class="nav-item"> 
+                    <a href="<?php echo BASE_URL ?>/php/dashboard/local_evaluator.php" class="nav-link <?php echo ($activePage == 'LocalEvaluatorTools') ? 'active' : ''; ?>" data-navigation="true"> 
+                    <i class="nav-icon bi bi-tools"></i>
+                        <p><strong>KRA1: Teaching</strong></p>
+                    </a>
+                </li>
             </ul> <!--end::Sidebar Menu-->
         </nav>
     </div> <!--end::Sidebar Wrapper-->
