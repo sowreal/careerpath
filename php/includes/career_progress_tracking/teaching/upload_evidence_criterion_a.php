@@ -23,6 +23,20 @@ try {
         throw new Exception('Invalid Evaluation ID.');
     }
 
+    // Check if the evaluation ID exists in the database
+    if ($tableType === 'student') {
+        $sql = "SELECT 1 FROM kra1_a_student_evaluation WHERE evaluation_id = :evaluation_id AND request_id = :request_id";
+    } else {
+        $sql = "SELECT 1 FROM kra1_a_supervisor_evaluation WHERE evaluation_id = :evaluation_id AND request_id = :request_id";
+    }
+    $stmt = $conn->prepare($sql);
+    $stmt->execute([':evaluation_id' => $evaluationID, ':request_id' => $requestID]);
+    $exists = $stmt->fetchColumn();
+
+    if (!$exists) {
+        throw new Exception('Please save the row before uploading evidence.');
+    }
+
     $file1 = $_FILES['fileFirstSemester']  ?? null;
     $file2 = $_FILES['fileSecondSemester'] ?? null;
 
@@ -35,28 +49,21 @@ try {
         }
     }
 
-    function getFilePath($userID, $requestID, $evaluationID, $semester, $file, $uploadDir, $allowedExtensions) {
-        $baseName = "{$userID}_{$requestID}_{$evaluationID}_{$semester}";
-        $existingFiles = glob("{$uploadDir}/{$baseName}.*");
-        if (!empty($existingFiles)) {
-            return str_replace(BASE_PATH, '', $existingFiles[0]);
-        }
-
+    function getFilePath($file, $uploadDir, $allowedExtensions) {
         if ($file && $file['error'] === UPLOAD_ERR_OK) {
             $ext = strtolower(pathinfo($file['name'], PATHINFO_EXTENSION));
             if (!in_array($ext, $allowedExtensions)) {
                 throw new Exception("Invalid file type. Allowed types: " . implode(", ", $allowedExtensions));
             }
-            $uniqueName = "{$baseName}.{$ext}";
+            $uniqueName = $file['name'];
             return "uploads/career_progress_tracking/kra1_teaching/criterion_a/{$uniqueName}";
         }
-
         return null;
     }
 
     $relativePaths = [
-        'sem1' => getFilePath($userID, $requestID, $evaluationID, 'sem1', $file1, $uploadDir, $allowedExtensions),
-        'sem2' => getFilePath($userID, $requestID, $evaluationID, 'sem2', $file2, $uploadDir, $allowedExtensions)
+        'sem1' => getFilePath($file1, $uploadDir, $allowedExtensions),
+        'sem2' => getFilePath($file2, $uploadDir, $allowedExtensions)
     ];
 
     if ($file1 && $file1['error'] === UPLOAD_ERR_OK) {

@@ -251,6 +251,11 @@
             const tableType = button.data('table-type');
             const row = button.closest('tr');
 
+            // Check if evaluation ID exists (not a new row)
+            if (evaluationID === '0' || !evaluationID) {
+                showMessage('Please save the row before uploading evidence.');
+                return; 
+            }
             const existingFile1 = row.find('input[name="evidence_file_1[]"]').val();
             const existingFile2 = row.find('input[name="evidence_file_2[]"]').val();
 
