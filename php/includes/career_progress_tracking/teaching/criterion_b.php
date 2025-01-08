@@ -50,7 +50,7 @@
                                     <td><input type="text" class="form-control" name="kra1_b_sole_authorship[<?php echo $i; ?>][publisher]"></td>
                                     <td><input type="date" class="form-control" name="kra1_b_sole_authorship[<?php echo $i; ?>][date_published]"></td>
                                     <td><input type="date" class="form-control" name="kra1_b_sole_authorship[<?php echo $i; ?>][date_approved]"></td>
-                                    <td><input type="number" class="form-control score-input" name="kra1_b_sole_authorship[<?php echo $i; ?>][score]"></td>
+                                    <td><input type="number" class="form-control score-input" name="kra1_b_sole_authorship[<?php echo $i; ?>][score]" readonly></td>
                                     <td>
                                         <button type="button" class="btn btn-success btn-sm upload-evidence-btn" data-subcriterion-id="sole_authorship_<?php echo $i; ?>">Upload Evidence</button>
                                         <input type="hidden" name="kra1_b_sole_authorship[<?php echo $i; ?>][evidence_file]" value="">
@@ -122,8 +122,8 @@
                                     <td><input type="text" class="form-control" name="kra1_b_co_authorship[<?php echo $i; ?>][publisher]"></td>
                                     <td><input type="date" class="form-control" name="kra1_b_co_authorship[<?php echo $i; ?>][date_published]"></td>
                                     <td><input type="date" class="form-control" name="kra1_b_co_authorship[<?php echo $i; ?>][date_approved]"></td>
-                                    <td><input type="number" step="0.01" class="form-control" name="kra1_b_co_authorship[<?php echo $i; ?>][contribution_percentage]"></td>
-                                    <td><input type="number" class="form-control score-input" name="kra1_b_co_authorship[<?php echo $i; ?>][score]"></td>
+                                    <td><input type="number" class="form-control" name="kra1_b_co_authorship[<?php echo $i; ?>][contribution_percentage]"></td>
+                                    <td><input type="number" class="form-control score-input" name="kra1_b_co_authorship[<?php echo $i; ?>][score]" readonly></td>
                                     <td>
                                         <button type="button" class="btn btn-success btn-sm upload-evidence-btn" data-subcriterion-id="co_authorship_<?php echo $i; ?>">Upload Evidence</button>
                                         <input type="hidden" name="kra1_b_co_authorship[<?php echo $i; ?>][evidence_file]" value="">
@@ -203,7 +203,7 @@
                                             <option value="Contributor">Contributor</option>
                                         </select>
                                     </td>
-                                    <td><input type="number" class="form-control score-input" name="kra1_b_academic_programs[<?php echo $i; ?>][score]"></td>
+                                    <td><input type="number" class="form-control score-input" name="kra1_b_academic_programs[<?php echo $i; ?>][score]" readonly></td>
                                     <td>
                                         <button type="button" class="btn btn-success btn-sm upload-evidence-btn" data-subcriterion-id="academic_programs_<?php echo $i; ?>">Upload Evidence</button>
                                         <input type="hidden" name="kra1_b_academic_programs[<?php echo $i; ?>][evidence_file]" value="">

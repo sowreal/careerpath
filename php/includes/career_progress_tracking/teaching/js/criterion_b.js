@@ -40,7 +40,7 @@
                 <td><input type="text" class="form-control" name="kra1_b_sole_authorship[new_${Date.now()}][publisher]" placeholder="Publisher/Repo"></td>
                 <td><input type="date" class="form-control" name="kra1_b_sole_authorship[new_${Date.now()}][date_published]"></td>
                 <td><input type="date" class="form-control" name="kra1_b_sole_authorship[new_${Date.now()}][date_approved]"></td>
-                <td><input type="number" class="form-control score-input" name="kra1_b_sole_authorship[new_${Date.now()}][score]" placeholder="0"></td>
+                <td><input type="number" class="form-control score-input" name="kra1_b_sole_authorship[new_${Date.now()}][score]" placeholder="0" readonly></td>
                 <td>
                     <button type="button" class="btn btn-success btn-sm upload-evidence-btn"
                         data-subcriterion="sole" data-record-id="0" data-file-path="">
@@ -78,8 +78,8 @@
                 <td><input type="text" class="form-control" name="kra1_b_co_authorship[new_${Date.now()}][publisher]" placeholder="Publisher/Repo"></td>
                 <td><input type="date" class="form-control" name="kra1_b_co_authorship[new_${Date.now()}][date_published]"></td>
                 <td><input type="date" class="form-control" name="kra1_b_co_authorship[new_${Date.now()}][date_approved]"></td>
-                <td><input type="number" step="0.01" class="form-control" name="kra1_b_co_authorship[new_${Date.now()}][contribution_percentage]" placeholder="0.00"></td>
-                <td><input type="number" class="form-control score-input" name="kra1_b_co_authorship[new_${Date.now()}][score]" placeholder="0"></td>
+                <td><input type="number" class="form-control" name="kra1_b_co_authorship[new_${Date.now()}][contribution_percentage]" placeholder="0.00"></td>
+                <td><input type="number" class="form-control score-input" name="kra1_b_co_authorship[new_${Date.now()}][score]" placeholder="0" readonly></td>
                 <td>
                     <button type="button" class="btn btn-success btn-sm upload-evidence-btn"
                         data-subcriterion="co" data-record-id="0" data-file-path="">
@@ -119,7 +119,7 @@
                         <option value="Contributor">Contributor</option>
                     </select>
                 </td>
-                <td><input type="number" class="form-control score-input" name="kra1_b_academic_programs[new_${Date.now()}][score]" placeholder="0"></td>
+                <td><input type="number" class="form-control score-input" name="kra1_b_academic_programs[new_${Date.now()}][score]" placeholder="0" readonly></td>
                 <td>
                     <button type="button" class="btn btn-success btn-sm upload-evidence-btn"
                         data-subcriterion="acad" data-record-id="0" data-file-path="">
@@ -178,7 +178,7 @@
                 <td><input type="text" class="form-control" name="kra1_b_sole_authorship[${index}][publisher]" value="${escapeHTML(item.publisher || '')}"></td>
                 <td><input type="date" class="form-control" name="kra1_b_sole_authorship[${index}][date_published]" value="${item.date_published || ''}"></td>
                 <td><input type="date" class="form-control" name="kra1_b_sole_authorship[${index}][date_approved]" value="${item.date_approved || ''}"></td>
-                <td><input type="number" class="form-control score-input" name="kra1_b_sole_authorship[${index}][score]" value="${item.score || ''}"></td>
+                <td><input type="number" class="form-control score-input" name="kra1_b_sole_authorship[${index}][score]" value="${item.score || ''}" readonly></td>
                 <td>
                     <button type="button" class="btn btn-success btn-sm upload-evidence-btn" 
                         data-subcriterion="sole" 
@@ -234,8 +234,8 @@
                 <td><input type="text" class="form-control" name="kra1_b_co_authorship[${index}][publisher]" value="${escapeHTML(item.publisher || '')}"></td>
                 <td><input type="date" class="form-control" name="kra1_b_co_authorship[${index}][date_published]" value="${item.date_published || ''}"></td>
                 <td><input type="date" class="form-control" name="kra1_b_co_authorship[${index}][date_approved]" value="${item.date_approved || ''}"></td>
-                <td><input type="number" step="0.01" class="form-control" name="kra1_b_co_authorship[${index}][contribution_percentage]" value="${item.contribution_percentage || ''}"></td>
-                <td><input type="number" class="form-control score-input" name="kra1_b_co_authorship[${index}][score]" value="${item.score || ''}"></td>
+                <td><input type="number" class="form-control" name="kra1_b_co_authorship[${index}][contribution_percentage]" value="${item.contribution_percentage || ''}"></td>
+                <td><input type="number" class="form-control score-input" name="kra1_b_co_authorship[${index}][score]" value="${item.score || ''}" readonly></td>
                 <td>
                     <button type="button" class="btn btn-success btn-sm upload-evidence-btn" 
                         data-subcriterion="co" 
@@ -293,7 +293,7 @@
                         <option value="Contributor" ${item.role === 'Contributor' ? 'selected' : ''}>Contributor</option>
                     </select>
                 </td>
-                <td><input type="number" class="form-control score-input" name="kra1_b_academic_programs[${index}][score]" value="${item.score || ''}"></td>
+                <td><input type="number" class="form-control score-input" name="kra1_b_academic_programs[${index}][score]" value="${item.score || ''}" readonly></td>
                 <td>
                     <button type="button" class="btn btn-success btn-sm upload-evidence-btn" 
                         data-subcriterion="acad" 
@@ -381,51 +381,110 @@
             saveBtn.classList.remove('btn-warning');
         }
 
-        // === RE-CALCULATION LOGIC ===
-        // We'll do quick sums of "score-input" across each table
-        // (This is purely for user feedback; your final "official" score 
-        // is still computed on the server in save_criterion_b.php.)
+        // CALCULATION HELPER FUNCTIONS
+        // 1) Row-by-Row Calculation Helper Functions
+        function getSoleAuthorshipScore(type) {
+            switch (type) {
+                case 'Textbook':                     return 30;
+                case 'Textbook Chapter':             return 10;
+                case 'Manual/Module':                return 16;
+                case 'Multimedia Teaching Material': return 16;
+                case 'Testing Material':             return 10;
+                default:                             return 0;
+            }
+        }
+        function getCoAuthorshipScore(type, contribution) {
+            return getSoleAuthorshipScore(type) * (contribution || 0);
+        }
+        function getAcademicProgramScore(role) {
+            switch (role) {
+                case 'Lead':        return 10;
+                case 'Contributor': return 5;
+                default:            return 0;
+            }
+        }
+        // 2) Compute & Set the Row's "score" in Real Time
+        function computeRowScore(row, tableId) {
+            // Find the row's "score" input (which should be readonly)
+            const scoreInput = row.querySelector('input[name*="[score]"]');
+            if (!scoreInput) return;
+
+            let computedScore = 0;
+            if (tableId === 'sole-authorship-table') {
+                // For Sole Authorship: based on "type"
+                const materialType = row.querySelector('select[name*="[type]"]')?.value || '';
+                computedScore = getSoleAuthorshipScore(materialType);
+
+            } else if (tableId === 'co-authorship-table') {
+                // For Co-Authorship: material type + contribution
+                const materialType = row.querySelector('select[name*="[type]"]')?.value || '';
+                const contrib      = parseFloat(row.querySelector('input[name*="[contribution"]')?.value || 0);
+                computedScore = getCoAuthorshipScore(materialType, contrib);
+
+            } else if (tableId === 'academic-programs-table') {
+                // For Academic Programs: role
+                const role = row.querySelector('select[name*="[role]"]')?.value || '';
+                computedScore = getAcademicProgramScore(role);
+            }
+
+            // Write the computed score into the row's score input (readonly)
+            scoreInput.value = computedScore.toFixed(2);
+        }
+        // 3) Sum Each Table and Update the "Totals"
         function recalcSoleAuthorship() {
             let total = 0;
-            $('#sole-authorship-table tbody tr').each(function() {
-                // If fields are empty or incomplete, you may want to set score = 0.
-                // But for a simple sum, we just parse the "score" input.
-                const scoreInput = $(this).find('input[name*="[score]"]');
-                const scoreVal = parseFloat(scoreInput.val()) || 0;
-                total += scoreVal;
+            $('#sole-authorship-table tbody tr').each(function () {
+                const score = parseFloat($(this).find('input[name*="[score]"]').val()) || 0;
+                total += score;
             });
             $('#kra1_b_sole_authorship_total').val(total.toFixed(2));
         }
         function recalcCoAuthorship() {
             let total = 0;
-            $('#co-authorship-table tbody tr').each(function() {
-                const scoreInput = $(this).find('input[name*="[score]"]');
-                const scoreVal = parseFloat(scoreInput.val()) || 0;
-                total += scoreVal;
+            $('#co-authorship-table tbody tr').each(function () {
+                const score = parseFloat($(this).find('input[name*="[score]"]').val()) || 0;
+                total += score;
             });
             $('#kra1_b_co_authorship_total').val(total.toFixed(2));
         }
         function recalcAcademicPrograms() {
             let total = 0;
-            $('#academic-programs-table tbody tr').each(function() {
-                const scoreInput = $(this).find('input[name*="[score]"]');
-                const scoreVal = parseFloat(scoreInput.val()) || 0;
-                total += scoreVal;
+            $('#academic-programs-table tbody tr').each(function () {
+                const score = parseFloat($(this).find('input[name*="[score]"]').val()) || 0;
+                total += score;
             });
             $('#kra1_b_academic_programs_total').val(total.toFixed(2));
         }
+        // 4) Recalc All Tables and Mark Form Dirty
         function recalcAll() {
             recalcSoleAuthorship();
             recalcCoAuthorship();
             recalcAcademicPrograms();
-            markFormAsDirty();
+            markFormAsDirty(); // ensure markFormAsDirty() is defined in the same scope
         }
+        // 5) Hook Up Event Listeners for Any Input/Select Changes
+        $(document).on('input change',
+        '#sole-authorship-table select, #co-authorship-table select, ' +
+        '#co-authorship-table input[name*="[contribution]"], ' +
+        '#academic-programs-table select',
+        function(e) {
+            // 1) Compute the row's score
+            const row = e.target.closest('tr');
+            const tableId = row.closest('table').id;
+            computeRowScore(row, tableId);
 
-        // When the user types in a .score-input field (or changes a <select> that might affect the “score”),
-        // we re-calc. In your final, you might add checks for completeness, type, etc.
-        $(document).on('input change', '#sole-authorship-table .score-input, #co-authorship-table .score-input, #academic-programs-table .score-input', function() {
+            // 2) Then recalc totals across all tables
             recalcAll();
-        });
+        }
+        );
+        /**
+         * If you want to recalc only the table the row belongs to (instead of all),
+         * replace recalcAll() with an if-check:
+         *   if (tableId==='sole-authorship-table') recalcSoleAuthorship();
+         *   else if (...) ...
+         *   markFormAsDirty();
+         */
+
 
         // === SINGLE-FILE UPLOAD LOGIC ===
         $(document).on('click', '.upload-evidence-btn', function () {
@@ -634,7 +693,7 @@
                 <td><input type="text" class="form-control" name="kra1_b_sole_authorship[new_${Date.now()}][publisher]"></td>
                 <td><input type="date" class="form-control" name="kra1_b_sole_authorship[new_${Date.now()}][date_published]"></td>
                 <td><input type="date" class="form-control" name="kra1_b_sole_authorship[new_${Date.now()}][date_approved]"></td>
-                <td><input type="number" class="form-control score-input" name="kra1_b_sole_authorship[new_${Date.now()}][score]"></td>
+                <td><input type="number" class="form-control score-input" name="kra1_b_sole_authorship[new_${Date.now()}][score]" readonly></td>
                 <td>
                     <button type="button" class="btn btn-success btn-sm upload-evidence-btn" 
                         data-subcriterion="sole" data-record-id="0" data-file-path="">
@@ -674,8 +733,8 @@
                 <td><input type="text" class="form-control" name="kra1_b_co_authorship[new_${Date.now()}][publisher]"></td>
                 <td><input type="date" class="form-control" name="kra1_b_co_authorship[new_${Date.now()}][date_published]"></td>
                 <td><input type="date" class="form-control" name="kra1_b_co_authorship[new_${Date.now()}][date_approved]"></td>
-                <td><input type="number" step="0.01" class="form-control" name="kra1_b_co_authorship[new_${Date.now()}][contribution_percentage]"></td>
-                <td><input type="number" class="form-control score-input" name="kra1_b_co_authorship[new_${Date.now()}][score]"></td>
+                <td><input type="number" class="form-control" name="kra1_b_co_authorship[new_${Date.now()}][contribution_percentage]"></td>
+                <td><input type="number" class="form-control score-input" name="kra1_b_co_authorship[new_${Date.now()}][score]" readonly></td>
                 <td>
                     <button type="button" class="btn btn-success btn-sm upload-evidence-btn" 
                         data-subcriterion="co" data-record-id="0" data-file-path="">
@@ -717,7 +776,7 @@
                         <option value="Contributor">Contributor</option>
                     </select>
                 </td>
-                <td><input type="number" class="form-control score-input" name="kra1_b_academic_programs[new_${Date.now()}][score]"></td>
+                <td><input type="number" class="form-control score-input" name="kra1_b_academic_programs[new_${Date.now()}][score]" readonly></td>
                 <td>
                     <button type="button" class="btn btn-success btn-sm upload-evidence-btn" 
                         data-subcriterion="acad" data-record-id="0" data-file-path="">
