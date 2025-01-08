@@ -151,3 +151,24 @@ document.addEventListener('DOMContentLoaded', function () {
         });
     }
 });
+
+// Ensures Only One Modal is Open at a Time
+function showModal(modalId) {
+    // Hide any currently shown modals
+    const currentlyOpenModals = document.querySelectorAll('.modal.show');
+    currentlyOpenModals.forEach(modal => {
+        const modalInstance = bootstrap.Modal.getInstance(modal);
+        if (modalInstance) {
+            modalInstance.hide();
+        }
+    });
+    
+    // Show the desired modal
+    const modalElement = document.getElementById(modalId);
+    if (modalElement) {
+        const modalInstance = new bootstrap.Modal(modalElement);
+        modalInstance.show();
+    } else {
+        console.error(`Modal with ID "${modalId}" not found.`);
+    }
+}

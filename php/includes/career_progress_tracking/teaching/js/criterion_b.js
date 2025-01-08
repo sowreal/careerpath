@@ -414,21 +414,25 @@
                 // For Sole Authorship: based on "type"
                 const materialType = row.querySelector('select[name*="[type]"]')?.value || '';
                 computedScore = getSoleAuthorshipScore(materialType);
+                markFormAsDirty();
 
             } else if (tableId === 'co-authorship-table') {
                 // For Co-Authorship: material type + contribution
                 const materialType = row.querySelector('select[name*="[type]"]')?.value || '';
                 const contrib      = parseFloat(row.querySelector('input[name*="[contribution"]')?.value || 0);
                 computedScore = getCoAuthorshipScore(materialType, contrib);
+                markFormAsDirty();
 
             } else if (tableId === 'academic-programs-table') {
                 // For Academic Programs: role
                 const role = row.querySelector('select[name*="[role]"]')?.value || '';
                 computedScore = getAcademicProgramScore(role);
+                markFormAsDirty();
             }
 
             // Write the computed score into the row's score input (readonly)
             scoreInput.value = computedScore.toFixed(2);
+            markFormAsDirty();
         }
         // 3) Sum Each Table and Update the "Totals"
         function recalcSoleAuthorship() {
@@ -921,42 +925,9 @@
             saveCriterionB();
         });
 
-        // === UNSAVED CHANGES PROMPT (if you want to reuse from Criterion A) ===
-        var intendedNavigationURL = null;
-        document.getElementById('confirm-navigation').addEventListener('click', function() {
-            if (intendedNavigationURL) {
-                markFormAsClean();
-                window.location.href = intendedNavigationURL;
-                intendedNavigationURL = null;
-            }
-        });
-
-        function isRealNavigation(linkElement) {
-            if (!linkElement) return false;
-            var href = linkElement.getAttribute('href');
-            return href && href !== '#' && !href.startsWith('javascript:');
-        }
-
-        document.addEventListener('click', function(e) {
-            var link = e.target.closest('a[data-navigation="true"]');
-            var button = e.target.closest('button[data-action="navigate"]');
-
-            if (link) {
-                if (isFormDirty) {
-                    e.preventDefault();
-                    intendedNavigationURL = link.href;
-                    var unsavedChangesModal = new bootstrap.Modal(document.getElementById('unsavedChangesModal'));
-                    unsavedChangesModal.show();
-                }
-            } else if (button && button.getAttribute('data-action') === 'navigate') {
-                if (isFormDirty) {
-                    e.preventDefault();
-                    intendedNavigationURL = button.getAttribute('data-href');
-                    var unsavedChangesModal = new bootstrap.Modal(document.getElementById('unsavedChangesModal'));
-                    unsavedChangesModal.show();
-                }
-            }
-        });
+        // === UNSAVED CHANGES PROMPT START ===
+        
+        // === UNSAVED CHANGES PROMPT END ===
 
         // Mark form as clean on initial load
         markFormAsClean();

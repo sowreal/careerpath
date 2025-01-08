@@ -213,11 +213,26 @@
             setElementValue('kra1_c_mentor_total', '0.00');
             return;
         }
-
-        // Populate the overall scores
-        setElementValue('kra1_c_adviser_total', metadata.adviser_total.toFixed(2));
-        setElementValue('kra1_c_panel_total', metadata.panel_total.toFixed(2));
-        setElementValue('kra1_c_mentor_total', metadata.mentor_total.toFixed(2));
+    
+        // Debugging logs
+        console.log('Adviser Total:', metadata.adviser_total, typeof metadata.adviser_total);
+        console.log('Panel Total:', metadata.panel_total, typeof metadata.panel_total);
+        console.log('Mentor Total:', metadata.mentor_total, typeof metadata.mentor_total);
+        
+        // Helper function to safely format numbers
+        function formatTotal(total) {
+            var num = Number(total);
+            if (isNaN(num)) {
+                console.warn(`Invalid total for ${total}. Defaulting to 0.00.`);
+                return '0.00';
+            }
+            return num.toFixed(2);
+        }
+    
+        // Populate the overall scores with safe formatting
+        setElementValue('kra1_c_adviser_total', formatTotal(metadata.adviser_total));
+        setElementValue('kra1_c_panel_total', formatTotal(metadata.panel_total));
+        setElementValue('kra1_c_mentor_total', formatTotal(metadata.mentor_total));
     }
 
     function setElementValue(elementId, value) {
@@ -308,14 +323,14 @@
                     tableToDeleteFrom = null;
                 }
 
-                const deleteModal = new bootstrap.Modal(document.getElementById('deleteRowModalC'));
+                const deleteModal = new bootstrap.Modal(document.getElementById('deleteRowModal'));
                 deleteModal.show();
             }
         });
 
-        document.getElementById('confirm-delete-row-c').addEventListener('click', function() {
+        document.getElementById('deleteRowModal').addEventListener('click', function() {
             if (rowToDelete) {
-                const deleteModal = bootstrap.Modal.getInstance(document.getElementById('deleteRowModalC'));
+                const deleteModal = bootstrap.Modal.getInstance(document.getElementById('deleteRowModal'));
                 deleteModal.hide();
 
                 if (evaluationIdToDelete !== '0' && tableToDeleteFrom) {
@@ -335,7 +350,7 @@
                 calculateOverallScores();
                 markFormAsDirty();
 
-                const successModal = new bootstrap.Modal(document.getElementById('deleteSuccessModalC'));
+                const successModal = new bootstrap.Modal(document.getElementById('deleteSuccessModal'));
                 successModal.show();
             }
         });
@@ -345,9 +360,9 @@
         $(document).on('click', '.view-remarks-c', function() {
             const button = $(this);
             const remarks = button.data('remarks');
-            $('#remarksModalBodyC').text(remarks || 'No remarks provided.');
+            $('#remarksModalBody').text(remarks || 'No remarks provided.');
 
-            const remarksModal = new bootstrap.Modal(document.getElementById('remarksModalC'));
+            const remarksModal = new bootstrap.Modal(document.getElementById('remarksModal'));
             remarksModal.show();
         });
         // === REMARKS HANDLER END ===
@@ -400,12 +415,13 @@
 
                 let score = 0;
                 if (competition && organization && award && dateAwarded) {
-                    score = 3;
+                    score = 3; // Example score logic
                 }
                 row.querySelector('.score-input').value = score;
                 mentorTotal += score;
             });
             document.getElementById('kra1_c_mentor_total').value = mentorTotal.toFixed(2);
+            markFormAsDirty();
         }
 
         function getMultiplier(requirement) {
@@ -678,41 +694,7 @@
         // === SAVING PROCESS END ===
 
         // === UNSAVED CHANGES PROMPT START ===
-        let intendedNavigationURL = null;
-        document.getElementById('confirm-navigation-c').addEventListener('click', function() {
-            if (intendedNavigationURL) {
-                markFormAsClean();
-                window.location.href = intendedNavigationURL;
-                intendedNavigationURL = null;
-            }
-        });
-
-        function isRealNavigation(linkElement) {
-            if (!linkElement) return false;
-            const href = linkElement.getAttribute('href');
-            return href && href !== '#' && !href.startsWith('javascript:');
-        }
-
-        document.addEventListener('click', function(e) {
-            const link = e.target.closest('a[data-navigation="true"]');
-            const button = e.target.closest('button[data-action="navigate"]');
-
-            if (link) {
-                if (isFormDirty) {
-                    e.preventDefault();
-                    intendedNavigationURL = link.href;
-                    const unsavedChangesModal = new bootstrap.Modal(document.getElementById('unsavedChangesModal'));
-                    unsavedChangesModal.show();
-                }
-            } else if (button && button.getAttribute('data-action') === 'navigate') {
-                if (isFormDirty) {
-                    e.preventDefault();
-                    intendedNavigationURL = button.getAttribute('data-href');
-                    const unsavedChangesModal = new bootstrap.Modal(document.getElementById('unsavedChangesModal'));
-                    unsavedChangesModal.show();
-                }
-            }
-        });
+        //
         // === UNSAVED CHANGES PROMPT END ===
 
         calculateOverallScores();
