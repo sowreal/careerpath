@@ -67,7 +67,7 @@
                     </table>
                 </div>
                 <!-- Add Row Button for Sole Authorship -->
-                <button type="button" class="btn btn-success mt-3 add-row" data-table-id="sole-authorship-table">Add Row</button>
+                <button type="button" class="btn btn-success mt-3 add-sole-authorship-row" data-table-id="sole-authorship-table">Add Row</button>
                 <!-- Overall Scores for Sole Authorship -->
                 <div class="mt-4">
                     <div class="row g-3 justify-content-end">
@@ -140,7 +140,7 @@
                     </table>
                 </div>
                 <!-- Add Row Button for Co-Authorship -->
-                <button type="button" class="btn btn-success mt-3 add-row" data-table-id="co-authorship-table">Add Row</button>
+                <button type="button" class="btn btn-success mt-3 add-co-authorship-row" data-table-id="co-authorship-table">Add Row</button>
                 <!-- Overall Scores for Co-Authorship -->
                 <div class="mt-4">
                     <div class="row g-3 justify-content-end">
@@ -220,7 +220,7 @@
                     </table>
                 </div> 
                 <!-- Add Row Button for Academic Programs -->
-                <button type="button" class="btn btn-success mt-3 add-row" data-table-id="academic-programs-table">Add Row</button>
+                <button type="button" class="btn btn-success mt-3 add-academic-programs-row" data-table-id="academic-programs-table">Add Row</button>
                 <!-- Overall Scores for Academic Programs -->
                 <div class="mt-4">
                     <div class="row g-3 justify-content-end">
