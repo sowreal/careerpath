@@ -4,8 +4,8 @@ require_once '../connection.php';
 require_once '../config.php';
 
 // Define variables for Page Titles and Sidebar Active effects
-$pageTitle = 'Career Path | Career Tracking';
-$activePage = 'CPT_Teaching';
+$pageTitle = 'Career Path | Local Evaluator';
+$activePage = 'LocalEvaluatorTools';
 
 // Check if the user is a Faculty Member
 if ($_SESSION['role'] != 'Regular Instructor' && $_SESSION['role'] != 'Contract of Service Instructor') {
@@ -71,7 +71,7 @@ if ($_SESSION['role'] != 'Regular Instructor' && $_SESSION['role'] != 'Contract 
                         <div class="row align-items-start">
                             <div class="col-sm-6 mb-5">
                                 <!-- Change Evaluation Number dynamically-->
-                                <h3 class="mb-2"><strong>KRA1</strong> Local Evaluator Page Test<br></h3>
+                                <h3 class="mb-2"><strong>KRA1 Submissions</strong></h3>
                                 <h4 class="mb-0"><span id="evaluation-number">Evaluation #: <small><i class="text-danger">Please select evaluation number.</i></small></span></h4>
                             </div>
                             <div class="col-sm-6 pe-4 mt-4">
@@ -152,6 +152,7 @@ if ($_SESSION['role'] != 'Regular Instructor' && $_SESSION['role'] != 'Contract 
     <script src="<?php echo BASE_URL; ?>/php/includes/career_progress_tracking/teaching/js/teaching.js"></script>
     <!-- Include Criterion A-specific JS -->
     <script src="<?php echo BASE_URL; ?>/php/includes/career_progress_tracking/teaching/js/criterion_a.js"></script>
+    <!-- Local eval scripts -->
 
 </body>
 </html>

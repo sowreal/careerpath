@@ -29,7 +29,6 @@
                                     <th scope="col">Faculty Score</th>
                                     <th scope="col">Evidence</th>
                                     <th scope="col">Remarks</th>
-                                    <th scope="col">Actions</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -50,7 +49,6 @@
                                         <td>
                                             <button type="button" class="btn btn-success btn-sm view-remarks">View Remarks</button>
                                         </td>
-                                        <td><button type="button" class="btn btn-danger btn-sm delete-row">Delete</button></td>
                                     </tr>
                                 <?php endforeach; ?>
                             </tbody>
@@ -84,7 +82,6 @@
                                     <th scope="col">Faculty Score</th>
                                     <th scope="col">Evidence</th>
                                     <th scope="col">Remarks</th>
-                                    <th scope="col">Actions</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -105,7 +102,6 @@
                                         <td>
                                             <button type="button" class="btn btn-success btn-sm view-remarks">View Remarks</button>
                                         </td>
-                                        <td><button type="button" class="btn btn-danger btn-sm delete-row">Delete</button></td>
                                     </tr>
                                 <?php endforeach; ?>
                             </tbody>
@@ -139,7 +135,6 @@
                                 <th scope="col">Faculty Score</th>
                                 <th scope="col">Evidence</th>
                                 <th scope="col">Remarks</th>
-                                <th scope="col">Actions</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -158,7 +153,6 @@
                                     <td>
                                         <button type="button" class="btn btn-success btn-sm view-remarks">View Remarks</button>
                                     </td>
-                                    <td><button type="button" class="btn btn-danger btn-sm delete-row">Delete</button></td>
                                 </tr>
                             <?php endfor; ?>
                         </tbody>

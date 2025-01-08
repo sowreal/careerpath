@@ -44,70 +44,61 @@
                 <!-- Responsive Table -->
                 <div class="table-responsive">
                     <table class="table table-bordered align-middle" id="student-evaluation-table">
-                        <thead class="table-light">
-                            <tr>
-                                <th scope="col">Evaluation Period</th>
-                                <th scope="col">1st Semester Rating</th>
-                                <th scope="col">2nd Semester Rating</th>
-                                <th scope="col">Evidence</th>
-                                <th scope="col">Remarks</th>
-                                <th scope="col">Actions</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <!-- Rows will be populated by JavaScript -->
+                      <thead class="table-light">
+                        <tr>
+                          <th scope="col">Evaluation Period</th>
+                          <th scope="col">1st Semester Rating</th>
+                          <th scope="col">2nd Semester Rating</th>
+                          <th scope="col">Evidence</th>
+                          <th scope="col">Remarks</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        <?php 
+                          $evaluationPeriods = $evaluationPeriods ?? ["AY 2019 - 2020", "AY 2020 - 2021", "AY 2021 - 2022", "AY 2022 - 2023"];
+                          $request_id = $request_id ?? null;
 
-                            <!-- Default Rows -->
-                            <?php 
-                                // Define $evaluationPeriods if it's not already defined
-                                $evaluationPeriods = $evaluationPeriods ?? ["AY 2019 - 2020", "AY 2020 - 2021", "AY 2021 - 2022", "AY 2022 - 2023"];
-
-                                // Initialize $request_id to null if it's not set
-                                $request_id = $request_id ?? null;
-
-                                foreach ($evaluationPeriods as $index => $period): 
-                                    // Default evaluation_id using loop index
-                                    $evaluation_id = $request_id ? $request_id . '_' . $period . '_student' : "default_" . $index . "_student"; 
-                            ?>
-                                <tr>
-                                    <td>
-                                        <input type="text" class="form-control" name="student_evaluation_period[]" value="<?php echo htmlspecialchars($period); ?>">
-                                    </td>
-                                    <td>
-                                        <input type="number" class="form-control rating-input" name="student_rating_1[]" placeholder="0.00" required>
-                                    </td>
-                                    <td>
-                                        <input type="number" class="form-control rating-input" name="student_rating_2[]" placeholder="0.00" required>
-                                    </td>
-                                    <td>
-                                        <button type="button" class="btn btn-success btn-sm upload-evidence-btn" 
-                                                data-request-id="<?php echo $request_id ?? ''; ?>" 
-                                                data-evaluation-id="<?php echo $evaluation_id; ?>" 
-                                                data-table-type="student">
-                                            Upload Evidence
-                                        </button>
-                                        <input type="hidden" name="evaluation_id[]" value="<?php echo $evaluation_id; ?>">
-                                        <input type="hidden" name="evidence_file_1[]" value="">
-                                        <input type="hidden" name="evidence_file_2[]" value="">
-                                    </td>
-                                    <td>
-                                        <button type="button" class="btn btn-success btn-sm view-remarks"
-                                            data-first-remark=""
-                                            data-second-remark="">
-                                            View Remarks
-                                        </button>
-                                    </td>
-                                    <td>
-                                        <button type="button" class="btn btn-danger btn-sm delete-row" aria-label="Delete row">Delete</button>
-                                    </td>
-                                </tr>
-                            <?php endforeach; ?>
-                        </tbody>
+                          foreach ($evaluationPeriods as $index => $period): 
+                              // Fetch evaluation data from the database
+                              // Example: Assuming $studentEvaluations is an associative array fetched from the database
+                              $evaluation = $studentEvaluations[$index] ?? [];
+                              $evaluation_id = $request_id ? $request_id . '_' . $period . '_student' : "default_" . $index . "_student"; 
+                        ?>
+                        <tr>
+                          <td>
+                            <input type="text" class="form-control" name="student_evaluation_period[]" value="<?php echo htmlspecialchars($period); ?>" readonly>
+                          </td>
+                          <td>
+                            <input type="number" class="form-control rating-input" name="student_rating_1[]" placeholder="0.00" value="<?php echo htmlspecialchars($evaluation['first_semester_rating'] ?? ''); ?>" readonly>
+                          </td>
+                          <td>
+                            <input type="number" class="form-control rating-input" name="student_rating_2[]" placeholder="0.00" value="<?php echo htmlspecialchars($evaluation['second_semester_rating'] ?? ''); ?>" readonly>
+                          </td>
+                          <td>
+                            <button type="button" class="btn btn-success btn-sm upload-evidence-btn" 
+                                    data-request-id="<?php echo $request_id ?? ''; ?>" 
+                                    data-evaluation-id="<?php echo $evaluation_id; ?>" 
+                                    data-table-type="student">
+                              View Evidence
+                            </button>
+                            <input type="hidden" name="evaluation_id[]" value="<?php echo $evaluation_id; ?>">
+                            <input type="hidden" name="evidence_file_1[]" value="<?php echo htmlspecialchars($evaluation['evidence_file_1'] ?? ''); ?>">
+                            <input type="hidden" name="evidence_file_2[]" value="<?php echo htmlspecialchars($evaluation['evidence_file_2'] ?? ''); ?>">
+                          </td>
+                          <td>
+                            <button type="button" class="btn btn-success btn-sm add-remarks"
+                                data-evaluation-id="<?php echo $evaluation_id; ?>" 
+                                data-table-type="student"
+                                data-first-remark="<?php echo htmlspecialchars($evaluation['remarks_first'] ?? ''); ?>"
+                                data-second-remark="<?php echo htmlspecialchars($evaluation['remarks_second'] ?? ''); ?>">
+                                Add Remarks
+                            </button>
+                          </td>
+                        </tr>
+                        <?php endforeach; ?>
+                      </tbody>
                     </table>
                 </div>
-
-                <!-- Add Row Button -->
-                <button type="button" class="btn btn-success mt-3 add-row" data-table-id="student-evaluation-table">Add Row</button>
 
                 <!-- Overall Scores -->
                 <div class="mt-5">
@@ -152,61 +143,57 @@
 
                 <!-- Responsive Table -->
                 <div class="table-responsive">
-                    <table class="table table-bordered align-middle" id="supervisor-evaluation-table">
-                        <thead class="table-light">
-                            <tr>
-                                <th scope="col">Evaluation Period</th>
-                                <th scope="col">1st Semester Rating</th>
-                                <th scope="col">2nd Semester Rating</th>
-                                <th scope="col">Evidence</th> 
-                                <th scope="col">Remarks</th>
-                                <th scope="col">Actions</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <!-- Rows will be populated by JavaScript -->
-
-                            <!-- Default Rows -->
-                            <?php 
-                                foreach ($evaluationPeriods as $index => $period): 
-                                    // Default evaluation_id using loop index
-                                    $evaluation_id = $request_id ? $request_id . '_' . $period . '_supervisor' : "default_" . $index . "_supervisor"; 
-                                ?>
-                                    <tr>
-                                        <td>
-                                            <input type="text" class="form-control" name="supervisor_evaluation_period[]" value="<?php echo htmlspecialchars($period); ?>">
-                                        </td>
-                                        <td>
-                                            <input type="number" class="form-control rating-input" name="supervisor_rating_1[]" placeholder="0.00" required>
-                                        </td>
-                                        <td>
-                                            <input type="number" class="form-control rating-input" name="supervisor_rating_2[]" placeholder="0.00" required>
-                                        </td>
-                                        <td>
-                                            <button type="button" class="btn btn-success btn-sm upload-evidence-btn" 
-                                                    data-request-id="<?php echo $request_id ?? ''; ?>" 
-                                                    data-evaluation-id="<?php echo $evaluation_id; ?>" 
-                                                    data-table-type="supervisor">
-                                                Upload Evidence
-                                            </button>
-                                            <input type="hidden" name="evaluation_id[]" value="<?php echo $evaluation_id; ?>">
-                                            <input type="hidden" name="evidence_file_1[]" value="">
-                                            <input type="hidden" name="evidence_file_2[]" value="">
-                                        </td>
-                                        <td>
-                                            <button type="button" class="btn btn-success btn-sm view-remarks"
-                                                data-first-remark=""
-                                                data-second-remark="">
-                                                View Remarks
-                                            </button>
-                                        </td>
-                                        <td>
-                                            <button type="button" class="btn btn-danger btn-sm delete-row" aria-label="Delete row">Delete</button>
-                                        </td>
-                                    </tr>
-                                <?php endforeach; ?>
-                        </tbody>
-                    </table>
+                  <table class="table table-bordered align-middle" id="supervisor-evaluation-table">
+                    <thead class="table-light">
+                      <tr>
+                        <th scope="col">Evaluation Period</th>
+                        <th scope="col">1st Semester Rating</th>
+                        <th scope="col">2nd Semester Rating</th>
+                        <th scope="col">Evidence</th> 
+                        <th scope="col">Remarks</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <?php 
+                        foreach ($evaluationPeriods as $index => $period): 
+                            // Fetch evaluation data from the database
+                            $evaluation = $supervisorEvaluations[$index] ?? [];
+                            $evaluation_id = $request_id ? $request_id . '_' . $period . '_supervisor' : "default_" . $index . "_supervisor"; 
+                      ?>
+                      <tr>
+                        <td>
+                          <input type="text" class="form-control" name="supervisor_evaluation_period[]" value="<?php echo htmlspecialchars($period); ?>" readonly>
+                        </td>
+                        <td>
+                          <input type="number" class="form-control rating-input" name="supervisor_rating_1[]" placeholder="0.00" value="<?php echo htmlspecialchars($evaluation['first_semester_rating'] ?? ''); ?>" readonly>
+                        </td>
+                        <td>
+                          <input type="number" class="form-control rating-input" name="supervisor_rating_2[]" placeholder="0.00" value="<?php echo htmlspecialchars($evaluation['second_semester_rating'] ?? ''); ?>" readonly>
+                        </td>
+                        <td>
+                          <button type="button" class="btn btn-success btn-sm upload-evidence-btn" 
+                                  data-request-id="<?php echo $request_id ?? ''; ?>" 
+                                  data-evaluation-id="<?php echo $evaluation_id; ?>" 
+                                  data-table-type="supervisor">
+                            Upload Evidence
+                          </button>
+                          <input type="hidden" name="evaluation_id[]" value="<?php echo $evaluation_id; ?>">
+                          <input type="hidden" name="evidence_file_1[]" value="<?php echo htmlspecialchars($evaluation['evidence_file_1'] ?? ''); ?>">
+                          <input type="hidden" name="evidence_file_2[]" value="<?php echo htmlspecialchars($evaluation['evidence_file_2'] ?? ''); ?>">
+                        </td>
+                        <td>
+                          <button type="button" class="btn btn-success btn-sm view-remarks"
+                              data-evaluation-id="<?php echo $evaluation_id; ?>" 
+                              data-table-type="supervisor"
+                              data-first-remark="<?php echo htmlspecialchars($evaluation['remarks_first'] ?? ''); ?>"
+                              data-second-remark="<?php echo htmlspecialchars($evaluation['remarks_second'] ?? ''); ?>">
+                              View Remarks
+                          </button>
+                        </td>
+                      </tr>
+                      <?php endforeach; ?>
+                    </tbody>
+                  </table>
                 </div>
 
                 <!-- Add Row Button -->
@@ -233,61 +220,6 @@
             <button type="button" class="btn btn-success" id="save-criterion-a">Save Criterion A</button>
         </div>
     </form>
-</div>
-
-<!-- Delete Row Confirmation Modal -->
-<div class="modal fade" id="deleteRowModal" tabindex="-1" aria-labelledby="deleteRowModalLabel" aria-hidden="true">
-  <div class="modal-dialog modal-dialog-centered">
-    <div class="modal-content">
-      <div class="modal-header"> 
-        <h5 class="modal-title text-danger" id="deleteRowModalLabel">Confirm Deletion</h5>
-        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-      </div>
-      <div class="modal-body">
-        Are you sure you want to delete this row? This action cannot be undone.
-        </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
-        <button type="button" class="btn btn-danger" id="confirm-delete-row">Delete</button>
-      </div>
-    </div>
-  </div>
-</div>
-
-<!-- Delete Success Modal -->
-<div class="modal fade" id="deleteSuccessModal" tabindex="-1" aria-labelledby="deleteSuccessModalLabel" aria-hidden="true">
-  <div class="modal-dialog modal-dialog-centered">
-    <div class="modal-content">
-      <div class="modal-header bg-success text-white"> 
-        <h5 class="modal-title" id="deleteSuccessModalLabel">Deletion Successful</h5>
-        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-      </div>
-      <div class="modal-body">
-        The row has been successfully deleted.
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-success" data-bs-dismiss="modal">OK</button>
-      </div>
-    </div>
-  </div>
-</div>
-
-<!-- Delete Error Modal -->
-<div class="modal fade" id="deleteErrorModal" tabindex="-1" aria-labelledby="deleteErrorModalLabel" aria-hidden="true">
-  <div class="modal-dialog modal-dialog-centered">
-    <div class="modal-content">
-      <div class="modal-header"> 
-        <h5 class="modal-title text-danger" id="deleteErrorModalLabel">Deletion Failed</h5>
-        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-      </div>
-      <div class="modal-body">
-        <!-- Error message will be injected here -->
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">OK</button>
-      </div>
-    </div>
-  </div>
 </div>
 
 <!-- Save Confirmation Modal -->
@@ -325,3 +257,123 @@
     </div>
   </div>
 </div>
+
+<!-- Remarks Modal -->
+<div class="modal fade" id="remarksModal" tabindex="-1" aria-labelledby="remarksModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <form id="remarksForm">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="remarksModalLabel">Add/View Remarks</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <input type="hidden" name="evaluation_id" id="modal_evaluation_id">
+          <input type="hidden" name="table_type" id="modal_table_type">
+          <!-- CSRF Token (Optional but Recommended) -->
+          <input type="hidden" name="csrf_token" value="<?php echo $_SESSION['csrf_token'] ?? ''; ?>">
+          <div class="mb-3">
+            <label for="firstRemark" class="form-label">First Remark</label>
+            <textarea class="form-control" id="firstRemark" name="first_remark" rows="3"></textarea>
+          </div>
+          <div class="mb-3">
+            <label for="secondRemark" class="form-label">Second Remark</label>
+            <textarea class="form-control" id="secondRemark" name="second_remark" rows="3"></textarea>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="submit" class="btn btn-primary" id="saveRemarksBtn">
+            <span id="saveBtnText">Save Remarks</span>
+            <span id="saveBtnSpinner" class="spinner-border spinner-border-sm" role="status" aria-hidden="true" style="display: none;"></span>
+          </button>
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+        </div>
+      </div>
+    </form>
+  </div>
+</div>
+
+
+
+<script>
+  $(document).ready(function() {
+  // Handle Add Remarks button click
+  $('.add-remarks').on('click', function() {
+    const evaluationId = $(this).data('evaluation-id');
+    const tableType = $(this).data('table-type');
+    const firstRemark = $(this).data('first-remark');
+    const secondRemark = $(this).data('second-remark');
+    
+    // Populate modal fields
+    $('#modal_evaluation_id').val(evaluationId);
+    $('#modal_table_type').val(tableType);
+    $('#firstRemark').val(firstRemark);
+    $('#secondRemark').val(secondRemark);
+    
+    // Set modal title
+    $('#remarksModalLabel').text('Add Remarks');
+    
+    // Enable editing
+    $('#firstRemark').prop('readonly', false);
+    $('#secondRemark').prop('readonly', false);
+    $('#saveRemarksBtn').show();
+    
+    // Show modal
+    $('#remarksModal').modal('show');
+  });
+
+  // Handle View Remarks button click
+  $('.view-remarks').on('click', function() {
+    const evaluationId = $(this).data('evaluation-id');
+    const tableType = $(this).data('table-type');
+    const firstRemark = $(this).data('first-remark');
+    const secondRemark = $(this).data('second-remark');
+    
+    // Populate modal fields
+    $('#modal_evaluation_id').val(evaluationId);
+    $('#modal_table_type').val(tableType);
+    $('#firstRemark').val(firstRemark);
+    $('#secondRemark').val(secondRemark);
+    
+    // Set modal title
+    $('#remarksModalLabel').text('View Remarks');
+    
+    // Make fields read-only
+    $('#firstRemark').prop('readonly', true);
+    $('#secondRemark').prop('readonly', true);
+    $('#saveRemarksBtn').hide();
+    
+    // Show modal
+    $('#remarksModal').modal('show');
+  });
+
+  // Handle Remarks Form Submission
+  $('#remarksForm').on('submit', function(e) {
+    e.preventDefault();
+    
+    const formData = $(this).serialize();
+    
+    $.ajax({
+      type: 'POST',
+      url: 'save_remarks.php',
+      data: formData,
+      success: function(response) {
+        // Assuming 'Success' is returned on success
+        if(response.trim() === 'Success') {
+          $('#remarksModal').modal('hide');
+          // Optionally, display a success message
+          alert('Remarks saved successfully.');
+          // Refresh the specific row or the entire page
+          location.reload(); // Simple refresh
+        } else {
+          alert('Failed to save remarks. Please try again.');
+        }
+      },
+      error: function() {
+        alert('An error occurred. Please try again.');
+      }
+    });
+  });
+});
+
+</script>
