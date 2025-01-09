@@ -1,4 +1,4 @@
-<!-- careerpath/php/includes/career_progress_tracking/research/criterion_a.php -->
+<!-- careerpath/php/includes/career_progress_tracking/research/kra2_criterion_a.php -->
 <div class="tab-pane fade show active criterion-tab" id="criterion-a" role="tabpanel" aria-labelledby="tab-criterion-a">
     <h4 class="mb-4 pb-2 border-bottom border-3 border-success">
         <strong>CRITERION A - RESEARCH OUTPUTS (MAX = 100 POINTS)</strong>
@@ -40,30 +40,31 @@
                             <?php for ($i = 1; $i <= 3; $i++) : ?>
                                 <tr>
                                     <td><?php echo $i; ?></td>
-                                    <td><input type="text" class="form-control" name="kra1_a_sole_authorship[<?php echo $i; ?>][title]"></td>
+                                    <td><input type="text" class="form-control" name="kra2_a_sole_authorship[<?php echo $i; ?>][title]"></td>
                                     <td>
-                                        <select class="form-select" name="kra1_a_sole_authorship[<?php echo $i; ?>][type]">
+                                        <select class="form-select" name="kra2_a_sole_authorship[<?php echo $i; ?>][type]">
                                             <option value="">SELECT OPTION</option>
-                                            <option value="scholarly_paper">Scholarly Paper</option>
-                                            <option value="educational_article">Educational Article</option>
-                                            <option value="technical_article">Technical Article</option>
-                                            <option value="other_output">Other Outputs</option>
+                                            <option value="Book">Book</option>
+                                            <option value="Journal Article">Journal Article</option>
+                                            <option value="Book Chapter">Book Chapter</option>
+                                            <option value="Monograph">Monograph</option>
+                                            <option value="Other Peer-Reviewed Output">Other Peer-Reviewed Output</option>
                                         </select>
                                     </td>
-                                    <td><input type="text" class="form-control" name="kra1_a_sole_authorship[<?php echo $i; ?>][journal_publisher]"></td>
-                                    <td><input type="text" class="form-control" name="kra1_a_sole_authorship[<?php echo $i; ?>][reviewer]"></td>
+                                    <td><input type="text" class="form-control" name="kra2_a_sole_authorship[<?php echo $i; ?>][journal_publisher]"></td>
+                                    <td><input type="text" class="form-control" name="kra2_a_sole_authorship[<?php echo $i; ?>][reviewer]"></td>
                                     <td>
-                                        <select class="form-select" name="kra1_a_sole_authorship[<?php echo $i; ?>][international]">
+                                        <select class="form-select" name="kra2_a_sole_authorship[<?php echo $i; ?>][international]">
                                             <option value="">SELECT OPTION</option>
                                             <option value="Yes">Yes</option>
                                             <option value="No">No</option>
                                         </select>
                                     </td>
-                                    <td><input type="date" class="form-control" name="kra1_a_sole_authorship[<?php echo $i; ?>][date_published]"></td>
-                                    <td><input type="text" class="form-control score-input" name="kra1_a_sole_authorship[<?php echo $i; ?>][score]" readonly></td>
+                                    <td><input type="date" class="form-control" name="kra2_a_sole_authorship[<?php echo $i; ?>][date_published]"></td>
+                                    <td><input type="text" class="form-control score-input" name="kra2_a_sole_authorship[<?php echo $i; ?>][score]" readonly></td>
                                     <td>
                                         <button type="button" class="btn btn-success btn-sm upload-evidence-btn" data-subcriterion-id="sole_authorship_<?php echo $i; ?>">Upload Evidence</button>
-                                        <input type="hidden" name="kra1_a_sole_authorship[<?php echo $i; ?>][evidence_file]" value="">
+                                        <input type="hidden" name="kra2_a_sole_authorship[<?php echo $i; ?>][evidence_file]" value="">
                                     </td>
                                     <td>
                                         <button type="button" class="btn btn-success btn-sm view-remarks">View Remarks</button>
@@ -82,8 +83,8 @@
                 <div class="mt-4">
                     <div class="row g-3 justify-content-end">
                         <div class="col-md-4">
-                            <label for="kra1_a_sole_authorship_total" class="form-label"><strong>Total Score:</strong></label>
-                            <input type="text" class="form-control" id="kra1_a_sole_authorship_total" name="kra1_a_sole_authorship_total" readonly>
+                            <label for="kra2_a_sole_authorship_total" class="form-label"><strong>Total Score:</strong></label>
+                            <input type="text" class="form-control" id="kra2_a_sole_authorship_total" name="kra2_a_sole_authorship_total" readonly>
                         </div>
                     </div>
                 </div>
@@ -118,31 +119,32 @@
                             <?php for ($i = 1; $i <= 3; $i++) : ?>
                                 <tr>
                                     <td><?php echo $i; ?></td>
-                                    <td><input type="text" class="form-control" name="kra1_a_co_authorship[<?php echo $i; ?>][title]"></td>
+                                    <td><input type="text" class="form-control" name="kra2_a_co_authorship[<?php echo $i; ?>][title]"></td>
                                     <td>
-                                        <select class="form-select" name="kra1_a_co_authorship[<?php echo $i; ?>][type]">
+                                        <select class="form-select" name="kra2_a_co_authorship[<?php echo $i; ?>][type]">
                                             <option value="">SELECT OPTION</option>
-                                            <option value="scholarly_paper">Scholarly Paper</option>
-                                            <option value="educational_article">Educational Article</option>
-                                            <option value="technical_article">Technical Article</option>
-                                            <option value="other_output">Other Outputs</option>
+                                            <option value="Book">Book</option>
+                                            <option value="Journal Article">Journal Article</option>
+                                            <option value="Book Chapter">Book Chapter</option>
+                                            <option value="Monograph">Monograph</option>
+                                            <option value="Other Peer-Reviewed Output">Other Peer-Reviewed Output</option>
                                         </select>
                                     </td>
-                                    <td><input type="text" class="form-control" name="kra1_a_co_authorship[<?php echo $i; ?>][journal_publisher]"></td>
-                                    <td><input type="text" class="form-control" name="kra1_a_co_authorship[<?php echo $i; ?>][reviewer]"></td>
+                                    <td><input type="text" class="form-control" name="kra2_a_co_authorship[<?php echo $i; ?>][journal_publisher]"></td>
+                                    <td><input type="text" class="form-control" name="kra2_a_co_authorship[<?php echo $i; ?>][reviewer]"></td>
                                     <td>
-                                        <select class="form-select" name="kra1_a_co_authorship[<?php echo $i; ?>][international]">
+                                        <select class="form-select" name="kra2_a_co_authorship[<?php echo $i; ?>][international]">
                                             <option value="">SELECT OPTION</option>
                                             <option value="Yes">Yes</option>
                                             <option value="No">No</option>
                                         </select>
                                     </td>
-                                    <td><input type="date" class="form-control" name="kra1_a_co_authorship[<?php echo $i; ?>][date_published]"></td>
-                                    <td><input type="number" class="form-control" name="kra1_a_co_authorship[<?php echo $i; ?>][contribution_percentage]" placeholder="0" min="0" max="100"></td>
-                                    <td><input type="text" class="form-control score-input" name="kra1_a_co_authorship[<?php echo $i; ?>][score]" readonly></td>
+                                    <td><input type="date" class="form-control" name="kra2_a_co_authorship[<?php echo $i; ?>][date_published]"></td>
+                                    <td><input type="number" class="form-control" name="kra2_a_co_authorship[<?php echo $i; ?>][contribution_percentage]" placeholder="0" min="0" max="100"></td>
+                                    <td><input type="text" class="form-control score-input" name="kra2_a_co_authorship[<?php echo $i; ?>][score]" readonly></td>
                                     <td>
                                         <button type="button" class="btn btn-success btn-sm upload-evidence-btn" data-subcriterion-id="co_authorship_<?php echo $i; ?>">Upload Evidence</button>
-                                        <input type="hidden" name="kra1_a_co_authorship[<?php echo $i; ?>][evidence_file]" value="">
+                                        <input type="hidden" name="kra2_a_co_authorship[<?php echo $i; ?>][evidence_file]" value="">
                                     </td>
                                     <td>
                                         <button type="button" class="btn btn-success btn-sm view-remarks">View Remarks</button>
@@ -161,8 +163,8 @@
                 <div class="mt-4">
                     <div class="row g-3 justify-content-end">
                         <div class="col-md-4">
-                            <label for="kra1_a_co_authorship_total" class="form-label"><strong>Total Score:</strong></label>
-                            <input type="text" class="form-control" id="kra1_a_co_authorship_total" name="kra1_a_co_authorship_total" readonly>
+                            <label for="kra2_a_co_authorship_total" class="form-label"><strong>Total Score:</strong></label>
+                            <input type="text" class="form-control" id="kra2_a_co_authorship_total" name="kra2_a_co_authorship_total" readonly>
                         </div>
                     </div>
                 </div>

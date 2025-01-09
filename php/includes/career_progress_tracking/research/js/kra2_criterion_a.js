@@ -27,10 +27,11 @@
                 <td>
                     <select class="form-select" name="kra2_a_sole_authorship[new_${Date.now()}][type]">
                         <option value="">SELECT OPTION</option>
-                        <option value="scholarly_paper">Scholarly Paper</option>
-                        <option value="educational_article">Educational Article</option>
-                        <option value="technical_article">Technical Article</option>
-                        <option value="other_output">Other Outputs</option>
+                        <option value="Book">Book</option>
+                        <option value="Journal Article">Journal Article</option>
+                        <option value="Book Chapter">Book Chapter</option>
+                        <option value="Monograph">Monograph Outputs</option>
+                        <option value="Other Peer-Reviewed Output">Other Peer-Reviewed Output</option>
                     </select>
                 </td>
                 <td><input type="text" class="form-control" name="kra2_a_sole_authorship[new_${Date.now()}][journal_publisher]" placeholder="Journal / Publisher"></td>
@@ -68,10 +69,11 @@
                 <td>
                     <select class="form-select" name="kra2_a_co_authorship[new_${Date.now()}][type]">
                         <option value="">SELECT OPTION</option>
-                        <option value="scholarly_paper">Scholarly Paper</option>
-                        <option value="educational_article">Educational Article</option>
-                        <option value="technical_article">Technical Article</option>
-                        <option value="other_output">Other Outputs</option>
+                        <option value="Book">Book</option>
+                        <option value="Journal Article">Journal Article</option>
+                        <option value="Book Chapter">Book Chapter</option>
+                        <option value="Monograph">Monograph Outputs</option>
+                        <option value="Other Peer-Reviewed Output">Other Peer-Reviewed Output</option>
                     </select>
                 </td>
                 <td><input type="text" class="form-control" name="kra2_a_co_authorship[new_${Date.now()}][journal_publisher]" placeholder="Journal / Publisher"></td>
@@ -540,7 +542,7 @@
 
     // === MAIN FETCH FUNCTION ===
     KRA2CriterionA.fetchCriterionA = function (requestId) {
-        return fetch(`../../includes/career_progress_tracking/research/kra2_criterion_a_handler.php?request_id=${requestId}&action=fetch`)
+        return fetch(`../../includes/career_progress_tracking/research/fetch_kra2_criterion_a.php?request_id=${requestId}`)
             .then(function (response) {
                 if (!response.ok) {
                     throw new Error('Network response was not ok');
@@ -549,7 +551,7 @@
             })
             .then(function (data) {
                 if (data.success) {
-                    // Populate each sub-criterion table
+                    // Populate each sub-criterion table (using the populate... functions)
                     populateSoleAuthorship(data.sole_authorship);
                     populateCoAuthorship(data.co_authorship);
                     populateLeadResearcher(data.lead_researcher);
@@ -557,7 +559,7 @@
                     populateLocalAuthors(data.local_authors);
                     populateInternationalAuthors(data.international_authors);
                     populateMetadata(data.metadata);
-                    return data;
+                    return data; // You can return the data if needed by the caller
                 } else {
                     console.error('Error:', data.error);
                     showMessage('Failed to fetch Criterion A data: ' + data.error);
@@ -568,6 +570,177 @@
                 showMessage('Failed to fetch Criterion A data. Check console for details.');
             });
     };
+
+    // === Array to temporarily store selected files ===
+    var selectedFiles = [];
+
+    // === GATHER PAYLOAD FUNCTION ===
+    function gatherPayload() {
+        var requestId = parseInt(document.getElementById('request_id').value.trim(), 10) || 0;
+
+        // --- Sole Authorship ---
+        var soleRows = [];
+        $('#sole-authorship-table tbody tr').each(function () {
+            var row = $(this);
+            var recordId = row.attr('data-sole-id') || '0';
+
+            var inputs = row.find('input, select');
+            var rowData = {
+                sole_authorship_id: recordId,
+                title: inputs.filter('[name*="[title]"]').val(),
+                type: inputs.filter('[name*="[type]"]').val(),
+                journal_publisher: inputs.filter('[name*="[journal_publisher]"]').val(),
+                reviewer: inputs.filter('[name*="[reviewer]"]').val(),
+                international: inputs.filter('[name*="[international]"]').val(),
+                date_published: inputs.filter('[name*="[date_published]"]').val(),
+                score: parseFloat(inputs.filter('[name*="[score]"]').val()) || 0,
+                evidence_file: inputs.filter('[name*="[evidence_file]"]').val() // This will be the index in selectedFiles
+            };
+            soleRows.push(rowData);
+        });
+
+        // --- Co Authorship ---
+        var coRows = [];
+        $('#co-authorship-table tbody tr').each(function () {
+            var row = $(this);
+            var recordId = row.attr('data-co-id') || '0';
+
+            var inputs = row.find('input, select');
+            var rowData = {
+                co_authorship_id: recordId,
+                title: inputs.filter('[name*="[title]"]').val(),
+                type: inputs.filter('[name*="[type]"]').val(),
+                journal_publisher: inputs.filter('[name*="[journal_publisher]"]').val(),
+                reviewer: inputs.filter('[name*="[reviewer]"]').val(),
+                international: inputs.filter('[name*="[international]"]').val(),
+                date_published: inputs.filter('[name*="[date_published]"]').val(),
+                contribution_percentage: parseFloat(inputs.filter('[name*="[contribution_percentage]"]').val()),
+                score: parseFloat(inputs.filter('[name*="[score]"]').val()) || 0,
+                evidence_file: inputs.filter('[name*="[evidence_file]"]').val() // Index in selectedFiles
+            };
+            coRows.push(rowData);
+        });
+
+        // --- Lead Researcher ---
+        var leadRows = [];
+        $('#lead-researcher-table tbody tr').each(function () {
+            var row = $(this);
+            var recordId = row.attr('data-lead-id') || '0';
+
+            var inputs = row.find('input, select');
+            var rowData = {
+                lead_researcher_id: recordId,
+                title: inputs.filter('[name*="[title]"]').val(),
+                date_completed: inputs.filter('[name*="[date_completed]"]').val(),
+                project_name: inputs.filter('[name*="[project_name]"]').val(),
+                funding_source: inputs.filter('[name*="[funding_source]"]').val(),
+                date_implemented: inputs.filter('[name*="[date_implemented]"]').val(),
+                score: parseFloat(inputs.filter('[name*="[score]"]').val()) || 0,
+                evidence_file: inputs.filter('[name*="[evidence_file]"]').val() // Index in selectedFiles
+            };
+            leadRows.push(rowData);
+        });
+
+        // --- Contributor ---
+        var contributorRows = [];
+        $('#contributor-table tbody tr').each(function () {
+            var row = $(this);
+            var recordId = row.attr('data-contributor-id') || '0';
+
+            var inputs = row.find('input, select');
+            var rowData = {
+                contributor_id: recordId,
+                title: inputs.filter('[name*="[title]"]').val(),
+                date_completed: inputs.filter('[name*="[date_completed]"]').val(),
+                project_name: inputs.filter('[name*="[project_name]"]').val(),
+                funding_source: inputs.filter('[name*="[funding_source]"]').val(),
+                date_implemented: inputs.filter('[name*="[date_implemented]"]').val(),
+                contribution_percentage: parseFloat(inputs.filter('[name*="[contribution_percentage]"]').val()),
+                score: parseFloat(inputs.filter('[name*="[score]"]').val()) || 0,
+                evidence_file: inputs.filter('[name*="[evidence_file]"]').val() // Index in selectedFiles
+            };
+            contributorRows.push(rowData);
+        });
+
+        // --- Local Authors ---
+        var localRows = [];
+        $('#local-authors-table tbody tr').each(function () {
+            var row = $(this);
+            var recordId = row.attr('data-local-id') || '0';
+
+            var inputs = row.find('input, select');
+            var rowData = {
+                local_author_id: recordId,
+                title: inputs.filter('[name*="[title]"]').val(),
+                date_published: inputs.filter('[name*="[date_published]"]').val(),
+                journal_name: inputs.filter('[name*="[journal_name]"]').val(),
+                citation_count: parseInt(inputs.filter('[name*="[citation_count]"]').val()),
+                citation_index: inputs.filter('[name*="[citation_index]"]').val(),
+                citation_year: inputs.filter('[name*="[citation_year]"]').val(),
+                score: parseFloat(inputs.filter('[name*="[score]"]').val()) || 0,
+                evidence_file: inputs.filter('[name*="[evidence_file]"]').val() // Index in selectedFiles
+            };
+            localRows.push(rowData);
+        });
+
+        // --- International Authors ---
+        var internationalRows = [];
+        $('#international-authors-table tbody tr').each(function () {
+            var row = $(this);
+            var recordId = row.attr('data-international-id') || '0';
+
+            var inputs = row.find('input, select');
+            var rowData = {
+                international_author_id: recordId,
+                title: inputs.filter('[name*="[title]"]').val(),
+                date_published: inputs.filter('[name*="[date_published]"]').val(),
+                journal_name: inputs.filter('[name*="[journal_name]"]').val(),
+                citation_count: parseInt(inputs.filter('[name*="[citation_count]"]').val()),
+                citation_index: inputs.filter('[name*="[citation_index]"]').val(),
+                citation_year: inputs.filter('[name*="[citation_year]"]').val(),
+                score: parseFloat(inputs.filter('[name*="[score]"]').val()) || 0,
+                evidence_file: inputs.filter('[name*="[evidence_file]"]').val() // Index in selectedFiles
+            };
+            internationalRows.push(rowData);
+        });
+
+        // --- Totals (Metadata) ---
+        var sole_total = parseFloat($('#kra2_a_sole_authorship_total').val()) || 0;
+        var co_total = parseFloat($('#kra2_a_co_authorship_total').val()) || 0;
+        var lead_total = parseFloat($('#kra2_a_lead_researcher_total').val()) || 0;
+        var contributor_total = parseFloat($('#kra2_a_contributor_total').val()) || 0;
+        var local_total = parseFloat($('#kra2_a_local_authors_total').val()) || 0;
+        var international_total = parseFloat($('#kra2_a_international_authors_total').val()) || 0;
+
+        // --- Files to Upload ---
+        var filesToUpload = [];
+        for (var i = 0; i < selectedFiles.length; i++) {
+            if (selectedFiles[i]) {
+                filesToUpload.push(selectedFiles[i]);
+            }
+        }
+
+        return {
+            request_id: requestId,
+            sole_authorship: soleRows,
+            co_authorship: coRows,
+            lead_researcher: leadRows,
+            contributor: contributorRows,
+            local_authors: localRows,
+            international_authors: internationalRows,
+            metadata: {
+                sole_authorship_total: sole_total,
+                co_authorship_total: co_total,
+                lead_researcher_total: lead_total,
+                contributor_total: contributor_total,
+                local_authors_total: local_total,
+                international_authors_total: international_total
+            },
+            // deleted_records: deletedRecords,
+            filesToUpload: filesToUpload
+        };
+    }
+    // === END OF GATHER PAYLOAD FUNCTION ===
 
     // === INIT FUNCTION ===
     KRA2CriterionA.init = function () {
@@ -598,6 +771,7 @@
         }
 
         // === CALCULATION HELPER FUNCTIONS ===
+        // (These functions remain unchanged)
         // 1) Row-by-Row Calculations
         function getSoleAuthorshipScore(type, international) {
             if (type === 'Book' || type === 'Monograph') {
@@ -753,12 +927,12 @@
             }
         );
 
-        // === SINGLE-FILE UPLOAD LOGIC ===
+        // === FILE SELECTION LOGIC ===
         $(document).on('click', '.upload-evidence-btn', function () {
             var button = $(this);
             var recordId = button.data('record-id');
             var subcriterion = button.data('subcriterion');
-            var filePath = button.data('file-path');
+            var filePath = button.data('file-path'); // Might be empty initially
             var requestId = $('#request_id').val();
 
             // Validation
@@ -789,55 +963,42 @@
             $('#singleAFileName').text(this.files[0] ? this.files[0].name : '');
         });
 
-        // Confirm Upload Button
+        // Select File Button (in the modal)
         $('#a_uploadSingleEvidenceBtn').on('click', function () {
-            var formData = new FormData($('#a_singleEvidenceUploadForm')[0]);
-            var fileInput = $('#singleAFileInput')[0].files[0];
-
-            // Validate that a file is selected
-            if (!fileInput) {
-                showMessage('Please select a file to upload.');
+            var fileInput = $('#singleAFileInput')[0];
+            if (!fileInput.files.length) {
+                showMessage('Please select a file.');
                 return;
             }
 
-            // Send AJAX request to upload the file
-            $.ajax({
-                url: '../../includes/career_progress_tracking/research/kra2_criterion_a_handler.php',
-                type: 'POST',
-                data: formData,
-                processData: false,
-                contentType: false,
-                dataType: 'json',
-                success: function (response) {
-                    if (response.success) {
-                        var subcriterion = $('#a_modal_subcriterion').val();
-                        var recordId = $('#a_modal_record_id').val();
-                        var filePath = response.path;
+            var file = fileInput.files[0];
+            var subcriterion = $('#a_modal_subcriterion').val();
+            var recordId = $('#a_modal_record_id').val();
 
-                        // Find the correct row in the table and update the hidden input and button
-                        var tableSelector = `#${subcriterion.replace(/_/g, '-')}-table`;
-                        var row = $(tableSelector).find(`tr[data-${subcriterion.split('_')[0]}-id="${recordId}"]`);
-                        row.find('input[name*="[evidence_file]"]').val(filePath);
-                        row.find('.upload-evidence-btn').data('file-path', filePath).text('Change Evidence');
-
-                        uploadSingleEvidenceModal.hide();
-                        markFormAsDirty();
-                        showMessage('File uploaded successfully!');
-
-                    } else {
-                        showMessage('Upload failed: ' + response.error);
-                    }
-                },
-                error: function (xhr, status, error) {
-                    console.error(xhr.responseText);
-                    showMessage('An error occurred during the upload.');
-                }
+            // Store the selected file data temporarily using the index
+            var fileIndex = selectedFiles.length;
+            selectedFiles.push({
+                file: file,
+                subcriterion: subcriterion,
+                record_id: recordId,
+                fileIndex: fileIndex
             });
-        });
 
-        // === DELETE FILE LOGIC (if needed) ===
-        $('#deleteFileBtn').on('click', function () {
-            // ... (Implementation for deleting files - to be done later) ...
+            // Find the correct row and update the hidden input with the file index
+            var tableSelector = `#${subcriterion.replace(/_/g, '-')}-table`;
+            var row = $(tableSelector).find(`tr[data-${subcriterion.split('_')[0]}-id="${recordId}"]`);
+            row.find('input[name*="[evidence_file]"]').val(fileIndex); // Store the index
+
+            // Update the button text
+            row.find('.upload-evidence-btn').text('Change Evidence');
+
+            uploadSingleEvidenceModal.hide();
+        });
+        // === END OF FILE SELECTION LOGIC ===
+
+        // === DELETE FILE LOGIC (Placeholder) ===
+        $(document).on('click', '.delete-evidence-btn', function () {
+            // We will implement this later
         });
 
         // === DELETE ROW LOGIC ===
@@ -845,21 +1006,21 @@
         var recordIdToDelete = null;
         var subcriterionToDelete = null;
 
-        $(document).on('click', '.delete-row', function() {
+        $(document).on('click', '.delete-row', function () {
             rowToDelete = $(this).closest('tr');
             subcriterionToDelete = rowToDelete.data('sole-id') !== undefined ? 'sole_authorship'
                 : rowToDelete.data('co-id') !== undefined ? 'co_authorship'
-                : rowToDelete.data('lead-id') !== undefined ? 'lead_researcher'
-                : rowToDelete.data('contributor-id') !== undefined ? 'contributor'
-                : rowToDelete.data('local-id') !== undefined ? 'local_authors'
-                : rowToDelete.data('international-id') !== undefined ? 'international_authors'
-                : null;
+                    : rowToDelete.data('lead-id') !== undefined ? 'lead_researcher'
+                        : rowToDelete.data('contributor-id') !== undefined ? 'contributor'
+                            : rowToDelete.data('local-id') !== undefined ? 'local_authors'
+                                : rowToDelete.data('international-id') !== undefined ? 'international_authors'
+                                    : null;
 
             recordIdToDelete = rowToDelete.data(`${subcriterionToDelete.split('_')[0]}-id`) || '0';
             deleteRowModal.show();
         });
 
-        $('#confirm-delete-row').on('click', function() {
+        $('#confirm-delete-row').on('click', function () {
             if (rowToDelete) {
                 deleteRowModal.hide();
 
@@ -897,10 +1058,11 @@
                 <td>
                     <select class="form-select" name="kra2_a_sole_authorship[new_${Date.now()}][type]">
                         <option value="">SELECT OPTION</option>
-                        <option value="scholarly_paper">Scholarly Paper</option>
-                        <option value="educational_article">Educational Article</option>
-                        <option value="technical_article">Technical Article</option>
-                        <option value="other_output">Other Outputs</option>
+                        <option value="Book">Book</option>
+                        <option value="Journal Article">Journal Article</option>
+                        <option value="Book Chapter">Book Chapter</option>
+                        <option value="Monograph">Monograph</option>
+                        <option value="Other Peer-Reviewed Output">Other Peer-Reviewed Output</option>
                     </select>
                 </td>
                 <td><input type="text" class="form-control" name="kra2_a_sole_authorship[new_${Date.now()}][journal_publisher]"></td>
@@ -941,10 +1103,11 @@
                 <td>
                     <select class="form-select" name="kra2_a_co_authorship[new_${Date.now()}][type]">
                         <option value="">SELECT OPTION</option>
-                        <option value="scholarly_paper">Scholarly Paper</option>
-                        <option value="educational_article">Educational Article</option>
-                        <option value="technical_article">Technical Article</option>
-                        <option value="other_output">Other Outputs</option>
+                        <option value="Book">Book</option>
+                        <option value="Journal Article">Journal Article</option>
+                        <option value="Book Chapter">Book Chapter</option>
+                        <option value="Monograph">Monograph</option>
+                        <option value="Other Peer-Reviewed Output">Other Peer-Reviewed Output</option>
                     </select>
                 </td>
                 <td><input type="text" class="form-control" name="kra2_a_co_authorship[new_${Date.now()}][journal_publisher]"></td>
@@ -1088,7 +1251,7 @@
             markFormAsDirty();
         });
 
-        // === SAVE CRITERION A FUNCTION ===
+        // === SAVE PROCESS ===
         function saveCriterionA() {
             if (!form.checkValidity()) {
                 form.classList.add('was-validated');
@@ -1102,7 +1265,7 @@
             }
 
             var payload = gatherPayload();
-            fetch('../../includes/career_progress_tracking/research/kra2_criterion_a_handler.php', {
+            fetch('../../includes/career_progress_tracking/research/save_kra2_criterion_a.php', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({
@@ -1119,13 +1282,15 @@
             .then(function (data) {
                 if (data.success) {
                     showMessage('Criterion A data saved successfully!');
-                    // Reset deleted arrays
+                    // Reset deleted arrays and selectedFiles
                     deletedRecords.sole_authorship = [];
                     deletedRecords.co_authorship = [];
                     deletedRecords.lead_researcher = [];
                     deletedRecords.contributor = [];
                     deletedRecords.local_authors = [];
                     deletedRecords.international_authors = [];
+                    selectedFiles = []; // Clear the selected files array
+
                     markFormAsClean();
                     KRA2CriterionA.fetchCriterionA(requestId);
                 } else {
@@ -1137,165 +1302,7 @@
                 showMessage('Failed to save Criterion A data. Please check the console for details.');
             });
         }
-
-        // === GATHER PAYLOAD FUNCTION ===
-        // === GATHER PAYLOAD FUNCTION ===
-        function gatherPayload() {
-            var requestId = parseInt(document.getElementById('request_id').value.trim(), 10) || 0;
-
-            // --- Sole Authorship ---
-            var soleRows = [];
-            $('#sole-authorship-table tbody tr').each(function () {
-                var row = $(this);
-                var recordId = row.attr('data-sole-id') || '0';
-
-                var inputs = row.find('input, select');
-                var rowData = {
-                    sole_authorship_id: recordId,
-                    title: inputs.filter('[name*="[title]"]').val(),
-                    type: inputs.filter('[name*="[type]"]').val(),
-                    journal_publisher: inputs.filter('[name*="[journal_publisher]"]').val(),
-                    reviewer: inputs.filter('[name*="[reviewer]"]').val(),
-                    international: inputs.filter('[name*="[international]"]').val(),
-                    date_published: inputs.filter('[name*="[date_published]"]').val(),
-                    score: parseFloat(inputs.filter('[name*="[score]"]').val()) || 0,
-                    evidence_file: inputs.filter('[name*="[evidence_file]"]').val()
-                };
-                soleRows.push(rowData);
-            });
-
-            // --- Co Authorship ---
-            var coRows = [];
-            $('#co-authorship-table tbody tr').each(function () {
-                var row = $(this);
-                var recordId = row.attr('data-co-id') || '0';
-
-                var inputs = row.find('input, select');
-                var rowData = {
-                    co_authorship_id: recordId,
-                    title: inputs.filter('[name*="[title]"]').val(),
-                    type: inputs.filter('[name*="[type]"]').val(),
-                    journal_publisher: inputs.filter('[name*="[journal_publisher]"]').val(),
-                    reviewer: inputs.filter('[name*="[reviewer]"]').val(),
-                    international: inputs.filter('[name*="[international]"]').val(),
-                    date_published: inputs.filter('[name*="[date_published]"]').val(),
-                    contribution_percentage: parseFloat(inputs.filter('[name*="[contribution_percentage]"]').val()),
-                    score: parseFloat(inputs.filter('[name*="[score]"]').val()) || 0,
-                    evidence_file: inputs.filter('[name*="[evidence_file]"]').val()
-                };
-                coRows.push(rowData);
-            });
-
-            // --- Lead Researcher ---
-            var leadRows = [];
-            $('#lead-researcher-table tbody tr').each(function () {
-                var row = $(this);
-                var recordId = row.attr('data-lead-id') || '0';
-
-                var inputs = row.find('input, select');
-                var rowData = {
-                    lead_researcher_id: recordId,
-                    title: inputs.filter('[name*="[title]"]').val(),
-                    date_completed: inputs.filter('[name*="[date_completed]"]').val(),
-                    project_name: inputs.filter('[name*="[project_name]"]').val(),
-                    funding_source: inputs.filter('[name*="[funding_source]"]').val(),
-                    date_implemented: inputs.filter('[name*="[date_implemented]"]').val(),
-                    score: parseFloat(inputs.filter('[name*="[score]"]').val()) || 0,
-                    evidence_file: inputs.filter('[name*="[evidence_file]"]').val()
-                };
-                leadRows.push(rowData);
-            });
-
-            // --- Contributor ---
-            var contributorRows = [];
-            $('#contributor-table tbody tr').each(function () {
-                var row = $(this);
-                var recordId = row.attr('data-contributor-id') || '0';
-
-                var inputs = row.find('input, select');
-                var rowData = {
-                    contributor_id: recordId,
-                    title: inputs.filter('[name*="[title]"]').val(),
-                    date_completed: inputs.filter('[name*="[date_completed]"]').val(),
-                    project_name: inputs.filter('[name*="[project_name]"]').val(),
-                    funding_source: inputs.filter('[name*="[funding_source]"]').val(),
-                    date_implemented: inputs.filter('[name*="[date_implemented]"]').val(),
-                    contribution_percentage: parseFloat(inputs.filter('[name*="[contribution_percentage]"]').val()),
-                    score: parseFloat(inputs.filter('[name*="[score]"]').val()) || 0,
-                    evidence_file: inputs.filter('[name*="[evidence_file]"]').val()
-                };
-                contributorRows.push(rowData);
-            });
-
-            // --- Local Authors ---
-            var localRows = [];
-            $('#local-authors-table tbody tr').each(function () {
-                var row = $(this);
-                var recordId = row.attr('data-local-id') || '0';
-
-                var inputs = row.find('input, select');
-                var rowData = {
-                    local_author_id: recordId,
-                    title: inputs.filter('[name*="[title]"]').val(),
-                    date_published: inputs.filter('[name*="[date_published]"]').val(),
-                    journal_name: inputs.filter('[name*="[journal_name]"]').val(),
-                    citation_count: parseInt(inputs.filter('[name*="[citation_count]"]').val()),
-                    citation_index: inputs.filter('[name*="[citation_index]"]').val(),
-                    citation_year: inputs.filter('[name*="[citation_year]"]').val(),
-                    score: parseFloat(inputs.filter('[name*="[score]"]').val()) || 0,
-                    evidence_file: inputs.filter('[name*="[evidence_file]"]').val()
-                };
-                localRows.push(rowData);
-            });
-
-            // --- International Authors ---
-            var internationalRows = [];
-            $('#international-authors-table tbody tr').each(function () {
-                var row = $(this);
-                var recordId = row.attr('data-international-id') || '0';
-
-                var inputs = row.find('input, select');
-                var rowData = {
-                    international_author_id: recordId,
-                    title: inputs.filter('[name*="[title]"]').val(),
-                    date_published: inputs.filter('[name*="[date_published]"]').val(),
-                    journal_name: inputs.filter('[name*="[journal_name]"]').val(),
-                    citation_count: parseInt(inputs.filter('[name*="[citation_count]"]').val()),
-                    citation_index: inputs.filter('[name*="[citation_index]"]').val(),
-                    citation_year: inputs.filter('[name*="[citation_year]"]').val(),
-                    score: parseFloat(inputs.filter('[name*="[score]"]').val()) || 0,
-                    evidence_file: inputs.filter('[name*="[evidence_file]"]').val()
-                };
-                internationalRows.push(rowData);
-            });
-
-            // --- Totals (Metadata) ---
-            var sole_total = parseFloat($('#kra2_a_sole_authorship_total').val()) || 0;
-            var co_total = parseFloat($('#kra2_a_co_authorship_total').val()) || 0;
-            var lead_total = parseFloat($('#kra2_a_lead_researcher_total').val()) || 0;
-            var contributor_total = parseFloat($('#kra2_a_contributor_total').val()) || 0;
-            var local_total = parseFloat($('#kra2_a_local_authors_total').val()) || 0;
-            var international_total = parseFloat($('#kra2_a_international_authors_total').val()) || 0;
-
-            return {
-                request_id: requestId,
-                sole_authorship: soleRows,
-                co_authorship: coRows,
-                lead_researcher: leadRows,
-                contributor: contributorRows,
-                local_authors: localRows,
-                international_authors: internationalRows,
-                metadata: {
-                    sole_authorship_total: sole_total,
-                    co_authorship_total: co_total,
-                    lead_researcher_total: lead_total,
-                    contributor_total: contributor_total,
-                    local_authors_total: local_total,
-                    international_authors_total: international_total
-                },
-                deleted_records: deletedRecords
-            };
-        }
+        // === END OF SAVE PROCESS ===
 
         // Attach save event to button
         saveBtn.addEventListener('click', function () {
@@ -1306,7 +1313,7 @@
         markFormAsClean();
     };
 
-    // On DOM load, initialize everything for Criterion A
+    // === On DOM load, initialize everything for Criterion A ===
     document.addEventListener('DOMContentLoaded', function () {
         KRA2CriterionA.init();
     });

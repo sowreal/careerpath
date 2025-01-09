@@ -119,11 +119,11 @@ if ($_SESSION['role'] != 'Regular Instructor' && $_SESSION['role'] != 'Contract 
                     <div class="card-body">
                         <div class="tab-content" id="kra-tab-content">
                             <!-- Tab 1: Criterion A: RESEARCH OUTPUTS -->
-                            <?php require_once BASE_PATH . '/php/includes/career_progress_tracking/research/criterion_a.php'; ?> 
+                            <?php require_once BASE_PATH . '/php/includes/career_progress_tracking/research/kra2_criterion_a.php'; ?> 
                             <!-- Tab 2: Criterion B: INVENTIONS  -->
-                            <?php require_once BASE_PATH . '/php/includes/career_progress_tracking/research/criterion_b.php'; ?> 
+                            <?php require_once BASE_PATH . '/php/includes/career_progress_tracking/research/kra2_criterion_b.php'; ?> 
                             <!-- Tab 3: Criterion C: Creative Works -->
-                            <?php require_once BASE_PATH . '/php/includes/career_progress_tracking/research/criterion_c.php'; ?> 
+                            <?php require_once BASE_PATH . '/php/includes/career_progress_tracking/research/kra2_criterion_c.php'; ?> 
                         </div>
                     </div>
 
