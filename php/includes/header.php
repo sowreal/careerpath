@@ -43,17 +43,15 @@ input[type=number]::-webkit-inner-spin-button {
     margin: 0;
 }
 
-/* General reset for all browsers */
-input[type=number] {
-    appearance: none;
-    margin: 0;
-}
-
 /* Firefox */
 input[type=number] {
     -moz-appearance: textfield;
 }
-input[type=number]::-moz-focus-inner {
-    border: 0;
+
+/* General reset for all browsers */
+input[type=number] {
+    appearance: none;
+    margin: 0;
+    -moz-appearance: textfield; /* Reiterating for Firefox */
 }
 </style>

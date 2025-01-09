@@ -2,10 +2,9 @@ document.addEventListener('DOMContentLoaded', function () {
     // Evaluation Selection Handler
     document.getElementById('select-evaluation-btn').addEventListener('click', function () {
         const modalBody = document.querySelector('#evaluationModal .modal-body');
-        modalBody.innerHTML = '<p>Loading evaluations...</p>'; // Show loading message while fetching data
+        modalBody.innerHTML = '<p>Loading evaluations...</p>';
 
-        // Fetch evaluations via AJAX
-        fetch('../../includes/career_progress_tracking/teaching/fetch_evaluations.php', { method: 'POST' })
+        fetch('../../includes/career_progress_tracking/research/fetch_evaluations.php', { method: 'POST' })
         .then(response => {
             if (!response.ok) throw new Error('Failed to fetch evaluations');
             return response.json();
@@ -42,31 +41,22 @@ document.addEventListener('DOMContentLoaded', function () {
         if (selectedEvaluation) {
             const requestId = selectedEvaluation.value;
 
-            // Update the header
             document.getElementById('evaluation-number').textContent = `Evaluation #: ${requestId}`;
+            document.getElementById('request_id').value = requestId;
+            document.getElementById('request_id_b').value = requestId;
+            document.getElementById('request_id_c').value = requestId;
 
-            // Set the input field value
-            const requestIdInput = document.getElementById('request_id');
-            if (requestIdInput) {
-                requestIdInput.value = requestId;
-                console.log('request_id set to:', requestId);
+            if (window.CriterionA && typeof CriterionA.fetchCriterionA === 'function') {
+                CriterionA.fetchCriterionA(requestId);
             } else {
-                console.error('Input field with id "request_id" not found.');
-            }
-
-            // Fetch data for the selected evaluation by calling Criterion A's fetch function
-            if (typeof fetchCriterionA === 'function') {
-                fetchCriterionA(requestId);
-            } else {
-                console.error('fetchCriterionA function is not defined.');
+                console.error('CriterionA.fetchCriterionA function is not defined.');
             }
 
             // Hide the modal
             const evaluationModal = bootstrap.Modal.getInstance(document.getElementById('evaluationModal'));
             evaluationModal.hide();
-
         } else {
-            // Show error modal instead of alert
+            // Show error modal
             const errorModal = new bootstrap.Modal(document.getElementById('saveErrorModal'));
             document.getElementById('saveErrorModalLabel').textContent = 'Selection Failed';
             document.querySelector('#saveErrorModal .modal-body').textContent = 'Please select an evaluation.';
@@ -74,71 +64,34 @@ document.addEventListener('DOMContentLoaded', function () {
         }
     });
 
-    // Visualization: Doughnut Chart for Overall Performance
-    const ctxDoughnut = document.getElementById('kraDoughnutChart');
-    if (ctxDoughnut) {
-        const kraDoughnutChart = new Chart(ctxDoughnut.getContext('2d'), {
-            type: 'doughnut',
-            data: {
-                labels: ['Teaching Effectiveness', 'Curriculum & Material Development', 'Thesis & Mentorship Services'],
-                datasets: [{
-                    label: 'Performance',
-                    data: [85, 70, 90],
-                    backgroundColor: [
-                        'rgba(54, 162, 235, 0.7)',
-                        'rgba(255, 206, 86, 0.7)',
-                        'rgba(75, 192, 192, 0.7)'
-                    ],
-                    borderColor: [
-                        'rgba(54, 162, 235, 1)',
-                        'rgba(255, 206, 86, 1)',
-                        'rgba(75, 192, 192, 1)'
-                    ],
-                    borderWidth: 1
-                }]
-            },
-            options: {
-                responsive: true,
-                maintainAspectRatio: false,
-                plugins: {
-                    legend: {
-                        position: 'top'
-                    }
-                }
-            }
-        });
-    }  
-
-    // JavaScript to dynamically add and remove bg-success and text-white on tabs on 2nd container
-    const tabs = document.querySelectorAll('#kra-tabs .nav-link');
-    if (tabs.length > 0) {
-        tabs.forEach(tab => {
+    // JavaScript for tabs styling
+    const tabs2 = document.querySelectorAll('#kra-2-tabs .nav-link');
+    if (tabs2.length > 0) {
+        tabs2.forEach(tab => {
             tab.addEventListener('click', function () {
-                // Remove bg-success and text-white from all tabs
-                tabs.forEach(t => t.classList.remove('bg-success', 'text-white'));
-
-                // Add bg-success and text-white to the clicked tab
+                tabs2.forEach(t => t.classList.remove('bg-success', 'text-white'));
+                console.log('Tab clicked:', this.id);
                 this.classList.add('bg-success', 'text-white');
             });
         });
     }
 
-    // AJAX Helper Functions (if needed for other criteria)
-    function ajaxPost(url, data) {
-        return $.ajax({
-            type: 'POST',
-            url: url,
-            data: data,
-            dataType: 'json'
+    // Ensures Only One Modal is Open at a Time
+    function showModal(modalId) {
+        const currentlyOpenModals = document.querySelectorAll('.modal.show');
+        currentlyOpenModals.forEach(modal => {
+            const modalInstance = bootstrap.Modal.getInstance(modal);
+            if (modalInstance) {
+                modalInstance.hide();
+            }
         });
-    }
-    
-    function ajaxGet(url, params) {
-        return $.ajax({
-            type: 'GET',
-            url: url,
-            data: params,
-            dataType: 'json'
-        });
+        
+        const modalElement = document.getElementById(modalId);
+        if (modalElement) {
+            const modalInstance = new bootstrap.Modal(modalElement);
+            modalInstance.show();
+        } else {
+            console.error(`Modal with ID "${modalId}" not found.`);
+        }
     }
 });

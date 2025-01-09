@@ -1,6 +1,6 @@
 <?php
-include('../../session.php'); // Ensure the user is logged in
-include('../../connection.php'); // Include the database connection
+require_once '../../session.php';
+require_once '../../connection.php';
 require_once '../../config.php';
 
 // Define variables for Page Titles and Sidebar Active effects
@@ -89,39 +89,40 @@ if ($_SESSION['role'] != 'Regular Instructor' && $_SESSION['role'] != 'Contract 
                 <!-- Hidden input to store request_id -->
                 <input type="hidden" id="request-id" name="request_id" value="">
 
-                <!-- KRA II Content -->
-                <?php // require_once BASE_PATH . '/php/includes/career_progress_tracking/research/kra2.php';?>
+                <!-- KRA II Content ======== REMOVED FOR NOW-->
+                <?php // require_once BASE_PATH . '/php/includes/career_progress_tracking/research/kra2.php';?> 
 
                 <!-- Container for Criteria -->
                 <div class="card mt-4">
                     <div class="card-header">
-                        <ul class="nav nav-tabs card-header-tabs" id="kra-tabs" role="tablist">
-                            <li class="nav-item">
-                                <button class="nav-link active bg-success text-white" id="tab-criterion-a" data-bs-toggle="tab" data-bs-target="#criterion-a" type="button" role="tab">
-                                    Criterion A
-                                </button>
-                            </li>
-                            <li class="nav-item">
-                                <button class="nav-link" id="tab-criterion-b" data-bs-toggle="tab" data-bs-target="#criterion-b" type="button" role="tab">
-                                    Criterion B
-                                </button>
-                            </li>
-                            <li class="nav-item">
-                                <button class="nav-link" id="tab-criterion-c" data-bs-toggle="tab" data-bs-target="#criterion-c" type="button" role="tab">
-                                    Criterion C
-                                </button>
-                            </li>
-                        </ul>
+                    <ul class="nav nav-tabs card-header-tabs" id="kra-tabs" role="tablist">
+                        <li class="nav-item">
+                            <button class="nav-link active bg-success text-white" id="tab-criterion-a" data-bs-toggle="tab" data-bs-target="#criterion-a" type="button" role="tab">
+                                Criterion A
+                            </button>
+                        </li>
+                        <li class="nav-item">
+                            <button class="nav-link" id="tab-criterion-b" data-bs-toggle="tab" data-bs-target="#criterion-b" type="button" role="tab" data-navigation="true">
+                                Criterion B
+                            </button>
+                        </li>
+                        <li class="nav-item">
+                            <button class="nav-link" id="tab-criterion-c" data-bs-toggle="tab" data-bs-target="#criterion-c" type="button" role="tab">
+                                Criterion C
+                            </button>
+                        </li>
+                    </ul>
+
                     </div>
 
                     <!-- Criterions section -->
                     <div class="card-body">
                         <div class="tab-content" id="kra-tab-content">
-                            <!-- Tab 1: Criterion A: Teaching Effectiveness -->
+                            <!-- Tab 1: Criterion A: RESEARCH OUTPUTS -->
                             <?php require_once BASE_PATH . '/php/includes/career_progress_tracking/research/criterion_a.php'; ?> 
-                            <!-- Tab 2: Criterion B: Curriculum & Material Development -->
+                            <!-- Tab 2: Criterion B: INVENTIONS  -->
                             <?php require_once BASE_PATH . '/php/includes/career_progress_tracking/research/criterion_b.php'; ?> 
-                            <!-- Tab 3: Criterion C: Thesis & Mentorship Services -->
+                            <!-- Tab 3: Criterion C: Creative Works -->
                             <?php require_once BASE_PATH . '/php/includes/career_progress_tracking/research/criterion_c.php'; ?> 
                         </div>
                     </div>
@@ -129,7 +130,7 @@ if ($_SESSION['role'] != 'Regular Instructor' && $_SESSION['role'] != 'Contract 
                 </div>
 
                 <!-- MODAL SECTION -->
-                <?php require_once BASE_PATH . '/php/includes/career_progress_tracking/teaching/modals.php'; ?>
+                <?php // require_once BASE_PATH . '/php/includes/career_progress_tracking/research/modals.php'; ?>
 
             </div>
         </main>
@@ -148,7 +149,16 @@ if ($_SESSION['role'] != 'Regular Instructor' && $_SESSION['role'] != 'Contract 
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
     
-    <!-- Career Progress Teaching Scripts -->
+    <!-- Career Progress Research Scripts -->
+    <!-- Career Progress Research Scripts -->
+    
+    <!-- Include Criterion A-specific JS -->
+    <script src="<?php echo BASE_URL; ?>/php/includes/career_progress_tracking/research/js/criterion_a.js"></script>
+    <!-- Include Criterion B-specific JS (Corrected Path) -->
+    <!-- <script src="<?php echo BASE_URL; ?>/php/includes/career_progress_tracking/research/js/criterion_b.js"></script> -->
+    <!-- Include Criterion C-specific JS -->
+    <!-- <script src="<?php echo BASE_URL; ?>/php/includes/career_progress_tracking/research/js/criterion_c.js"></script> -->
+    <!-- Include research.js LAST -->
     <script src="<?php echo BASE_URL; ?>/php/includes/career_progress_tracking/research/js/research.js"></script>
 
 </body>

@@ -1,21 +1,26 @@
 <!-- careerpath/php/includes/career_progress_tracking/teaching/criterion_a.php -->
 <div class="tab-pane fade show active criterion-tab" id="criterion-a" role="tabpanel" aria-labelledby="tab-criterion-a">
-    <h4 class="mb-4 pb-2 border-bottom border-3 border-success"><strong>CRITERION A - RESEARCH OUTPUTS (MAX = 100 POINTS)</strong></h4>
-    
-    <h5><strong>1. FOR EVERY SCHOLARLY RESEARCH PAPER/EDUCATIONAL OR TECHNICAL ARTICLE AND OTHER OUTPUTS PUBLISHED:</strong></h5>
-    
+    <h4 class="mb-4 pb-2 border-bottom border-3 border-success">
+        <strong>CRITERION A - RESEARCH OUTPUTS (MAX = 100 POINTS)</strong>
+    </h4>
+    <p class="card-text">
+        This section evaluates the faculty's research and scholarly outputs.
+    </p>
 
     <form id="criterion-a-form">
         <div class="row">
             <!-- Hidden Input for request_id -->
             <input type="hidden" id="request_id" name="request_id" value="" readonly>
 
-            <!-- Research Outputs Section -->
-            <div class="col-12 mt-5">
-              <h5 class="mb-4 pb-2 border-bottom border-2 border-success">1.1 SOLE AUTHORSHIP</h5>
-                <!-- Responsive Table for Research Outputs -->
+            <!-- Sub-criterion A.1: Sole Authorship -->
+            <div class="sub-criterion">
+                <h5 class="mb-4 pb-2 border-bottom border-2 border-success">
+                    1. FOR EVERY SCHOLARLY RESEARCH PAPER/EDUCATIONAL OR TECHNICAL ARTICLE AND OTHER OUTPUTS PUBLISHED
+                </h5>
+                <h6 class="mb-4"><strong>1.1 SOLE AUTHORSHIP</strong></h6>
+                <!-- Responsive Table for Sole Authorship -->
                 <div class="table-responsive">
-                    <table class="table table-bordered align-middle" id="research-output-table">
+                    <table class="table table-bordered align-middle" id="sole-authorship-table">
                         <thead class="table-light">
                             <tr>
                                 <th scope="col">No</th>
@@ -23,52 +28,73 @@
                                 <th scope="col">Type of Research Output</th>
                                 <th scope="col">Name of Journal / Publisher</th>
                                 <th scope="col">Reviewer or Its Equivalent</th>
-                                <th scope="col">International Indexing Body</th>
+                                <th scope="col">International</th>
                                 <th scope="col">Date Published (mm/dd/yyyy)</th>
                                 <th scope="col">Faculty Score</th>
-                                <th scope="col">Link to Evidence from Google Drive</th>
+                                <th scope="col">Evidence</th>
+                                <th scope="col">Remarks</th>
+                                <th scope="col">Actions</th>
                             </tr>
                         </thead>
                         <tbody>
-                            <?php for ($i = 1; $i <= 10; $i++): ?>
-                            <tr>
-                                <td><?php echo $i; ?></td>
-                                <td><input type="text" class="form-control" name="title_of_research_output_<?php echo $i; ?>" /></td>
-                                <td>
-                                    <select class="form-select" name="type_of_research_output_<?php echo $i; ?>">
-                                        <option value="">SELECT OPTION</option>
-                                        <option value="scholarly_paper">Scholarly Paper</option>
-                                        <option value="educational_article">Educational Article</option>
-                                        <option value="technical_article">Technical Article</option>
-                                        <option value="other_output">Other Outputs</option>
-                                    </select>
-                                </td>
-                                <td><input type="text" class="form-control" name="journal_publisher_<?php echo $i; ?>" /></td>
-                                <td><input type="text" class="form-control" name="reviewer_equivalent_<?php echo $i; ?>" /></td>
-                                <td><input type="text" class="form-control" name="indexing_body_<?php echo $i; ?>" /></td>
-                                <td><input type="date" class="form-control" name="date_published_<?php echo $i; ?>" /></td>
-                                <td><input type="number" class="form-control" name="faculty_score_<?php echo $i; ?>" value="0.00" readonly /></td>
-                                <td><input type="url" class="form-control" name="link_evidence_<?php echo $i; ?>" placeholder="https://drive.google.com/..." /></td>
-                            </tr>
+                            <?php for ($i = 1; $i <= 3; $i++) : ?>
+                                <tr>
+                                    <td><?php echo $i; ?></td>
+                                    <td><input type="text" class="form-control" name="kra1_a_sole_authorship[<?php echo $i; ?>][title]"></td>
+                                    <td>
+                                        <select class="form-select" name="kra1_a_sole_authorship[<?php echo $i; ?>][type]">
+                                            <option value="">SELECT OPTION</option>
+                                            <option value="scholarly_paper">Scholarly Paper</option>
+                                            <option value="educational_article">Educational Article</option>
+                                            <option value="technical_article">Technical Article</option>
+                                            <option value="other_output">Other Outputs</option>
+                                        </select>
+                                    </td>
+                                    <td><input type="text" class="form-control" name="kra1_a_sole_authorship[<?php echo $i; ?>][journal_publisher]"></td>
+                                    <td><input type="text" class="form-control" name="kra1_a_sole_authorship[<?php echo $i; ?>][reviewer]"></td>
+                                    <td>
+                                        <select class="form-select" name="kra1_a_sole_authorship[<?php echo $i; ?>][international]">
+                                            <option value="">SELECT OPTION</option>
+                                            <option value="Yes">Yes</option>
+                                            <option value="No">No</option>
+                                        </select>
+                                    </td>
+                                    <td><input type="date" class="form-control" name="kra1_a_sole_authorship[<?php echo $i; ?>][date_published]"></td>
+                                    <td><input type="text" class="form-control score-input" name="kra1_a_sole_authorship[<?php echo $i; ?>][score]" readonly></td>
+                                    <td>
+                                        <button type="button" class="btn btn-success btn-sm upload-evidence-btn" data-subcriterion-id="sole_authorship_<?php echo $i; ?>">Upload Evidence</button>
+                                        <input type="hidden" name="kra1_a_sole_authorship[<?php echo $i; ?>][evidence_file]" value="">
+                                    </td>
+                                    <td>
+                                        <button type="button" class="btn btn-success btn-sm view-remarks">View Remarks</button>
+                                    </td>
+                                    <td>
+                                        <button type="button" class="btn btn-danger btn-sm delete-row">Delete</button>
+                                    </td>
+                                </tr>
                             <?php endfor; ?>
                         </tbody>
                     </table>
                 </div>
-
-                <!-- Overall Score -->
-                <div class="mt-5">
+                <!-- Add Row Button for Sole Authorship -->
+                <button type="button" class="btn btn-success mt-3 add-sole-authorship-row" data-table-id="sole-authorship-table">Add Row</button>
+                <!-- Overall Scores for Sole Authorship -->
+                <div class="mt-4">
                     <div class="row g-3 justify-content-end">
                         <div class="col-md-4">
-                            <label for="overall_score" class="form-label"><strong>Total Score:</strong></label>
-                            <input type="number" class="form-control" id="overall_score" name="overall_score" value="0.00" readonly>
+                            <label for="kra1_a_sole_authorship_total" class="form-label"><strong>Total Score:</strong></label>
+                            <input type="text" class="form-control" id="kra1_a_sole_authorship_total" name="kra1_a_sole_authorship_total" readonly>
                         </div>
                     </div>
                 </div>
             </div>
 
-            <!-- Co-Authorship Section -->
-            <div class="col-12 mt-5">
+            <!-- Sub-criterion A.2: Co-Authorship -->
+            <div class="sub-criterion mt-5">
                 <h5 class="mb-4 pb-2 border-bottom border-2 border-success">1.2 CO-AUTHORSHIP</h5>
+                <p class="mb-4">
+                    Note: Every Research Output with Multiple Authors should be accompanied by a Certification using FORM II-A1a
+                </p>
                 <!-- Responsive Table for Co-Authorship -->
                 <div class="table-responsive">
                     <table class="table table-bordered align-middle" id="co-authorship-table">
@@ -79,46 +105,75 @@
                                 <th scope="col">Type of Research Output</th>
                                 <th scope="col">Name of Journal / Publisher</th>
                                 <th scope="col">Reviewer or Equivalent (if applicable)</th>
-                                <th scope="col">International Indexing Body (if applicable)</th>
+                                <th scope="col">International</th>
                                 <th scope="col">Date Published (mm/dd/yyyy)</th>
-                                <th scope="col">% Contribution (write in decimal form)</th>
+                                <th scope="col">% Contribution</th>
                                 <th scope="col">Faculty Score</th>
-                                <th scope="col">Link to Evidence from Google Drive</th>
+                                <th scope="col">Evidence</th>
+                                <th scope="col">Remarks</th>
+                                <th scope="col">Actions</th>
                             </tr>
                         </thead>
                         <tbody>
-                            <?php for ($i = 1; $i <= 10; $i++): ?>
-                            <tr>
-                                <td><?php echo $i; ?></td>
-                                <td><input type="text" class="form-control" name="coauthorship_title_of_research_output_<?php echo $i; ?>" /></td>
-                                <td>
-                                    <select class="form-select" name="coauthorship_type_of_research_output_<?php echo $i; ?>">
-                                        <option value="">SELECT OPTION</option>
-                                        <option value="scholarly_paper">Scholarly Paper</option>
-                                        <option value="educational_article">Educational Article</option>
-                                        <option value="technical_article">Technical Article</option>
-                                        <option value="other_output">Other Outputs</option>
-                                    </select>
-                                </td>
-                                <td><input type="text" class="form-control" name="coauthorship_journal_publisher_<?php echo $i; ?>" /></td>
-                                <td><input type="text" class="form-control" name="coauthorship_reviewer_equivalent_<?php echo $i; ?>" /></td>
-                                <td><input type="text" class="form-control" name="coauthorship_indexing_body_<?php echo $i; ?>" /></td>
-                                <td><input type="date" class="form-control" name="coauthorship_date_published_<?php echo $i; ?>" /></td>
-                                <td><input type="number" class="form-control" name="coauthorship_contribution_<?php echo $i; ?>" placeholder="0.0" /></td>
-                                <td><input type="number" class="form-control" name="coauthorship_faculty_score_<?php echo $i; ?>" value="0.00" readonly /></td>
-                                <td><input type="url" class="form-control" name="coauthorship_link_evidence_<?php echo $i; ?>" placeholder="https://drive.google.com/..." /></td>
-                            </tr>
+                            <?php for ($i = 1; $i <= 3; $i++) : ?>
+                                <tr>
+                                    <td><?php echo $i; ?></td>
+                                    <td><input type="text" class="form-control" name="kra1_a_co_authorship[<?php echo $i; ?>][title]"></td>
+                                    <td>
+                                        <select class="form-select" name="kra1_a_co_authorship[<?php echo $i; ?>][type]">
+                                            <option value="">SELECT OPTION</option>
+                                            <option value="scholarly_paper">Scholarly Paper</option>
+                                            <option value="educational_article">Educational Article</option>
+                                            <option value="technical_article">Technical Article</option>
+                                            <option value="other_output">Other Outputs</option>
+                                        </select>
+                                    </td>
+                                    <td><input type="text" class="form-control" name="kra1_a_co_authorship[<?php echo $i; ?>][journal_publisher]"></td>
+                                    <td><input type="text" class="form-control" name="kra1_a_co_authorship[<?php echo $i; ?>][reviewer]"></td>
+                                    <td>
+                                        <select class="form-select" name="kra1_a_co_authorship[<?php echo $i; ?>][international]">
+                                            <option value="">SELECT OPTION</option>
+                                            <option value="Yes">Yes</option>
+                                            <option value="No">No</option>
+                                        </select>
+                                    </td>
+                                    <td><input type="date" class="form-control" name="kra1_a_co_authorship[<?php echo $i; ?>][date_published]"></td>
+                                    <td><input type="number" class="form-control" name="kra1_a_co_authorship[<?php echo $i; ?>][contribution_percentage]" placeholder="0" min="0" max="100"></td>
+                                    <td><input type="text" class="form-control score-input" name="kra1_a_co_authorship[<?php echo $i; ?>][score]" readonly></td>
+                                    <td>
+                                        <button type="button" class="btn btn-success btn-sm upload-evidence-btn" data-subcriterion-id="co_authorship_<?php echo $i; ?>">Upload Evidence</button>
+                                        <input type="hidden" name="kra1_a_co_authorship[<?php echo $i; ?>][evidence_file]" value="">
+                                    </td>
+                                    <td>
+                                        <button type="button" class="btn btn-success btn-sm view-remarks">View Remarks</button>
+                                    </td>
+                                    <td>
+                                        <button type="button" class="btn btn-danger btn-sm delete-row">Delete</button>
+                                    </td>
+                                </tr>
                             <?php endfor; ?>
                         </tbody>
                     </table>
                 </div>
-                <p class="text-muted">Note: Every Research Output with Multiple Authors should be accompanied by a Certification using FORM II-A1a</p>
+                <!-- Add Row Button for Co-Authorship -->
+                <button type="button" class="btn btn-success mt-3 add-co-authorship-row" data-table-id="co-authorship-table">Add Row</button>
+                <!-- Overall Scores for Co-Authorship -->
+                <div class="mt-4">
+                    <div class="row g-3 justify-content-end">
+                        <div class="col-md-4">
+                            <label for="kra1_a_co_authorship_total" class="form-label"><strong>Total Score:</strong></label>
+                            <input type="text" class="form-control" id="kra1_a_co_authorship_total" name="kra1_a_co_authorship_total" readonly>
+                        </div>
+                    </div>
+                </div>
             </div>
 
-            <!-- Lead Researcher Section -->
-            <div class="col-12 mt-5">
-                <h5><strong>2. FOR EVERY RESEARCH OUTPUT TRANSLATED INTO PROJECT, POLICY OR PRODUCT AS:</strong></h5>
-                <h5 class="mb-4 pb-2 border-bottom border-2 border-success">2.1 LEAD RESEARCHER</h5>
+            <!-- Sub-criterion A.3: Lead Researcher -->
+            <div class="sub-criterion mt-5">
+                <h5 class="mb-4 pb-2 border-bottom border-2 border-success">
+                    2. FOR EVERY RESEARCH OUTPUT TRANSLATED INTO PROJECT, POLICY OR PRODUCT AS:
+                </h5>
+                <h6 class="mb-4"><strong>2.1 LEAD RESEARCHER</strong></h6>
                 <!-- Responsive Table for Lead Researcher -->
                 <div class="table-responsive">
                     <table class="table table-bordered align-middle" id="lead-researcher-table">
@@ -131,30 +186,54 @@
                                 <th scope="col">Funding Source</th>
                                 <th scope="col">Date implemented, adopted or developed (mm/dd/yyyy)</th>
                                 <th scope="col">Faculty Score</th>
-                                <th scope="col">Link to Evidence from Google Drive</th>
+                                <th scope="col">Evidence</th>
+                                <th scope="col">Remarks</th>
+                                <th scope="col">Actions</th>
                             </tr>
                         </thead>
                         <tbody>
-                            <?php for ($i = 1; $i <= 6; $i++): ?>
-                            <tr>
-                                <td><?php echo $i; ?></td>
-                                <td><input type="text" class="form-control" name="lead_research_title_<?php echo $i; ?>" /></td>
-                                <td><input type="date" class="form-control" name="lead_research_date_completed_<?php echo $i; ?>" /></td>
-                                <td><input type="text" class="form-control" name="lead_research_project_name_<?php echo $i; ?>" /></td>
-                                <td><input type="text" class="form-control" name="lead_research_funding_source_<?php echo $i; ?>" /></td>
-                                <td><input type="date" class="form-control" name="lead_research_date_implemented_<?php echo $i; ?>" /></td>
-                                <td><input type="number" class="form-control" name="lead_research_faculty_score_<?php echo $i; ?>" value="0.00" readonly /></td>
-                                <td><input type="url" class="form-control" name="lead_research_link_evidence_<?php echo $i; ?>" placeholder="https://drive.google.com/..." /></td>
-                            </tr>
+                            <?php for ($i = 1; $i <= 3; $i++) : ?>
+                                <tr>
+                                    <td><?php echo $i; ?></td>
+                                    <td><input type="text" class="form-control" name="kra1_a_lead_researcher[<?php echo $i; ?>][title]"></td>
+                                    <td><input type="date" class="form-control" name="kra1_a_lead_researcher[<?php echo $i; ?>][date_completed]"></td>
+                                    <td><input type="text" class="form-control" name="kra1_a_lead_researcher[<?php echo $i; ?>][project_name]"></td>
+                                    <td><input type="text" class="form-control" name="kra1_a_lead_researcher[<?php echo $i; ?>][funding_source]"></td>
+                                    <td><input type="date" class="form-control" name="kra1_a_lead_researcher[<?php echo $i; ?>][date_implemented]"></td>
+                                    <td><input type="text" class="form-control score-input" name="kra1_a_lead_researcher[<?php echo $i; ?>][score]" readonly></td>
+                                    <td>
+                                        <button type="button" class="btn btn-success btn-sm upload-evidence-btn" data-subcriterion-id="lead_researcher_<?php echo $i; ?>">Upload Evidence</button>
+                                        <input type="hidden" name="kra1_a_lead_researcher[<?php echo $i; ?>][evidence_file]" value="">
+                                    </td>
+                                    <td>
+                                        <button type="button" class="btn btn-success btn-sm view-remarks">View Remarks</button>
+                                    </td>
+                                    <td>
+                                        <button type="button" class="btn btn-danger btn-sm delete-row">Delete</button>
+                                    </td>
+                                </tr>
                             <?php endfor; ?>
                         </tbody>
                     </table>
                 </div>
+                <!-- Add Row Button for Lead Researcher -->
+                <button type="button" class="btn btn-success mt-3 add-lead-researcher-row" data-table-id="lead-researcher-table">Add Row</button>
+                <!-- Overall Scores for Lead Researcher -->
+                <div class="mt-4">
+                    <div class="row g-3 justify-content-end">
+                        <div class="col-md-4">
+                            <label for="kra1_a_lead_researcher_total" class="form-label"><strong>Total Score:</strong></label>
+                            <input type="text" class="form-control" id="kra1_a_lead_researcher_total" name="kra1_a_lead_researcher_total" readonly>
+                        </div>
+                    </div>
+                </div>
             </div>
-
-            <!-- Contributor Section -->
-            <div class="col-12 mt-5">
-                <h5 class="mb-4 pb-2 border-bottom border-2 border-success">2.2 CONTRIBUTOR (should be accompanied by a Certification using FORM II-A2a)</h5>
+            
+            <!-- Sub-criterion A.4: Contributor -->
+            <div class="sub-criterion mt-5">
+                <h5 class="mb-4 pb-2 border-bottom border-2 border-success">
+                    2.2 CONTRIBUTOR (should be accompanied by a Certification using FORM II-A2a)
+                </h5>
                 <!-- Responsive Table for Contributor -->
                 <div class="table-responsive">
                     <table class="table table-bordered align-middle" id="contributor-table">
@@ -166,34 +245,58 @@
                                 <th scope="col">Name of Project, Policy or Product</th>
                                 <th scope="col">Funding Source</th>
                                 <th scope="col">Date implemented, adopted or developed (mm/dd/yyyy)</th>
-                                <th scope="col">% Contribution (write in decimal form)</th>
+                                <th scope="col">% Contribution</th>
                                 <th scope="col">Faculty Score</th>
-                                <th scope="col">Link to Evidence from Google Drive</th>
+                                <th scope="col">Evidence</th>
+                                <th scope="col">Remarks</th>
+                                <th scope="col">Actions</th>
                             </tr>
                         </thead>
                         <tbody>
-                            <?php for ($i = 1; $i <= 6; $i++): ?>
-                            <tr>
-                                <td><?php echo $i; ?></td>
-                                <td><input type="text" class="form-control" name="contributor_title_<?php echo $i; ?>" /></td>
-                                <td><input type="date" class="form-control" name="contributor_date_completed_<?php echo $i; ?>" /></td>
-                                <td><input type="text" class="form-control" name="contributor_project_name_<?php echo $i; ?>" /></td>
-                                <td><input type="text" class="form-control" name="contributor_funding_source_<?php echo $i; ?>" /></td>
-                                <td><input type="date" class="form-control" name="contributor_date_implemented_<?php echo $i; ?>" /></td>
-                                <td><input type="number" class="form-control" name="contributor_contribution_<?php echo $i; ?>" placeholder="0.0" /></td>
-                                <td><input type="number" class="form-control" name="contributor_faculty_score_<?php echo $i; ?>" value="0.00" readonly /></td>
-                                <td><input type="url" class="form-control" name="contributor_link_evidence_<?php echo $i; ?>" placeholder="https://drive.google.com/..." /></td>
-                            </tr>
+                            <?php for ($i = 1; $i <= 3; $i++) : ?>
+                                <tr>
+                                    <td><?php echo $i; ?></td>
+                                    <td><input type="text" class="form-control" name="kra1_a_contributor[<?php echo $i; ?>][title]"></td>
+                                    <td><input type="date" class="form-control" name="kra1_a_contributor[<?php echo $i; ?>][date_completed]"></td>
+                                    <td><input type="text" class="form-control" name="kra1_a_contributor[<?php echo $i; ?>][project_name]"></td>
+                                    <td><input type="text" class="form-control" name="kra1_a_contributor[<?php echo $i; ?>][funding_source]"></td>
+                                    <td><input type="date" class="form-control" name="kra1_a_contributor[<?php echo $i; ?>][date_implemented]"></td>
+                                    <td><input type="number" class="form-control" name="kra1_a_contributor[<?php echo $i; ?>][contribution_percentage]" placeholder="0" min="0" max="100"></td>
+                                    <td><input type="text" class="form-control score-input" name="kra1_a_contributor[<?php echo $i; ?>][score]" readonly></td>
+                                    <td>
+                                        <button type="button" class="btn btn-success btn-sm upload-evidence-btn" data-subcriterion-id="contributor_<?php echo $i; ?>">Upload Evidence</button>
+                                        <input type="hidden" name="kra1_a_contributor[<?php echo $i; ?>][evidence_file]" value="">
+                                    </td>
+                                    <td>
+                                        <button type="button" class="btn btn-success btn-sm view-remarks">View Remarks</button>
+                                    </td>
+                                    <td>
+                                        <button type="button" class="btn btn-danger btn-sm delete-row">Delete</button>
+                                    </td>
+                                </tr>
                             <?php endfor; ?>
                         </tbody>
                     </table>
                 </div>
+                <!-- Add Row Button for Contributor -->
+                <button type="button" class="btn btn-success mt-3 add-contributor-row" data-table-id="contributor-table">Add Row</button>
+                <!-- Overall Scores for Contributor -->
+                <div class="mt-4">
+                    <div class="row g-3 justify-content-end">
+                        <div class="col-md-4">
+                            <label for="kra1_a_contributor_total" class="form-label"><strong>Total Score:</strong></label>
+                            <input type="text" class="form-control" id="kra1_a_contributor_total" name="kra1_a_contributor_total" readonly>
+                        </div>
+                    </div>
+                </div>
             </div>
 
-            <!-- Local Authors Section -->
-            <div class="col-12 mt-5">
-                <h5><strong>3. FOR EVERY RESEARCH PUBLICATION CITED BY OTHER AUTHORS</strong></h5>
-                <h5 class="mb-4 pb-2 border-bottom border-2 border-success">3.1 LOCAL AUTHORS (MAX = 40 POINTS)</h5>
+            <!-- Sub-criterion A.5: Local Authors -->
+            <div class="sub-criterion mt-5">
+                <h5 class="mb-4 pb-2 border-bottom border-2 border-success">
+                    3. FOR EVERY RESEARCH PUBLICATION CITED BY OTHER AUTHORS
+                </h5>
+                <h6 class="mb-4"><strong>3.1 LOCAL AUTHORS (MAX = 40 POINTS)</strong></h6>
                 <!-- Responsive Table for Local Authors -->
                 <div class="table-responsive">
                     <table class="table table-bordered align-middle" id="local-authors-table">
@@ -207,31 +310,55 @@
                                 <th scope="col">Citation Index</th>
                                 <th scope="col">Year's Citation Published</th>
                                 <th scope="col">Faculty Score</th>
-                                <th scope="col">Link to Evidence from Google Drive</th>
+                                <th scope="col">Evidence</th>
+                                <th scope="col">Remarks</th>
+                                <th scope="col">Actions</th>
                             </tr>
                         </thead>
                         <tbody>
-                            <?php for ($i = 1; $i <= 7; $i++): ?>
-                            <tr>
-                                <td><?php echo $i; ?></td>
-                                <td><input type="text" class="form-control" name="local_authors_title_<?php echo $i; ?>" /></td>
-                                <td><input type="date" class="form-control" name="local_authors_date_published_<?php echo $i; ?>" /></td>
-                                <td><input type="text" class="form-control" name="local_authors_journal_<?php echo $i; ?>" /></td>
-                                <td><input type="number" class="form-control" name="local_authors_no_of_citation_<?php echo $i; ?>" /></td>
-                                <td><input type="text" class="form-control" name="local_authors_citation_index_<?php echo $i; ?>" /></td>
-                                <td><input type="date" class="form-control" name="local_authors_year_citation_published_<?php echo $i; ?>" /></td>
-                                <td><input type="number" class="form-control" name="local_authors_faculty_score_<?php echo $i; ?>" value="0.00" readonly /></td>
-                                <td><input type="url" class="form-control" name="local_authors_link_evidence_<?php echo $i; ?>" placeholder="https://drive.google.com/..." /></td>
-                            </tr>
+                            <?php for ($i = 1; $i <= 3; $i++) : ?>
+                                <tr>
+                                    <td><?php echo $i; ?></td>
+                                    <td><input type="text" class="form-control" name="kra1_a_local_authors[<?php echo $i; ?>][title]"></td>
+                                    <td><input type="date" class="form-control" name="kra1_a_local_authors[<?php echo $i; ?>][date_published]"></td>
+                                    <td><input type="text" class="form-control" name="kra1_a_local_authors[<?php echo $i; ?>][journal_name]"></td>
+                                    <td><input type="number" class="form-control" name="kra1_a_local_authors[<?php echo $i; ?>][citation_count]"></td>
+                                    <td><input type="text" class="form-control" name="kra1_a_local_authors[<?php echo $i; ?>][citation_index]"></td>
+                                    <td><input type="date" class="form-control" name="kra1_a_local_authors[<?php echo $i; ?>][citation_year]"></td>
+                                    <td><input type="text" class="form-control score-input" name="kra1_a_local_authors[<?php echo $i; ?>][score]" readonly></td>
+                                    <td>
+                                        <button type="button" class="btn btn-success btn-sm upload-evidence-btn" data-subcriterion-id="local_authors_<?php echo $i; ?>">Upload Evidence</button>
+                                        <input type="hidden" name="kra1_a_local_authors[<?php echo $i; ?>][evidence_file]" value="">
+                                    </td>
+                                    <td>
+                                        <button type="button" class="btn btn-success btn-sm view-remarks">View Remarks</button>
+                                    </td>
+                                    <td>
+                                        <button type="button" class="btn btn-danger btn-sm delete-row">Delete</button>
+                                    </td>
+                                </tr>
                             <?php endfor; ?>
                         </tbody>
                     </table>
                 </div>
+                <!-- Add Row Button for Local Authors -->
+                <button type="button" class="btn btn-success mt-3 add-local-authors-row" data-table-id="local-authors-table">Add Row</button>
+                <!-- Overall Scores for Local Authors -->
+                <div class="mt-4">
+                    <div class="row g-3 justify-content-end">
+                        <div class="col-md-4">
+                            <label for="kra1_a_local_authors_total" class="form-label"><strong>Total Score:</strong></label>
+                            <input type="text" class="form-control" id="kra1_a_local_authors_total" name="kra1_a_local_authors_total" readonly>
+                        </div>
+                    </div>
+                </div>
             </div>
 
-            <!-- International Authors Section -->
-            <div class="col-12 mt-5">
-                <h5 class="mb-4 pb-2 border-bottom border-2 border-success">3.2 INTERNATIONAL AUTHORS (MAX = 60 POINTS)</h5>
+            <!-- Sub-criterion A.6: International Authors -->
+            <div class="sub-criterion mt-5">
+                <h5 class="mb-4 pb-2 border-bottom border-2 border-success">
+                    3.2 INTERNATIONAL AUTHORS (MAX = 60 POINTS)
+                </h5>
                 <!-- Responsive Table for International Authors -->
                 <div class="table-responsive">
                     <table class="table table-bordered align-middle" id="international-authors-table">
@@ -245,25 +372,47 @@
                                 <th scope="col">Citation Index</th>
                                 <th scope="col">Year's Citation Published</th>
                                 <th scope="col">Faculty Score</th>
-                                <th scope="col">Link to Evidence from Google Drive</th>
+                                <th scope="col">Evidence</th>
+                                <th scope="col">Remarks</th>
+                                <th scope="col">Actions</th>
                             </tr>
                         </thead>
                         <tbody>
-                            <?php for ($i = 1; $i <= 15; $i++): ?>
-                            <tr>
-                                <td><?php echo $i; ?></td>
-                                <td><input type="text" class="form-control" name="international_authors_title_<?php echo $i; ?>" /></td>
-                                <td><input type="date" class="form-control" name="international_authors_date_published_<?php echo $i; ?>" /></td>
-                                <td><input type="text" class="form-control" name="international_authors_journal_<?php echo $i; ?>" /></td>
-                                <td><input type="number" class="form-control" name="international_authors_no_of_citation_<?php echo $i; ?>" /></td>
-                                <td><input type="text" class="form-control" name="international_authors_citation_index_<?php echo $i; ?>" /></td>
-                                <td><input type="date" class="form-control" name="international_authors_year_citation_published_<?php echo $i; ?>" /></td>
-                                <td><input type="number" class="form-control" name="international_authors_faculty_score_<?php echo $i; ?>" value="0.00" readonly /></td>
-                                <td><input type="url" class="form-control" name="international_authors_link_evidence_<?php echo $i; ?>" placeholder="https://drive.google.com/..." /></td>
-                            </tr>
+                            <?php for ($i = 1; $i <= 3; $i++) : ?>
+                                <tr>
+                                    <td><?php echo $i; ?></td>
+                                    <td><input type="text" class="form-control" name="kra1_a_international_authors[<?php echo $i; ?>][title]"></td>
+                                    <td><input type="date" class="form-control" name="kra1_a_international_authors[<?php echo $i; ?>][date_published]"></td>
+                                    <td><input type="text" class="form-control" name="kra1_a_international_authors[<?php echo $i; ?>][journal_name]"></td>
+                                    <td><input type="number" class="form-control" name="kra1_a_international_authors[<?php echo $i; ?>][citation_count]"></td>
+                                    <td><input type="text" class="form-control" name="kra1_a_international_authors[<?php echo $i; ?>][citation_index]"></td>
+                                    <td><input type="date" class="form-control" name="kra1_a_international_authors[<?php echo $i; ?>][citation_year]"></td>
+                                    <td><input type="text" class="form-control score-input" name="kra1_a_international_authors[<?php echo $i; ?>][score]" readonly></td>
+                                    <td>
+                                        <button type="button" class="btn btn-success btn-sm upload-evidence-btn" data-subcriterion-id="international_authors_<?php echo $i; ?>">Upload Evidence</button>
+                                        <input type="hidden" name="kra1_a_international_authors[<?php echo $i; ?>][evidence_file]" value="">
+                                    </td>
+                                    <td>
+                                        <button type="button" class="btn btn-success btn-sm view-remarks">View Remarks</button>
+                                    </td>
+                                    <td>
+                                        <button type="button" class="btn btn-danger btn-sm delete-row">Delete</button>
+                                    </td>
+                                </tr>
                             <?php endfor; ?>
                         </tbody>
                     </table>
+                </div>
+                <!-- Add Row Button for International Authors -->
+                <button type="button" class="btn btn-success mt-3 add-international-authors-row" data-table-id="international-authors-table">Add Row</button>
+                <!-- Overall Scores for International Authors -->
+                <div class="mt-4">
+                    <div class="row g-3 justify-content-end">
+                        <div class="col-md-4">
+                            <label for="kra1_a_international_authors_total" class="form-label"><strong>Total Score:</strong></label>
+                            <input type="text" class="form-control" id="kra1_a_international_authors_total" name="kra1_a_international_authors_total" readonly>
+                        </div>
+                    </div>
                 </div>
             </div>
 
@@ -275,97 +424,3 @@
         </div>
     </form>
 </div>
-
-<!-- Delete Confirmation Modal -->
-<div class="modal fade" id="deleteRowModal" tabindex="-1" aria-labelledby="deleteRowModalLabel" aria-hidden="true">
-  <div class="modal-dialog modal-dialog-centered">
-    <div class="modal-content">
-      <div class="modal-header"> 
-        <h5 class="modal-title text-danger" id="deleteRowModalLabel">Confirm Deletion</h5>
-        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-      </div>
-      <div class="modal-body">
-        Are you sure you want to delete this row? This action cannot be undone.
-        </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
-        <button type="button" class="btn btn-danger" id="confirm-delete-row">Delete</button>
-      </div>
-    </div>
-  </div>
-</div>
-
-<!-- Delete Success Modal -->
-<div class="modal fade" id="deleteSuccessModal" tabindex="-1" aria-labelledby="deleteSuccessModalLabel" aria-hidden="true">
-  <div class="modal-dialog modal-dialog-centered">
-    <div class="modal-content">
-      <div class="modal-header bg-success text-white"> 
-        <h5 class="modal-title" id="deleteSuccessModalLabel">Deletion Successful</h5>
-        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-      </div>
-      <div class="modal-body">
-        The row has been successfully deleted.
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-success" data-bs-dismiss="modal">OK</button>
-      </div>
-    </div>
-  </div>
-</div>
-
-<!-- Delete Error Modal -->
-<div class="modal fade" id="deleteErrorModal" tabindex="-1" aria-labelledby="deleteErrorModalLabel" aria-hidden="true">
-  <div class="modal-dialog modal-dialog-centered">
-    <div class="modal-content">
-      <div class="modal-header"> 
-        <h5 class="modal-title text-danger" id="deleteErrorModalLabel">Deletion Failed</h5>
-        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-      </div>
-      <div class="modal-body">
-        <!-- Error message will be injected here -->
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">OK</button>
-      </div>
-    </div>
-  </div>
-</div>
-
-<!-- Save Confirmation Modal -->
-<div class="modal fade" id="saveConfirmationModal" tabindex="-1" aria-labelledby="saveConfirmationModalLabel" aria-hidden="true">
-  <div class="modal-dialog modal-dialog-centered">
-    <div class="modal-content">
-      <div class="modal-header bg-success text-white">
-        <h5 class="modal-title" id="saveConfirmationModalLabel">Save Successful</h5>
-        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
-      </div>
-      <div class="modal-body">
-        Criterion A has been saved successfully!
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-success" data-bs-dismiss="modal">OK</button>
-      </div>
-    </div>
-  </div>
-</div>
-
-<!-- Save Error Modal -->
-<div class="modal fade" id="saveErrorModal" tabindex="-1" aria-labelledby="saveErrorModalLabel" aria-hidden="true">
-  <div class="modal-dialog modal-dialog-centered">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title text-danger" id="saveErrorModalLabel">Save Failed</h5>
-        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-      </div>
-      <div class="modal-body">
-        <!-- Dynamic error message will be inserted here -->
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">OK</button>
-      </div>
-    </div>
-  </div>
-</div>
-
-<!-- Include Criterion A-specific JS -->
-<script src="<?php echo BASE_URL; ?>/php/includes/career_progress_tracking/research/js/criterion_a.js"></script>
