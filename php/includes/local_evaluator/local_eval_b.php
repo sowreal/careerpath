@@ -28,7 +28,6 @@
                                 <th scope="col">Faculty Score</th>
                                 <th scope="col">Evidence</th>
                                 <th scope="col">Remarks</th>
-                                <th scope="col">Actions</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -50,7 +49,7 @@
                                     <td><input type="text" class="form-control" name="kra1_b_sole_authorship[<?php echo $i; ?>][publisher]"></td>
                                     <td><input type="date" class="form-control" name="kra1_b_sole_authorship[<?php echo $i; ?>][date_published]"></td>
                                     <td><input type="date" class="form-control" name="kra1_b_sole_authorship[<?php echo $i; ?>][date_approved]"></td>
-                                    <td><input type="text" class="form-control score-input" name="kra1_b_sole_authorship[<?php echo $i; ?>][score]" readonly></td>
+                                    <td><input type="number" class="form-control score-input" name="kra1_b_sole_authorship[<?php echo $i; ?>][score]"></td>
                                     <td>
                                         <button type="button" class="btn btn-success btn-sm upload-evidence-btn" data-subcriterion-id="sole_authorship_<?php echo $i; ?>">Upload Evidence</button>
                                         <input type="hidden" name="kra1_b_sole_authorship[<?php echo $i; ?>][evidence_file]" value="">
@@ -58,22 +57,19 @@
                                     <td>
                                         <button type="button" class="btn btn-success btn-sm view-remarks">View Remarks</button>
                                     </td>
-                                    <td>
-                                        <button type="button" class="btn btn-danger btn-sm delete-row">Delete</button>
-                                    </td>
                                 </tr>
                             <?php endfor; ?>
                         </tbody>
                     </table>
                 </div>
                 <!-- Add Row Button for Sole Authorship -->
-                <button type="button" class="btn btn-success mt-3 add-sole-authorship-row" data-table-id="sole-authorship-table">Add Row</button>
+                <button type="button" class="btn btn-success mt-3 add-row" data-table-id="sole-authorship-table">Add Row</button>
                 <!-- Overall Scores for Sole Authorship -->
                 <div class="mt-4">
                     <div class="row g-3 justify-content-end">
                         <div class="col-md-4">
                             <label for="kra1_b_sole_authorship_total" class="form-label"><strong>Total Score:</strong></label>
-                            <input type="text" class="form-control" id="kra1_b_sole_authorship_total" name="kra1_b_sole_authorship_total" readonly>
+                            <input type="number" class="form-control" id="kra1_b_sole_authorship_total" name="kra1_b_sole_authorship_total" readonly>
                         </div>
                     </div>
                 </div>
@@ -100,7 +96,6 @@
                                 <th scope="col">Faculty Score</th>
                                 <th scope="col">Evidence</th>
                                 <th scope="col">Remarks</th>
-                                <th scope="col">Actions</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -122,8 +117,8 @@
                                     <td><input type="text" class="form-control" name="kra1_b_co_authorship[<?php echo $i; ?>][publisher]"></td>
                                     <td><input type="date" class="form-control" name="kra1_b_co_authorship[<?php echo $i; ?>][date_published]"></td>
                                     <td><input type="date" class="form-control" name="kra1_b_co_authorship[<?php echo $i; ?>][date_approved]"></td>
-                                    <td><input type="text" class="form-control" name="kra1_b_co_authorship[<?php echo $i; ?>][contribution_percentage]"></td>
-                                    <td><input type="text" class="form-control score-input" name="kra1_b_co_authorship[<?php echo $i; ?>][score]" readonly></td>
+                                    <td><input type="number" step="0.01" class="form-control" name="kra1_b_co_authorship[<?php echo $i; ?>][contribution_percentage]"></td>
+                                    <td><input type="number" class="form-control score-input" name="kra1_b_co_authorship[<?php echo $i; ?>][score]"></td>
                                     <td>
                                         <button type="button" class="btn btn-success btn-sm upload-evidence-btn" data-subcriterion-id="co_authorship_<?php echo $i; ?>">Upload Evidence</button>
                                         <input type="hidden" name="kra1_b_co_authorship[<?php echo $i; ?>][evidence_file]" value="">
@@ -131,22 +126,19 @@
                                     <td>
                                         <button type="button" class="btn btn-success btn-sm view-remarks">View Remarks</button>
                                     </td>
-                                    <td>
-                                        <button type="button" class="btn btn-danger btn-sm delete-row">Delete</button>
-                                    </td>
                                 </tr>
                             <?php endfor; ?>
                         </tbody>
                     </table>
                 </div>
                 <!-- Add Row Button for Co-Authorship -->
-                <button type="button" class="btn btn-success mt-3 add-co-authorship-row" data-table-id="co-authorship-table">Add Row</button>
+                <button type="button" class="btn btn-success mt-3 add-row" data-table-id="co-authorship-table">Add Row</button>
                 <!-- Overall Scores for Co-Authorship -->
                 <div class="mt-4">
                     <div class="row g-3 justify-content-end">
                         <div class="col-md-4">
                             <label for="kra1_b_co_authorship_total" class="form-label"><strong>Total Score:</strong></label>
-                            <input type="text" class="form-control" id="kra1_b_co_authorship_total" name="kra1_b_co_authorship_total" readonly>
+                            <input type="number" class="form-control" id="kra1_b_co_authorship_total" name="kra1_b_co_authorship_total" readonly>
                         </div>
                     </div>
                 </div>
@@ -168,7 +160,6 @@
                                 <th scope="col">Faculty Score</th>
                                 <th scope="col">Evidence</th>
                                 <th scope="col">Remarks</th>
-                                <th scope="col">Actions</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -203,7 +194,7 @@
                                             <option value="Contributor">Contributor</option>
                                         </select>
                                     </td>
-                                    <td><input type="text" class="form-control score-input" name="kra1_b_academic_programs[<?php echo $i; ?>][score]" readonly></td>
+                                    <td><input type="number" class="form-control score-input" name="kra1_b_academic_programs[<?php echo $i; ?>][score]"></td>
                                     <td>
                                         <button type="button" class="btn btn-success btn-sm upload-evidence-btn" data-subcriterion-id="academic_programs_<?php echo $i; ?>">Upload Evidence</button>
                                         <input type="hidden" name="kra1_b_academic_programs[<?php echo $i; ?>][evidence_file]" value="">
@@ -211,22 +202,19 @@
                                     <td>
                                         <button type="button" class="btn btn-success btn-sm view-remarks">View Remarks</button>
                                     </td>
-                                    <td>
-                                        <button type="button" class="btn btn-danger btn-sm delete-row">Delete</button>
-                                    </td>
                                 </tr>
                             <?php endfor; ?>
                         </tbody>
                     </table>
                 </div> 
                 <!-- Add Row Button for Academic Programs -->
-                <button type="button" class="btn btn-success mt-3 add-academic-programs-row" data-table-id="academic-programs-table">Add Row</button>
+                <button type="button" class="btn btn-success mt-3 add-row" data-table-id="academic-programs-table">Add Row</button>
                 <!-- Overall Scores for Academic Programs -->
                 <div class="mt-4">
                     <div class="row g-3 justify-content-end">
                         <div class="col-md-4">
                             <label for="kra1_b_academic_programs_total" class="form-label"><strong>Total Score:</strong></label>
-                            <input type="text" class="form-control" id="kra1_b_academic_programs_total" name="kra1_b_academic_programs_total" readonly>
+                            <input type="number" class="form-control" id="kra1_b_academic_programs_total" name="kra1_b_academic_programs_total" readonly>
                         </div>
                     </div>
                 </div>

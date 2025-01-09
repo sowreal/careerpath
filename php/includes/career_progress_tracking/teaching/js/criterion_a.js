@@ -218,7 +218,7 @@
         const saveBtn = document.getElementById('save-criterion-a');
         const saveErrorModal = new bootstrap.Modal(document.getElementById('saveErrorModal'));
         const messageModal = new bootstrap.Modal(document.getElementById('messageModal')); // For displaying messages
-        const uploadEvidenceModal = new bootstrap.Modal(document.getElementById('uploadEvidenceModal'));
+        const uploadEvidenceModal = new bootstrap.Modal(document.getElementById('uploadEvidenceModalA'));
 
         function showMessage(message) {
             $('#messageModalBody').text(message);
@@ -461,7 +461,7 @@
             $('#first-semester-remark').text(firstSemesterRemark);
             $('#second-semester-remark').text(secondSemesterRemark);
 
-            const remarksModal = new bootstrap.Modal(document.getElementById('remarksModal'));
+            const remarksModal = new bootstrap.Modal(document.getElementById('remarksModalA'));
             remarksModal.show();
         });
         // === REMARKS HANDLER END ===
@@ -520,9 +520,9 @@
         // === CALCULATION END ===
 
         // === ADD ROWS START ===
-        document.querySelectorAll('.add-row').forEach(addBtn => {
+        document.querySelectorAll('#criterion-a-form .add-row').forEach(addBtn => { // Updated selector
             addBtn.addEventListener('click', function() {
-                const tableId = this.getAttribute('data-table-id');
+                const tableId = this.getAttribute('data-table-id'); // Directly get table ID from the button
                 const tableBody = document.querySelector(`#${tableId} tbody`);
                 const requestId = document.getElementById('request_id').value.trim();
 

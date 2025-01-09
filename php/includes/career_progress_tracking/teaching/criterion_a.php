@@ -74,10 +74,10 @@
                                         <input type="text" class="form-control" name="student_evaluation_period[]" value="<?php echo htmlspecialchars($period); ?>">
                                     </td>
                                     <td>
-                                        <input type="number" class="form-control rating-input" name="student_rating_1[]" placeholder="0.00" required>
+                                        <input type="text" class="form-control rating-input" name="student_rating_1[]" placeholder="0.00" required>
                                     </td>
                                     <td>
-                                        <input type="number" class="form-control rating-input" name="student_rating_2[]" placeholder="0.00" required>
+                                        <input type="text" class="form-control rating-input" name="student_rating_2[]" placeholder="0.00" required>
                                     </td>
                                     <td>
                                         <button type="button" class="btn btn-success btn-sm upload-evidence-btn" 
@@ -114,11 +114,11 @@
                     <div class="row g-3 justify-content-end">
                         <div class="col-md-4">
                             <label for="student_overall_score" class="form-label"><strong>Overall Average Rating:</strong></label>
-                            <input type="number" class="form-control" id="student_overall_score" name="student_overall_score" readonly>
+                            <input type="text" class="form-control" id="student_overall_score" name="student_overall_score" readonly>
                         </div>
                         <div class="col-md-4">
                             <label for="student_faculty_overall_score" class="form-label"><strong>Faculty Score:</strong></label>
-                            <input type="number" class="form-control" id="student_faculty_overall_score" name="student_faculty_overall_score" readonly>
+                            <input type="text" class="form-control" id="student_faculty_overall_score" name="student_faculty_overall_score" readonly>
                         </div>
                     </div>
                 </div>
@@ -177,10 +177,10 @@
                                             <input type="text" class="form-control" name="supervisor_evaluation_period[]" value="<?php echo htmlspecialchars($period); ?>">
                                         </td>
                                         <td>
-                                            <input type="number" class="form-control rating-input" name="supervisor_rating_1[]" placeholder="0.00" required>
+                                            <input type="text" class="form-control rating-input" name="supervisor_rating_1[]" placeholder="0.00" required>
                                         </td>
                                         <td>
-                                            <input type="number" class="form-control rating-input" name="supervisor_rating_2[]" placeholder="0.00" required>
+                                            <input type="text" class="form-control rating-input" name="supervisor_rating_2[]" placeholder="0.00" required>
                                         </td>
                                         <td>
                                             <button type="button" class="btn btn-success btn-sm upload-evidence-btn" 
@@ -217,11 +217,11 @@
                     <div class="row g-3 justify-content-end">
                         <div class="col-md-4">
                             <label for="supervisor-overall-score" class="form-label"><strong>Overall Average Rating:</strong></label>
-                            <input type="number" class="form-control" id="supervisor-overall-score" name="supervisor-overall-score" readonly>
+                            <input type="text" class="form-control" id="supervisor-overall-score" name="supervisor-overall-score" readonly>
                         </div>
                         <div class="col-md-4">
                             <label for="supervisor-faculty-overall-score" class="form-label"><strong>Faculty Score:</strong></label>
-                            <input type="number" class="form-control" id="supervisor-faculty-overall-score" name="supervisor-faculty-overall-score" readonly>
+                            <input type="text" class="form-control" id="supervisor-faculty-overall-score" name="supervisor-faculty-overall-score" readonly>
                         </div>
                     </div>
                 </div>
@@ -233,95 +233,4 @@
             <button type="button" class="btn btn-success" id="save-criterion-a">Save Criterion A</button>
         </div>
     </form>
-</div>
-
-<!-- Delete Row Confirmation Modal -->
-<div class="modal fade" id="deleteRowModal" tabindex="-1" aria-labelledby="deleteRowModalLabel" aria-hidden="true">
-  <div class="modal-dialog modal-dialog-centered">
-    <div class="modal-content">
-      <div class="modal-header"> 
-        <h5 class="modal-title text-danger" id="deleteRowModalLabel">Confirm Deletion</h5>
-        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-      </div>
-      <div class="modal-body">
-        Are you sure you want to delete this row? This action cannot be undone.
-        </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
-        <button type="button" class="btn btn-danger" id="confirm-delete-row">Delete</button>
-      </div>
-    </div>
-  </div>
-</div>
-
-<!-- Delete Success Modal -->
-<div class="modal fade" id="deleteSuccessModal" tabindex="-1" aria-labelledby="deleteSuccessModalLabel" aria-hidden="true">
-  <div class="modal-dialog modal-dialog-centered">
-    <div class="modal-content">
-      <div class="modal-header bg-success text-white"> 
-        <h5 class="modal-title" id="deleteSuccessModalLabel">Deletion Successful</h5>
-        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-      </div>
-      <div class="modal-body">
-        The row has been successfully deleted.
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-success" data-bs-dismiss="modal">OK</button>
-      </div>
-    </div>
-  </div>
-</div>
-
-<!-- Delete Error Modal -->
-<div class="modal fade" id="deleteErrorModal" tabindex="-1" aria-labelledby="deleteErrorModalLabel" aria-hidden="true">
-  <div class="modal-dialog modal-dialog-centered">
-    <div class="modal-content">
-      <div class="modal-header"> 
-        <h5 class="modal-title text-danger" id="deleteErrorModalLabel">Deletion Failed</h5>
-        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-      </div>
-      <div class="modal-body">
-        <!-- Error message will be injected here -->
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">OK</button>
-      </div>
-    </div>
-  </div>
-</div>
-
-<!-- Save Confirmation Modal -->
-<div class="modal fade" id="saveConfirmationModal" tabindex="-1" aria-labelledby="saveConfirmationModalLabel" aria-hidden="true">
-  <div class="modal-dialog modal-dialog-centered">
-    <div class="modal-content">
-      <div class="modal-header bg-success text-white">
-        <h5 class="modal-title" id="saveConfirmationModalLabel">Save Successful</h5>
-        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
-      </div>
-      <div class="modal-body">
-        Criterion A has been saved successfully!
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-success" data-bs-dismiss="modal">OK</button>
-      </div>
-    </div>
-  </div>
-</div>
-
-<!-- Save Error Modal -->
-<div class="modal fade" id="saveErrorModal" tabindex="-1" aria-labelledby="saveErrorModalLabel" aria-hidden="true">
-  <div class="modal-dialog modal-dialog-centered">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title text-danger" id="saveErrorModalLabel">Save Failed</h5>
-        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-      </div>
-      <div class="modal-body">
-        <!-- Dynamic error message will be inserted here -->
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">OK</button>
-      </div>
-    </div>
-  </div>
 </div>

@@ -45,7 +45,7 @@ document.addEventListener('DOMContentLoaded', function () {
             // Update the header
             document.getElementById('evaluation-number').textContent = `Evaluation #: ${requestId}`;
 
-            // Set the input field value
+            // Set the input field value for Criterion A
             const requestIdInput = document.getElementById('request_id');
             if (requestIdInput) {
                 requestIdInput.value = requestId;
@@ -54,11 +54,43 @@ document.addEventListener('DOMContentLoaded', function () {
                 console.error('Input field with id "request_id" not found.');
             }
 
-            // Fetch data for the selected evaluation by calling CriterionA's fetch function
+            // Set the input field value for Criterion B
+            const requestIdInputB = document.getElementById('request_id_b');
+            if (requestIdInputB) {
+                requestIdInputB.value = requestId;
+                console.log('request_id_b set to:', requestId);
+            } else {
+                console.error('Input field with id "request_id_b" not found.');
+            }
+
+             // Set the input field value for Criterion C
+            const requestIdInputC = document.getElementById('request_id_c');
+            if (requestIdInputC) {
+                requestIdInputC.value = requestId;
+                console.log('request_id_c set to:', requestId);
+            } else {
+                console.error('Input field with id "request_id_c" not found.');
+            }
+
+            // Fetch data for the selected evaluation for Criterion A
             if (window.CriterionA && typeof CriterionA.fetchCriterionA === 'function') {
                 CriterionA.fetchCriterionA(requestId);
             } else {
                 console.error('CriterionA.fetchCriterionA function is not defined.');
+            }
+
+            // Fetch data for the selected evaluation for Criterion B
+            if (window.CriterionB && typeof CriterionB.fetchCriterionB === 'function') {
+                CriterionB.fetchCriterionB(requestId);
+            } else {
+                console.error('CriterionB.fetchCriterionB function is not defined.');
+            }
+
+            // Fetch data for the selected evaluation for Criterion C
+            if (window.CriterionC && typeof CriterionC.fetchCriterionC === 'function') {
+                CriterionC.fetchCriterionC(requestId);
+            } else {
+                console.error('CriterionC.fetchCriterionC function is not defined.');
             }
 
             // Hide the modal
@@ -119,3 +151,24 @@ document.addEventListener('DOMContentLoaded', function () {
         });
     }
 });
+
+// Ensures Only One Modal is Open at a Time
+function showModal(modalId) {
+    // Hide any currently shown modals
+    const currentlyOpenModals = document.querySelectorAll('.modal.show');
+    currentlyOpenModals.forEach(modal => {
+        const modalInstance = bootstrap.Modal.getInstance(modal);
+        if (modalInstance) {
+            modalInstance.hide();
+        }
+    });
+    
+    // Show the desired modal
+    const modalElement = document.getElementById(modalId);
+    if (modalElement) {
+        const modalInstance = new bootstrap.Modal(modalElement);
+        modalInstance.show();
+    } else {
+        console.error(`Modal with ID "${modalId}" not found.`);
+    }
+}

@@ -106,3 +106,4 @@ window.submitForm = function () {
   // Form submission logic here
   alert("Form submitted!");
 };
+

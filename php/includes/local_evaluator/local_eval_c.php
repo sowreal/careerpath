@@ -27,9 +27,8 @@
                                     <th scope="col">AY 2021-2022</th>
                                     <th scope="col">AY 2022-2023</th>
                                     <th scope="col">Faculty Score</th>
-                                    <th scope="col">Link to Evidence</th>
+                                    <th scope="col">Evidence</th>
                                     <th scope="col">Remarks</th>
-                                    <th scope="col">Actions</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -40,17 +39,16 @@
                                         <td><?php echo $index + 1; ?></td>
                                         <td><?php echo $requirement; ?></td>
                                         <?php for ($year = 2019; $year <= 2022; $year++): ?>
-                                            <td><input type="text" class="form-control" name="kra1_c_adviser[<?php echo $index; ?>][ay_<?php echo $year; ?>]" placeholder="0"></td>
+                                            <td><input type="number" class="form-control" name="kra1_c_adviser[<?php echo $index; ?>][ay_<?php echo $year; ?>]" step="1" min="0" value="0"></td>
                                         <?php endfor; ?>
-                                        <td><input type="text" class="form-control score-input" name="kra1_c_adviser[<?php echo $index; ?>][score]" placeholder="0" readonly></td>
+                                        <td><input type="number" class="form-control score-input" name="kra1_c_adviser[<?php echo $index; ?>][score]" step="0.01" min="0" value="0.00"></td>
                                         <td>
-                                            <input type="text" class="form-control evidence-link" name="kra1_c_adviser[<?php echo $index; ?>][evidence_link]" placeholder="Link to Evidence">
-                                        </td>
+                                            <button type="button" class="btn btn-success btn-sm upload-evidence-btn" data-subcriterion-id="adviser_<?php echo $index; ?>">Upload Evidence</button>
+                                            <input type="hidden" name="kra1_c_adviser[<?php echo $index; ?>][evidence_file]" value="">
                                         </td>
                                         <td>
-                                            <button type="button" class="btn btn-success btn-sm view-remarks-c">View Remarks</button>
+                                            <button type="button" class="btn btn-success btn-sm view-remarks">View Remarks</button>
                                         </td>
-                                        <td><button type="button" class="btn btn-danger btn-sm delete-row">Delete</button></td>
                                     </tr>
                                 <?php endforeach; ?>
                             </tbody>
@@ -62,7 +60,7 @@
                         <div class="row g-3 justify-content-end">
                             <div class="col-md-4">
                                 <label for="kra1_c_adviser_total" class="form-label"><strong>Total Score:</strong></label>
-                                <input type="text" class="form-control" id="kra1_c_adviser_total" name="kra1_c_adviser_total" readonly>
+                                <input type="number" class="form-control" id="kra1_c_adviser_total" name="kra1_c_adviser_total" readonly>
                             </div>
                         </div>
                     </div>
@@ -82,9 +80,8 @@
                                     <th scope="col">AY 2021-2022</th>
                                     <th scope="col">AY 2022-2023</th>
                                     <th scope="col">Faculty Score</th>
-                                    <th scope="col">Link to Evidence</th>
+                                    <th scope="col">Evidence</th>
                                     <th scope="col">Remarks</th>
-                                    <th scope="col">Actions</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -95,16 +92,16 @@
                                         <td><?php echo $index + 1; ?></td>
                                         <td><?php echo $requirement; ?></td>
                                         <?php for ($year = 2019; $year <= 2022; $year++): ?>
-                                            <td><input type="text" class="form-control" name="kra1_c_panel[<?php echo $index; ?>][ay_<?php echo $year; ?>]" placeholder="0"></td>
+                                            <td><input type="number" class="form-control" name="kra1_c_panel[<?php echo $index; ?>][ay_<?php echo $year; ?>]" step="1" min="0" value="0"></td>
                                         <?php endfor; ?>
-                                        <td><input type="text" class="form-control score-input" name="kra1_c_panel[<?php echo $index; ?>][score]" placeholder="0" readonly></td>
+                                        <td><input type="number" class="form-control score-input" name="kra1_c_panel[<?php echo $index; ?>][score]" step="0.01" min="0" value="0.00"></td>
                                         <td>
-                                            <input type="text" class="form-control evidence-link" name="kra1_c_panel[<?php echo $index; ?>][evidence_link]" placeholder="Link to Evidence">
+                                            <button type="button" class="btn btn-success btn-sm upload-evidence-btn" data-subcriterion-id="panel_<?php echo $index; ?>">Upload Evidence</button>
+                                            <input type="hidden" name="kra1_c_panel[<?php echo $index; ?>][evidence_file]" value="">
                                         </td>
                                         <td>
-                                            <button type="button" class="btn btn-success btn-sm view-remarks-c">View Remarks</button>
+                                            <button type="button" class="btn btn-success btn-sm view-remarks">View Remarks</button>
                                         </td>
-                                        <td><button type="button" class="btn btn-danger btn-sm delete-row">Delete</button></td>
                                     </tr>
                                 <?php endforeach; ?>
                             </tbody>
@@ -116,7 +113,7 @@
                         <div class="row g-3 justify-content-end">
                             <div class="col-md-4">
                                 <label for="kra1_c_panel_total" class="form-label"><strong>Total Score:</strong></label>
-                                <input type="text" class="form-control" id="kra1_c_panel_total" name="kra1_c_panel_total" readonly>
+                                <input type="number" class="form-control" id="kra1_c_panel_total" name="kra1_c_panel_total" readonly>
                             </div>
                         </div>
                     </div>
@@ -136,27 +133,26 @@
                                 <th scope="col">Award Received</th>
                                 <th scope="col">Date Awarded (mm/dd/yyyy)</th>
                                 <th scope="col">Faculty Score</th>
-                                <th scope="col">Link to Evidence</th>
+                                <th scope="col">Evidence</th>
                                 <th scope="col">Remarks</th>
-                                <th scope="col">Actions</th>
                             </tr>
                         </thead>
                         <tbody>
                             <?php for ($i = 1; $i <= 3; $i++): ?>
                                 <tr>
                                     <td><?php echo $i; ?></td>
-                                    <td><input type="text" class="form-control" name="kra1_c_mentor[<?php echo $i; ?>][competition]"></td>
-                                    <td><input type="text" class="form-control" name="kra1_c_mentor[<?php echo $i; ?>][organization]"></td>
-                                    <td><input type="text" class="form-control" name="kra1_c_mentor[<?php echo $i; ?>][award]"></td>
-                                    <td><input type="date" class="form-control" name="kra1_c_mentor[<?php echo $i; ?>][date_awarded]"></td>
-                                    <td><input type="text" class="form-control score-input" name="kra1_c_mentor[<?php echo $i; ?>][score]" placeholder="0" readonly></td>
+                                    <td><input type="text" class="form-control" name="kra1_c_mentor[<?php echo $i; ?>][competition]" required></td>
+                                    <td><input type="text" class="form-control" name="kra1_c_mentor[<?php echo $i; ?>][organization]" required></td>
+                                    <td><input type="text" class="form-control" name="kra1_c_mentor[<?php echo $i; ?>][award]" required></td>
+                                    <td><input type="date" class="form-control" name="kra1_c_mentor[<?php echo $i; ?>][date_awarded]" required></td>
+                                    <td><input type="number" class="form-control score-input" name="kra1_c_mentor[<?php echo $i; ?>][score]" step="0.01" min="0" value="0.00" required></td>
                                     <td>
-                                        <input type="text" class="form-control evidence-link" name="kra1_c_mentor[<?php echo $i; ?>][evidence_link]" placeholder="Link to Evidence">
+                                        <button type="button" class="btn btn-success btn-sm upload-evidence-btn" data-subcriterion-id="mentor_<?php echo $i; ?>">Upload Evidence</button>
+                                        <input type="hidden" name="kra1_c_mentor[<?php echo $i; ?>][evidence_file]" value="">
                                     </td>
                                     <td>
-                                        <button type="button" class="btn btn-success btn-sm view-remarks-c">View Remarks</button>
+                                        <button type="button" class="btn btn-success btn-sm view-remarks">View Remarks</button>
                                     </td>
-                                    <td><button type="button" class="btn btn-danger btn-sm delete-row">Delete</button></td>
                                 </tr>
                             <?php endfor; ?>
                         </tbody>
@@ -168,7 +164,7 @@
                     <div class="row g-3 justify-content-end">
                         <div class="col-md-4">
                             <label for="kra1_c_mentor_total" class="form-label"><strong>Total Score:</strong></label>
-                            <input type="text" class="form-control" id="kra1_c_mentor_total" name="kra1_c_mentor_total" readonly>
+                            <input type="number" class="form-control" id="kra1_c_mentor_total" name="kra1_c_mentor_total" readonly>
                         </div>
                     </div>
                 </div>

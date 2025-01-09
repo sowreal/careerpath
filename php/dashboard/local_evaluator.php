@@ -1,19 +1,22 @@
 <?php
-include '../session.php'; 
-include '../connection.php'; 
+require_once '../session.php';
+require_once '../connection.php';
 require_once '../config.php';
 
 // Define variables for Page Titles and Sidebar Active effects
-$pageTitle = 'Career Path | Faculty Profiles';
-$activePage = 'Faculty Management';
+$pageTitle = 'Career Path | Local Evaluator';
+$activePage = 'LocalEvaluatorTools';
 
-// Check user role
-if ($_SESSION['role'] != 'Human Resources') {
-    // Check if the user is a Faculty Member
-    if ($_SESSION['role'] != 'Regular Instructor' && $_SESSION['role'] != 'Contract of Service Instructor') {
+// Check if the user is a Faculty Member
+if ($_SESSION['role'] != 'Regular Instructor' && $_SESSION['role'] != 'Contract of Service Instructor') {
+    // Check if the user is Human Resources
+    if ($_SESSION['role'] != 'Human Resources') {
         // **Start of Session Destruction**
+        // Unset all session variables
         $_SESSION = array();
 
+        // Kill the session, also delete the session cookie.
+        // Note: This will destroy the session, and not just the session data
         if (ini_get("session.use_cookies")) {
             $params = session_get_cookie_params();
             setcookie(session_name(), '', time() - 42000,
@@ -21,6 +24,7 @@ if ($_SESSION['role'] != 'Human Resources') {
                 $params["secure"], $params["httponly"]
             );
         }
+        // Finally, destroy the session.
         session_destroy();
         // **End of Session Destruction**
 
@@ -31,9 +35,8 @@ if ($_SESSION['role'] != 'Human Resources') {
               </script>";
         exit();
     }
-    // If the user is a Faculty Member, they should not access HR's Faculty Management
-    // Redirect them to their own Profile Management page
-    header('Location: ../dashboard/profile_management.php'); // Adjust if necessary
+    // If the user is part of Human Resources, redirect to their dashboard
+    header('Location: ../dashboard_HR/dashboard_HR.php'); // Redirect to HR dashboard if not a faculty member
     exit();
 }
 
@@ -135,33 +138,27 @@ function build_pagination_link($page, $search, $department, $faculty_rank) {
 }
 ?>
 
-
-
 <!DOCTYPE html>
-<html lang="en"> <!--begin::Head-->
-
+<html lang="en">
 <head>
-    <?php require_once BASE_PATH . '/php/includes/header.php';?>
-    <style>
-        #profileChangeRequestsTable tbody tr:hover {
-            background-color: #f5f5f5;
-            cursor: pointer;
-        }
-    </style>
+    <?php require_once BASE_PATH . '/php/includes/header.php'; ?>
+    <!-- Pass user ID to JavaScript -->
+    <script>
+        const userId = <?php echo json_encode($_SESSION['user_id']); ?>;
+    </script>
 </head>
 
 <body class="layout-fixed sidebar-expand-lg bg-body-tertiary"> <!--begin::App Wrapper-->
     <div class="app-wrapper"> 
         <!--begin::Header-->
-        <?php require_once BASE_PATH . '/php/includes/navbar.php';?>
+        <?php require_once BASE_PATH . '/php/includes/navbar.php'; ?>
         <!--end::Header--> 
         
         <!--begin::Sidebar-->
-        <?php require_once BASE_PATH . '/php/includes/sidebar_HR.php';?>
+        <?php require_once BASE_PATH . '/php/includes/sidebar_faculty.php'; ?> 
         <!--end::Sidebar--> 
-        
+
         <!--begin::App Main-->
-        <!-- Main Content -->
         <main class="app-main">
             <!-- Faculty Management Section-->
             <div class="container-fluid">
@@ -457,26 +454,29 @@ function build_pagination_link($page, $search, $department, $faculty_rank) {
 
 
             <!-- Logs Modal -->
-            
-
         </main>
+        <!--end::App Main-->
 
-                <!--end::App Main--> 
-                
-                <!--begin::Footer-->
-                <?php require_once BASE_PATH . '/php/includes/footer.php'; ?>
-                <!--end::Footer-->
+        <!--begin::Footer-->   
+            <?php require_once BASE_PATH . '/php/includes/footer.php'; ?> 
+        <!--end::Footer-->
     </div> 
-        <!--end::App Wrapper--> 
-        
-        
-        <!--begin::Script--> 
-        <!--begin::Third Party Plugin(OverlayScrollbars)-->
-        <?php require_once BASE_PATH . '/php/includes/dashboard_default_scripts.php';?>
-        
+    <!--end::App Wrapper--> 
+
+    <!--begin::Script--> 
+    <?php require_once BASE_PATH . '/php/includes/dashboard_default_scripts.php'; ?> 
+
+    <!-- Script Links for Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+    
+    <!-- Career Progress Teaching Scripts -->
+    <script src="<?php echo BASE_URL; ?>/php/includes/career_progress_tracking/teaching/js/teaching.js"></script>
+    <!-- Include Criterion A-specific JS -->
+    <script src="<?php echo BASE_URL; ?>/php/includes/career_progress_tracking/teaching/js/criterion_a.js"></script>
+    <!-- Local eval scripts -->
 
     <!-- Faculty Management Section -->
     <script src="<?php echo BASE_URL; ?>/php/dashboard_HR/js/faculty_management.js"></script>
-
-    </body><!--end::Body-->
+</body>
 </html>
