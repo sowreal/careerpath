@@ -1,3 +1,4 @@
+// careerpath/php/includes/career_progress_tracking/teaching/criterion_a.js
 // Encapsulate Criterion A logic in a namespace to avoid conflicts.
 (function (window, document, $) {
     'use strict';

@@ -72,7 +72,7 @@ if ($_SESSION['role'] != 'Regular Instructor' && $_SESSION['role'] != 'Contract 
                             <div class="col-sm-6 mb-5">
                                 <!-- Change Evaluation Number dynamically-->
                                 <h3 class="mb-2"><strong>KRA II:</strong> Research, Innovation, and Creative Work<br></h3>
-                                <h4 class="mb-0"><span id="evaluation-number">Evaluation #: <small><i class="text-danger">Please select evaluation number.</i></small></span></h4>
+                                <h4 class="mb-0"><span id="evaluation-number-research">Evaluation #: <small><i class="text-danger">Please select evaluation number.</i></small></span></h4>
                             </div>
                             <div class="col-sm-6 pe-4 mt-4">
                                 <div class="d-flex justify-content-end">
@@ -130,7 +130,7 @@ if ($_SESSION['role'] != 'Regular Instructor' && $_SESSION['role'] != 'Contract 
                 </div>
 
                 <!-- MODAL SECTION -->
-                <?php // require_once BASE_PATH . '/php/includes/career_progress_tracking/research/modals.php'; ?>
+                <?php require_once BASE_PATH . '/php/includes/career_progress_tracking/research/kra2_modals.php'; ?>
 
             </div>
         </main>
@@ -153,7 +153,7 @@ if ($_SESSION['role'] != 'Regular Instructor' && $_SESSION['role'] != 'Contract 
     <!-- Career Progress Research Scripts -->
     
     <!-- Include Criterion A-specific JS -->
-    <script src="<?php echo BASE_URL; ?>/php/includes/career_progress_tracking/research/js/criterion_a.js"></script>
+    <script src="<?php echo BASE_URL; ?>/php/includes/career_progress_tracking/research/js/kra2_criterion_a.js"></script>
     <!-- Include Criterion B-specific JS (Corrected Path) -->
     <!-- <script src="<?php echo BASE_URL; ?>/php/includes/career_progress_tracking/research/js/criterion_b.js"></script> -->
     <!-- Include Criterion C-specific JS -->

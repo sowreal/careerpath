@@ -1,4 +1,5 @@
 <?php
+// php/includes/career_progress_tracking/research/fetch_kra2_evaluations.php
 session_start();
 include '../../../connection.php';
 
@@ -23,7 +24,9 @@ try {
         $request_id = $row['request_id'];
         $created_at = $row['created_at'];
 
-        $evaluation_number = $created_at . '_' . $user_id . '_' . $request_id;
+        // Format the evaluation number and date
+        $formatted_date = date("F j, Y, g:i a", strtotime($created_at)); // Adjust date format as needed
+        $evaluation_number = "Evaluation #: " . $request_id . " (Created: " . $formatted_date . ")";
 
         $evaluations[] = [
             'request_id' => $request_id,

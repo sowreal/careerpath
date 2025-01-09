@@ -1,4 +1,4 @@
-<!-- criterion_c.php (KRA 2) -->
+<!-- careerpath/php/includes/career_progress_tracking/research/criterion_c.php -->
 <div class="tab-pane fade" id="criterion-c" role="tabpanel" aria-labelledby="tab-criterion-c">
     <h4 class="mb-4 pb-2 border-bottom border-3 border-success">
         <strong>CRITERION C: Creative Works (Max = 100 Points)</strong>

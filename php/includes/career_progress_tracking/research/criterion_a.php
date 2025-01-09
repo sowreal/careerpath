@@ -1,4 +1,4 @@
-<!-- careerpath/php/includes/career_progress_tracking/teaching/criterion_a.php -->
+<!-- careerpath/php/includes/career_progress_tracking/research/criterion_a.php -->
 <div class="tab-pane fade show active criterion-tab" id="criterion-a" role="tabpanel" aria-labelledby="tab-criterion-a">
     <h4 class="mb-4 pb-2 border-bottom border-3 border-success">
         <strong>CRITERION A - RESEARCH OUTPUTS (MAX = 100 POINTS)</strong>

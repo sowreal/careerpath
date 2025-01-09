@@ -1,3 +1,4 @@
+// careerpath/php/includes/career_progress_tracking/teaching/criterion_c.js
 // Encapsulate Criterion C logic in a namespace to avoid conflicts.
 (function (window, document, $) {
     'use strict';
