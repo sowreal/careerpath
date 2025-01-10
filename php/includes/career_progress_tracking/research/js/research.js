@@ -3,16 +3,19 @@ document.addEventListener('DOMContentLoaded', function () {
     // --- Evaluation Selection Handler ---
     document.getElementById('select-evaluation-btn').addEventListener('click', function () {
         const modalBody = document.querySelector('#evaluationModal .modal-body');
-        modalBody.innerHTML = '<p>Loading evaluations...</p>'; // Show loading message
+        
+        // Clear previous content and show loading message
+        modalBody.innerHTML = '<p>Loading evaluations...</p>'; 
 
         // Fetch evaluations via AJAX
-        fetch('../../includes/career_progress_tracking/research/fetch_kra2_evaluations.php', { method: 'POST' })
+        fetch('../../includes/career_progress_tracking/research/kra2_fetch_evaluations.php', { method: 'POST' })
         .then(response => {
             if (!response.ok) throw new Error('Failed to fetch evaluations');
             return response.json();
         })
         .then(data => {
             if (data.length > 0) {
+                // Dynamically create radio buttons for each evaluation
                 modalBody.innerHTML = data.map(evalItem => {
                     const createdDate = new Date(evalItem.created_at);
                     const options = { year: 'numeric', month: 'short', day: 'numeric', hour: 'numeric', minute: 'numeric' };
@@ -28,6 +31,7 @@ document.addEventListener('DOMContentLoaded', function () {
                         </div>`;
                 }).join('');
             } else {
+                // No evaluations found message with a link
                 modalBody.innerHTML = '<p>No evaluations found.</p><p>Click <a href="career_progress_request.php">HERE</a> to create a new one.</p>';
             }
         })
@@ -55,57 +59,27 @@ document.addEventListener('DOMContentLoaded', function () {
                 console.error('Input field with id "request_id" not found.');
             }
 
-            // Set the input field value for Criterion B
-            // const requestIdInputB = document.getElementById('request_id_b');
-            // if (requestIdInputB) {
-            //     requestIdInputB.value = requestId;
-            //     console.log('request_id_b set to:', requestId);
-            // } else {
-            //     console.error('Input field with id "request_id_b" not found.');
-            // }
-
-            // Set the input field value for Criterion C
-            // const requestIdInputC = document.getElementById('request_id_c');
-            // if (requestIdInputC) {
-            //     requestIdInputC.value = requestId;
-            //     console.log('request_id_c set to:', requestId);
-            // } else {
-            //     console.error('Input field with id "request_id_c" not found.');
-            // }
-
             // Fetch data for the selected evaluation for Criterion A
-            // if (window.KRA2CriterionA && typeof KRA2CriterionA.fetchCriterionA === 'function') {
-            //     KRA2CriterionA.fetchCriterionA(requestId);
-            // } else {
-            //     console.error('KRA2CriterionA.fetchCriterionA function is not defined.');
-            // }
-
-            // Fetch data for the selected evaluation for Criterion B
-            // if (window.KRA2CriterionB && typeof KRA2CriterionB.fetchCriterionB === 'function') {
-            //     KRA2CriterionB.fetchCriterionB(requestId);
-            // } else {
-            //     console.error('KRA2CriterionB.fetchCriterionB function is not defined.');
-            // }
-
-            // Fetch data for the selected evaluation for Criterion C
-            // if (window.KRA2CriterionC && typeof KRA2CriterionC.fetchCriterionC === 'function') {
-            //     KRA2CriterionC.fetchCriterionC(requestId);
-            // } else {
-            //     console.error('KRA2CriterionC.fetchCriterionC function is not defined.');
-            // }
+            if (window.CriterionA && typeof CriterionA.fetchCriterionA === 'function') {
+                CriterionA.fetchCriterionA(requestId);
+            } else {
+                console.error('CriterionA.fetchCriterionA function is not defined.');
+            }
 
             // Hide the modal
             const evaluationModal = bootstrap.Modal.getInstance(document.getElementById('evaluationModal'));
             evaluationModal.hide();
+
         } else {
-            // Show error modal
-            const errorModal = new bootstrap.Modal(document.getElementById('messageModal'));
+            // Show error modal using Bootstrap's modal API
+            var messageModal = new bootstrap.Modal(document.getElementById('messageModal'));
             document.getElementById('messageModalLabel').textContent = 'Selection Failed';
             document.querySelector('#messageModal .modal-body').textContent = 'Please select an evaluation.';
-            errorModal.show();
+            messageModal.show();
         }
     });
-    // JavaScript for tabs styling
+
+    // JavaScript for tabs styling (if needed)
     const tabs = document.querySelectorAll('#kra-tabs .nav-link');
     if (tabs.length > 0) {
         tabs.forEach(tab => {
