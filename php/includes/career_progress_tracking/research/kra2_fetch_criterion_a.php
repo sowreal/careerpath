@@ -1,54 +1,68 @@
 <?php
-require_once '../../../connection.php';
+// careerpath/php/includes/career_progress_tracking/research/kra2_fetch_criterion_a.php
+header('Content-Type: application/json');
 
-if (isset($_GET['request_id'])) {
-    $request_id = $_GET['request_id'];
+try {
+    require_once '../../../connection.php'; // Adjust the path as needed
 
-    // Fetch Sole Authorship Data
+    // Get request_id
+    $request_id = isset($_GET['request_id']) ? intval($_GET['request_id']) :
+        (isset($_POST['request_id']) ? intval($_POST['request_id']) : 0);
+
+    if ($request_id <= 0) {
+        throw new Exception("Invalid request ID.");
+    }
+
+    // 1) Fetch Sole Authorship
     $stmt = $conn->prepare("SELECT * FROM kra2_a_sole_authorship WHERE request_id = ?");
     $stmt->execute([$request_id]);
     $sole_authorship = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
-    // Fetch Co-Authorship Data
+    // 2) Fetch Co-Authorship (Add when implementing)
     $stmt = $conn->prepare("SELECT * FROM kra2_a_co_authorship WHERE request_id = ?");
     $stmt->execute([$request_id]);
     $co_authorship = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
-    // Fetch Lead Researcher Data
+    // 3) Fetch Lead Researcher (Add when implementing)
     $stmt = $conn->prepare("SELECT * FROM kra2_a_lead_researcher WHERE request_id = ?");
     $stmt->execute([$request_id]);
     $lead_researcher = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
-    // Fetch Contributor Data
+    // 4) Fetch Contributor (Add when implementing)
     $stmt = $conn->prepare("SELECT * FROM kra2_a_contributor WHERE request_id = ?");
     $stmt->execute([$request_id]);
     $contributor = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
-    // Fetch Local Authors Data
+    // 5) Fetch Local Authors (Add when implementing)
     $stmt = $conn->prepare("SELECT * FROM kra2_a_local_authors WHERE request_id = ?");
     $stmt->execute([$request_id]);
     $local_authors = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
-    // Fetch International Authors Data
+    // 6) Fetch International Authors (Add when implementing)
     $stmt = $conn->prepare("SELECT * FROM kra2_a_international_authors WHERE request_id = ?");
     $stmt->execute([$request_id]);
     $international_authors = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
-    // Fetch Metadata
+    // 7) Fetch Metadata (scores)
     $stmt = $conn->prepare("SELECT * FROM kra2_a_metadata WHERE request_id = ?");
     $stmt->execute([$request_id]);
     $metadata = $stmt->fetch(PDO::FETCH_ASSOC);
 
     echo json_encode([
-        'sole_authorship' => $sole_authorship,
-        'co_authorship' => $co_authorship,
-        'lead_researcher' => $lead_researcher,
-        'contributor' => $contributor,
-        'local_authors' => $local_authors,
-        'international_authors' => $international_authors,
-        'metadata' => $metadata
+        'success' => true,
+        'sole_authorship'    => $sole_authorship,
+        'co_authorship'      => $co_authorship, // Will be populated later
+        'lead_researcher'    => $lead_researcher, // Will be populated later
+        'contributor'        => $contributor, // Will be populated later
+        'local_authors'      => $local_authors, // Will be populated later
+        'international_authors' => $international_authors, // Will be populated later
+        'metadata'           => $metadata
     ]);
-} else {
-    echo json_encode(['error' => 'Request ID not provided']);
+
+} catch (Exception $e) {
+    echo json_encode([
+        'success' => false,
+        'error' => $e->getMessage()
+    ]);
 }
 ?>

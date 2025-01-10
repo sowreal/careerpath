@@ -1,73 +1,111 @@
-<!-- php/includes/career_progress_tracking/research/kra2_upload_evidence_criterion_a.php -->
 <?php
+// careerpath/php/includes/career_progress_tracking/research/kra2_upload_evidence_criterion_a.php
+header('Content-Type: application/json');
+require_once '../../../session.php';
 require_once '../../../connection.php';
 require_once '../../../config.php';
 
-if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_FILES['evidence_file'])) {
-    $request_id = $_POST['request_id'];
-    $table = $_POST['table']; // e.g., 'kra2_a_sole_authorship'
-    $row_id = $_POST['row_id']; // Primary key value of the row
-    $file = $_FILES['evidence_file'];
+if (!isset($_SESSION['user_id'])) {
+    echo json_encode(['success' => false, 'error' => 'Unauthorized']);
+    exit;
+}
 
-    // Determine the primary key column name based on the table
-    switch ($table) {
-        case 'kra2_a_sole_authorship':
-            $primary_key = 'sole_authorship_id';
+try {
+    $userID = $_SESSION['user_id'];
+    $requestID = isset($_POST['a_modal_request_id']) ? intval($_POST['a_modal_request_id']) : 0;
+    $recordID = isset($_POST['a_modal_record_id']) ? intval($_POST['a_modal_record_id']) : 0;
+    $subcriterion = isset($_POST['a_modal_subcriterion']) ? trim($_POST['a_modal_subcriterion']) : '';
+    $oldFilePath = isset($_POST['a_existing_file_path']) ? trim($_POST['a_existing_file_path']) : '';
+
+    if ($requestID <= 0 || $recordID <= 0 || !$subcriterion) {
+        throw new Exception('Invalid input data for uploading evidence (Criterion A).');
+    }
+
+    // Determine the DB table to update based on subcriterion
+    switch ($subcriterion) {
+        case 'sole_authorship':
+            $tableName = 'kra2_a_sole_authorship';
+            $idColumn = 'sole_authorship_id';
             break;
-        case 'kra2_a_co_authorship':
-            $primary_key = 'co_authorship_id';
+        case 'co_authorship':
+            $tableName = 'kra2_a_co_authorship';
+            $idColumn = 'co_authorship_id';
             break;
-        case 'kra2_a_lead_researcher':
-            $primary_key = 'lead_researcher_id';
+        case 'lead_researcher':
+            $tableName = 'kra2_a_lead_researcher';
+            $idColumn = 'lead_researcher_id';
             break;
-        case 'kra2_a_contributor':
-            $primary_key = 'contributor_id';
+        case 'contributor':
+            $tableName = 'kra2_a_contributor';
+            $idColumn = 'contributor_id';
             break;
-        case 'kra2_a_local_authors':
-            $primary_key = 'local_author_id';
+        case 'local_authors':
+            $tableName = 'kra2_a_local_authors';
+            $idColumn = 'local_author_id';
             break;
-        case 'kra2_a_international_authors':
-            $primary_key = 'international_author_id';
+        case 'international_authors':
+            $tableName = 'kra2_a_international_authors';
+            $idColumn = 'international_author_id';
             break;
         default:
-            echo json_encode(['status' => 'error', 'message' => 'Invalid table name']);
-            exit;
+            throw new Exception('Invalid sub-criterion specified.');
     }
 
-    $uploadDir = '/uploads/research_evidence/';
-    $uploadPath = BASE_PATH . $uploadDir; // Using BASE_PATH
-    $originalFileName = $file['name'];
-    $fileExtension = pathinfo($originalFileName, PATHINFO_EXTENSION);
-    $uniqueFileName = uniqid('evidence_' . $request_id . '_' . $row_id . '_') . '.' . $fileExtension;
-    $targetFilePath = $uploadPath . $uniqueFileName;
-
-    if (!file_exists($uploadPath)) {
-        mkdir($uploadPath, 0777, true);
+    // Check if the record exists
+    $stmt = $conn->prepare("SELECT 1 FROM $tableName WHERE $idColumn = :recordId AND request_id = :requestId");
+    $stmt->execute([':recordId' => $recordID, ':requestId' => $requestID]);
+    if (!$stmt->fetchColumn()) {
+        throw new Exception('No matching record found for the given ID and request ID.');
     }
 
-    if (move_uploaded_file($file['tmp_name'], $targetFilePath)) {
-        // Get the old file path
-        $stmt = $conn->prepare("SELECT evidence_file FROM $table WHERE $primary_key = ? AND request_id = ?");
-        $stmt->execute([$row_id, $request_id]);
-        $result = $stmt->fetch(PDO::FETCH_ASSOC);
+    // File validation
+    $file = $_FILES['singleAFileInput'] ?? null;
+    if (!$file || $file['error'] !== UPLOAD_ERR_OK) {
+        throw new Exception('No file was uploaded or an upload error occurred.');
+    }
 
-        // Delete the old file if it exists
-        if ($result && !empty($result['evidence_file']) && file_exists(BASE_PATH . $result['evidence_file'])) {
-            unlink(BASE_PATH . $result['evidence_file']);
+    $allowedExtensions = ['pdf', 'doc', 'docx', 'jpg', 'jpeg', 'png', 'xlsx', 'xls'];
+    $ext = strtolower(pathinfo($file['name'], PATHINFO_EXTENSION));
+    if (!in_array($ext, $allowedExtensions)) {
+        throw new Exception("Invalid file type. Allowed types: " . implode(', ', $allowedExtensions));
+    }
+
+    // Prepare upload directory
+    $uploadDir = BASE_PATH . '/uploads/career_progress_tracking/kra2_research/criterion_a/';
+    if (!is_dir($uploadDir)) {
+        if (!mkdir($uploadDir, 0777, true)) {
+            throw new Exception("Failed to create directory: $uploadDir");
         }
-
-        // Update the database with the new file path
-        $relativePath = $uploadDir . $uniqueFileName;
-        $stmt = $conn->prepare("UPDATE $table SET evidence_file = ? WHERE $primary_key = ? AND request_id = ?");
-        if ($stmt->execute([$relativePath, $row_id, $request_id])) {
-            echo json_encode(['status' => 'success', 'message' => 'File uploaded successfully', 'file_path' => $relativePath]);
-        } else {
-            echo json_encode(['status' => 'error', 'message' => 'Error updating database']);
-        }
-    } else {
-        echo json_encode(['status' => 'error', 'message' => 'Error uploading file']);
     }
-} else {
-    echo json_encode(['status' => 'error', 'message' => 'Invalid request']);
+
+    // Create unique file name (consider more robust naming, e.g., with user/request/record IDs)
+    $uniqueName = $userID . '_A_' . $recordID . '_' . time() . '.' . $ext;
+    $targetPath = $uploadDir . $uniqueName;
+
+    if (!move_uploaded_file($file['tmp_name'], $targetPath)) {
+        throw new Exception('Failed to move the uploaded file.');
+    }
+
+    // Relative path for storing in DB
+    $relativePath = 'uploads/career_progress_tracking/kra2_research/criterion_a/' . $uniqueName;
+
+    // Delete old file if applicable
+    if ($oldFilePath && $oldFilePath !== $relativePath) {
+        $fullOldPath = BASE_PATH . '/' . $oldFilePath;
+        if (file_exists($fullOldPath)) {
+            unlink($fullOldPath);
+        }
+    }
+
+    // Update database record
+    $stmt = $conn->prepare("UPDATE $tableName SET evidence_file = :file WHERE $idColumn = :recordId AND request_id = :requestId");
+    $stmt->execute([':file' => $relativePath, ':recordId' => $recordID, ':requestId' => $requestID]);
+
+    echo json_encode([
+        'success' => true,
+        'path' => $relativePath
+    ]);
+
+} catch (Exception $e) {
+    echo json_encode(['success' => false, 'error' => $e->getMessage()]);
 }
-?>

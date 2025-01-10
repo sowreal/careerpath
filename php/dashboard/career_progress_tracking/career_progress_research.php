@@ -72,12 +72,12 @@ if ($_SESSION['role'] != 'Regular Instructor' && $_SESSION['role'] != 'Contract 
                             <div class="col-sm-6 mb-5">
                                 <!-- Change Evaluation Number dynamically-->
                                 <h3 class="mb-2"><strong>KRA II:</strong> Research, Innovation, and Creative Work<br></h3>
-                                <h5 id="evaluation-number-research">Evaluation #: (Not yet selected)</h5>
+                                <h4 class="mb-0"><span id="evaluation-number">Evaluation #: <small><i class="text-danger">Please select evaluation number.</i></small></span></h4>
                             </div>
                             <div class="col-sm-6 pe-4 mt-4">
                                 <div class="d-flex justify-content-end">
                                     <!-- Button for Select Evaluation Modal -->
-                                    <button type="button" class="btn btn-success" id="select-evaluation-btn" data-bs-toggle="modal" data-bs-target="#evaluationModal">
+                                    <button id="select-evaluation-btn" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#evaluationModal">
                                         Select Evaluation
                                     </button>
                                 </div>

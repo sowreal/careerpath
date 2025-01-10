@@ -1,61 +1,90 @@
 <?php
+// careerpath/php/includes/career_progress_tracking/research/kra2_delete_evidence_criterion_a.php
+header('Content-Type: application/json');
+require_once '../../../session.php';
 require_once '../../../connection.php';
 require_once '../../../config.php';
 
-if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    $request_id = $_POST['request_id'];
-    $table = $_POST['table'];
-    $row_id = $_POST['row_id'];
+if (!isset($_SESSION['user_id'])) {
+    echo json_encode(['success' => false, 'error' => 'Unauthorized']);
+    exit;
+}
 
-    // Determine the primary key column name based on the table
-    switch ($table) {
-        case 'kra2_a_sole_authorship':
-            $primary_key = 'sole_authorship_id';
+try {
+    $userID = $_SESSION['user_id'];
+    $requestID = isset($_POST['request_id']) ? intval($_POST['request_id']) : 0;
+    $recordID = isset($_POST['record_id']) ? intval($_POST['record_id']) : 0;
+    $subcriterion = isset($_POST['subcriterion']) ? trim($_POST['subcriterion']) : '';
+
+    if ($requestID <= 0 || $recordID <= 0 || !$subcriterion) {
+        throw new Exception('Invalid input data for deleting evidence (Criterion A).');
+    }
+
+    // Determine the DB table to update based on subcriterion
+    switch ($subcriterion) {
+        case 'sole_authorship':
+            $tableName = 'kra2_a_sole_authorship';
+            $idColumn = 'sole_authorship_id';
             break;
-        case 'kra2_a_co_authorship':
-            $primary_key = 'co_authorship_id';
+        case 'co_authorship':
+            $tableName = 'kra2_a_co_authorship';
+            $idColumn = 'co_authorship_id';
             break;
-        case 'kra2_a_lead_researcher':
-            $primary_key = 'lead_researcher_id';
+        case 'lead_researcher':
+            $tableName = 'kra2_a_lead_researcher';
+            $idColumn = 'lead_researcher_id';
             break;
-        case 'kra2_a_contributor':
-            $primary_key = 'contributor_id';
+        case 'contributor':
+            $tableName = 'kra2_a_contributor';
+            $idColumn = 'contributor_id';
             break;
-        case 'kra2_a_local_authors':
-            $primary_key = 'local_author_id';
+        case 'local_authors':
+            $tableName = 'kra2_a_local_authors';
+            $idColumn = 'local_author_id';
             break;
-        case 'kra2_a_international_authors':
-            $primary_key = 'international_author_id';
+        case 'international_authors':
+            $tableName = 'kra2_a_international_authors';
+            $idColumn = 'international_author_id';
             break;
         default:
-            echo json_encode(['status' => 'error', 'message' => 'Invalid table name']);
-            exit;
+            throw new Exception('Invalid sub-criterion specified.');
     }
 
-    // Fetch the file path from the database
-    $stmt = $conn->prepare("SELECT evidence_file FROM $table WHERE $primary_key = ? AND request_id = ?");
-    $stmt->execute([$row_id, $request_id]);
-    $result = $stmt->fetch(PDO::FETCH_ASSOC);
+    // Get the file path from the database
+    $stmt = $conn->prepare("SELECT evidence_file FROM $tableName WHERE $idColumn = :recordId AND request_id = :requestId");
+    $stmt->execute([':recordId' => $recordID, ':requestId' => $requestID]);
+    $filePath = $stmt->fetchColumn();
 
-    if ($result) {
-        $filePath = $result['evidence_file'];
+    if (!$filePath) {
+        throw new Exception('No evidence file found for the given record.');
+    }
 
-        // Delete the file from the server
-        if (!empty($filePath) && file_exists(BASE_PATH . $filePath)) {
-            unlink(BASE_PATH . $filePath);
-        }
+    // Construct the full file path
+    $fullFilePath = BASE_PATH . '/' . $filePath;
 
-        // Update the database to remove the file path
-        $stmt = $conn->prepare("UPDATE $table SET evidence_file = NULL WHERE $primary_key = ? AND request_id = ?");
-        if ($stmt->execute([$row_id, $request_id])) {
-            echo json_encode(['status' => 'success', 'message' => 'Evidence deleted successfully']);
-        } else {
-            echo json_encode(['status' => 'error', 'message' => 'Error deleting evidence from database']);
+    // Check if the file exists and is readable
+    if (is_file($fullFilePath) && is_readable($fullFilePath)) {
+        // Attempt to delete the file
+        if (!unlink($fullFilePath)) {
+            throw new Exception('Failed to delete the evidence file.');
         }
     } else {
-        echo json_encode(['status' => 'error', 'message' => 'Evidence not found']);
+        throw new Exception('Evidence file not found or not readable.');
     }
-} else {
-    echo json_encode(['status' => 'error', 'message' => 'Invalid request method']);
+
+    // Update the database record to remove the file path
+    $stmt = $conn->prepare("UPDATE $tableName SET evidence_file = NULL WHERE $idColumn = :recordId AND request_id = :requestId");
+    $stmt->execute([':recordId' => $recordID, ':requestId' => $requestID]);
+
+    echo json_encode([
+        'success' => true,
+        'message' => 'Evidence file deleted successfully.'
+    ]);
+
+} catch (Exception $e) {
+    echo json_encode([
+        'success' => false,
+        'error' => $e->getMessage()
+    ]);
 }
 ?>
