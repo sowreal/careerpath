@@ -160,19 +160,8 @@ if ($_SESSION['role'] != 'Regular Instructor' && $_SESSION['role'] != 'Contract 
     <!-- Include Criterion B-specific JS (Corrected Path) -->
 
     <!-- Include Criterion C-specific JS -->
-     
-    <script>
-        // Initialize CriterionA in the global scope
-        window.CriterionA = {
-            fetchCriterionA: function(requestId) {
-                // Your logic here to fetch and display data for Criterion A
-                console.log("Fetching data for Criterion A, Request ID:", requestId);
-                // You can use AJAX to fetch data from the server
-            }
-        };
-    </script>
-    
 
+    
 </body>
 </html>
 

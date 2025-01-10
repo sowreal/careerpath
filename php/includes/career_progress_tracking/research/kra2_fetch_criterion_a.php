@@ -51,11 +51,11 @@ try {
     echo json_encode([
         'success' => true,
         'sole_authorship'    => $sole_authorship,
-        'co_authorship'      => $co_authorship, // Will be populated later
-        'lead_researcher'    => $lead_researcher, // Will be populated later
-        'contributor'        => $contributor, // Will be populated later
-        'local_authors'      => $local_authors, // Will be populated later
-        'international_authors' => $international_authors, // Will be populated later
+        'co_authorship'      => $co_authorship, 
+        'lead_researcher'    => $lead_researcher, 
+        'contributor'        => $contributor, 
+        'local_authors'      => $local_authors, 
+        'international_authors' => $international_authors, 
         'metadata'           => $metadata
     ]);
 

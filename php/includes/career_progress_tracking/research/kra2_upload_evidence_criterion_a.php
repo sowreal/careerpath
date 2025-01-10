@@ -78,7 +78,7 @@ try {
         }
     }
 
-    // Create unique file name (consider more robust naming, e.g., with user/request/record IDs)
+    // Create unique file name 
     $uniqueName = $userID . '_A_' . $recordID . '_' . time() . '.' . $ext;
     $targetPath = $uploadDir . $uniqueName;
 
@@ -109,3 +109,4 @@ try {
 } catch (Exception $e) {
     echo json_encode(['success' => false, 'error' => $e->getMessage()]);
 }
+?>
