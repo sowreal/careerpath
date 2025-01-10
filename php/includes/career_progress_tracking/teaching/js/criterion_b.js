@@ -318,8 +318,6 @@
 
     // Populate totals from metadata (if any)
     function populateMetadata(metadata) {
-        // If your B metadata table has total fields, put them here.
-        // Example placeholders:
         if (!metadata) {
             document.getElementById('kra1_b_sole_authorship_total').value = '';
             document.getElementById('kra1_b_co_authorship_total').value = '';
@@ -360,9 +358,8 @@
     CriterionB.init = function () {
         var form = document.getElementById('criterion-b-form');
         var saveBtn = document.getElementById('save-criterion-b');
-        var deleteRowModal = new bootstrap.Modal(document.getElementById('deleteRowModal'));
-        var deleteSuccessModal = new bootstrap.Modal(document.getElementById('deleteSuccessModal'));
-        var uploadSingleEvidenceModal = new bootstrap.Modal(document.getElementById('uploadSingleEvidenceModalB'));
+        // Moved the initialization of modals to a centralized location 
+        // or within a DOMContentLoaded event listener at the end of the HTML.
 
         // Track deleted records
         var deletedRecords = {
@@ -490,7 +487,6 @@
          *   markFormAsDirty();
          */
 
-
         // === SINGLE-FILE UPLOAD LOGIC ===
         $(document).on('click', '.upload-evidence-btn', function () {
             var button = $(this);
@@ -518,7 +514,7 @@
             $('#singleBFileInput').val('');
             $('#singleBFileName').text(filePath ? filePath.split('/').pop() : '');
 
-            uploadSingleEvidenceModal.show();
+            uploadSingleEvidenceModalB.show();
         });
 
         // Show filename when changed
@@ -562,7 +558,7 @@
                         row.find('input[name*="[evidence_file]"]').val(filePath);
                         row.find('.upload-evidence-btn').data('file-path', filePath).text('Change Evidence');
 
-                        uploadSingleEvidenceModal.hide();
+                        uploadSingleEvidenceModalB.hide();
                         markFormAsDirty();
                         showMessage('File uploaded successfully!');
 
@@ -613,7 +609,7 @@
                         row.find('.upload-evidence-btn').data('file-path', '').text('Upload Evidence');
 
                         showMessage('Evidence file deleted successfully.');
-                        uploadSingleEvidenceModal.hide();
+                        uploadSingleEvidenceModalB.hide();
                         markFormAsDirty();
 
                         var requestId = $('#request_id_b').val();

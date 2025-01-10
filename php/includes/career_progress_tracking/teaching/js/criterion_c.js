@@ -277,14 +277,8 @@
     CriterionC.init = function() {
         const form = document.getElementById('criterion-c-form');
         const saveBtn = document.getElementById('save-criterion-c');
-        const saveErrorModal = new bootstrap.Modal(document.getElementById('saveErrorModal'));
-        const messageModal = new bootstrap.Modal(document.getElementById('messageModal')); // For displaying messages
-
-        function showMessage(message) {
-            $('#messageModalBody').text(message);
-            messageModal.show();
-        }
-        window.showMessage = showMessage; // Make it accessible if needed by other scripts
+        // Moved the initialization of modals to a centralized location 
+        // or within a DOMContentLoaded event listener at the end of the HTML.
 
         // === DELETION TRACKING AND DIRTY FLAG START ===
         let deletedAdvisers = [];
@@ -324,15 +318,13 @@
                     tableToDeleteFrom = null;
                 }
 
-                const deleteModal = new bootstrap.Modal(document.getElementById('deleteRowModal'));
-                deleteModal.show();
+                deleteRowModal.show();
             }
         });
 
         document.getElementById('deleteRowModal').addEventListener('click', function() {
             if (rowToDelete) {
-                const deleteModal = bootstrap.Modal.getInstance(document.getElementById('deleteRowModal'));
-                deleteModal.hide();
+                deleteRowModal.hide();
 
                 if (evaluationIdToDelete !== '0' && tableToDeleteFrom) {
                     if (tableToDeleteFrom === 'adviser') {
@@ -351,8 +343,7 @@
                 calculateOverallScores();
                 markFormAsDirty();
 
-                const successModal = new bootstrap.Modal(document.getElementById('deleteSuccessModal'));
-                successModal.show();
+                deleteSuccessModal.show();
             }
         });
         // === DELETE ROW FUNCTION END ===
@@ -361,10 +352,9 @@
         $(document).on('click', '.view-remarks-c', function() {
             const button = $(this);
             const remarks = button.data('remarks');
-            $('#remarksModalBody').text(remarks || 'No remarks provided.');
+            $('#remarksModalBodyC').text(remarks || 'No remarks provided.');
 
-            const remarksModal = new bootstrap.Modal(document.getElementById('remarksModal'));
-            remarksModal.show();
+            remarksModalC.show();
         });
         // === REMARKS HANDLER END ===
 
@@ -696,6 +686,7 @@
 
         // === UNSAVED CHANGES PROMPT START ===
         //
+
         // === UNSAVED CHANGES PROMPT END ===
 
         calculateOverallScores();

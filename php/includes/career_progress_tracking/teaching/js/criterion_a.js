@@ -9,11 +9,12 @@
     // === HELPER FUNCTIONS ===
     function escapeHTML(str) {
         if (!str) return '';
-        return str.replace(/&/g, "&amp;")
-                  .replace(/</g, "&lt;")
-                  .replace(/>/g, "&gt;")
-                  .replace(/"/g, "&quot;")
-                  .replace(/'/g, "&#039;");
+        return str
+            .replace(/&/g, "&amp;")
+            .replace(/</g, "&lt;")
+            .replace(/>/g, "&gt;")
+            .replace(/"/g, "&quot;")
+            .replace(/'/g, "&#039;");
     }
     
     function addDefaultStudentRows(tableBody) {
@@ -217,15 +218,9 @@
     CriterionA.init = function() {
         const form = document.getElementById('criterion-a-form');
         const saveBtn = document.getElementById('save-criterion-a');
-        const saveErrorModal = new bootstrap.Modal(document.getElementById('saveErrorModal'));
-        const messageModal = new bootstrap.Modal(document.getElementById('messageModal')); // For displaying messages
-        const uploadEvidenceModal = new bootstrap.Modal(document.getElementById('uploadEvidenceModalA'));
 
-        function showMessage(message) {
-            $('#messageModalBody').text(message);
-            messageModal.show();
-        }
-        window.showMessage = showMessage; // Make it accessible if needed by other scripts
+        // Moved the initialization of modals to a centralized location 
+        // or within a DOMContentLoaded event listener at the end of the HTML.
 
         // === DELETION TRACKING AND DIRTY FLAG START ===
         let deletedEvaluations = {
@@ -272,7 +267,7 @@
             $('#firstSemesterFilename').text(filename1 ? filename1.split('/').pop() : '');
             $('#secondSemesterFilename').text(filename2 ? filename2.split('/').pop() : '');
 
-            uploadEvidenceModal.show();
+            uploadEvidenceModalA.show();
         });
 
         $('#firstSemesterFile').on('change', function() {
@@ -332,7 +327,7 @@
                             </button>`;
                         row.find('td:eq(3)').html(newContent);
 
-                        uploadEvidenceModal.hide();
+                        uploadEvidenceModalA.hide();
                         markFormAsDirty();
                         showMessage('Files uploaded successfully!');
 
@@ -391,7 +386,7 @@
                             $('#messageModal').modal('hide');
                         }, 2000);
 
-                        uploadEvidenceModal.hide();
+                        uploadEvidenceModalA.hide();
                         markFormAsDirty();
 
                         const requestId = $('#request_id').val();
@@ -427,15 +422,13 @@
                     tableToDeleteFrom = null;
                 }
 
-                const deleteModal = new bootstrap.Modal(document.getElementById('deleteRowModal'));
-                deleteModal.show();
+                deleteRowModal.show();
             }
         });
 
         document.getElementById('confirm-delete-row').addEventListener('click', function() {
             if (rowToDelete) {
-                const deleteModal = bootstrap.Modal.getInstance(document.getElementById('deleteRowModal'));
-                deleteModal.hide();
+                deleteRowModal.hide();
 
                 if (evaluationIdToDelete !== '0' && tableToDeleteFrom) {
                     deletedEvaluations[tableToDeleteFrom].push(evaluationIdToDelete);
@@ -448,8 +441,7 @@
                 calculateOverallScores();
                 markFormAsDirty();
 
-                const successModal = new bootstrap.Modal(document.getElementById('deleteSuccessModal'));
-                successModal.show();
+                deleteSuccessModal.show();
             }
         });
         // === DELETE ROW FUNCTION END ===
@@ -462,8 +454,7 @@
             $('#first-semester-remark').text(firstSemesterRemark);
             $('#second-semester-remark').text(secondSemesterRemark);
 
-            const remarksModal = new bootstrap.Modal(document.getElementById('remarksModalA'));
-            remarksModal.show();
+            remarksModalA.show();
         });
         // === REMARKS HANDLER END ===
 
@@ -734,14 +725,12 @@
                 if (isFormDirty) {
                     e.preventDefault();
                     intendedNavigationURL = link.href;
-                    const unsavedChangesModal = new bootstrap.Modal(document.getElementById('unsavedChangesModal'));
                     unsavedChangesModal.show();
                 }
             } else if (button && button.getAttribute('data-action') === 'navigate') {
                 if (isFormDirty) {
                     e.preventDefault();
                     intendedNavigationURL = button.getAttribute('data-href');
-                    const unsavedChangesModal = new bootstrap.Modal(document.getElementById('unsavedChangesModal'));
                     unsavedChangesModal.show();
                 }
             }
@@ -755,6 +744,15 @@
     // On DOM load, initialize everything
     document.addEventListener('DOMContentLoaded', function () {
         CriterionA.init();
+
+        // Initialize Modals
+        window.messageModal = new bootstrap.Modal(document.getElementById('messageModal'));
+        window.saveErrorModal = new bootstrap.Modal(document.getElementById('saveErrorModal'));
+        window.uploadEvidenceModalA = new bootstrap.Modal(document.getElementById('uploadEvidenceModalA'));
+        window.remarksModalA = new bootstrap.Modal(document.getElementById('remarksModalA'));
+        window.deleteRowModal = new bootstrap.Modal(document.getElementById('deleteRowModal'));
+        window.deleteSuccessModal = new bootstrap.Modal(document.getElementById('deleteSuccessModal'));
+        window.unsavedChangesModal = new bootstrap.Modal(document.getElementById('unsavedChangesModal'));
     });
 
     // Expose the namespace
