@@ -248,10 +248,7 @@
             const row = button.closest('tr');
 
             // Check if evaluation ID exists (not a new row)
-            if (evaluationID === '0' || !evaluationID) {
-                showMessage('Please save the row before uploading evidence.');
-                return; 
-            }
+           
             const existingFile1 = row.find('input[name="evidence_file_1[]"]').val();
             const existingFile2 = row.find('input[name="evidence_file_2[]"]').val();
 
@@ -753,6 +750,8 @@
         window.deleteRowModal = new bootstrap.Modal(document.getElementById('deleteRowModal'));
         window.deleteSuccessModal = new bootstrap.Modal(document.getElementById('deleteSuccessModal'));
         window.unsavedChangesModal = new bootstrap.Modal(document.getElementById('unsavedChangesModal'));
+
+        document.getElementById('view-remarks-c').addEventListener('click', () => showModal('remarksModalC'));
     });
 
     // Expose the namespace

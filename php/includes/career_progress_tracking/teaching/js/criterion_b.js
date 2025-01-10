@@ -664,7 +664,6 @@
         // === VIEW REMARKS HANDLER (if needed) ===
         $(document).on('click', '.view-remarks', function () {
             // If you track remarks for these rows, adapt similarly to Criterion A
-            showMessage('No remarks to display.');
         });
 
         // === ADD ROW LOGIC FOR EACH SUB-CRITERION ===

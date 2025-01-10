@@ -349,13 +349,13 @@
         // === DELETE ROW FUNCTION END ===
 
         // === REMARKS HANDLER START ===
-        $(document).on('click', '.view-remarks-c', function() {
+        $(document).on('click', '.view-remarks-c', function () {
             const button = $(this);
             const remarks = button.data('remarks');
             $('#remarksModalBodyC').text(remarks || 'No remarks provided.');
-
-            remarksModalC.show();
-        });
+        
+            showModal('remarksModalC');
+        });        
         // === REMARKS HANDLER END ===
 
         // === CALCULATION START ===
