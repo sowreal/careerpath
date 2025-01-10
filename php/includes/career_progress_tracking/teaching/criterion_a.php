@@ -80,7 +80,7 @@
                                         <input type="text" class="form-control rating-input" name="student_rating_2[]" placeholder="0.00" required>
                                     </td>
                                     <td>
-                                        <button type="button" class="btn btn-success btn-sm upload-evidence-btn" 
+                                        <button type="button" class="btn btn-success btn-sm upload-evidence-btn-a" 
                                                 data-request-id="<?php echo $request_id ?? ''; ?>" 
                                                 data-evaluation-id="<?php echo $evaluation_id; ?>" 
                                                 data-table-type="student">
@@ -183,7 +183,7 @@
                                             <input type="text" class="form-control rating-input" name="supervisor_rating_2[]" placeholder="0.00" required>
                                         </td>
                                         <td>
-                                            <button type="button" class="btn btn-success btn-sm upload-evidence-btn" 
+                                            <button type="button" class="btn btn-success btn-sm upload-evidence-btn-a" 
                                                     data-request-id="<?php echo $request_id ?? ''; ?>" 
                                                     data-evaluation-id="<?php echo $evaluation_id; ?>" 
                                                     data-table-type="supervisor">
