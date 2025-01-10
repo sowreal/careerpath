@@ -9,7 +9,7 @@ $activePage = 'Faculty Management';
 // Check user role
 if ($_SESSION['role'] != 'Human Resources') {
     // Check if the user is a Faculty Member
-    if ($_SESSION['role'] != 'Regular Instructor' && $_SESSION['role'] != 'Contract of Service Instructor') {
+    if ($_SESSION['role'] != 'Permanent Instructor' && $_SESSION['role'] != 'Contract of Service Instructor') {
         // **Start of Session Destruction**
         $_SESSION = array();
 
@@ -49,8 +49,8 @@ $departmentFilter = isset($_GET['department']) ? trim($_GET['department']) : '';
 $facultyRankFilter = isset($_GET['faculty_rank']) ? trim($_GET['faculty_rank']) : '';
 
 // Base SQL query
-$sql = "SELECT id, first_name, middle_name, last_name, department, faculty_rank, email FROM users WHERE role IN ('Regular Instructor', 'Contract of Service Instructor')";
-$count_sql = "SELECT COUNT(*) FROM users WHERE role IN ('Regular Instructor', 'Contract of Service Instructor')";
+$sql = "SELECT id, first_name, middle_name, last_name, department, faculty_rank, email FROM users WHERE role IN ('Permanent Instructor', 'Contract of Service Instructor')";
+$count_sql = "SELECT COUNT(*) FROM users WHERE role IN ('Permanent Instructor', 'Contract of Service Instructor')";
 
 // Parameters array for prepared statements
 $params = [];
@@ -443,7 +443,7 @@ function build_pagination_link($page, $search, $department, $faculty_rank) {
                                                 <label for="facultyRole" class="form-label"><strong>Role:</strong></label>
                                                 <select class="form-select" id="facultyRole" name="role" required>
                                                     <option value="">Select Role</option>
-                                                    <option value="Regular Instructor">Regular Instructor</option>
+                                                    <option value="Permanent Instructor">Permanent Instructor</option>
                                                     <option value="Contract of Service Instructor">Contract of Service Instructor</option>
                                                     <option value="Human Resources">Human Resources</option>
                                                 </select>

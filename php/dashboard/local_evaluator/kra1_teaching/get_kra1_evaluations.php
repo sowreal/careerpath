@@ -27,13 +27,13 @@ $sql = "SELECT DISTINCT u.id, u.first_name, u.middle_name, u.last_name, u.depart
         FROM users u
         INNER JOIN request_form rf ON u.id = rf.faculty_id
         INNER JOIN kra1_a_metadata kam ON rf.request_id = kam.request_id
-        WHERE u.role IN ('Regular Instructor', 'Contract of Service Instructor')";
+        WHERE u.role IN ('Permanent Instructor', 'Contract of Service Instructor')";
 
 $count_sql = "SELECT COUNT(DISTINCT u.id)
               FROM users u
               INNER JOIN request_form rf ON u.id = rf.faculty_id
               INNER JOIN kra1_a_metadata kam ON rf.request_id = kam.request_id
-              WHERE u.role IN ('Regular Instructor', 'Contract of Service Instructor')";
+              WHERE u.role IN ('Permanent Instructor', 'Contract of Service Instructor')";
 
 $params = [];
 

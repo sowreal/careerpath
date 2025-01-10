@@ -116,7 +116,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             if (isset($_SESSION['role'])) {
                 if ($_SESSION['role'] == 'Human Resources') {
                     require_once BASE_PATH . '/php/includes/sidebar_hr.php';
-                } elseif ($_SESSION['role'] == 'Regular Instructor' || $_SESSION['role'] == 'Contract of Service Instructor') {
+                } elseif ($_SESSION['role'] == 'Permanent Instructor' || $_SESSION['role'] == 'Contract of Service Instructor') {
                     require_once BASE_PATH . '/php/includes/sidebar_faculty.php';
                 } else {
                     // Default Sidebar or handle other roles

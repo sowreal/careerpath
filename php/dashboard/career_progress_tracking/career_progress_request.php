@@ -10,7 +10,7 @@ $pageTitle = 'Career Path | Career Tracking';
 $activePage = 'CPT_Request';
 
 // Check if the user is a Faculty Member
-if ($_SESSION['role'] != 'Regular Instructor' && $_SESSION['role'] != 'Contract of Service Instructor') {
+if ($_SESSION['role'] != 'Permanent Instructor' && $_SESSION['role'] != 'Contract of Service Instructor') {
     // Check if the user is Human Resources
     if ($_SESSION['role'] != 'Human Resources') {
         // **Start of Session Destruction**

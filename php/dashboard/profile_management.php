@@ -9,7 +9,7 @@ $activePage = 'Profile';
 
 // Check if the user is a Faculty Member
 $sidebarFile = '../includes/sidebar_faculty.php';
-if ($_SESSION['role'] != 'Regular Instructor' && $_SESSION['role'] != 'Contract of Service Instructor') {
+if ($_SESSION['role'] != 'Permanent Instructor' && $_SESSION['role'] != 'Contract of Service Instructor') {
     // **Start of Session Destruction**
     // Unset all session variables
     $_SESSION = array();
@@ -214,7 +214,7 @@ if (isset($_GET['request'])) {
                                                     <label for="role" class="form-label"><strong>Role:</strong></label>
                                                     <select class="form-control" id="role" name="role" required>
                                                         <option value="">Select your role</option>
-                                                        <option value="Regular Instructor" <?php if($_SESSION['role'] == 'Regular Instructor') echo 'selected'; ?>>Regular Instructor</option>
+                                                        <option value="Permanent Instructor" <?php if($_SESSION['role'] == 'Permanent Instructor') echo 'selected'; ?>>Permanent Instructor</option>
                                                         <option value="Contract of Service Instructor" <?php if($_SESSION['role'] == 'Contract of Service Instructor') echo 'selected'; ?>>Contract of Service Instructor</option>
                                                         <option value="Human Resources Personnel" <?php if($_SESSION['role'] == 'Human Resources Personnel') echo 'selected'; ?>>Human Resources Personnel</option>
                                                     </select>
