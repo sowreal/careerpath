@@ -113,7 +113,7 @@ if ($_SESSION['role'] != 'Regular Instructor' && $_SESSION['role'] != 'Contract 
                                 </button>
                             </li>
                             <li class="nav-item">
-                                <button class="nav-link" id="tab-criterion-c" data-bs-toggle="tab" data-bs-target="#criterion-c" type="button" role="tab">
+                                <button class="nav-link" id="tab-criterion-d" data-bs-toggle="tab" data-bs-target="#criterion-d" type="button" role="tab">
                                     Criterion D
                                 </button>
                             </li>
@@ -129,6 +129,8 @@ if ($_SESSION['role'] != 'Regular Instructor' && $_SESSION['role'] != 'Contract 
                             <?php require_once BASE_PATH . '/php/includes/career_progress_tracking/professional/kra4_criterion_b.php'; ?> 
                             <!-- Tab 3: Criterion C -->
                             <?php require_once BASE_PATH . '/php/includes/career_progress_tracking/professional/kra4_criterion_c.php'; ?> 
+                            <!-- Tab 4: Criterion D -->
+                            <?php require_once BASE_PATH . '/php/includes/career_progress_tracking/professional/kra4_criterion_d.php'; ?> 
                         </div>
                     </div>
 
@@ -157,8 +159,7 @@ if ($_SESSION['role'] != 'Regular Instructor' && $_SESSION['role'] != 'Contract 
 
     
     <!-- Career Progress Teaching Scripts -->
-    <script src="<?php echo BASE_URL; ?>/php/includes/career_progress_tracking/research/js/research.js"></script>
-    <!-- <script src="<?php echo BASE_URL; ?>/php/includes/career_progress_tracking/professional/js/professional.js"></script> -->
+    <script src="<?php echo BASE_URL; ?>/php/includes/career_progress_tracking/professional/js/kra4_criterion_a.js"></script>
 
 </body>
 </html>
