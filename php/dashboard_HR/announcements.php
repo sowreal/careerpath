@@ -9,7 +9,7 @@ $activePage = 'Announcements';
 // Check if the user is a Human Resources
 if ($_SESSION['role'] != 'Human Resources') {
     // Check if the user is a Faculty Member
-    if ($_SESSION['role'] != 'Regular Instructor' && $_SESSION['role'] != 'Contract of Service Instructor') {
+    if ($_SESSION['role'] != 'Permanent Instructor' && $_SESSION['role'] != 'Contract of Service Instructor') {
         // **Start of Session Destruction**
         // Unset all session variables
         $_SESSION = array();

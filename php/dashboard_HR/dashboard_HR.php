@@ -9,7 +9,7 @@ $activePage = 'DashboardHR';
 // Check if the user is Human Resources
 if ($_SESSION['role'] != 'Human Resources') {
     // If the user is not HR, check if they are Faculty
-    if ($_SESSION['role'] == 'Regular Instructor' || $_SESSION['role'] == 'Contract of Service Instructor') {
+    if ($_SESSION['role'] == 'Permanent Instructor' || $_SESSION['role'] == 'Contract of Service Instructor') {
         // Redirect to Faculty dashboard
         header('Location: ../dashboard/dashboard_faculty.php');
         exit();
