@@ -72,12 +72,12 @@ if ($_SESSION['role'] != 'Regular Instructor' && $_SESSION['role'] != 'Contract 
                             <div class="col-sm-6 mb-5">
                                 <!-- Change Evaluation Number dynamically-->
                                 <h3 class="mb-2"><strong>KRA II:</strong> Research, Innovation, and Creative Work<br></h3>
-                                <h4 class="mb-0"><span id="evaluation-number-research">Evaluation #: <small><i class="text-danger">Please select evaluation number.</i></small></span></h4>
+                                <h5 id="evaluation-number-research">Evaluation #: (Not yet selected)</h5>
                             </div>
                             <div class="col-sm-6 pe-4 mt-4">
                                 <div class="d-flex justify-content-end">
                                     <!-- Button for Select Evaluation Modal -->
-                                    <button id="select-evaluation-btn" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#evaluationModal">
+                                    <button type="button" class="btn btn-success" id="select-evaluation-btn" data-bs-toggle="modal" data-bs-target="#evaluationModal">
                                         Select Evaluation
                                     </button>
                                 </div>
@@ -88,6 +88,7 @@ if ($_SESSION['role'] != 'Regular Instructor' && $_SESSION['role'] != 'Contract 
 
                 <!-- Hidden input to store request_id -->
                 <input type="hidden" id="request-id" name="request_id" value="">
+                
 
                 <!-- KRA II Content ======== REMOVED FOR NOW-->
                 <?php // require_once BASE_PATH . '/php/includes/career_progress_tracking/research/kra2.php';?> 
@@ -153,13 +154,24 @@ if ($_SESSION['role'] != 'Regular Instructor' && $_SESSION['role'] != 'Contract 
     <!-- Career Progress Research Scripts -->
     
     <!-- Include Criterion A-specific JS -->
+     <!-- Include research.js LAST -->
+    <script src="<?php echo BASE_URL; ?>/php/includes/career_progress_tracking/research/js/research.js"></script>
     <script src="<?php echo BASE_URL; ?>/php/includes/career_progress_tracking/research/js/kra2_criterion_a.js"></script>
     <!-- Include Criterion B-specific JS (Corrected Path) -->
-    <!-- <script src="<?php echo BASE_URL; ?>/php/includes/career_progress_tracking/research/js/criterion_b.js"></script> -->
+
     <!-- Include Criterion C-specific JS -->
-    <!-- <script src="<?php echo BASE_URL; ?>/php/includes/career_progress_tracking/research/js/criterion_c.js"></script> -->
-    <!-- Include research.js LAST -->
-    <script src="<?php echo BASE_URL; ?>/php/includes/career_progress_tracking/research/js/research.js"></script>
+     
+    <script>
+        // Initialize CriterionA in the global scope
+        window.CriterionA = {
+            fetchCriterionA: function(requestId) {
+                // Your logic here to fetch and display data for Criterion A
+                console.log("Fetching data for Criterion A, Request ID:", requestId);
+                // You can use AJAX to fetch data from the server
+            }
+        };
+    </script>
+    
 
 </body>
 </html>

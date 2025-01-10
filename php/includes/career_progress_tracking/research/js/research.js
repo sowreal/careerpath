@@ -41,8 +41,8 @@ document.addEventListener('DOMContentLoaded', function () {
         });
     });
 
-    // --- Modal Button Handler for Selecting Evaluation Number ---
-    document.getElementById('confirm-selection-research').addEventListener('click', function () {
+     // --- Modal Button Handler for Selecting Evaluation Number ---
+     document.getElementById('confirm-selection-research').addEventListener('click', function() {
         const selectedEvaluation = document.querySelector('input[name="evaluation-research"]:checked');
         if (selectedEvaluation) {
             const requestId = selectedEvaluation.value;
@@ -55,15 +55,13 @@ document.addEventListener('DOMContentLoaded', function () {
             if (requestIdInput) {
                 requestIdInput.value = requestId;
                 console.log('request_id set to:', requestId);
+
+                // Trigger a custom event to indicate that request_id has been updated
+                const event = new CustomEvent('request_id_updated', { detail: { requestId: requestId } });
+                document.dispatchEvent(event);
+
             } else {
                 console.error('Input field with id "request_id" not found.');
-            }
-
-            // Fetch data for the selected evaluation for Criterion A
-            if (window.CriterionA && typeof CriterionA.fetchCriterionA === 'function') {
-                CriterionA.fetchCriterionA(requestId);
-            } else {
-                console.error('CriterionA.fetchCriterionA function is not defined.');
             }
 
             // Hide the modal
@@ -71,7 +69,7 @@ document.addEventListener('DOMContentLoaded', function () {
             evaluationModal.hide();
 
         } else {
-            // Show error modal using Bootstrap's modal API
+            // Show error modal
             var messageModal = new bootstrap.Modal(document.getElementById('messageModal'));
             document.getElementById('messageModalLabel').textContent = 'Selection Failed';
             document.querySelector('#messageModal .modal-body').textContent = 'Please select an evaluation.';
