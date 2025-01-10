@@ -124,18 +124,18 @@ if ($_SESSION['role'] != 'Regular Instructor' && $_SESSION['role'] != 'Contract 
                     <div class="card-body">
                         <div class="tab-content" id="kra-tab-content">
                             <!-- Tab 1: Criterion A: Teaching Effectiveness -->
-                            <?php require_once BASE_PATH . '/php/includes/career_progress_tracking/research/criterion_a.php'; ?> 
+                            <?php require_once BASE_PATH . '/php/includes/career_progress_tracking/professional/kra4_criterion_a.php'; ?> 
                             <!-- Tab 2: Criterion B: Curriculum & Material Development -->
-                            <?php require_once BASE_PATH . '/php/includes/career_progress_tracking/research/criterion_b.php'; ?> 
+                            <?php // require_once BASE_PATH . '/php/includes/career_progress_tracking/professional/kra4_criterion_b.php'; ?> 
                             <!-- Tab 3: Criterion C: Thesis & Mentorship Services -->
-                            <?php require_once BASE_PATH . '/php/includes/career_progress_tracking/research/criterion_c.php'; ?> 
+                            <?php // require_once BASE_PATH . '/php/includes/career_progress_tracking/professional/kra4_criterion_c.php'; ?> 
                         </div>
                     </div>
 
                 </div>
 
                 <!-- MODAL SECTION -->
-                <?php require_once BASE_PATH . '/php/includes/career_progress_tracking/teaching/modals.php'; ?>
+                <?php // require_once BASE_PATH . '/php/includes/career_progress_tracking/professional/kra4_modals.php'; ?>
 
             </div>
         </main>
@@ -157,7 +157,7 @@ if ($_SESSION['role'] != 'Regular Instructor' && $_SESSION['role'] != 'Contract 
 
     
     <!-- Career Progress Teaching Scripts -->
-    <script src="<?php echo BASE_URL; ?>/php/includes/career_progress_tracking/research/js/research.js"></script>
+    <!-- <script src="<?php echo BASE_URL; ?>/php/includes/career_progress_tracking/professional/js/professional.js"></script> -->
 
 </body>
 </html>

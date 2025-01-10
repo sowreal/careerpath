@@ -63,7 +63,7 @@
                                     <td><input type="date" class="form-control" name="kra2_a_sole_authorship[<?php echo $i; ?>][date_published]"></td>
                                     <td><input type="text" class="form-control score-input" name="kra2_a_sole_authorship[<?php echo $i; ?>][score]" readonly></td>
                                     <td>
-                                        <button type="button" class="btn btn-success btn-sm upload-evidence-btn" data-subcriterion-id="sole_authorship_<?php echo $i; ?>">Upload Evidence</button>
+                                        <input type="text" class="form-control evidence-link" name="sole_authorship_<?php echo $i; ?>][evidence_link]" placeholder="Link to Evidence">
                                         <input type="hidden" name="kra2_a_sole_authorship[<?php echo $i; ?>][evidence_file]" value="">
                                     </td>
                                     <td>
@@ -143,7 +143,7 @@
                                     <td><input type="number" class="form-control" name="kra2_a_co_authorship[<?php echo $i; ?>][contribution_percentage]" placeholder="0" min="0" max="100"></td>
                                     <td><input type="text" class="form-control score-input" name="kra2_a_co_authorship[<?php echo $i; ?>][score]" readonly></td>
                                     <td>
-                                        <button type="button" class="btn btn-success btn-sm upload-evidence-btn" data-subcriterion-id="co_authorship_<?php echo $i; ?>">Upload Evidence</button>
+                                        <input type="text" class="form-control evidence-link" name="co_authorship_<?php echo $i; ?>][evidence_link]" placeholder="Link to Evidence">
                                         <input type="hidden" name="kra2_a_co_authorship[<?php echo $i; ?>][evidence_file]" value="">
                                     </td>
                                     <td>
@@ -204,7 +204,7 @@
                                     <td><input type="date" class="form-control" name="kra1_a_lead_researcher[<?php echo $i; ?>][date_implemented]"></td>
                                     <td><input type="text" class="form-control score-input" name="kra1_a_lead_researcher[<?php echo $i; ?>][score]" readonly></td>
                                     <td>
-                                        <button type="button" class="btn btn-success btn-sm upload-evidence-btn" data-subcriterion-id="lead_researcher_<?php echo $i; ?>">Upload Evidence</button>
+                                        <input type="text" class="form-control evidence-link" name="lead_researcher_<?php echo $i; ?>][evidence_link]" placeholder="Link to Evidence">
                                         <input type="hidden" name="kra1_a_lead_researcher[<?php echo $i; ?>][evidence_file]" value="">
                                     </td>
                                     <td>
@@ -266,7 +266,7 @@
                                     <td><input type="number" class="form-control" name="kra1_a_contributor[<?php echo $i; ?>][contribution_percentage]" placeholder="0" min="0" max="100"></td>
                                     <td><input type="text" class="form-control score-input" name="kra1_a_contributor[<?php echo $i; ?>][score]" readonly></td>
                                     <td>
-                                        <button type="button" class="btn btn-success btn-sm upload-evidence-btn" data-subcriterion-id="contributor_<?php echo $i; ?>">Upload Evidence</button>
+                                        <input type="text" class="form-control evidence-link" name="contributor_<?php echo $i; ?>][evidence_link]" placeholder="Link to Evidence">
                                         <input type="hidden" name="kra1_a_contributor[<?php echo $i; ?>][evidence_file]" value="">
                                     </td>
                                     <td>
@@ -329,7 +329,7 @@
                                     <td><input type="date" class="form-control" name="kra1_a_local_authors[<?php echo $i; ?>][citation_year]"></td>
                                     <td><input type="text" class="form-control score-input" name="kra1_a_local_authors[<?php echo $i; ?>][score]" readonly></td>
                                     <td>
-                                        <button type="button" class="btn btn-success btn-sm upload-evidence-btn" data-subcriterion-id="local_authors_<?php echo $i; ?>">Upload Evidence</button>
+                                        <input type="text" class="form-control evidence-link" name="local_authors_<?php echo $i; ?>][evidence_link]" placeholder="Link to Evidence">
                                         <input type="hidden" name="kra1_a_local_authors[<?php echo $i; ?>][evidence_file]" value="">
                                     </td>
                                     <td>
@@ -391,7 +391,7 @@
                                     <td><input type="date" class="form-control" name="kra1_a_international_authors[<?php echo $i; ?>][citation_year]"></td>
                                     <td><input type="text" class="form-control score-input" name="kra1_a_international_authors[<?php echo $i; ?>][score]" readonly></td>
                                     <td>
-                                        <button type="button" class="btn btn-success btn-sm upload-evidence-btn" data-subcriterion-id="international_authors_<?php echo $i; ?>">Upload Evidence</button>
+                                        <input type="text" class="form-control evidence-link" name="international_authors_<?php echo $i; ?>][evidence_link]" placeholder="Link to Evidence">
                                         <input type="hidden" name="kra1_a_international_authors[<?php echo $i; ?>][evidence_file]" value="">
                                     </td>
                                     <td>
