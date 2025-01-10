@@ -39,8 +39,6 @@
                                             <option value="Institutional">Institutional</option>
                                             <option value="Local">Local</option>
                                             <option value="Regional">Regional</option>
-                                            <option value="National">National</option>
-                                            <option value="International">International</option>
                                         </select>
                                     </td>
                                     <td><input type="text" class="form-control" name="kra4_c_awards[<?php echo $i; ?>][award_giving_body]"></td>

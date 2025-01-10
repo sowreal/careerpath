@@ -51,6 +51,7 @@
                         </tbody>
                     </table>
                 </div>
+                <button type="button" class="btn btn-success mt-3 add-row" data-table-id="additional-degrees-table">Add Row</button>
             </div>
 
             <!-- Section 1.2: Additional Degrees -->
