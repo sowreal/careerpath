@@ -11,7 +11,7 @@
 
 
 
-
+<!-- SideBar -->
 <script>
     const SELECTOR_SIDEBAR_WRAPPER = ".sidebar-wrapper";
     const Default = {
@@ -34,28 +34,6 @@
             });
         }
     });
-
-    // Hide up-down arrows (spinners) for all numeric input fields
-    document.querySelectorAll('input[type=number]').forEach(input => {
-    input.style.MozAppearance = 'textfield'; // For Firefox
-    input.style.WebkitAppearance = 'none'; // For Chrome, Safari, Opera
-    input.style.margin = '0'; // Remove margin in WebKit browsers
-    });
-
-    const css = `
-    input[type=number]::-webkit-outer-spin-button,
-    input[type=number]::-webkit-inner-spin-button {
-    -webkit-appearance: none;
-    margin: 0;
-    }
-    input[type=number] {
-    -moz-appearance: textfield; // For Firefox
-    }
-    `;
-
-    const style = document.createElement('style');
-    style.appendChild(document.createTextNode(css));
-    document.head.appendChild(style);
 </script>
 
 <!-- TOTTGLE DARK MODE -->
