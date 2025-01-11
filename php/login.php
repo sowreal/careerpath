@@ -46,7 +46,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $_SESSION['role'] = $user['role']; // Store the user's role in session
 
             // Redirect based on role
-            if ($user['role'] == 'Regular Instructor' || $user['role'] == 'Contract of Service Instructor') {
+            if ($user['role'] == 'Permanent Instructor' || $user['role'] == 'Contract of Service Instructor') {
                 header('Location: dashboard/dashboard_faculty.php'); // Relative path
             } elseif ($user['role'] == 'Human Resources') {
                 header('Location: dashboard_HR/dashboard_HR.php'); // Relative path

@@ -5,7 +5,7 @@ include('../../connection.php');
 include('../../includes/functions.php');
 
 // Ensure the user is a faculty member
-if ($_SESSION['role'] != 'Regular Instructor' && $_SESSION['role'] != 'Contract of Service Instructor') {
+if ($_SESSION['role'] != 'Permanent Instructor' && $_SESSION['role'] != 'Contract of Service Instructor') {
     echo json_encode(['status' => 'error', 'message' => 'Unauthorized access.']);
     exit();
 }

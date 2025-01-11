@@ -39,10 +39,10 @@ $offset = ($page - 1) * $limit;
 // Build the base query
 $sql = "SELECT id, first_name, middle_name, last_name, department, faculty_rank 
         FROM users 
-        WHERE role IN ('Regular Instructor', 'Contract of Service Instructor', 'Human Resources')";
+        WHERE role IN ('Permanent Instructor', 'Contract of Service Instructor', 'Human Resources')";
 $count_sql = "SELECT COUNT(*) 
              FROM users 
-             WHERE role IN ('Regular Instructor', 'Contract of Service Instructor', 'Human Resources')";
+             WHERE role IN ('Permanent Instructor', 'Contract of Service Instructor', 'Human Resources')";
 
 // Parameters array for prepared statements
 $params = [];

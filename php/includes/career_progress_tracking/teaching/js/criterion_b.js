@@ -43,7 +43,7 @@
                 <td><input type="date" class="form-control" name="kra1_b_sole_authorship[new_${Date.now()}][date_approved]"></td>
                 <td><input type="number" class="form-control score-input" name="kra1_b_sole_authorship[new_${Date.now()}][score]" placeholder="0" readonly></td>
                 <td>
-                    <button type="button" class="btn btn-success btn-sm upload-evidence-btn"
+                    <button type="button" class="btn btn-success btn-sm upload-evidence-btn-b"
                         data-subcriterion="sole" data-record-id="0" data-file-path="">
                         Upload Evidence
                     </button>
@@ -82,7 +82,7 @@
                 <td><input type="number" class="form-control" name="kra1_b_co_authorship[new_${Date.now()}][contribution_percentage]" placeholder="0.00"></td>
                 <td><input type="number" class="form-control score-input" name="kra1_b_co_authorship[new_${Date.now()}][score]" placeholder="0" readonly></td>
                 <td>
-                    <button type="button" class="btn btn-success btn-sm upload-evidence-btn"
+                    <button type="button" class="btn btn-success btn-sm upload-evidence-btn-b"
                         data-subcriterion="co" data-record-id="0" data-file-path="">
                         Upload Evidence
                     </button>
@@ -122,7 +122,7 @@
                 </td>
                 <td><input type="number" class="form-control score-input" name="kra1_b_academic_programs[new_${Date.now()}][score]" placeholder="0" readonly></td>
                 <td>
-                    <button type="button" class="btn btn-success btn-sm upload-evidence-btn"
+                    <button type="button" class="btn btn-success btn-sm upload-evidence-btn-b"
                         data-subcriterion="acad" data-record-id="0" data-file-path="">
                         Upload Evidence
                     </button>
@@ -181,7 +181,7 @@
                 <td><input type="date" class="form-control" name="kra1_b_sole_authorship[${index}][date_approved]" value="${item.date_approved || ''}"></td>
                 <td><input type="number" class="form-control score-input" name="kra1_b_sole_authorship[${index}][score]" value="${item.score || ''}" readonly></td>
                 <td>
-                    <button type="button" class="btn btn-success btn-sm upload-evidence-btn" 
+                    <button type="button" class="btn btn-success btn-sm upload-evidence-btn-b" 
                         data-subcriterion="sole" 
                         data-record-id="${item.sole_authorship_id}" 
                         data-file-path="${escapeHTML(item.evidence_file || '')}">
@@ -238,7 +238,7 @@
                 <td><input type="number" class="form-control" name="kra1_b_co_authorship[${index}][contribution_percentage]" value="${item.contribution_percentage || ''}"></td>
                 <td><input type="number" class="form-control score-input" name="kra1_b_co_authorship[${index}][score]" value="${item.score || ''}" readonly></td>
                 <td>
-                    <button type="button" class="btn btn-success btn-sm upload-evidence-btn" 
+                    <button type="button" class="btn btn-success btn-sm upload-evidence-btn-b" 
                         data-subcriterion="co" 
                         data-record-id="${item.co_authorship_id}" 
                         data-file-path="${escapeHTML(item.evidence_file || '')}">
@@ -296,7 +296,7 @@
                 </td>
                 <td><input type="number" class="form-control score-input" name="kra1_b_academic_programs[${index}][score]" value="${item.score || ''}" readonly></td>
                 <td>
-                    <button type="button" class="btn btn-success btn-sm upload-evidence-btn" 
+                    <button type="button" class="btn btn-success btn-sm upload-evidence-btn-b" 
                         data-subcriterion="acad" 
                         data-record-id="${item.academic_prog_id}" 
                         data-file-path="${escapeHTML(item.evidence_file || '')}">
@@ -488,7 +488,7 @@
          */
 
         // === SINGLE-FILE UPLOAD LOGIC ===
-        $(document).on('click', '.upload-evidence-btn', function () {
+        $(document).on('click', '.upload-evidence-btn-b', function () {
             var button = $(this);
             var recordId = button.data('record-id');
             var subcriterion = button.data('subcriterion'); // 'sole', 'co', or 'acad'
@@ -556,7 +556,7 @@
                         }
                         var row = $(tableSelector).find(`tr[data-${subcriterion}-id="${recordId}"]`);
                         row.find('input[name*="[evidence_file]"]').val(filePath);
-                        row.find('.upload-evidence-btn').data('file-path', filePath).text('Change Evidence');
+                        row.find('.upload-evidence-btn-b').data('file-path', filePath).text('Change Evidence');
 
                         uploadSingleEvidenceModalB.hide();
                         markFormAsDirty();
@@ -606,7 +606,7 @@
                         }
                         var row = $(tableSelector).find(`tr[data-${subcriterion}-id="${recordId}"]`);
                         row.find('input[name*="[evidence_file]"]').val('');
-                        row.find('.upload-evidence-btn').data('file-path', '').text('Upload Evidence');
+                        row.find('.upload-evidence-btn-b').data('file-path', '').text('Upload Evidence');
 
                         showMessage('Evidence file deleted successfully.');
                         uploadSingleEvidenceModalB.hide();
@@ -695,7 +695,7 @@
                 <td><input type="date" class="form-control" name="kra1_b_sole_authorship[new_${Date.now()}][date_approved]"></td>
                 <td><input type="number" class="form-control score-input" name="kra1_b_sole_authorship[new_${Date.now()}][score]" readonly></td>
                 <td>
-                    <button type="button" class="btn btn-success btn-sm upload-evidence-btn" 
+                    <button type="button" class="btn btn-success btn-sm upload-evidence-btn-b" 
                         data-subcriterion="sole" data-record-id="0" data-file-path="">
                         Upload Evidence
                     </button>
@@ -736,7 +736,7 @@
                 <td><input type="number" class="form-control" name="kra1_b_co_authorship[new_${Date.now()}][contribution_percentage]"></td>
                 <td><input type="number" class="form-control score-input" name="kra1_b_co_authorship[new_${Date.now()}][score]" readonly></td>
                 <td>
-                    <button type="button" class="btn btn-success btn-sm upload-evidence-btn" 
+                    <button type="button" class="btn btn-success btn-sm upload-evidence-btn-b" 
                         data-subcriterion="co" data-record-id="0" data-file-path="">
                         Upload Evidence
                     </button>
@@ -778,7 +778,7 @@
                 </td>
                 <td><input type="number" class="form-control score-input" name="kra1_b_academic_programs[new_${Date.now()}][score]" readonly></td>
                 <td>
-                    <button type="button" class="btn btn-success btn-sm upload-evidence-btn" 
+                    <button type="button" class="btn btn-success btn-sm upload-evidence-btn-b" 
                         data-subcriterion="acad" data-record-id="0" data-file-path="">
                         Upload Evidence
                     </button>

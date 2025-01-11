@@ -25,7 +25,7 @@ if ($faculty_id <= 0) {
 
 // Fetch faculty information
 try {
-    $stmt = $conn->prepare("SELECT first_name, middle_name, last_name, department, faculty_rank FROM users WHERE id = :id AND role IN ('Regular Instructor', 'Contract of Service Instructor')");
+    $stmt = $conn->prepare("SELECT first_name, middle_name, last_name, department, faculty_rank FROM users WHERE id = :id AND role IN ('Permanent Instructor', 'Contract of Service Instructor')");
     $stmt->bindParam(':id', $faculty_id, PDO::PARAM_INT);
     $stmt->execute();
     $faculty = $stmt->fetch(PDO::FETCH_ASSOC);

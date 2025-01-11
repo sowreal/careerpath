@@ -3,9 +3,9 @@ document.addEventListener('DOMContentLoaded', function () {
     // --- Evaluation Selection Handler ---
     document.getElementById('select-evaluation-btn').addEventListener('click', function () {
         const modalBody = document.querySelector('#evaluationModal .modal-body');
-        
+
         // Clear previous content and show loading message
-        modalBody.innerHTML = '<p>Loading evaluations...</p>'; 
+        modalBody.innerHTML = '<p>Loading evaluations...</p>';
 
         // Fetch evaluations via AJAX
         fetch('../../includes/career_progress_tracking/research/kra2_fetch_evaluations.php', { method: 'POST' })
@@ -42,28 +42,29 @@ document.addEventListener('DOMContentLoaded', function () {
     });
 
     // --- Modal Button Handler for Selecting Evaluation Number ---
-    document.getElementById('confirm-selection-research').addEventListener('click', function () {
+    document.getElementById('confirm-selection-research').addEventListener('click', function() {
         const selectedEvaluation = document.querySelector('input[name="evaluation-research"]:checked');
         if (selectedEvaluation) {
             const requestId = selectedEvaluation.value;
 
-            // Update the header
-            document.getElementById('evaluation-number-research').textContent = `Evaluation #: ${requestId}`;
+            // Update the header 
+            const evaluationNumberHeader = document.getElementById('evaluation-number'); 
+            evaluationNumberHeader.innerHTML = `Evaluation #: ${requestId}`; 
 
             // Set the input field value for Criterion A
             const requestIdInput = document.getElementById('request_id');
             if (requestIdInput) {
                 requestIdInput.value = requestId;
                 console.log('request_id set to:', requestId);
+
+                // Fetch data for Criterion A using the selected requestId
+                if (window.CriterionA && typeof CriterionA.fetchCriterionA === 'function') {
+                    CriterionA.fetchCriterionA(requestId);
+                } else {
+                    console.error('CriterionA.fetchCriterionA function is not defined.');
+                }
             } else {
                 console.error('Input field with id "request_id" not found.');
-            }
-
-            // Fetch data for the selected evaluation for Criterion A
-            if (window.CriterionA && typeof CriterionA.fetchCriterionA === 'function') {
-                CriterionA.fetchCriterionA(requestId);
-            } else {
-                console.error('CriterionA.fetchCriterionA function is not defined.');
             }
 
             // Hide the modal
@@ -71,7 +72,7 @@ document.addEventListener('DOMContentLoaded', function () {
             evaluationModal.hide();
 
         } else {
-            // Show error modal using Bootstrap's modal API
+            // Show error modal
             var messageModal = new bootstrap.Modal(document.getElementById('messageModal'));
             document.getElementById('messageModalLabel').textContent = 'Selection Failed';
             document.querySelector('#messageModal .modal-body').textContent = 'Please select an evaluation.';
@@ -79,7 +80,7 @@ document.addEventListener('DOMContentLoaded', function () {
         }
     });
 
-    // JavaScript for tabs styling (if needed)
+    // JavaScript for tabs styling
     const tabs = document.querySelectorAll('#kra-tabs .nav-link');
     if (tabs.length > 0) {
         tabs.forEach(tab => {

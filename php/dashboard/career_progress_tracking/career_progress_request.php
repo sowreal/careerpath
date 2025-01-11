@@ -10,7 +10,7 @@ $pageTitle = 'Career Path | Career Tracking';
 $activePage = 'CPT_Request';
 
 // Check if the user is a Faculty Member
-if ($_SESSION['role'] != 'Regular Instructor' && $_SESSION['role'] != 'Contract of Service Instructor') {
+if ($_SESSION['role'] != 'Permanent Instructor' && $_SESSION['role'] != 'Contract of Service Instructor') {
     // Check if the user is Human Resources
     if ($_SESSION['role'] != 'Human Resources') {
         // **Start of Session Destruction**
@@ -40,8 +40,10 @@ if ($_SESSION['role'] != 'Regular Instructor' && $_SESSION['role'] != 'Contract 
 // Initialize variables for error/success messages
 $success = '';
 $error = '';
+$mode = 'new'; // Default to 'new' for new request, change to 'edit' if data exists
 
 // Initialize variables to store form data
+$request_id = null; // Initialize request_id
 $degree = '';
 $name_hei = '';
 $year_graduated = '';
@@ -54,6 +56,35 @@ $address = '';
 // CSRF Protection: Generate or verify token
 if (empty($_SESSION['csrf_token'])) {
     $_SESSION['csrf_token'] = bin2hex(random_bytes(32));
+}
+
+// Retrieve existing data if available
+$user_id = isset($_SESSION['user_id']) ? $_SESSION['user_id'] : null;
+if ($user_id) {
+    try {
+        $stmt = $conn->prepare("SELECT * FROM request_form WHERE user_id = :user_id");
+        $stmt->bindParam(':user_id', $user_id, PDO::PARAM_INT);
+        $stmt->execute();
+
+        if ($stmt->rowCount() > 0) {
+            $mode = 'edit'; // User has existing data
+            $row = $stmt->fetch(PDO::FETCH_ASSOC);
+
+            // Populate form data from the database row
+            $request_id = $row['request_id'];
+            $degree = $row['degree_name'];
+            $name_hei = $row['name_of_hei'];
+            $year_graduated = $row['year_graduated'];
+            $mode_of_appointment = $row['mode_of_appointment'];
+            $date_of_appointment = $row['date_of_appointment'];
+            $suc_name = $row['suc_name'];
+            $campus = $row['campus'];
+            $address = $row['address'];
+        }
+    } catch (PDOException $e) {
+        $error = "Error fetching data: " . $e->getMessage();
+        error_log("Database Error: " . $e->getMessage());
+    }
 }
 
 // Check if form is submitted
@@ -97,44 +128,78 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
             if (empty($error)) {
                 try {
-                    // Prepare the SQL statement using PDO
-                    $stmt = $conn->prepare("
-                        INSERT INTO request_form 
-                        (user_id, degree_name, name_of_hei, year_graduated, current_rank, mode_of_appointment, date_of_appointment, suc_name, campus, address) 
-                        VALUES 
-                        (:user_id, :degree, :name_hei, :year_graduated, :current_rank, :mode_of_appointment, :date_of_appointment, :suc_name, :campus, :address)
-                    ");
+                    if ($mode == 'new') {
+                        // Insert new record
+                        $stmt = $conn->prepare("
+                            INSERT INTO request_form 
+                            (user_id, degree_name, name_of_hei, year_graduated, current_rank, mode_of_appointment, date_of_appointment, suc_name, campus, address) 
+                            VALUES 
+                            (:user_id, :degree, :name_hei, :year_graduated, :current_rank, :mode_of_appointment, :date_of_appointment, :suc_name, :campus, :address)
+                        ");
+                    } else {
+                        // Update existing record
+                        $stmt = $conn->prepare("
+                            UPDATE request_form 
+                            SET degree_name = :degree, name_of_hei = :name_hei, year_graduated = :year_graduated, 
+                                mode_of_appointment = :mode_of_appointment, date_of_appointment = :date_of_appointment, 
+                                suc_name = :suc_name, campus = :campus, address = :address
+                            WHERE user_id = :user_id
+                        ");
+                    }
 
-                    // Bind parameters
+                    // Bind parameters (common for both insert and update)
                     $stmt->bindParam(':user_id', $user_id, PDO::PARAM_INT);
                     $stmt->bindParam(':degree', $degree, PDO::PARAM_STR);
                     $stmt->bindParam(':name_hei', $name_hei, PDO::PARAM_STR);
                     $stmt->bindParam(':year_graduated', $year_graduated, PDO::PARAM_INT);
-                    $stmt->bindParam(':current_rank', $current_rank, PDO::PARAM_STR);
+                    if ($mode == 'new') {
+                        $stmt->bindParam(':current_rank', $current_rank, PDO::PARAM_STR);
+                    }
                     $stmt->bindParam(':mode_of_appointment', $mode_of_appointment, PDO::PARAM_STR);
                     $stmt->bindParam(':date_of_appointment', $date_of_appointment, PDO::PARAM_STR);
                     $stmt->bindParam(':suc_name', $suc_name, PDO::PARAM_STR);
                     $stmt->bindParam(':campus', $campus, PDO::PARAM_STR);
                     $stmt->bindParam(':address', $address, PDO::PARAM_STR);
 
-                    // Execute the statement
                     $stmt->execute();
 
-                    // Get the unique request_id
-                    $request_id = $conn->lastInsertId();
-
-                    // Success message with a button to generate PDF
-                    $success = "Request submitted successfully! Your Request ID is: " . htmlspecialchars($request_id) . ". <br><a href='../../includes/generate_pdf/pdf_request_form.php?request_id=" . urlencode($request_id) . "' class='btn btn-primary' target='_blank'>Download PDF</a>";
-
+                    if ($mode == 'new') {
+                        $request_id = $conn->lastInsertId();
+                        $success = "Request submitted successfully! Your Request ID is: " . htmlspecialchars($request_id) . ". <br><a href='../../includes/generate_pdf/pdf_request_form.php?request_id=" . urlencode($request_id) . "' class='btn btn-primary' target='_blank'>Download PDF</a>";
+                    } else {
+                        $success = "Request updated successfully!";
+                    }
+                    $mode = 'edit'; // After insert or update, switch to edit mode
                 } catch (PDOException $e) {
-                    // For debugging: Display the error message (remove in production)
-                    $error = "An unexpected error occurred. Please try again later. <br> Error Details: " . htmlspecialchars($e->getMessage());
-
-                    // Optionally, log the error for further inspection
+                    $error = "An unexpected error occurred. Please try again later. <br> Error Details: " . $e->getMessage();
                     error_log("Database Error: " . $e->getMessage());
                 }
             }
         }
+    }
+}
+
+// Handle deletion
+if (isset($_GET['action']) && $_GET['action'] == 'delete' && $user_id) {
+    try {
+        $stmt = $conn->prepare("DELETE FROM request_form WHERE user_id = :user_id");
+        $stmt->bindParam(':user_id', $user_id, PDO::PARAM_INT);
+        $stmt->execute();
+
+        $success = "Request data deleted successfully!";
+        $mode = 'new'; // Reset to new mode after deletion
+        // Reset form fields after deletion
+        $degree = '';
+        $name_hei = '';
+        $year_graduated = '';
+        $mode_of_appointment = '';
+        $date_of_appointment = '';
+        $suc_name = '';
+        $campus = '';
+        $address = '';
+    } catch (PDOException $e) {
+        $error = "Error deleting data: " . $e->getMessage();
+        error_log("Database Error: " . $e->getMessage());
     }
 }
 ?>
@@ -145,8 +210,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     <?php require_once '../../includes/header.php' ?>
 </head>
 
-<body class="layout-fixed sidebar-expand-lg bg-body-tertiary"> <!--begin::App Wrapper-->
-    <div class="app-wrapper"> 
+<body class="layout-fixed sidebar-expand-lg bg-body-tertiary">
+    <div class="app-wrapper">
         <!--begin::Header-->
         <?php require_once('../../includes/navbar.php'); ?>
         <!--end::Header--> 
@@ -171,23 +236,22 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                     </div>
 
                     <!-- Success and Error Messages -->
-                    <?php if($success): ?>
+                    <?php if ($success): ?>
                         <div class="alert alert-success alert-dismissible fade show" role="alert">
                             <?php echo $success; ?>
                             <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
                         </div>
                     <?php endif; ?>
 
-                    <?php if($error): ?>
+                    <?php if ($error): ?>
                         <div class="alert alert-danger alert-dismissible fade show" role="alert">
                             <?php echo $error; ?>
                             <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
                         </div>
                     <?php endif; ?>
 
-                    <!-- Centered Form Card Container -->
                     <div class="row justify-content-center">
-                        <div class="col"><!---lg-10 col-md-10-->
+                        <div class="col">
                             <div class="card shadow-sm">
                                 <div class="card-header bg-success text-white">
                                     <h4>Request Form</h4>
@@ -196,11 +260,14 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                                     <form method="POST" action="">
                                         <!-- CSRF Token -->
                                         <input type="hidden" name="csrf_token" value="<?php echo htmlspecialchars($_SESSION['csrf_token']); ?>">
+                                        <input type="hidden" name="mode" value="<?php echo $mode; ?>">
 
+                                        <!-- Form fields (same as before, but values are populated from variables) -->
                                         <div class="row">
                                             <!-- Personal Information Column -->
                                             <div class="col-md-6">
                                                 <h5 class="font-weight-bold mb-3">Personal Information</h5>
+                                                <!-- ... (Existing form fields for last_name, first_name, etc.) ... -->
                                                 <div class="form-group mt-3">
                                                     <label for="last_name">Last Name</label>
                                                     <input type="text" class="form-control mt-2" id="last_name" name="last_name" 
@@ -321,11 +388,19 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                                                 </div>
                                             </div>
                                         </div>
-                                        <!-- Submit Button with Modal Trigger -->
+
+                                        <!-- Submit/Update Button -->
                                         <div class="mt-4 text-right">
                                             <button type="button" class="btn btn-success" id="submitRequestButton">
-                                                Submit Request
+                                                <?php echo $mode == 'new' ? 'Submit Request' : 'Update Request'; ?>
                                             </button>
+
+                                            <!-- Delete Button (only in edit mode) -->
+                                            <?php if ($mode == 'edit'): ?>
+                                                <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#deleteConfirmationModal">
+                                                    Delete Request
+                                                </button>
+                                            <?php endif; ?>
                                         </div>
                                     </form>
                                 </div>
@@ -366,6 +441,25 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
                                 <!-- Agree and Submit Button -->
                                 <button type="button" class="btn btn-success" id="confirmSubmitButton">Agree and Submit</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Delete Confirmation Modal -->
+                <div class="modal fade" id="deleteConfirmationModal" tabindex="-1" aria-labelledby="deleteConfirmationModalLabel" aria-hidden="true">
+                    <div class="modal-dialog">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="deleteConfirmationModalLabel">Confirm Delete</h5>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                            </div>
+                            <div class="modal-body">
+                                Are you sure you want to delete your request data? This action cannot be undone.
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                                <a href="?action=delete" class="btn btn-danger">Delete</a>
                             </div>
                         </div>
                     </div>

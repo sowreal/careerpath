@@ -116,6 +116,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
     if (searchInput) {
         searchInput.addEventListener('input', function () {
+            console.log('Search input event detected:', searchInput.value);
             fetchFacultyMembers(1);
         });
     }

@@ -8,7 +8,7 @@ $pageTitle = 'Career Path | Career Tracking';
 $activePage = 'CPT_Professional';
 
 // Check if the user is a Faculty Member
-if ($_SESSION['role'] != 'Regular Instructor' && $_SESSION['role'] != 'Contract of Service Instructor') {
+if ($_SESSION['role'] != 'Permanent Instructor' && $_SESSION['role'] != 'Contract of Service Instructor') {
     // Check if the user is Human Resources
     if ($_SESSION['role'] != 'Human Resources') {
         // **Start of Session Destruction**
@@ -113,7 +113,7 @@ if ($_SESSION['role'] != 'Regular Instructor' && $_SESSION['role'] != 'Contract 
                                 </button>
                             </li>
                             <li class="nav-item">
-                                <button class="nav-link" id="tab-criterion-c" data-bs-toggle="tab" data-bs-target="#criterion-c" type="button" role="tab">
+                                <button class="nav-link" id="tab-criterion-d" data-bs-toggle="tab" data-bs-target="#criterion-d" type="button" role="tab">
                                     Criterion D
                                 </button>
                             </li>
@@ -123,19 +123,21 @@ if ($_SESSION['role'] != 'Regular Instructor' && $_SESSION['role'] != 'Contract 
                     <!-- Criterions section -->
                     <div class="card-body">
                         <div class="tab-content" id="kra-tab-content">
-                            <!-- Tab 1: Criterion A: Teaching Effectiveness -->
-                            <?php require_once BASE_PATH . '/php/includes/career_progress_tracking/research/criterion_a.php'; ?> 
-                            <!-- Tab 2: Criterion B: Curriculum & Material Development -->
-                            <?php require_once BASE_PATH . '/php/includes/career_progress_tracking/research/criterion_b.php'; ?> 
-                            <!-- Tab 3: Criterion C: Thesis & Mentorship Services -->
-                            <?php require_once BASE_PATH . '/php/includes/career_progress_tracking/research/criterion_c.php'; ?> 
+                            <!-- Tab 1: Criterion A -->
+                            <?php require_once BASE_PATH . '/php/includes/career_progress_tracking/professional/kra4_criterion_a.php'; ?> 
+                            <!-- Tab 2: Criterion B -->
+                            <?php require_once BASE_PATH . '/php/includes/career_progress_tracking/professional/kra4_criterion_b.php'; ?> 
+                            <!-- Tab 3: Criterion C -->
+                            <?php require_once BASE_PATH . '/php/includes/career_progress_tracking/professional/kra4_criterion_c.php'; ?> 
+                            <!-- Tab 4: Criterion D -->
+                            <?php require_once BASE_PATH . '/php/includes/career_progress_tracking/professional/kra4_criterion_d.php'; ?> 
                         </div>
                     </div>
 
                 </div>
 
                 <!-- MODAL SECTION -->
-                <?php require_once BASE_PATH . '/php/includes/career_progress_tracking/teaching/modals.php'; ?>
+                <?php // require_once BASE_PATH . '/php/includes/career_progress_tracking/professional/kra4_modals.php'; ?>
 
             </div>
         </main>
@@ -157,7 +159,7 @@ if ($_SESSION['role'] != 'Regular Instructor' && $_SESSION['role'] != 'Contract 
 
     
     <!-- Career Progress Teaching Scripts -->
-    <script src="<?php echo BASE_URL; ?>/php/includes/career_progress_tracking/research/js/research.js"></script>
+    <script src="<?php echo BASE_URL; ?>/php/includes/career_progress_tracking/professional/js/kra4_criterion_a.js"></script>
 
 </body>
 </html>

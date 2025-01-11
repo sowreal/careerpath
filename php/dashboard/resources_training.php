@@ -8,7 +8,7 @@ $pageTitle = 'Career Path | Resources & Training';
 $activePage = 'Training';
 
 // Check if the user is a Faculty Member
-if ($_SESSION['role'] != 'Regular Instructor' && $_SESSION['role'] != 'Contract of Service Instructor') { 
+if ($_SESSION['role'] != 'Permanent Instructor' && $_SESSION['role'] != 'Contract of Service Instructor') { 
     // Check if the user is Human Resources
     if ($_SESSION['role'] == 'Human Resources') { 
         // Redirect to HR dashboard

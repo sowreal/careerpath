@@ -53,7 +53,7 @@
                                     <td><input type="date" class="form-control" name="kra1_b_sole_authorship[<?php echo $i; ?>][date_approved]"></td>
                                     <td><input type="text" class="form-control score-input" name="kra1_b_sole_authorship[<?php echo $i; ?>][score]" readonly></td>
                                     <td>
-                                        <button type="button" class="btn btn-success btn-sm upload-evidence-btn" data-subcriterion-id="sole_authorship_<?php echo $i; ?>">Upload Evidence</button>
+                                        <button type="button" class="btn btn-success btn-sm upload-evidence-btn-b" data-subcriterion-id="sole_authorship_<?php echo $i; ?>">Upload Evidence</button>
                                         <input type="hidden" name="kra1_b_sole_authorship[<?php echo $i; ?>][evidence_file]" value="">
                                     </td>
                                     <td>
@@ -126,7 +126,7 @@
                                     <td><input type="text" class="form-control" name="kra1_b_co_authorship[<?php echo $i; ?>][contribution_percentage]"></td>
                                     <td><input type="text" class="form-control score-input" name="kra1_b_co_authorship[<?php echo $i; ?>][score]" readonly></td>
                                     <td>
-                                        <button type="button" class="btn btn-success btn-sm upload-evidence-btn" data-subcriterion-id="co_authorship_<?php echo $i; ?>">Upload Evidence</button>
+                                        <button type="button" class="btn btn-success btn-sm upload-evidence-btn-b" data-subcriterion-id="co_authorship_<?php echo $i; ?>">Upload Evidence</button>
                                         <input type="hidden" name="kra1_b_co_authorship[<?php echo $i; ?>][evidence_file]" value="">
                                     </td>
                                     <td>
@@ -206,7 +206,7 @@
                                     </td>
                                     <td><input type="text" class="form-control score-input" name="kra1_b_academic_programs[<?php echo $i; ?>][score]" readonly></td>
                                     <td>
-                                        <button type="button" class="btn btn-success btn-sm upload-evidence-btn" data-subcriterion-id="academic_programs_<?php echo $i; ?>">Upload Evidence</button>
+                                        <button type="button" class="btn btn-success btn-sm upload-evidence-btn-b" data-subcriterion-id="academic_programs_<?php echo $i; ?>">Upload Evidence</button>
                                         <input type="hidden" name="kra1_b_academic_programs[<?php echo $i; ?>][evidence_file]" value="">
                                     </td>
                                     <td>

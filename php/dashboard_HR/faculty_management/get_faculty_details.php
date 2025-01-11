@@ -30,7 +30,7 @@ try {
             profile_picture 
         FROM users 
         WHERE id = :id 
-          AND role IN ('Regular Instructor', 'Contract of Service Instructor', 'Human Resources')
+          AND role IN ('Permanent Instructor', 'Contract of Service Instructor', 'Human Resources')
     ");
     $stmt->bindParam(':id', $facultyId, PDO::PARAM_INT);
     $stmt->execute();

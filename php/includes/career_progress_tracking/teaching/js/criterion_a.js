@@ -28,7 +28,7 @@
                 <td><input type="number" class="form-control rating-input" name="student_rating_1[]" placeholder="0.00" required></td>
                 <td><input type="number" class="form-control rating-input" name="student_rating_2[]" placeholder="0.00" required></td>
                 <td>
-                    <button type="button" class="btn btn-success btn-sm upload-evidence-btn" 
+                    <button type="button" class="btn btn-success btn-sm upload-evidence-btn-a" 
                             data-request-id="${requestId}"
                             data-table-type="student">
                         Upload Evidence
@@ -54,7 +54,7 @@
                 <td><input type="number" class="form-control rating-input" name="supervisor_rating_1[]" placeholder="0.00" required></td>
                 <td><input type="number" class="form-control rating-input" name="supervisor_rating_2[]" placeholder="0.00" required></td>
                 <td>
-                    <button type="button" class="btn btn-success btn-sm upload-evidence-btn" 
+                    <button type="button" class="btn btn-success btn-sm upload-evidence-btn-a" 
                             data-request-id="${requestId}"
                             data-table-type="supervisor">
                         Upload Evidence
@@ -84,7 +84,7 @@
             tr.setAttribute('data-evaluation-id', item.evaluation_id);
 
             let evidenceCellContent = `
-                <button type="button" class="btn btn-success btn-sm upload-evidence-btn" 
+                <button type="button" class="btn btn-success btn-sm upload-evidence-btn-a" 
                         data-request-id="${requestId}"
                         data-evaluation-id="${item.evaluation_id}"
                         data-table-type="student">
@@ -125,7 +125,7 @@
             tr.setAttribute('data-evaluation-id', item.evaluation_id);
 
             let evidenceCellContent = `
-                <button type="button" class="btn btn-success btn-sm upload-evidence-btn" 
+                <button type="button" class="btn btn-success btn-sm upload-evidence-btn-a" 
                         data-request-id="${requestId}"
                         data-evaluation-id="${item.evaluation_id}"
                         data-table-type="supervisor">
@@ -240,7 +240,7 @@
         // === DELETION TRACKING AND DIRTY FLAG END ===
 
         // === UPLOAD EVIDENCE HANDLERS (Event Delegation) START ===
-        $('#student-evaluation-table, #supervisor-evaluation-table').on('click', '.upload-evidence-btn', function() {
+        $('#student-evaluation-table, #supervisor-evaluation-table').on('click', '.upload-evidence-btn-a', function() {
             const button = $(this);
             const requestID = button.data('request-id');
             const evaluationID = button.data('evaluation-id');
@@ -316,7 +316,7 @@
                         row.find('input[name="evidence_file_2[]"]').val(response.paths.sem2);
 
                         const newContent = `
-                            <button type="button" class="btn btn-success btn-sm upload-evidence-btn" 
+                            <button type="button" class="btn btn-success btn-sm upload-evidence-btn-a" 
                                     data-request-id="${$('#modal_request_id').val()}"
                                     data-evaluation-id="${evaluationID}"
                                     data-table-type="${tableType}">
@@ -369,7 +369,7 @@
                         row.find(`input[name="evidence_file_${semester.slice(-1)}[]"]`).val('');
 
                         const newContent = `
-                            <button type="button" class="btn btn-success btn-sm upload-evidence-btn" 
+                            <button type="button" class="btn btn-success btn-sm upload-evidence-btn-a" 
                                     data-request-id="${requestID}"
                                     data-evaluation-id="${evaluationID}"
                                     data-table-type="${tableType}">
@@ -538,7 +538,7 @@
                         <input type="number" class="form-control rating-input" name="${rating2Name}" placeholder="0.00" required>
                     </td>
                     <td>
-                        <button type="button" class="btn btn-success btn-sm upload-evidence-btn" 
+                        <button type="button" class="btn btn-success btn-sm upload-evidence-btn-a" 
                                 data-request-id="${requestId}"
                                 data-evaluation-id="${new_evaluation_id}"
                                 data-table-type="${isStudent ? 'student' : 'supervisor'}">
@@ -750,7 +750,7 @@
         window.deleteRowModal = new bootstrap.Modal(document.getElementById('deleteRowModal'));
         window.deleteSuccessModal = new bootstrap.Modal(document.getElementById('deleteSuccessModal'));
         window.unsavedChangesModal = new bootstrap.Modal(document.getElementById('unsavedChangesModal'));
-
+        window.uploadSingleEvidenceModalB = new bootstrap.Modal(document.getElementById('uploadSingleEvidenceModalB'));
         document.getElementById('view-remarks-c').addEventListener('click', () => showModal('remarksModalC'));
     });
 
