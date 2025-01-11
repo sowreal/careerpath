@@ -3,7 +3,11 @@
         'name' => '__root__',
         'pretty_version' => 'dev-main',
         'version' => 'dev-main',
+<<<<<<< Updated upstream
         'reference' => 'ddab492420c6ce51caf049d7578a798d89423bae',
+=======
+        'reference' => '4d65c7b5120b6bc0cfb0ce287626c4db0b5e4bcd',
+>>>>>>> Stashed changes
         'type' => 'library',
         'install_path' => __DIR__ . '/../../',
         'aliases' => array(),
@@ -13,7 +17,11 @@
         '__root__' => array(
             'pretty_version' => 'dev-main',
             'version' => 'dev-main',
+<<<<<<< Updated upstream
             'reference' => 'ddab492420c6ce51caf049d7578a798d89423bae',
+=======
+            'reference' => '4d65c7b5120b6bc0cfb0ce287626c4db0b5e4bcd',
+>>>>>>> Stashed changes
             'type' => 'library',
             'install_path' => __DIR__ . '/../../',
             'aliases' => array(),

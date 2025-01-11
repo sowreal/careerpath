@@ -1,3 +1,4 @@
+<<<<<<< Updated upstream
 <!-- careerpath/php/includes/career_progress_tracking/extension/kra3_criterion_a.php -->
 
 <div class="tab-pane fade show active" id="kra3-criterion-a" role="tabpanel" aria-labelledby="tab-kra3-criterion-a">
@@ -19,6 +20,26 @@
 
                     <!-- 1. FOR EVERY SUCCESSFUL LINKAGE, NETWORKING OR PARTNERSHIP ACTIVITY -->
                     <h5 class="mt-4">
+=======
+<!-- careerpath/php/includes/career_progress_tracking/extension/criterion_a.php -->
+
+<div class="tab-pane fade show active criterion-tab" id="criterion-a" role="tabpanel" aria-labelledby="tab-criterion-a">
+    <div class="container-fluid">
+
+        <form id="criterion-a-form" enctype="multipart/form-data">
+            <div class="row">
+                <!-- Hidden Input for request_id -->
+                <input type="hidden" id="request_id" name="request_id" value="" readonly>
+
+                <!-- CRITERION A: SERVICE TO THE INSTITUTION -->
+                <div class="col-12 mt-3">
+                    <h4 class="mb-4 pb-2 border-bottom border-3 border-success">
+                        <strong>CRITERION A - SERVICE TO THE INSTITUTION (MAX = 30 POINTS)</strong>
+                    </h4>
+
+                    <!-- 1. FOR EVERY SUCCESSFUL LINKAGE, NETWORKING OR PARTNERSHIP ACTIVITY -->
+                    <h5 class="mt-4  pb-2 border-bottom border-2 border-success">
+>>>>>>> Stashed changes
                         <strong>1. FOR EVERY SUCCESSFUL LINKAGE, NETWORKING OR PARTNERSHIP ACTIVITY</strong>
                     </h5>
                     <div class="table-responsive mt-3">
@@ -35,10 +56,16 @@
                                     <th scope="col">Date of activity (mm/dd/yyyy)</th>
                                     <th scope="col">Faculty Score</th>
                                     <th scope="col">Link to Evidence from Google Drive</th>
+<<<<<<< Updated upstream
+=======
+                                    <th scope="col">Remarks</th>
+                                    <th scope="col">Actions</th>
+>>>>>>> Stashed changes
                                 </tr>
                             </thead>
                             <tbody>
                                 <?php for ($i = 1; $i <= 9; $i++): ?>
+<<<<<<< Updated upstream
                                 <tr>
                                     <td><?php echo $i; ?></td>
                                     <td><input type="text" class="form-control" name="a1_partner_name_<?php echo $i; ?>" /></td>
@@ -57,10 +84,35 @@
                                     <td><input type="number" class="form-control" name="a1_faculty_score_<?php echo $i; ?>" value="0.00" readonly /></td>
                                     <td><input type="url" class="form-control" name="a1_link_evidence_<?php echo $i; ?>" placeholder="https://drive.google.com/..." /></td>
                                 </tr>
+=======
+                                    <tr>
+                                        <td><?php echo $i; ?></td>
+                                        <!-- Hidden input for linkages_id -->
+                                        <td><input type="hidden" name="a1_linkages_id_<?php echo $i; ?>" value="0" />
+                                        <input type="text" class="form-control" name="a1_partner_name_<?php echo $i; ?>" /></td>
+                                        <td><input type="text" class="form-control" name="a1_partnership_nature_<?php echo $i; ?>" /></td>
+                                        <td>
+                                            <select class="form-select" name="a1_faculty_role_<?php echo $i; ?>">
+                                                <option value="">SELECT OPTION</option>
+                                                <option value="Lead Coordinator">Lead Coordinator</option>
+                                                <option value="Assistant Coordinator">Assistant Coordinator</option>
+                                            </select>
+                                        </td>
+                                        <td><input type="date" class="form-control" name="a1_moa_start_<?php echo $i; ?>" /></td>
+                                        <td><input type="date" class="form-control" name="a1_moa_expiration_<?php echo $i; ?>" /></td>
+                                        <td><input type="text" class="form-control" name="a1_activities_conducted_<?php echo $i; ?>" /></td>
+                                        <td><input type="date" class="form-control" name="a1_activity_date_<?php echo $i; ?>" /></td>
+                                        <td><input type="number" class="form-control" name="a1_score_<?php echo $i; ?>" placeholder="0.00" /></td>
+                                        <td><input type="url" class="form-control" name="a1_link_evidence_<?php echo $i; ?>" placeholder="https://drive.google.com/..." /></td>
+                                        <td><button type="button" class="btn btn-primary btn-sm view-remarks" data-first-remark="" data-second-remark="">View Remarks</button></td>
+                                        <td><button type="button" class="btn btn-danger btn-sm delete-row">Delete</button></td>
+                                    </tr>
+>>>>>>> Stashed changes
                                 <?php endfor; ?>
                             </tbody>
                             <tfoot>
                                 <tr>
+<<<<<<< Updated upstream
                                     <td colspan="8"></td>
                                     <td>
                                         <input type="number" class="form-control" id="a1_total_score" name="a1_total_score" value="0.00" readonly>
@@ -73,6 +125,20 @@
 
                     <!-- 2. TOTAL CONTRIBUTION TO INCOME GENERATION -->
                     <h5 class="mt-4">
+=======
+                                    <td colspan="7"></td><td><strong>Total Score:</strong></td>
+                                    <td>
+                                        <input type="number" class="form-control" id="a1_total_score" name="a1_total_score" value="0.00" readonly>
+                                    </td>
+                                </tr>
+                            </tfoot>
+                        </table>
+                        <button type="button" class="btn btn-success mt-3 add-row" data-table-id="adviser-table">Add Row</button>
+                    </div>
+
+                    <!-- 2. TOTAL CONTRIBUTION TO INCOME GENERATION -->
+                    <h5 class="mt-4 pb-2 border-bottom border-2 border-success">
+>>>>>>> Stashed changes
                         <strong>2. TOTAL CONTRIBUTION TO INCOME GENERATION</strong>
                     </h5>
                     <div class="table-responsive mt-3">
@@ -86,10 +152,17 @@
                                     <th scope="col">Total Amount</th>
                                     <th scope="col">Faculty Points</th>
                                     <th scope="col">Link to Evidence from Google Drive</th>
+<<<<<<< Updated upstream
+=======
+                                    <th scope="col">Remarks</th>
+                                    <th scope="col">Actions</th>
+
+>>>>>>> Stashed changes
                                 </tr>
                             </thead>
                             <tbody>
                                 <?php for ($i = 1; $i <= 9; $i++): ?>
+<<<<<<< Updated upstream
                                 <tr>
                                     <td><?php echo $i; ?></td>
                                     <td><input type="text" class="form-control" name="a2_project_name_<?php echo $i; ?>" /></td>
@@ -105,10 +178,32 @@
                                     <td><input type="number" class="form-control" name="a2_faculty_points_<?php echo $i; ?>" value="0.00" readonly /></td>
                                     <td><input type="url" class="form-control" name="a2_link_evidence_<?php echo $i; ?>" placeholder="https://drive.google.com/..." /></td>
                                 </tr>
+=======
+                                    <tr>
+                                        <td><?php echo $i; ?></td>
+                                        <!-- Hidden input for income_generation_id -->
+                                        <td><input type="hidden" name="a2_income_generation_id_<?php echo $i; ?>" value="0" />
+                                        <input type="text" class="form-control" name="a2_product_name_<?php echo $i; ?>" /></td>
+                                        <td>
+                                            <select class="form-select" name="a2_role_<?php echo $i; ?>">
+                                                <option value="">SELECT OPTION</option>
+                                                <option value="Lead Contributor">Lead Contributor</option>
+                                                <option value="Co-contributor">Co-contributor</option>
+                                            </select>
+                                        </td>
+                                        <td><input type="text" class="form-control" name="a2_coverage_period_<?php echo $i; ?>" placeholder="mm/dd/yyyy to mm/dd/yyyy" /></td>
+                                        <td><input type="number" class="form-control" name="a2_total_amount_<?php echo $i; ?>" /></td>
+                                        <td><input type="number" class="form-control" name="a2_score_<?php echo $i; ?>" placeholder="0.00" /></td>
+                                        <td><input type="url" class="form-control" name="a2_link_evidence_<?php echo $i; ?>" placeholder="https://drive.google.com/..." /></td>
+                                        <td><button type="button" class="btn btn-primary btn-sm view-remarks" data-first-remark="" data-second-remark="">View Remarks</button></td>
+                                        <td><button type="button" class="btn btn-danger btn-sm delete-row">Delete</button></td>
+                                    </tr>
+>>>>>>> Stashed changes
                                 <?php endfor; ?>
                             </tbody>
                             <tfoot>
                                 <tr>
+<<<<<<< Updated upstream
                                     <td colspan="5"></td>
                                     <td>
                                         <input type="number" class="form-control" id="a2_total_score" name="a2_total_score" value="0.00" readonly>
@@ -117,6 +212,16 @@
                                 </tr>
                             </tfoot>
                         </table>
+=======
+                                    <td colspan="4"></td><td><strong>Total Score:</strong></td>
+                                    <td>
+                                        <input type="number" class="form-control" id="a2_total_score" name="a2_total_score" value="0.00" readonly>
+                                    </td>
+                                </tr>
+                            </tfoot>
+                        </table>
+                        <button type="button" class="btn btn-success mt-3 add-row" data-table-id="incomegen-table">Add Row</button>
+>>>>>>> Stashed changes
                     </div>
                 </div>
             </div>
