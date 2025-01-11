@@ -120,12 +120,12 @@ $isCPTActive = in_array($activePage, ['CPT', 'CPT_Request', 'CPT_Teaching', 'CPT
                     </a>
                 </li>
 
-                <li class="nav-item"> 
+                <!-- <li class="nav-item"> 
                     <a href="<?php echo BASE_URL ?>/php/dashboard/resources_training.php" class="nav-link <?php echo ($activePage == 'Training') ? 'active' : ''; ?>" data-navigation="true"> 
                         <i class="nav-icon bi bi-book"></i>
                         <p><strong>Resources and Training</strong></p>
                     </a>
-                </li>
+                </li> -->
 
                 <!-- Separator/Header for Local Evaluator Tools -->
                 <li class="nav-item">
