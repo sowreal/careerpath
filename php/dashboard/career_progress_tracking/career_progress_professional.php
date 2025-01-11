@@ -159,6 +159,8 @@ if ($_SESSION['role'] != 'Permanent Instructor' && $_SESSION['role'] != 'Contrac
 
     
     <!-- Career Progress Teaching Scripts -->
+    
+    <script src="<?php echo BASE_URL; ?>/php/includes/career_progress_tracking/professional/js/kra4_professional.js"></script>
     <script src="<?php echo BASE_URL; ?>/php/includes/career_progress_tracking/professional/js/kra4_criterion_a.js"></script>
     <script src="<?php echo BASE_URL; ?>/php/includes/career_progress_tracking/professional/js/kra4_criterion_b.js"></script>
     <script src="<?php echo BASE_URL; ?>/php/includes/career_progress_tracking/professional/js/kra4_criterion_c.js"></script>
