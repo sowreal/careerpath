@@ -394,17 +394,15 @@ if (isset($_GET['action']) && $_GET['action'] == 'delete' && $user_id) {
                                             <button type="button" class="btn btn-success" id="submitRequestButton">
                                                 <?php echo $mode == 'new' ? 'Submit Request' : 'Update Request'; ?>
                                             </button>
+
+                                            <!-- Delete Button (only in edit mode) -->
+                                            <?php if ($mode == 'edit'): ?>
+                                                <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#deleteConfirmationModal">
+                                                    Delete Request
+                                                </button>
+                                            <?php endif; ?>
                                         </div>
                                     </form>
-
-                                    <!-- Delete Button (only in edit mode) -->
-                                    <?php if ($mode == 'edit'): ?>
-                                        <div class="mt-3 text-right">
-                                            <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#deleteConfirmationModal">
-                                                Delete Request
-                                            </button>
-                                        </div>
-                                    <?php endif; ?>
                                 </div>
                             </div>
                         </div>
