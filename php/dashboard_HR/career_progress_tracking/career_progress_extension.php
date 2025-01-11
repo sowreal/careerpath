@@ -114,7 +114,7 @@ if ($_SESSION['role'] != 'Permanent Instructor' && $_SESSION['role'] != 'Contrac
                                 </button>
                             </li>
                             <li class="nav-item">
-                                <button class="nav-link" id="tab-criterion-c" data-bs-toggle="tab" data-bs-target="#criterion-c" type="button" role="tab">
+                                <button class="nav-link" id="tab-criterion-d" data-bs-toggle="tab" data-bs-target="#criterion-d" type="button" role="tab">
                                     Criterion D: Bonus Criterion
                                 </button>
                             </li>
