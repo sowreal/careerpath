@@ -114,7 +114,7 @@ if ($_SESSION['role'] != 'Permanent Instructor' && $_SESSION['role'] != 'Contrac
                                 </button>
                             </li>
                             <li class="nav-item">
-                                <button class="nav-link" id="tab-criterion-c" data-bs-toggle="tab" data-bs-target="#criterion-c" type="button" role="tab">
+                                <button class="nav-link" id="tab-criterion-d" data-bs-toggle="tab" data-bs-target="#criterion-d" type="button" role="tab">
                                     Criterion D
                                 </button>
                             </li>
@@ -124,20 +124,20 @@ if ($_SESSION['role'] != 'Permanent Instructor' && $_SESSION['role'] != 'Contrac
                     <!-- Criterions section -->
                     <div class="card-body">
                         <div class="tab-content" id="kra-tab-content">
-                            <!-- Tab 1: Criterion A: Teaching Effectiveness -->
+                            <!-- Tab 1: Criterion A: Service to the Institution -->
                             <?php require_once BASE_PATH . '/php/includes/career_progress_tracking/extension/criterion_a.php'; ?> 
-                            <!-- Tab 2: Criterion B: Curriculum & Material Development -->
+                            <!-- Tab 2: Criterion B: Service to the Community -->
                             <?php require_once BASE_PATH . '/php/includes/career_progress_tracking/extension/criterion_b.php'; ?> 
-                            <!-- Tab 3: Criterion C: Thesis & Mentorship Services -->
+                            <!-- Tab 3: Criterion C: Quality of Extension Services-->
                             <?php require_once BASE_PATH . '/php/includes/career_progress_tracking/extension/criterion_c.php'; ?> 
-                            <!-- Tab 4: Criterion C: Thesis & Mentorship Services -->
+                            <!-- Tab 4: Criterion D: Bonus Criterion -->
                             <?php require_once BASE_PATH . '/php/includes/career_progress_tracking/extension/criterion_d.php'; ?> 
                         </div>
                     </div>
 
                 </div>
 
-                <!-- MODAL SECTION -->
+                <!-- MODAL SECTION -->f
                 <?php require_once BASE_PATH . '/php/includes/career_progress_tracking/teaching/modals.php'; ?>
 
             </div>
@@ -161,6 +161,7 @@ if ($_SESSION['role'] != 'Permanent Instructor' && $_SESSION['role'] != 'Contrac
     
     <!-- Career Progress Teaching Scripts -->
     <script src="<?php echo BASE_URL; ?>/php/includes/career_progress_tracking/research/js/research.js"></script>
+    <script src="<?php echo BASE_URL; ?>/php/includes/career_progress_tracking/extension/js/criterion_a.js"></script>
 
 </body>
 </html>

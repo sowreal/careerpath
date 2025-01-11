@@ -1,126 +1,115 @@
-<!-- careerpath/php/includes/career_progress_tracking/teaching/criterion_c.php -->
-<div class="tab-pane fade" id="criterion-c" role="tabpanel" aria-labelledby="tab-criterion-c">
-    <h4 class="mb-4 pb-2 border-bottom border-3 border-success"><strong>CRITERION DDDD - BONUS CRITERION (MAX = 20 POINTS)</strong></h4>
+<!-- careerpath/php/includes/career_progress_tracking/extension/criterion_d.php -->
+<div class="tab-pane fade" id="criterion-d" role="tabpanel" aria-labelledby="tab-criterion-d">
+<h4 class="mb-4 pb-2 border-bottom border-3 border-success"><strong>CRITERION D - BONUS CRITERION (MAX = 20 POINTS)</strong></h4>
+    
+    <h5><strong>FOR ADMINISTRATIVE DESIGNATION</strong><br>  
+    HIGHEST ADMINISTRATIVE DESIGNATION HELD FOR AT LEAST ONE YEAR WITH THE EVALUATION PERIOD
+    </h5>
 
-    <!-- Section 1: Services Rendered to Students as Adviser -->
-    <h5>1. FOR SERVICES RENDERED TO STUDENTS AS:</h5>
+    <form id="criterion-d-form" enctype="multipart/form-data">
+        <div class="row">
+        <!-- Hidden Input for request_id -->
+        <input type="hidden" id="request_id" name="request_id" value="" readonly>
 
-    <!-- 1.1 Adviser -->
-    <div class="mt-4">
-        <h5 class="mb-3 pb-2 border-bottom border-2 border-success">1.1 Adviser</h5>
-        <div class="table-responsive">
-            <table class="table table-bordered align-middle" id="adviser-table">
-                <thead class="table-light">
-                    <tr>
-                        <th scope="col">No.</th>
-                        <th scope="col">Requirement</th>
-                        <th scope="col">AY 2019-2020</th>
-                        <th scope="col">AY 2020-2021</th>
-                        <th scope="col">AY 2021-2022</th>
-                        <th scope="col">AY 2022-2023</th>
-                        <th scope="col">Faculty Score</th>
-                        <th scope="col">Link to Evidence</th>
-                        <th scope="col">Actions</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <?php 
-                    $adviser_requirements = ["Special/Capstone Project", "Undergraduate Thesis", "Master's Thesis", "Dissertation"];
-                    foreach ($adviser_requirements as $index => $requirement): ?>
-                        <tr>
-                            <td><?php echo $index + 1; ?></td>
-                            <td><?php echo $requirement; ?></td>
-                            <?php for ($year = 1; $year <= 4; $year++): ?>
-                                <td><input type="number" class="form-control" name="adviser_ay_<?php echo $year; ?>[]" step="1" min="0" required></td>
-                            <?php endfor; ?>
-                            <td><input type="number" class="form-control" name="adviser_score[]" step="0.01" min="0" required></td>
-                            <td><input type="url" class="form-control" name="adviser_evidence_link[]" placeholder="http://example.com/evidence" required></td>
-                            <td><button type="button" class="btn btn-danger btn-sm delete-row">Delete</button></td>
-                        </tr>
-                    <?php endforeach; ?>
-                </tbody>
-            </table>
-        </div>
-        <button type="button" class="btn btn-success mt-3 add-row" data-table-id="adviser-table">Add Row</button>
-    </div>
+                <!-- Responsive Table -->
+                <div class="table-responsive">
+                    <table class="table table-bordered align-middle" id="administrative-designation-table">
+                        <thead class="table-light">
+                            <tr>
+                                <th scope="col" rowspan="2" class="align-middle text-center">No.</th>
+                                <th scope="col" rowspan="2" class="align-middle text-center">Designation</th>
+                                <th scope="col" rowspan="2" class="align-middle text-center">Effectivity Period<br>(mm/dd/yyyy to mm/dd/yyyy)</th>
+                                <th scope="col" rowspan="2" class="align-middle text-center">Faculty Score</th>
+                                <th scope="col" rowspan="2" class="align-middle text-center">Link to Evidence<br>from Google Drive</th>
+                                <th scope="col" rowspan="2" class="align-middle text-center">Remarks</th>
+                                <th scope="col" colspan="3" class="text-center">For Validator</th>
+                            </tr>
+                            <tr>
+                                <th scope="col" class="text-center">Validation of Documents</th>
+                                <th scope="col" class="text-center">Validated Score</th>
+                                <th scope="col" class="text-center">Explanation for Non-Acceptance</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <!-- Default Rows -->
+                            <tr>
+                                <td class="text-center">1</td>
+                                <td>
+                                    <select class="form-select" name="designation[]">
+                                        <option value="President or OIC President">President or OIC President</option>
+                                        <option value="Vice-President">Vice-President</option>
+                                        <option value="Chancellor">Chancellor</option>
+                                        <option value="Vice-Chancellor">Vice-Chancellor</option>
+                                        <option value="Campus Director/Administrator/Head">Campus Director/Administrator/Head</option>
+                                        <option value="Faculty Regent">Faculty Regent</option>
+                                        <option value="Office Director">Office Director</option>
+                                        <option value="University/College Secretary">University/College Secretary</option>
+                                        <option value="Project Head">Project Head</option>
+                                        <option value="Institution-level Committee Chair">Institution-level Committee Chair</option>
+                                        <option value="Institution-level Committee Member">Institution-level Committee Member</option>
+                                        <option value="Dean">Dean</option>
+                                        <option value="Associate Dean">Associate Dean</option>
+                                        <option value="College Secretary">College Secretary</option>
+                                        <option value="Department Head">Department Head</option>
+                                        <option value="Program Chair/Project Head">Program Chair/Project Head</option>
+                                        <option value="Department-level Committee Chair">Department-level Committee Chair</option>
+                                        <option value="Department-level Committee Member">Department-level Committee Member</option>
+                                    </select>
+                                </td>
+                                <td>
+                                    <input type="text" class="form-control" name="effectivity_period[]" placeholder="mm/dd/yyyy to mm/dd/yyyy">
+                                </td>
+                                <td>
+                                    <input type="number" class="form-control" name="faculty_score[]" value="0.00" readonly>
+                                </td>
+                                <td>
+                                    <input type="text" class="form-control" name="google_drive_link[]" placeholder="<Google Drive link>">
+                                </td>
+                                <td>
+                                    <input type="text" class="form-control" name="remarks[]" placeholder="">
+                                </td>
+                                <td>
+                                    <select class="form-select" name="validation[]">
+                                        <option value="ACCEPTABLE">ACCEPTABLE</option>
+                                        <option value="NOT ACCEPTABLE">NOT ACCEPTABLE</option>
+                                        <!-- Add more options as needed -->
+                                    </select>
+                                </td>
+                                <td>
+                                    <input type="number" class="form-control" name="validated_score[]" value="0.00" readonly>
+                                </td>
+                                <td>
+                                    <input type="text" class="form-control" name="explanation[]" placeholder="">
+                                </td>
+                            </tr>
+                            <!-- You can add more rows similarly -->
+                        </tbody>
+                        <tfoot>
+                            <tr>
+                                <td colspan="3" class="text-end"><strong>TOTAL</strong></td>
+                                <td>
+                                    <input type="number" class="form-control" name="total_faculty_score" value="0.00" readonly>
+                                </td>
+                                <td colspan="2"></td>
+                                <td></td>
+                                <td>
+                                    <input type="number" class="form-control" name="total_validated_score" value="0.00" readonly>
+                                </td>
+                                <td></td>
+                            </tr>
+                        </tfoot>
+                    </table>
+                </div>
 
-    <!-- 1.2 Panel -->
-    <div class="mt-5">
-        <h5 class="mb-3 pb-2 border-bottom border-2 border-success">1.2 Panel</h5>
-        <div class="table-responsive">
-            <table class="table table-bordered align-middle" id="panel-table">
-                <thead class="table-light">
-                    <tr>
-                        <th scope="col">No.</th>
-                        <th scope="col">Requirement</th>
-                        <th scope="col">AY 2019-2020</th>
-                        <th scope="col">AY 2020-2021</th>
-                        <th scope="col">AY 2021-2022</th>
-                        <th scope="col">AY 2022-2023</th>
-                        <th scope="col">Faculty Score</th>
-                        <th scope="col">Link to Evidence</th>
-                        <th scope="col">Actions</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <?php 
-                    $panel_requirements = ["Special/Capstone Project", "Undergraduate Thesis", "Master's Thesis", "Dissertation"];
-                    foreach ($panel_requirements as $index => $requirement): ?>
-                        <tr>
-                            <td><?php echo $index + 1; ?></td>
-                            <td><?php echo $requirement; ?></td>
-                            <?php for ($year = 1; $year <= 4; $year++): ?>
-                                <td><input type="number" class="form-control" name="panel_ay_<?php echo $year; ?>[]" step="1" min="0" required></td>
-                            <?php endfor; ?>
-                            <td><input type="number" class="form-control" name="panel_score[]" step="0.01" min="0" required></td>
-                            <td><input type="url" class="form-control" name="panel_evidence_link[]" placeholder="http://example.com/evidence" required></td>
-                            <td><button type="button" class="btn btn-danger btn-sm delete-row">Delete</button></td>
-                        </tr>
-                    <?php endforeach; ?>
-                </tbody>
-            </table>
-        </div>
-        <button type="button" class="btn btn-success mt-3 add-row" data-table-id="panel-table">Add Row</button>
-    </div>
+                <!-- Add Row Button (if needed) -->
+                <!-- <button type="button" class="btn btn-success mt-3 add-row" data-table-id="administrative-designation-table">Add Row</button> -->
 
-    <!-- Section 2: Services Rendered as Mentor -->
-    <div class="mt-5">
-        <h5 class="mb-3 pb-2 border-bottom border-2 border-success">2. FOR SERVICES RENDERED AS MENTOR</h5>
-        <div class="table-responsive">
-            <table class="table table-bordered align-middle" id="mentor-table">
-                <thead class="table-light">
-                    <tr>
-                        <th scope="col">No.</th>
-                        <th scope="col">Name of Academic Competition</th>
-                        <th scope="col">Name of Sponsor Organization</th>
-                        <th scope="col">Award Received</th>
-                        <th scope="col">Date Awarded</th>
-                        <th scope="col">Faculty Score</th>
-                        <th scope="col">Link to Evidence</th>
-                        <th scope="col">Actions</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <?php for ($i = 1; $i <= 5; $i++): ?>
-                        <tr>
-                            <td><?php echo $i; ?></td>
-                            <td><input type="text" class="form-control" name="mentor_competition[]" required></td>
-                            <td><input type="text" class="form-control" name="mentor_organization[]" required></td>
-                            <td><input type="text" class="form-control" name="mentor_award[]" required></td>
-                            <td><input type="date" class="form-control" name="mentor_date_awarded[]" required></td>
-                            <td><input type="number" class="form-control" name="mentor_score[]" step="0.01" min="0" required></td>
-                            <td><input type="url" class="form-control" name="mentor_evidence_link[]" placeholder="http://example.com/evidence" required></td>
-                            <td><button type="button" class="btn btn-danger btn-sm delete-row">Delete</button></td>
-                        </tr>
-                    <?php endfor; ?>
-                </tbody>
-            </table>
-        </div>
-        <button type="button" class="btn btn-success mt-3 add-row" data-table-id="mentor-table">Add Row</button>
-    </div>
-
+            </div>
     <!-- Save Button -->
     <div class="d-flex justify-content-end mt-5">
-        <button type="submit" class="btn btn-success" id="save-criterion-c">Save Criterion C</button>
+        <button type="submit" class="btn btn-success" id="save-criterion-d">Save Criterion D</button>
     </div>
 </div>
+
+<!-- Delete Row Confirmation Modal (if needed) -->
+<!-- Add other modals as required, similar to your existing code -->

@@ -155,11 +155,6 @@ if ($_SESSION['role'] != 'Permanent Instructor' && $_SESSION['role'] != 'Contrac
                                                 <a href="#" class="dropdown-item">Separated link</a> 
                                             </div>
                                         </div> 
-
-                                        <!-- Close Button -->
-                                        <!-- <button type="button" class="btn btn-tool" data-lte-toggle="card-remove"> 
-                                            <i class="bi bi-x-lg"></i> 
-                                        </button> -->
                                     </div>
                                 </div> 
                                 <!-- /.card-header -->

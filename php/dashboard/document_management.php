@@ -85,130 +85,72 @@ if ($_SESSION['role'] != 'Permanent Instructor' && $_SESSION['role'] != 'Contrac
             <div class="app-content">
                 <div class="container-fluid">
 
-                    <!-- Upload Documents Section -->
-                    <div class="row mb-4">
-                        <div class="col-lg-6">
-                            <div class="card">
-                                <div class="card-header bg-success bg-gradient text-white">
-                                    <h5>Upload Document</h5>
-                                </div>
-                                <div class="card-body">
-                                    <form id="uploadForm">
-                                        <div class="mb-3">
-                                            <label for="document" class="form-label"><strong>Choose Document</strong></label>
-                                            <input type="file" class="form-control" id="document" name="document" required>
-                                        </div>
-                                        <button type="submit" class="btn btn-success">Upload</button>
-                                    </form>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- View Uploaded Documents Section -->
                     <!-- View Uploaded Documents Section -->
                     <div class="row">
                         <div class="col-lg-12">
-                            <div class="card">
-                                <div class="card-header bg-success bg-gradient text-white">
-                                    <h5>Uploaded Documents</h5>
+                            <div class="card card-success">
+                                <div class="card-header bg-success">
+                                    <h3 class="card-title">Uploaded Documents</h3>
                                 </div>
                                 <div class="card-body">
-
-                                    <!-- Filter Section -->
-                                    <div class="mb-3">
-                                        <label for="filterStatus" class="form-label"><strong>Filter by Status</strong></label>
-                                        <select id="filterStatus" class="form-select">
-                                            <option value="all">All</option>
-                                            <option value="approved">Approved</option>
-                                            <option value="pending">Pending</option>
-                                            <option value="rejected">Rejected</option>
-                                        </select>
+                                   <div class="row mb-3">
+                                        <div class="col-md-6">
+                                            <div class="form-group">
+                                                <label for="filter-type">Filter by Type:</label>
+                                                    <select class="form-control" id="filter-type">
+                                                    <option value="all" selected>All</option>
+                                                    <option value="KRA 1 - Teaching">KRA 1 - Teaching</option>
+                                                    <option value="KRA 2 - Research">KRA 2 - Research</option>
+                                                    <option value="KRA 3 - Extension">KRA 3 - Extension</option>
+                                                    <option value="KRA 4 - Professional Dev">KRA 4 - Professional Development</option>
+                                                    <option value="other">Other Documents</option>
+                                                    </select>
+                                            </div>
+                                        </div>
+                                          <div class="col-md-6">
+                                            <div class="form-group">
+                                                <label for="filter-status">Filter by Status:</label>
+                                                    <select class="form-control" id="filter-status">
+                                                    <option value="all" selected>All</option>
+                                                    <option value="pending">Pending</option>
+                                                    <option value="approved">Approved</option>
+                                                    <option value="rejected">Rejected</option>
+                                                    </select>
+                                            </div>
+                                        </div>
                                     </div>
+                                    
+                                    <div class="table-responsive">
+                                        <table class="table table-bordered">
+                                            <thead>
+                                                <tr>
+                                                    <th>Document ID</th>
+                                                    <th>Title</th>
+                                                    <th>Type</th>
+                                                    <th>Status</th>
+                                                    <th>Date</th>
+                                                    <th>Actions</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody id="documents-table-body">
+                                                <!-- Document Rows to be dynamically loaded here -->
+                                            </tbody>
+                                        </table>
+                                     </div>
 
-                                    <!-- Table of Uploaded Documents -->
-                                    <table class="table table-striped">
-                                        <thead>
-                                            <tr>
-                                                <th>Document ID</th>
-                                                <th>Title</th>
-                                                <th>Status</th>
-                                                <th>Date</th>
-                                                <th>Actions</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody id="documentTable">
-                                            <!-- Mock Data for Uploaded Documents -->
-                                            <tr data-status="approved">
-                                                <td>DOC001</td>
-                                                <td>Research Paper on AI</td>
-                                                <td><span class="badge bg-success">Approved</span></td>
-                                                <td>Oct 10, 2024</td>
-                                                <td>
-                                                    <button class="btn btn-primary btn-sm">View</button>
-                                                    <button class="btn btn-secondary btn-sm">Download</button>
-                                                    <button class="btn btn-danger btn-sm">Delete</button>
-                                                </td>
-                                            </tr>
-                                            <tr data-status="pending">
-                                                <td>DOC002</td>
-                                                <td>Teaching Certificate</td>
-                                                <td><span class="badge bg-warning">Pending</span></td>
-                                                <td>Oct 12, 2024</td>
-                                                <td>
-                                                    <button class="btn btn-primary btn-sm">View</button>
-                                                    <button class="btn btn-secondary btn-sm">Download</button>
-                                                    <button class="btn btn-danger btn-sm">Delete</button>
-                                                </td>
-                                            </tr>
-                                            <tr data-status="rejected">
-                                                <td>DOC003</td>
-                                                <td>Research Paper on Climate Change</td>
-                                                <td><span class="badge bg-danger">Rejected</span></td>
-                                                <td>Oct 14, 2024</td>
-                                                <td>
-                                                    <button class="btn btn-primary btn-sm">View</button>
-                                                    <button class="btn btn-secondary btn-sm">Download</button>
-                                                    <button class="btn btn-danger btn-sm">Delete</button>
-                                                </td>
-                                            </tr>
-                                        </tbody>
-                                    </table>
+                                    <ul class="pagination">
+                                        <li class="page-item" id="previous-page"><a class="page-link" href="#">Previous</a></li>
+                                        <li class="page-item" id="current-page"><a class="page-link" href="#">1</a></li>
+                                        <li class="page-item" id="next-page"><a class="page-link" href="#">Next</a></li>
+                                    </ul>
 
-                                    <!-- Pagination Section (Mock) -->
-                                    <nav aria-label="Page navigation example">
-                                        <ul class="pagination">
-                                            <li class="page-item"><a class="page-link" href="#">Previous</a></li>
-                                            <li class="page-item"><a class="page-link" href="#">1</a></li>
-                                            <li class="page-item"><a class="page-link" href="#">2</a></li>
-                                            <li class="page-item"><a class="page-link" href="#">Next</a></li>
-                                        </ul>
-                                    </nav>
                                 </div>
                             </div>
                         </div>
                     </div>
 
 
-                    <!-- Mock Upload Notification Modal -->
-                    <div class="modal fade" id="uploadModal" tabindex="-1" aria-labelledby="uploadModalLabel" aria-hidden="true">
-                        <div class="modal-dialog modal-dialog-centered">
-                            <div class="modal-content">
-                                <div class="modal-header bg-success-subtle">
-                                    <h5 class="modal-title" id="uploadModalLabel">Document Upload Successful</h5>
-                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                                </div>
-                                <div class="modal-body">
-                                    Your document has been uploaded successfully. It will be reviewed by the administration shortly.
-                                </div>
-                                <div class="modal-footer">
-                                    <button type="button" class="btn btn-primary" data-bs-dismiss="modal">OK</button>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Modal for Viewing Document Details -->
+                     <!-- Modal for Viewing Document Details -->
                     <div class="modal fade" id="viewDocumentModal" tabindex="-1" aria-labelledby="viewDocumentModalLabel" aria-hidden="true">
                         <div class="modal-dialog modal-dialog-centered">
                             <div class="modal-content">
@@ -220,6 +162,7 @@ if ($_SESSION['role'] != 'Permanent Instructor' && $_SESSION['role'] != 'Contrac
                                     <!-- Dynamic content will be inserted here via JS -->
                                     <p><strong>Document ID:</strong> <span id="modalDocumentId"></span></p>
                                     <p><strong>Title:</strong> <span id="modalDocumentTitle"></span></p>
+                                    <p><strong>Type:</strong> <span id="modalDocumentType"></span></p>
                                     <p><strong>Status:</strong> <span id="modalDocumentStatus"></span></p>
                                     <p><strong>Date:</strong> <span id="modalDocumentDate"></span></p>
                                 </div>
@@ -268,7 +211,6 @@ if ($_SESSION['role'] != 'Permanent Instructor' && $_SESSION['role'] != 'Contrac
                         </div>
                     </div>
 
-
                 </div>
             </div>
         </main>
@@ -289,101 +231,213 @@ if ($_SESSION['role'] != 'Permanent Instructor' && $_SESSION['role'] != 'Contrac
     <!--begin::Third Party Plugin(OverlayScrollbars)-->       
     <?php require_once('../includes/dashboard_default_scripts.php');?>
 
-    <script>
-        // Listen for the form submission
-        document.getElementById('uploadForm').addEventListener('submit', function(event) {
-            event.preventDefault(); // Prevent actual form submission
+     <script>
+         $(document).ready(function() {
+            const documentTableBody = $('#documents-table-body');
+            const filterType = $('#filter-type');
+            const filterStatus = $('#filter-status');
+            const previousPage = $('#previous-page');
+            const nextPage = $('#next-page');
+            const currentPage = $('#current-page');
+            const itemsPerPage = 5;
+            let documents = [];
+            let currentPageNumber = 1;
 
-            // Trigger the modal
-            var uploadModal = new bootstrap.Modal(document.getElementById('uploadModal'));
-            uploadModal.show();
-
-            // Optionally reset the form after showing the modal
-            document.getElementById('uploadForm').reset();
-        });
-    </script>
-
-    <script>
-        // Filter by document status
-        document.getElementById('filterStatus').addEventListener('change', function() {
-            var filterValue = this.value;
-            var rows = document.querySelectorAll('#documentTable tr');
-
-            rows.forEach(function(row) {
-                if (filterValue === 'all') {
-                    row.style.display = '';
-                } else {
-                    if (row.getAttribute('data-status') === filterValue) {
-                        row.style.display = '';
-                    } else {
-                        row.style.display = 'none';
+            function fetchDocuments() {
+                $.ajax({
+                    url: 'get_documents.php',
+                    type: 'GET',
+                    dataType: 'json',
+                    success: function(data) {
+                    documents = data;
+                    updateTable();
+                    },
+                    error: function(xhr, status, error) {
+                    console.error("Failed to fetch documents:", error);
                     }
+                });
+            }
+
+            function updateTable(){
+                const filteredDocuments = filterDocuments();
+                 const totalPages = Math.ceil(filteredDocuments.length / itemsPerPage);
+                 currentPageNumber = Math.min(currentPageNumber, totalPages); // Adjust the page if necessary.
+
+                 const startIndex = (currentPageNumber - 1) * itemsPerPage;
+                 const endIndex = Math.min(startIndex + itemsPerPage, filteredDocuments.length);
+                 const paginatedDocuments = filteredDocuments.slice(startIndex, endIndex);
+
+                documentTableBody.empty();
+                if(paginatedDocuments.length > 0) {
+                paginatedDocuments.forEach(doc => {
+                    let statusClass = '';
+                    switch(doc.status){
+                        case 'approved':
+                            statusClass = 'badge badge-success';
+                            break;
+                        case 'pending':
+                            statusClass = 'badge badge-warning';
+                            break;
+                        case 'rejected':
+                            statusClass = 'badge badge-danger';
+                            break;
+                        default:
+                          statusClass = 'badge badge-secondary'
+                    }
+                    documentTableBody.append(`
+                    <tr>
+                      <td>${doc.id}</td>
+                      <td>${doc.filename}</td>
+                      <td>${doc.type}</td>
+                      <td><span class="${statusClass}">${doc.status}</span></td>
+                      <td>${doc.date}</td>
+                      <td>
+                        <button class="btn btn-sm btn-info view-button" data-id="${doc.id}">View</button>
+                        <button class="btn btn-sm btn-secondary download-button" data-id="${doc.id}">Download</button>
+                        <button class="btn btn-sm btn-danger delete-button" data-id="${doc.id}">Delete</button>
+                      </td>
+                    </tr>
+                `);
+                });
+
+                   currentPage.text(currentPageNumber);
+                   previousPage.toggleClass('disabled', currentPageNumber === 1);
+                   nextPage.toggleClass('disabled', currentPageNumber === totalPages || totalPages === 0);
+                }else {
+                    documentTableBody.append('<tr><td colspan="6" class="text-center">No documents found.</td></tr>');
+                    currentPage.text("1");
+                    previousPage.addClass('disabled');
+                     nextPage.addClass('disabled');
+
+                }
+            }
+
+            function filterDocuments() {
+                const typeFilter = filterType.val();
+                const statusFilter = filterStatus.val();
+
+                return documents.filter(doc => {
+                     const typeMatch = typeFilter === 'all' || doc.type === typeFilter;
+                     const statusMatch = statusFilter === 'all' || doc.status === statusFilter;
+                     return typeMatch && statusMatch;
+                });
+            }
+
+            filterType.on('change', function(){
+               currentPageNumber = 1;
+               updateTable();
+            });
+
+            filterStatus.on('change', function(){
+                currentPageNumber = 1;
+               updateTable();
+            });
+
+            previousPage.on('click', function(e) {
+                e.preventDefault();
+                if (currentPageNumber > 1) {
+                    currentPageNumber--;
+                    updateTable();
                 }
             });
-        });
-    </script>
 
-    <!-- ACTION MODALS -->
-    <script>
-        // Mock "View" button functionality
-        document.querySelectorAll('.btn-primary').forEach(function(button) {
-            button.addEventListener('click', function() {
-                var row = this.closest('tr');
-                var docId = row.children[0].innerText;
-                var docTitle = row.children[1].innerText;
-                var docStatus = row.children[2].innerText;
-                var docDate = row.children[3].innerText;
-
-                document.getElementById('modalDocumentId').innerText = docId;
-                document.getElementById('modalDocumentTitle').innerText = docTitle;
-                document.getElementById('modalDocumentStatus').innerText = docStatus;
-                document.getElementById('modalDocumentDate').innerText = docDate;
-
-                var viewModal = new bootstrap.Modal(document.getElementById('viewDocumentModal'));
-                viewModal.show();
+            nextPage.on('click', function(e) {
+               e.preventDefault();
+               const totalPages = Math.ceil(filterDocuments().length / itemsPerPage);
+                if (currentPageNumber < totalPages) {
+                    currentPageNumber++;
+                    updateTable();
+                 }
             });
-        });
 
-        // Mock "Download" button functionality
-        document.querySelectorAll('.btn-secondary').forEach(function(button) {
-            button.addEventListener('click', function() {
-                var row = this.closest('tr');
-                var docTitle = row.children[1].innerText;
 
-                document.getElementById('downloadDocumentTitle').innerText = docTitle;
+          documentTableBody.on('click', '.view-button', function() {
+                const docId = $(this).data('id');
+                $.ajax({
+                   url: 'view_document.php',
+                    type: 'GET',
+                   dataType: 'json',
+                     data: { id: docId },
+                   success: function(doc){
+                    document.getElementById('modalDocumentId').innerText = doc.id;
+                    document.getElementById('modalDocumentTitle').innerText = doc.filename;
+                    document.getElementById('modalDocumentType').innerText = doc.type;
+                     document.getElementById('modalDocumentStatus').innerText = doc.status;
+                    document.getElementById('modalDocumentDate').innerText = doc.date;
 
-                var downloadModal = new bootstrap.Modal(document.getElementById('downloadModal'));
-                downloadModal.show();
+                       var viewModal = new bootstrap.Modal(document.getElementById('viewDocumentModal'));
+                      viewModal.show();
+                    },
+                   error: function(xhr, status, error) {
+                     console.error("Failed to fetch document:", error);
+                    }
+                   });
+            });
 
-                document.getElementById('confirmDownloadButton').addEventListener('click', function() {
-                    // Simulate download confirmation (mock functionality)
-                    alert('Downloading: ' + docTitle);
-                    downloadModal.hide();
+            documentTableBody.on('click', '.download-button', function(){
+                const docId = $(this).data('id');
+                   $.ajax({
+                     url: 'download_document.php',
+                    type: 'GET',
+                    dataType: 'json',
+                     data: { id: docId },
+                   success: function(doc){
+                        document.getElementById('downloadDocumentTitle').innerText = doc.filename;
+                        var downloadModal = new bootstrap.Modal(document.getElementById('downloadModal'));
+                         downloadModal.show();
+
+                        document.getElementById('confirmDownloadButton').addEventListener('click', function() {
+                            window.location.href = `download_document_file.php?id=${docId}`;
+                           downloadModal.hide();
+                        });
+                   },
+                   error: function(xhr, status, error) {
+                     console.error("Failed to fetch document:", error);
+                    }
+                   });
+            });
+
+            documentTableBody.on('click', '.delete-button', function(){
+                 const docId = $(this).data('id');
+                  $.ajax({
+                     url: 'delete_document.php',
+                    type: 'GET',
+                   dataType: 'json',
+                     data: { id: docId },
+                   success: function(doc){
+                       document.getElementById('deleteDocumentTitle').innerText = doc.filename;
+                      var deleteModal = new bootstrap.Modal(document.getElementById('deleteModal'));
+                    deleteModal.show();
+                      document.getElementById('confirmDeleteButton').addEventListener('click', function() {
+                            $.ajax({
+                                url: 'delete_document_file.php',
+                                type: 'POST',
+                                dataType: 'json',
+                                data: { id: docId },
+                                success: function(response) {
+                                      if(response.success) {
+                                            fetchDocuments();
+                                      } else {
+                                          alert('Failed to delete document');
+                                      }
+                                     deleteModal.hide();
+                                },
+                                  error: function(xhr, status, error) {
+                                    console.error("Failed to delete document:", error);
+                                   }
+                            });
+                        });
+                   },
+                   error: function(xhr, status, error) {
+                     console.error("Failed to fetch document:", error);
+                    }
                 });
+
             });
+
+           fetchDocuments();
+
         });
-
-        // Mock "Delete" button functionality
-        document.querySelectorAll('.btn-danger').forEach(function(button) {
-            button.addEventListener('click', function() {
-                var row = this.closest('tr');
-                var docTitle = row.children[1].innerText;
-
-                document.getElementById('deleteDocumentTitle').innerText = docTitle;
-
-                var deleteModal = new bootstrap.Modal(document.getElementById('deleteModal'));
-                deleteModal.show();
-
-                document.getElementById('confirmDeleteButton').addEventListener('click', function() {
-                    // Simulate deletion (mock functionality)
-                    row.remove();
-                    deleteModal.hide();
-                });
-            });
-        });
-    </script>
-
+     </script>
 </body>
 </html>
-
-
